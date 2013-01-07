@@ -3,12 +3,8 @@ utstring: dynamic string macros for C
 Troy D. Hanson <thanson@users.sourceforge.net>
 v1.9.7, October 2012
 
-include::topnav_utstring.txt[]
-
 Introduction
 ------------
-include::toc.txt[]
-
 A set of basic dynamic string macros for C programs are included with
 uthash in `utstring.h`.  To use these in your own C program, just copy
 `utstring.h` into your source directory and use it in your programs.

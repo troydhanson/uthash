@@ -3,12 +3,8 @@ utarray: dynamic array macros for C
 Troy D. Hanson <thanson@users.sourceforge.net>
 v1.9.7, October 2012
 
-include::topnav_utarray.txt[]
-
 Introduction
 ------------
-include::toc.txt[]
-
 A set of general-purpose dynamic array macros for C structures are included with
 uthash in `utarray.h`.  To use these macros in your own C program, just
 copy `utarray.h` into your source directory and use it in your programs.

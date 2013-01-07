@@ -1,18 +1,15 @@
 uthash User Guide
 =================
-Troy D. Hanson <thanson@users.sourceforge.net>
-v1.9.7, October 2012
-
-include::topnav.txt[]
+Troy D. Hanson <tdh@tkhanson.net>
+v1.9.8, January 2013
 
 A hash in C
 -----------
-include::toc.txt[]
-
 This document is written for C programmers. Since you're reading this, chances
 are that you know a hash is used for looking up items using a key. In scripting
-languages like Perl, hashes are used all the time.  In C, hashes don't exist in
-the language itself. This software provides a hash table for C structures.  
+languages, hashes or "dictionaries" are used all the time.  In C, hashes don't
+exist in the language itself. This software provides a hash table for C
+structures.  
 
 What can it do?
 ~~~~~~~~~~~~~~~~~
@@ -81,8 +78,8 @@ Debian/Ubuntu users may simply `aptitude install uthash-dev`.
 
 Getting help
 ~~~~~~~~~~~~
-Feel free to mailto:tdh@tkhanson.net[email the author] at
-tdh@tkhanson.net.
+You can mailto:tdh@tkhanson.net[email the author] at tdh@tkhanson.net or
+message @troydhanson on Twitter.
 
 Resources
 ~~~~~~~~~
@@ -90,7 +87,7 @@ Users of uthash may wish to follow the news feed for information about new
 releases. Also, there are some extra bonus headers included with uthash.
 
 News::
- The author has a news feed for http://troydhanson.wordpress.com/[software updates] image:rss.png[(RSS)].
+ The author has a news feed for http://troydhanson.wordpress.com/[software updates] image:rss.png[(RSS)]. You can also follow @troydhanson on Twitter for updates.
 Extras included with uthash::
  uthash ships with these "extras"-- independent headers similar to uthash. 
  First link:utlist.html[utlist.h] provides linked list macros for C structures.
@@ -101,9 +98,10 @@ Other software::
 
 Who's using it?
 ~~~~~~~~~~~~~~~
-Since releasing uthash in 2006, it has been downloaded thousands of times,
-incorporated into commercial software, academic research, and into other
-open-source software.  
+Since releasing uthash in 2006, it has been downloaded tens of thousands of
+times, incorporated into commercial software, academic research, and into other
+open-source software.  It has also been added to the native package repositories
+for a number of Linux and BSD distros. 
 
 Your structure
 --------------

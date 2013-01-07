@@ -1,8 +1,0 @@
-ifdef::backend-xhtml11[]
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  <div id="topnav" style="font-size: 9pt; font-family: sans-serif;">
-  <a style="padding: 8px;" href="index.html">uthash home</a> 
-  >>  utarray macros
-  </div>
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-endif::backend-xhtml11[]

@@ -3,44 +3,581 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.6" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
 <title>utarray: dynamic array macros for C</title>
-<link rel="stylesheet" href="./tdh.css" type="text/css" />
-<script type="text/javascript" src="./asciidoc.js"></script>
-<script type="text/javascript" src="./tdh.js"></script>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+@media screen {
+  body {
+    max-width: 50em; /* approximately 80 characters wide */
+    margin-left: 16em;
+  }
+
+  #toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 13em;
+    padding: 0.5em;
+    padding-bottom: 1.5em;
+    margin: 0;
+    overflow: auto;
+    border-right: 3px solid #f8f8f8;
+    background-color: white;
+  }
+
+  #toc .toclevel1 {
+    margin-top: 0.5em;
+  }
+
+  #toc .toclevel2 {
+    margin-top: 0.25em;
+    display: list-item;
+    color: #aaaaaa;
+  }
+
+  #toctitle {
+    margin-top: 0.5em;
+  }
+}
+</style>
 <script type="text/javascript">
 /*<![CDATA[*/
-asciidoc.install();
-/*]]>*/
-</script>
-</head>
-<body class="article">
-<div id="header">
-<h1>utarray: dynamic array macros for C</h1>
-<span id="author">Troy D. Hanson</span><br />
-<span id="email"><tt>&lt;<a href="mailto:thanson@users.sourceforge.net">thanson@users.sourceforge.net</a>&gt;</tt></span><br />
-<span id="revnumber">version 1.9.7,</span>
-<span id="revdate">October 2012</span>
-</div>
-<div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<a style="float: right; padding-right: 50px" href="http://sourceforge.net/projects/uthash"><img style="border: 0" src="http://sflogo.sourceforge.net/sflogo.php?group_id=163879&amp;type=13" width="120" height="30" alt="uthash at SourceForge.net" /></a>
-  <div id="topnav" style="font-size: 9pt; font-family: sans-serif;">
-  <a style="padding: 8px;" href="index.html">uthash home</a>
-  >>  utarray macros
-  </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_introduction">Introduction</h2>
-<div class="sectionbody">
-<div id="toc"></div>
-<script>
-window.onload=generate_TOC
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
 
 /* Author: Mihai Bazon, September 2002
- * <a href="http://students.infoiasi.ro/~mishoo">http://students.infoiasi.ro/~mishoo</a>
+ * http://students.infoiasi.ro/~mishoo
  *
  * Table Of Content generator
  * Version: 0.4
@@ -50,88 +587,214 @@ window.onload=generate_TOC
  */
 
  /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
 
-function H_getText(el) {
-  var text = "";
-  for (var i = el.firstChild; i != null; i = i.nextSibling) {
-    if (i.nodeType == 3 /* Node.TEXT_NODE, IE doesn't speak constants */)
-      text += i.data;
-    else if (i.firstChild != null)
-      text += H_getText(i);
-  }
-  return text;
-}
+// toclevels = 1..4.
+toc: function (toclevels) {
 
-function TOC_EL(el, text, level) {
-  this.element = el;
-  this.text = text;
-  this.level = level;
-}
-
-function getHeadlines(el) {
-  var l = new Array;
-  var rx = /[hH]([2-3])/;
-  // internal recursive function that scans the DOM tree
-  var rec = function (el) {
+  function getText(el) {
+    var text = "";
     for (var i = el.firstChild; i != null; i = i.nextSibling) {
-      if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
-        if (rx.exec(i.tagName))
-          l[l.length] = new TOC_EL(i, H_getText(i), parseInt(RegExp.$1));
-        rec(i);
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
       }
     }
   }
-  rec(el);
-  return l;
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
 }
 
-function generate_TOC() {
-  var parent = document.getElementById("toc");
-  var toc_hdr = document.createElement("div");
-  var toc_hdr_txt = document.createTextNode("CONTENTS");
-  toc_hdr.appendChild(toc_hdr_txt);
-  /* toc_hdr.setAttribute("id","hdr"); */
-  toc_hdr.id = "hdr";
-  parent.appendChild(toc_hdr);
-  var hs = getHeadlines(document.getElementsByTagName("body")[0]);
-  for (var i = 0; i < hs.length; ++i) {
-    var hi = hs[i];
-    var d = document.createElement("div");
-    if (hi.element.id == "") hi.element.id = "gen" + i;
-    var a = document.createElement("a");
-    a.href = "#" + hi.element.id;
-    a.appendChild(document.createTextNode(hi.text));
-    d.appendChild(a);
-    d.className = "level" + hi.level;
-    parent.appendChild(d);
-    /*
-    if (hi.level == 3) {
-        var dvtop = document.createElement("div");
-        dvtop.className = "toplink";
-        dvtop.appendChild(document.createTextNode("^top^"));
-        dvtop.onclick=function(){scrollTo(0,0);};
-        hi.element.appendChild(dvtop);
-    }
-    */
-  }
 }
+asciidoc.install(2);
+/*]]>*/
 </script>
+</head>
+<body class="article">
+<div id="header">
+<h1>utarray: dynamic array macros for C</h1>
+<span id="author">Troy D. Hanson</span><br />
+<span id="email"><code>&lt;<a href="mailto:thanson@users.sourceforge.net">thanson@users.sourceforge.net</a>&gt;</code></span><br />
+<span id="revnumber">version 1.9.7,</span>
+<span id="revdate">October 2012</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
 <div class="paragraph"><p>A set of general-purpose dynamic array macros for C structures are included with
-uthash in <tt>utarray.h</tt>.  To use these macros in your own C program, just
-copy <tt>utarray.h</tt> into your source directory and use it in your programs.</p></div>
+uthash in <code>utarray.h</code>.  To use these macros in your own C program, just
+copy <code>utarray.h</code> into your source directory and use it in your programs.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>#include "utarray.h"</tt></pre>
+<pre><code>#include "utarray.h"</code></pre>
 </div></div>
 <div class="paragraph"><p>The dynamic array supports basic operations such as push, pop, and erase on the
 array elements. These array elements can be any simple datatype or structure.
 The array <a href="#operations">operations</a> are based loosely on the C++ STL vector methods.</p></div>
 <div class="paragraph"><p>Internally the dynamic array contains a contiguous memory region into which
-the elements are copied. This buffer is grown as needed using <tt>realloc</tt> to
+the elements are copied. This buffer is grown as needed using <code>realloc</code> to
 accomodate all the data that is pushed into it.</p></div>
 <div class="sect2">
 <h3 id="_download">Download</h3>
-<div class="paragraph"><p>To download the <tt>utarray.h</tt> header file, follow the link on the
+<div class="paragraph"><p>To download the <code>utarray.h</code> header file, follow the link on the
 <a href="http://uthash.sourceforge.net">uthash home page</a>.</p></div>
 </div>
 <div class="sect2">
@@ -168,17 +831,17 @@ Windows, using Visual Studio 2008 and Visual Studio 2010
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_declaration">Declaration</h3>
-<div class="paragraph"><p>The array itself has the data type <tt>UT_array</tt>, regardless of the type of
+<div class="paragraph"><p>The array itself has the data type <code>UT_array</code>, regardless of the type of
 elements to be stored in it. It is declared like,</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>UT_array *nums;</tt></pre>
+<pre><code>UT_array *nums;</code></pre>
 </div></div>
 </div>
 <div class="sect2">
 <h3 id="_new_and_free">New and free</h3>
-<div class="paragraph"><p>The next step is to create the array using <tt>utarray_new</tt>. Later when you&#8217;re
-done with the array, <tt>utarray_free</tt> will free it and all its elements.</p></div>
+<div class="paragraph"><p>The next step is to create the array using <code>utarray_new</code>. Later when you&#8217;re
+done with the array, <code>utarray_free</code> will free it and all its elements.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_push_pop_etc">Push, pop, etc</h3>
@@ -202,7 +865,7 @@ Lastly it frees it.</p></div>
 <div class="listingblock">
 <div class="title">Integer elements</div>
 <div class="content">
-<pre><tt>#include &lt;stdio.h&gt;
+<pre><code>#include &lt;stdio.h&gt;
 #include "utarray.h"
 
 int main() {
@@ -221,10 +884,10 @@ int main() {
   utarray_free(nums);
 
   return 0;
-}</tt></pre>
+}</code></pre>
 </div></div>
-<div class="paragraph"><p>The second argument to <tt>utarray_push_back</tt> is always a <em>pointer</em> to the type
-(so a literal cannot be used). So for integers, it is an <tt>int*</tt>.</p></div>
+<div class="paragraph"><p>The second argument to <code>utarray_push_back</code> is always a <em>pointer</em> to the type
+(so a literal cannot be used). So for integers, it is an <code>int*</code>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_strings">Strings</h3>
@@ -233,7 +896,7 @@ it and free it.</p></div>
 <div class="listingblock">
 <div class="title">String elements</div>
 <div class="content">
-<pre><tt>#include &lt;stdio.h&gt;
+<pre><code>#include &lt;stdio.h&gt;
 #include "utarray.h"
 
 int main() {
@@ -252,58 +915,58 @@ int main() {
   utarray_free(strs);
 
   return 0;
-}</tt></pre>
+}</code></pre>
 </div></div>
-<div class="paragraph"><p>In this example, since the element is a <tt>char*</tt>, we pass a pointer to it
-(<tt>char**</tt>) as the second argument to <tt>utarray_push_back</tt>. Note that "push" makes
+<div class="paragraph"><p>In this example, since the element is a <code>char*</code>, we pass a pointer to it
+(<code>char**</code>) as the second argument to <code>utarray_push_back</code>. Note that "push" makes
 a copy of the source string and pushes that copy into the array.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_about_ut_icd">About UT_icd</h3>
 <div class="paragraph"><p>Arrays be made of any type of element, not just integers and strings.  The
 elements can be basic types or structures. Unless you&#8217;re dealing with integers
-and strings (which use pre-defined <tt>ut_int_icd</tt> and <tt>ut_str_icd</tt>), you&#8217;ll need
-to define a <tt>UT_icd</tt> helper structure. This structure contains everything that
+and strings (which use pre-defined <code>ut_int_icd</code> and <code>ut_str_icd</code>), you&#8217;ll need
+to define a <code>UT_icd</code> helper structure. This structure contains everything that
 utarray needs to initialize, copy or destruct elements.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>typedef struct {
+<pre><code>typedef struct {
     size_t sz;
     init_f *init;
     ctor_f *copy;
     dtor_f *dtor;
-} UT_icd;</tt></pre>
+} UT_icd;</code></pre>
 </div></div>
-<div class="paragraph"><p>The three function pointers <tt>init</tt>, <tt>copy</tt>, and <tt>dtor</tt> have these prototypes:</p></div>
+<div class="paragraph"><p>The three function pointers <code>init</code>, <code>copy</code>, and <code>dtor</code> have these prototypes:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>typedef void (ctor_f)(void *dst, const void *src);
+<pre><code>typedef void (ctor_f)(void *dst, const void *src);
 typedef void (dtor_f)(void *elt);
-typedef void (init_f)(void *elt);</tt></pre>
+typedef void (init_f)(void *elt);</code></pre>
 </div></div>
-<div class="paragraph"><p>The <tt>sz</tt> is just the size of the element being stored in the array.</p></div>
-<div class="paragraph"><p>The <tt>init</tt> function will be invoked whenever utarray needs to initialize an
-empty element. This only happens as a byproduct of <tt>utarray_resize</tt> or
-<tt>utarray_extend_back</tt>. If <tt>init</tt> is <tt>NULL</tt>, it defaults to zero filling the
+<div class="paragraph"><p>The <code>sz</code> is just the size of the element being stored in the array.</p></div>
+<div class="paragraph"><p>The <code>init</code> function will be invoked whenever utarray needs to initialize an
+empty element. This only happens as a byproduct of <code>utarray_resize</code> or
+<code>utarray_extend_back</code>. If <code>init</code> is <code>NULL</code>, it defaults to zero filling the
 new element using memset.</p></div>
-<div class="paragraph"><p>The <tt>copy</tt> function is used whenever an element is copied into the array.
-It is invoked during <tt>utarray_push_back</tt>, <tt>utarray_insert</tt>, <tt>utarray_inserta</tt>,
-or <tt>utarray_concat</tt>. If <tt>copy</tt> is <tt>NULL</tt>, it defaults to a bitwise copy using
+<div class="paragraph"><p>The <code>copy</code> function is used whenever an element is copied into the array.
+It is invoked during <code>utarray_push_back</code>, <code>utarray_insert</code>, <code>utarray_inserta</code>,
+or <code>utarray_concat</code>. If <code>copy</code> is <code>NULL</code>, it defaults to a bitwise copy using
 memcpy.</p></div>
-<div class="paragraph"><p>The <tt>dtor</tt> function is used to clean up an element that is being removed from
-the array. It may be invoked due to <tt>utarray_resize</tt>, <tt>utarray_pop_back</tt>,
-<tt>utarray_erase</tt>, <tt>utarray_clear</tt>, <tt>utarray_done</tt> or <tt>utarray_free</tt>. If the
-elements need no cleanup upon destruction, <tt>dtor</tt> may be <tt>NULL</tt>.</p></div>
+<div class="paragraph"><p>The <code>dtor</code> function is used to clean up an element that is being removed from
+the array. It may be invoked due to <code>utarray_resize</code>, <code>utarray_pop_back</code>,
+<code>utarray_erase</code>, <code>utarray_clear</code>, <code>utarray_done</code> or <code>utarray_free</code>. If the
+elements need no cleanup upon destruction, <code>dtor</code> may be <code>NULL</code>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_scalar_types">Scalar types</h3>
-<div class="paragraph"><p>The next example uses <tt>UT_icd</tt> with all its defaults to make a utarray of
-<tt>long</tt> elements. This example pushes two longs, prints them, and frees the
+<div class="paragraph"><p>The next example uses <code>UT_icd</code> with all its defaults to make a utarray of
+<code>long</code> elements. This example pushes two longs, prints them, and frees the
 array.</p></div>
 <div class="listingblock">
 <div class="title">long elements</div>
 <div class="content">
-<pre><tt>#include &lt;stdio.h&gt;
+<pre><code>#include &lt;stdio.h&gt;
 #include "utarray.h"
 
 UT_icd long_icd = {sizeof(long), NULL, NULL, NULL };
@@ -321,19 +984,19 @@ int main() {
 
   utarray_free(nums);
   return 0;
-}</tt></pre>
+}</code></pre>
 </div></div>
 </div>
 <div class="sect2">
 <h3 id="_structures">Structures</h3>
 <div class="paragraph"><p>Structures can be used as utarray elements. If the structure requires no
-special effort to initialize, copy or destruct, we can use <tt>UT_icd</tt> with all
+special effort to initialize, copy or destruct, we can use <code>UT_icd</code> with all
 its defaults. This example shows a structure that consists of two integers. Here
 we push two values, print them and free the array.</p></div>
 <div class="listingblock">
 <div class="title">Structure (simple)</div>
 <div class="content">
-<pre><tt>#include &lt;stdio.h&gt;
+<pre><code>#include &lt;stdio.h&gt;
 #include "utarray.h"
 
 typedef struct {
@@ -360,23 +1023,23 @@ int main() {
 
   utarray_free(pairs);
   return 0;
-}</tt></pre>
+}</code></pre>
 </div></div>
-<div class="paragraph"><p>The real utility of <tt>UT_icd</tt> is apparent when the elements of the utarray are
+<div class="paragraph"><p>The real utility of <code>UT_icd</code> is apparent when the elements of the utarray are
 structures that require special work to initialize, copy or destruct.</p></div>
 <div class="paragraph"><p>For example, when a structure contains pointers to related memory areas that
 need to be copied when the structure is copied (and freed when the structure is
-freed), we can use custom <tt>init</tt>, <tt>copy</tt>, and <tt>dtor</tt> members in the <tt>UT_icd</tt>.</p></div>
+freed), we can use custom <code>init</code>, <code>copy</code>, and <code>dtor</code> members in the <code>UT_icd</code>.</p></div>
 <div class="paragraph"><p>Here we take an example of a structure that contains an integer and a string.
 When this element is copied (such as when an element is pushed into the array),
-we want to "deep copy" the <tt>s</tt> pointer (so the original element and the new
-element point to their own copies of <tt>s</tt>). When an element is destructed, we
-want to "deep free" its copy of <tt>s</tt>. Lastly, this example is written to work
-even if <tt>s</tt> has the value <tt>NULL</tt>.</p></div>
+we want to "deep copy" the <code>s</code> pointer (so the original element and the new
+element point to their own copies of <code>s</code>). When an element is destructed, we
+want to "deep free" its copy of <code>s</code>. Lastly, this example is written to work
+even if <code>s</code> has the value <code>NULL</code>.</p></div>
 <div class="listingblock">
 <div class="title">Structure (complex)</div>
 <div class="content">
-<pre><tt>#include &lt;stdio.h&gt;
+<pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include "utarray.h"
 
@@ -413,7 +1076,7 @@ int main() {
 
   utarray_free(intchars);
   return 0;
-}</tt></pre>
+}</code></pre>
 </div></div>
 </div>
 </div>
@@ -434,95 +1097,95 @@ cellspacing="0" cellpadding="4">
 <col width="44%" />
 <tbody>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_new(UT_array *a, UT_icd *icd)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_new(UT_array *a, UT_icd *icd)</code></p></td>
 <td align="left" valign="top"><p class="table">allocate a new array</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_free(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_free(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">free an allocated array</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_init(UT_array *a,UT_icd *icd)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_init(UT_array *a,UT_icd *icd)</code></p></td>
 <td align="left" valign="top"><p class="table">init an array (non-alloc)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_done(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_done(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">dispose of an array (non-allocd)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_reserve(UT_array *a,int n)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_reserve(UT_array *a,int n)</code></p></td>
 <td align="left" valign="top"><p class="table">ensure space available for <em>n</em> more elements</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_push_back(UT_array *a,void *p)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_push_back(UT_array *a,void *p)</code></p></td>
 <td align="left" valign="top"><p class="table">push element p onto a</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_pop_back(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_pop_back(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">pop last element from a</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_extend_back(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_extend_back(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">push empty element onto a</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_len(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_len(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">get length of a</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_eltptr(UT_array *a,int j)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_eltptr(UT_array *a,int j)</code></p></td>
 <td align="left" valign="top"><p class="table">get pointer of element from index</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_eltidx(UT_array *a,void *e)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_eltidx(UT_array *a,void *e)</code></p></td>
 <td align="left" valign="top"><p class="table">get index of element from pointer</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_insert(UT_array *a,void *p, int j)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_insert(UT_array *a,void *p, int j)</code></p></td>
 <td align="left" valign="top"><p class="table">insert element p to index j</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_inserta(UT_array *a,UT_array *w, int j)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_inserta(UT_array *a,UT_array *w, int j)</code></p></td>
 <td align="left" valign="top"><p class="table">insert array w into array a at index j</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_resize(UT_array *dst,int num)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_resize(UT_array *dst,int num)</code></p></td>
 <td align="left" valign="top"><p class="table">extend or shrink array to num elements</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_concat(UT_array *dst,UT_array *src)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_concat(UT_array *dst,UT_array *src)</code></p></td>
 <td align="left" valign="top"><p class="table">copy src to end of dst array</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_erase(UT_array *a,int pos,int len)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_erase(UT_array *a,int pos,int len)</code></p></td>
 <td align="left" valign="top"><p class="table">remove len elements from a[pos]..a[pos+len-1]</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_clear(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_clear(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">clear all elements from a, setting its length to zero</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_sort(UT_array *a,cmpfcn *cmp)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_sort(UT_array *a,cmpfcn *cmp)</code></p></td>
 <td align="left" valign="top"><p class="table">sort elements of a using comparison function</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_find(UT_array *a,void *v, cmpfcn *cmp)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_find(UT_array *a,void *v, cmpfcn *cmp)</code></p></td>
 <td align="left" valign="top"><p class="table">find element v in utarray (must be sorted)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_front(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_front(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">get first element of a</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_next(UT_array *a,void *e)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_next(UT_array *a,void *e)</code></p></td>
 <td align="left" valign="top"><p class="table">get element of a following e (front if e is NULL)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_prev(UT_array *a,void *e)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_prev(UT_array *a,void *e)</code></p></td>
 <td align="left" valign="top"><p class="table">get element of a before e (back if e is NULL)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><tt>utarray_back(UT_array *a)</tt></p></td>
+<td align="left" valign="top"><p class="table"><code>utarray_back(UT_array *a)</code></p></td>
 <td align="left" valign="top"><p class="table">get last element of a</p></td>
 </tr>
 </tbody>
@@ -534,48 +1197,48 @@ cellspacing="0" cellpadding="4">
 <div class="olist arabic"><ol class="arabic">
 <li>
 <p>
-<tt>utarray_new</tt> and <tt>utarray_free</tt> are used to allocate a new array and free it,
-   while <tt>utarray_init</tt> and <tt>utarray_done</tt> can be used if the UT_array is already
+<code>utarray_new</code> and <code>utarray_free</code> are used to allocate a new array and free it,
+   while <code>utarray_init</code> and <code>utarray_done</code> can be used if the UT_array is already
    allocated and just needs to be initialized or have its internal resources
    freed.
 </p>
 </li>
 <li>
 <p>
-<tt>utarray_reserve</tt> takes the "delta" of elements to reserve (not the total
+<code>utarray_reserve</code> takes the "delta" of elements to reserve (not the total
    desired capacity of the array-- this differs from the C++ STL "reserve" notion)
 </p>
 </li>
 <li>
 <p>
-<tt>utarray_sort</tt> expects a comparison function having the usual <tt>strcmp</tt> -like
+<code>utarray_sort</code> expects a comparison function having the usual <code>strcmp</code> -like
    convention where it accepts two elements (a and b) and returns a negative
    value if a precedes b, 0 if a and b sort equally, and positive if b precedes a.
    This is an example of a comparison function:
 </p>
 <div class="literalblock">
 <div class="content">
-<pre><tt>int intsort(const void *a,const void*b) {
+<pre><code>int intsort(const void *a,const void*b) {
     int _a = *(int*)a;
     int _b = *(int*)b;
     return _a - _b;
-}</tt></pre>
+}</code></pre>
 </div></div>
 </li>
 <li>
 <p>
-<tt>utarray_find</tt> uses a binary search to locate an element having a certain value
+<code>utarray_find</code> uses a binary search to locate an element having a certain value
    according to the given comparison function. The utarray must be first sorted
-   using the same comparison function. An example of using <tt>utarray_find</tt> with
-   a utarray of strings is included in <tt>tests/test61.c</tt>.
+   using the same comparison function. An example of using <code>utarray_find</code> with
+   a utarray of strings is included in <code>tests/test61.c</code>.
 </p>
 </li>
 <li>
 <p>
-A <em>pointer</em> to a particular element (obtained using <tt>utarray_eltptr</tt> or
-   <tt>utarray_front</tt>, <tt>utarray_next</tt>, <tt>utarray_prev</tt>, <tt>utarray_back</tt>) becomes invalid whenever
+A <em>pointer</em> to a particular element (obtained using <code>utarray_eltptr</code> or
+   <code>utarray_front</code>, <code>utarray_next</code>, <code>utarray_prev</code>, <code>utarray_back</code>) becomes invalid whenever
    another element is inserted into the utarray. This is because the internal
-   memory management may need to <tt>realloc</tt> the element storage to a new address.
+   memory management may need to <code>realloc</code> the element storage to a new address.
    For this reason, it&#8217;s usually better to refer to an element by its integer
    <em>index</em> in code whose duration may include element insertion.
 </p>
@@ -589,7 +1252,7 @@ A <em>pointer</em> to a particular element (obtained using <tt>utarray_eltptr</t
 <div id="footer">
 <div id="footer-text">
 Version 1.9.7<br />
-Last updated 2012-10-08 20:56:02 EDT
+Last updated 2013-01-07 02:13:40 EST
 </div>
 </div>
 </body>

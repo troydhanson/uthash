@@ -3,12 +3,8 @@ utlist: linked list macros for C structures
 Troy D. Hanson <thanson@users.sourceforge.net>
 v1.9.7, October 2012
 
-include::topnav_utlist.txt[]
-
 Introduction
 ------------
-include::toc.txt[]
-
 A set of general-purpose 'linked list' macros for C structures are included with
 uthash in `utlist.h`.  To use these macros in your own C program, just
 copy `utlist.h` into your source directory and use it in your programs.
