@@ -41,6 +41,10 @@ a img {
    border: 0
 }
 
+.twitter-follow-button {
+   padding: 10px;
+}
+
 #nav {
     background-color: #fff8f1;
     margin-left: 10px;
