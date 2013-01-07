@@ -3,7 +3,6 @@ utlist: linked list macros for C structures
 Troy D. Hanson <thanson@users.sourceforge.net>
 v1.9.7, October 2012
 
-include::sflogo.txt[]
 include::topnav_utlist.txt[]
 
 Introduction

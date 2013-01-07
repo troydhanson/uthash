@@ -3,7 +3,6 @@ utstring: dynamic string macros for C
 Troy D. Hanson <thanson@users.sourceforge.net>
 v1.9.7, October 2012
 
-include::sflogo.txt[]
 include::topnav_utstring.txt[]
 
 Introduction

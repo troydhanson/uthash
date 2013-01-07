@@ -1,5 +1,0 @@
-ifdef::backend-xhtml11[]
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-<a style="float: right; padding-right: 50px" href="http://sourceforge.net/projects/uthash"><img style="border: 0" src="http://sflogo.sourceforge.net/sflogo.php?group_id=163879&amp;type=13" width="120" height="30" alt="uthash at SourceForge.net" /></a>
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-endif::backend-xhtml11[]

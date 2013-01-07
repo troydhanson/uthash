@@ -25,7 +25,7 @@
 h1,p {  margin: 0; }  /* non-0 margin on firefox */
 
 #mid {
-    background-image: url(img/grad_blue.png);
+    /* background-image: url(img/grad_blue.png); */
     background-repeat: repeat-y;
     /* background-color: #ffddaa; */
     padding-top: 20px;

@@ -1,7 +1,6 @@
 uthash ChangeLog
 ================
 
-include::sflogo.txt[]
 
 Click to return to the link:index.html[uthash home page].
 
@@ -141,7 +140,7 @@ Version 1.5 (2009-02-19)
   This change made HASH_FIND about 13% faster and enabled reader concurrency.
 * made link:license.html[BSD license] terms even more permissive
 * added link:userguide.pdf[PDF version] of User Guide 
-* added http://troydhanson.wordpress.com/feed/[update news] image:img/rss.png[(RSS)]
+* added http://troydhanson.wordpress.com/feed/[update news] image:rss.png[(RSS)]
 
 Version 1.4 (2008-09-23)
 --------------------------
