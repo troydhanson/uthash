@@ -18,15 +18,7 @@ changelog:	ChangeLog.txt
 TMP=/tmp/uthash-gh-pages
 stage:
 	mkdir -p ${TMP}
-	cp userguide.html ${TMP}/uthash
-	cp userguide.pdf ${TMP}/uthash
-	cp utlist.html ${TMP}/uthash
-	cp utarray.html ${TMP}/uthash
-	cp utstring.html ${TMP}/uthash
-	cp ChangeLog.html ${TMP}/uthash
-	cp license.html ${TMP}/uthash
-	cp index.html ${TMP}/uthash
-	cp styles.css ${TMP}/uthash
+	cp *.html *.pdf *.png *.css ${TMP}
 
 .PHONY: pdf
 
