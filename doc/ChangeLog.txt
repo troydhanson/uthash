@@ -1,6 +1,9 @@
 uthash ChangeLog
 ================
 
+Version 1.9.8 (2013-01-09)
+--------------------------
+* transitioned to GitHub
 
 Click to return to the link:index.html[uthash home page].
 

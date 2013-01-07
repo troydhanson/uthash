@@ -1,7 +1,9 @@
 utstring: dynamic string macros for C 
 =====================================
-Troy D. Hanson <thanson@users.sourceforge.net>
-v1.9.7, October 2012
+Troy D. Hanson <tdh@tkhanson.net>
+v1.9.8, January 2013
+
+Here's a link back to the https://github.com/troydhanson/uthash[GitHub project page].
 
 Introduction
 ------------
@@ -20,8 +22,9 @@ Some utstring operations are implemented as functions rather than macros.
 
 Download
 ~~~~~~~~
-To download the `utstring.h` header file, follow the link on the
-http://uthash.sourceforge.net[uthash home page]. 
+To download the `utstring.h` header file, 
+follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file, 
+then look in the src/ sub-directory.
 
 BSD licensed
 ~~~~~~~~~~~~

@@ -3,6 +3,9 @@ uthash User Guide
 Troy D. Hanson <tdh@tkhanson.net>
 v1.9.8, January 2013
 
+To download uthash, follow this link back to the
+https://github.com/troydhanson/uthash[GitHub project page].
+
 A hash in C
 -----------
 This document is written for C programmers. Since you're reading this, chances
@@ -68,18 +71,13 @@ This software is made available under the
 link:license.html[revised BSD license]. 
 It is free and open source. 
 
-Obtaining uthash
-~~~~~~~~~~~~~~~~
-Please follow the link to download on the 
-http://uthash.sourceforge.net[uthash website] at http://uthash.sourceforge.net.
-
-A number of platforms include uthash in their package repositories. For example,
-Debian/Ubuntu users may simply `aptitude install uthash-dev`.
+Download uthash
+~~~~~~~~~~~~~~~
+Follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file.
 
 Getting help
 ~~~~~~~~~~~~
-You can mailto:tdh@tkhanson.net[email the author] at tdh@tkhanson.net or
-message @troydhanson on Twitter.
+You can email the author at tdh@tkhanson.net or message @troydhanson on Twitter.
 
 Resources
 ~~~~~~~~~
