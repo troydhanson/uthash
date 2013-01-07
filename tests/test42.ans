@@ -1,0 +1,14 @@
+LL macros
+a b c 
+search scalar found b
+search found a
+
+DL macros
+a b c 
+search scalar found b
+search found a
+
+CDL macros
+c b a 
+search scalar found b
+search found a

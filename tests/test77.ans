@@ -1,0 +1,13 @@
+"There are two needle" len=55
+"needle" len=8
+utstring_find()=46
+utstring_find()=14
+utstring_find()=-1
+FindCnt=2
+expect 15 15
+expect  4 4
+expect -1 -1
+expect 11 11
+expect  4 4
+expect 11 11
+expect  0 0

@@ -1,0 +1,20 @@
+al aligned (y): y
+u1 aligned (n): n
+u2 aligned (n): n
+u3 aligned (n): n
+
+al plus1 (n): n
+u1 plus1 (y): y
+u2 plus1 (n): n
+u3 plus1 (n): n
+
+al plus2 (n): n
+u1 plus2 (n): n
+u2 plus2 (y): y
+u3 plus2 (n): n
+
+al plus3 (n): n
+u1 plus3 (n): n
+u2 plus3 (n): n
+u3 plus3 (y): y
+

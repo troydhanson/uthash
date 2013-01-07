@@ -1,0 +1,20 @@
+#!/bin/sh
+
+echo "MinGW test script starting"
+
+for f in test*.exe
+do
+  t=`echo $f | sed s/.exe//`
+  `$f > $t.out`
+  diff -qb "$t.out" "$t.ans"
+  if [ $? -eq 1 ]
+  then
+    echo "$f failed"
+  else
+    true # can't have empty else
+    #echo "$f passed"
+  fi
+done
+
+echo 
+echo "All tests complete"

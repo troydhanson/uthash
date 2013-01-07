@@ -1,0 +1,88 @@
+length is 0
+push
+length is 1
+back is 1 2
+pop
+length is 0
+push
+push
+length is 2
+1 2
+3 4
+erase [0]
+length is 1
+3 4
+push
+3 4
+1 2
+clear
+length is 0
+extend
+length is 1
+ip points to [0] ? yes
+push
+0 0
+1 2
+erase [1]
+length is 1
+0 0
+push
+0 0
+3 4
+back is 3 4
+copy
+cpy length is 2
+cpy 0 0
+cpy 3 4
+insert cpy[0]
+cpy length is 3
+cpy 5 6
+cpy 0 0
+cpy 3 4
+erase cpy [0] [1]
+cpy length is 1
+cpy 3 4
+inserta at cpy[1]
+cpy length is 3
+cpy 3 4
+cpy 0 0
+cpy 3 4
+free cpy
+length is 2
+resize to 30
+length is 30
+0 0
+3 4
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+resize to 1
+length is 1
+resize to 0
+length is 0
+free

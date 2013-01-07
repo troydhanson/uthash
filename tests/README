@@ -1,0 +1,110 @@
+Automated tests for uthash
+==============================================================================
+Run "make" in this directory to build the tests and run them.
+
+test1:  make 10-item hash, iterate and print each one
+test2:  make 10-item hash, lookup items with even keys, print
+test3:  make 10-item hash, delete items with even keys, print others 
+test4:  10 structs have dual hash handles, separate keys
+test5:  10 structs have dual hash handles, lookup evens by alt key
+test6:  test alt malloc macros
+test7:  test alt malloc macros with 1000 structs so bucket expansion occurs
+test8:  test num_items counter in UT_hash_handle
+test9:  test "find" after bucket expansion
+test10: dual-hash handle test, bucket expansion on one and not the other
+test11: read dat file of names into hash, sort them and print
+test12: create hash with string keys, add 10 items, lookup each item
+test13: make 10-item hash, delete items with even keys, reverse print others
+test14: read dat file of names into hash, read file again and lookup each one
+test15: build string-keyed hash of 3 items, lookup one item (c.f. test40.c)
+test16: hash on aggregate key, iterate, lookup, using generalized macros
+test17: sort, add more items, sort again
+test18: test pathological HASH_DEL(a,a) scenario (single head,deletee variable)
+test19: sort two hash tables with shared elements using HASH_SRT
+test20: test a 5-byte "binary" key
+test21: test a structure key (userguide)
+test22: test multi-field key using flexible array member (userguide utf32)
+test23: test whether delete in iteration works
+test24: make 10-item hash and confirm item count (HASH_COUNT)
+test25: CDL / DL / LL tests
+test26: test the linked list sort macros in utlist.h
+test27: LL_APPEND, SORT
+test28: CDL / DL / LL tests  
+test29: DL_APPEND, SORT
+test30: CDL_PREPEND, SORT
+test31: CDL_PREPEND, SORT
+test32: DL_PREPEND
+test33: LL_PREPEND
+test34: CDL_PREPEND
+test35: CDL_PREPEND
+test36: HASH_SELECT
+test37: HASH_CLEAR
+test38: find-or-add test on integer keys in short loop
+test39: HASH_ADD_KEYPTR then HASH_FIND using array element as key pointer
+test40: HASH_ADD_KEYPTR on string keys; pointer equivalent to test15.c
+test41: test LL_FOREACH_SAFE,DL_FOREACH_SAFE,CDL_FOREACH_SAFE
+test42: test LL_SEARCH, LL_SEARCH_SCALAR, and DL and CDL counterparts
+test43: test utarray with intpair objects
+test44: test utarray with int objects
+test45: test utarray with int objects
+test46: test utarray with char* objects
+test47: test utstring
+test48: test utarray of int
+test49: test utarray of str
+test50: test utarray of long
+test51: test utarray of intpair
+test52: test utarray of intchar
+test53: test utstring
+test54: test utstring
+test55: test utstring
+test56: test uthash, utlist and utstring together for #define conflicts etc
+test57: test uthash HASH_ADD_PTR and HASH_FIND_PTR
+test58: test HASH_ITER macro
+test59: sample of multi-level hash 
+test60: sample of multi-level hash that also does HASH_DEL and free
+test61: test utarray_find
+test62: test macros used in safe unaligned reads on non-Intel type platforms
+test63: LL_CONCAT test
+test64: DL_CONCAT test
+test65: LRU cache example courtesy of jehiah.cz with modifications
+test66: test example where output variable to HASH_FIND needs extra parens
+test67: test utarray_prev
+test68: test DL_REPLACE_ELEM (Zoltán Lajos Kis)
+test69: test DL_PREPEND_ELEM (Zoltán Lajos Kis)
+test70: test LL_REPLACE_ELEM (Zoltán Lajos Kis)
+test71: test LL_PREPEND_ELEM (Zoltán Lajos Kis)
+test72: test CDL_REPLACE_ELEM (Zoltán Lajos Kis)
+test73: test CDL_PREPEND_ELEM (Zoltán Lajos Kis)
+test74: test utstring with utstring_find (Joe Wei)
+test75: test utstring with utstring_findR (Joe Wei)
+test76: test utstring with _utstring_find (Joe Wei)
+test77: test utstring with _utstring_findR (Joe Wei)
+test78: test utlist "2" family with flexible Prev/Next naming eg. DL_DELETE2
+
+
+Other Make targets
+================================================================================
+pedantic:  makes the tests with extra CFLAGS for pedantic compiling
+cplusplus: compiles all the C tests using the C++ compiler to test compatibility
+debug:     makes the tests with debugging symbols and no optimization
+example:   builds the 'example' program from the user guide
+================================================================================
+
+Other files
+================================================================================
+keystats:  key statistics analyzer. See the User Guide (http://uthash.sf.net)
+emit_keys: reads a data file of unique strings, emits as keys w/HASH_EMIT_KEYS=1
+all_funcs: a script which executes the test suite with every hash function
+win32tests:builds and runs the test suite under Microsoft Visual Studio
+
+LINUX-ONLY
+----------
+hashscan:  tool to examine a running process and get info on its hash tables
+test_sleep:used as a subject for inspection by hashscan
+
+Manual performance testing
+================================================================================
+  # test performance characteristics on keys that are English dictionary words
+  emit_keys /usr/share/dict/words > words.keys
+  ./keystats words.keys
+

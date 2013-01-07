@@ -1,0 +1,2 @@
+test1: exercise a two-reader, one-writer, rwlock-protected hash.
+test2: a template for a nthread, nloop kind of program

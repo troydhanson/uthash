@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# utility to macro-expand a test program
+CC=gcc
+#CPPFLAGS=-DHASH_DEBUG=1
+#CC=g++
+CPPFLAGS="-m64 -O3"
+CFLAGS="-O3 -m64 -pedantic -Wall"
+
+${CC} ${CPPFLAGS} -E -I../src $1 | egrep -v '^#' > /tmp/$1
+indent /tmp/$1
+${CC} ${CFLAGS} -o /tmp/$1.$$ /tmp/$1
+rm -f /tmp/$1.$$ 
+
+read -p "open /tmp/$1 ? [n] " response
+if [ "$response" = "y" ]
+then
+  vi /tmp/$1
+fi
+
+

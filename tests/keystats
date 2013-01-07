@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use strict;
+
+use FindBin;
+
+sub usage {
+  print "usage: keystats [-v] keyfile\n";
+  print "usage: keystats [-p <pct> [-v]] keyfile\n";
+  exit -1;
+}
+
+usage if ((@ARGV == 0) or ($ARGV[0] eq '-h'));
+
+my @exes = glob "$FindBin::Bin/keystat.???";
+my %stats;
+for my $exe (@exes) {
+    $stats{$exe} = `$exe @ARGV`;
+    delete $stats{$exe} if ($? != 0); # omit hash functions that fail to produce stats (nx)
+}
+
+print( "fcn  ideal%     #items   #buckets  dup%  fl   add_usec  find_usec  del-all usec\n");
+printf("---  ------ ---------- ---------- -----  -- ---------- ----------  ------------\n");
+for my $exe (sort statsort keys %stats) {
+    my ($ideal,$items,$bkts,$dups,$ok,$add,$find,$del) = split /,/, $stats{$exe}; 
+
+    # convert 0-1 values to percentages
+    $dups = $items ? (100.0 * $dups / $items) : 0.0;
+    $ideal = 100.0 * $ideal;
+
+    printf("%3s  %5.1f%% %10d %10d %4.0f%%  %2s %10d %10d  %12d\n", substr($exe,-3,3), 
+        $ideal,$items,$bkts,$dups,$ok,$add,$find,$del); 
+}
+
+# sort on hash_q (desc) then by find_usec (asc)
+sub statsort {
+    my @a_stats = split /,/, $stats{$a};
+    my @b_stats = split /,/, $stats{$b};
+    return ($b_stats[0] <=> $a_stats[0]) || ($a_stats[-1] <=> $b_stats[-1]);
+}

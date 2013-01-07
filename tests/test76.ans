@@ -1,0 +1,6 @@
+"There are two needle" len=55
+"needle" len=8
+utstring_find()=14
+utstring_find()=46
+utstring_find()=-1
+FindCnt=2

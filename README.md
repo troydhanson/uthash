@@ -1,4 +1,6 @@
-uthash
-======
 
-C macros for hash tables and more
+Documentation for uthash is available at:
+
+    http://troydhanson.github.com/uthash/
+
+

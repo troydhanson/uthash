@@ -1,0 +1,14 @@
+#!/bin/sh
+
+function proceed {
+  read -p "proceed ? [n] " response
+  if [ "$response" != "y" ]; then exit -1; fi
+}
+
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_BER'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SAX'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_FNV'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_OAT'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_JEN'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_MUR'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SFH'; 
