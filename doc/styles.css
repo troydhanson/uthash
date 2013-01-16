@@ -42,6 +42,10 @@ a img {
    border: 0
 }
 
+.twitter-share-button {
+   float: right;
+}
+
 .twitter-follow-button {
    padding: 5px;
 }
