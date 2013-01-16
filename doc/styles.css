@@ -29,6 +29,7 @@ h1,p {  margin: 0; }  /* non-0 margin on firefox */
     background-repeat: repeat-y;
     /* background-color: #ffddaa; */
     padding-top: 20px;
+    padding-top: 20px;
     margin-bottom: 10px;
 }
 
@@ -42,13 +43,14 @@ a img {
 }
 
 .twitter-follow-button {
-   padding: 10px;
+   padding: 5px;
 }
 
 #nav {
     background-color: #fff8f1;
     margin-left: 10px;
     margin-top: 20px;
+    margin-right: 20px;
     float: left;
     padding: 10px;
     border-style: solid;
@@ -95,10 +97,11 @@ a img {
 
 .code {
     padding: 10px;
+    margin: 10px;
     font-size: 8pt;
     font-weight: normal;
     background: #f3f3f3;
-    width: 80%;
+    width: 100%;
     border-style: solid;
     border-width: 1px;
 }
