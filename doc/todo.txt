@@ -1,0 +1,4 @@
+1. to minimize TLB churn, store hashv locally in chain
+2. to reduce memory, make the insertion-order pointers optional
+3. to improve optimization use function generators rather than void*
+4. to reduce memory, eliminate hash handle, bookkeep in head object
