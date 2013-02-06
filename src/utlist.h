@@ -108,15 +108,12 @@ do {                                                                            
   LDECLTYPE(list) _ls_q;                                                                       \
   LDECLTYPE(list) _ls_e;                                                                       \
   LDECLTYPE(list) _ls_tail;                                                                    \
-  LDECLTYPE(list) _ls_oldhead;                                                                 \
-  LDECLTYPE(list) _tmp;                                                                        \
   int _ls_insize, _ls_nmerges, _ls_psize, _ls_qsize, _ls_i, _ls_looping;                       \
   if (list) {                                                                                  \
     _ls_insize = 1;                                                                            \
     _ls_looping = 1;                                                                           \
     while (_ls_looping) {                                                                      \
       _CASTASGN(_ls_p,list);                                                                   \
-      _CASTASGN(_ls_oldhead,list);                                                             \
       list = NULL;                                                                             \
       _ls_tail = NULL;                                                                         \
       _ls_nmerges = 0;                                                                         \
@@ -153,13 +150,15 @@ do {                                                                            
         }                                                                                      \
         _ls_p = _ls_q;                                                                         \
       }                                                                                        \
-      _SV(_ls_tail,list); _NEXTASGN(_ls_tail,list,NULL,next); _RS(list);                       \
+      if (_ls_tail) {                                                                          \
+        _SV(_ls_tail,list); _NEXTASGN(_ls_tail,list,NULL,next); _RS(list);                     \
+      }                                                                                        \
       if (_ls_nmerges <= 1) {                                                                  \
         _ls_looping=0;                                                                         \
       }                                                                                        \
       _ls_insize *= 2;                                                                         \
     }                                                                                          \
-  } else _tmp=NULL; /* quiet gcc unused variable warning */                                    \
+  }                                                                                            \
 } while (0)
 
 
@@ -172,15 +171,12 @@ do {                                                                            
   LDECLTYPE(list) _ls_q;                                                                       \
   LDECLTYPE(list) _ls_e;                                                                       \
   LDECLTYPE(list) _ls_tail;                                                                    \
-  LDECLTYPE(list) _ls_oldhead;                                                                 \
-  LDECLTYPE(list) _tmp;                                                                        \
   int _ls_insize, _ls_nmerges, _ls_psize, _ls_qsize, _ls_i, _ls_looping;                       \
   if (list) {                                                                                  \
     _ls_insize = 1;                                                                            \
     _ls_looping = 1;                                                                           \
     while (_ls_looping) {                                                                      \
       _CASTASGN(_ls_p,list);                                                                   \
-      _CASTASGN(_ls_oldhead,list);                                                             \
       list = NULL;                                                                             \
       _ls_tail = NULL;                                                                         \
       _ls_nmerges = 0;                                                                         \
@@ -225,7 +221,7 @@ do {                                                                            
       }                                                                                        \
       _ls_insize *= 2;                                                                         \
     }                                                                                          \
-  } else _tmp=NULL; /* quiet gcc unused variable warning */                                    \
+  }                                                                                            \
 } while (0)
 
 #define CDL_SORT(list, cmp)                                                                    \
@@ -239,7 +235,6 @@ do {                                                                            
   LDECLTYPE(list) _ls_tail;                                                                    \
   LDECLTYPE(list) _ls_oldhead;                                                                 \
   LDECLTYPE(list) _tmp;                                                                        \
-  LDECLTYPE(list) _tmp2;                                                                       \
   int _ls_insize, _ls_nmerges, _ls_psize, _ls_qsize, _ls_i, _ls_looping;                       \
   if (list) {                                                                                  \
     _ls_insize = 1;                                                                            \
@@ -295,14 +290,14 @@ do {                                                                            
         _ls_p = _ls_q;                                                                         \
       }                                                                                        \
       _CASTASGN(list->prev,_ls_tail);                                                          \
-      _CASTASGN(_tmp2,list);                                                                   \
-      _SV(_ls_tail,list); _NEXTASGN(_ls_tail,list,_tmp2,next); _RS(list);                      \
+      _CASTASGN(_tmp,list);                                                                    \
+      _SV(_ls_tail,list); _NEXTASGN(_ls_tail,list,_tmp,next); _RS(list);                       \
       if (_ls_nmerges <= 1) {                                                                  \
         _ls_looping=0;                                                                         \
       }                                                                                        \
       _ls_insize *= 2;                                                                         \
     }                                                                                          \
-  } else _tmp=NULL; /* quiet gcc unused variable warning */                                    \
+  }                                                                                            \
 } while (0)
 
 /******************************************************************************
