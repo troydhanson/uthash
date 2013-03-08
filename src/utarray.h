@@ -211,10 +211,10 @@ typedef struct {
 #define utarray_find(a,v,cmp) bsearch((v),(a)->d,(a)->i,(a)->icd.sz,cmp)
 
 #define utarray_front(a) (((a)->i) ? (_utarray_eltptr(a,0)) : NULL)
-#define utarray_next(a,e) (((e)==NULL) ? utarray_front(a) : ((((a)->i) > (utarray_eltidx(a,e)+1)) ? _utarray_eltptr(a,utarray_eltidx(a,e)+1) : NULL))
+#define utarray_next(a,e) (((e)==NULL) ? utarray_front(a) : ((((a)->i) > (unsigned)(utarray_eltidx(a,e)+1)) ? _utarray_eltptr(a,(unsigned)(utarray_eltidx(a,e)+1)) : NULL))
 #define utarray_prev(a,e) (((e)==NULL) ? utarray_back(a) : ((utarray_eltidx(a,e) > 0) ? _utarray_eltptr(a,utarray_eltidx(a,e)-1) : NULL))
 #define utarray_back(a) (((a)->i) ? (_utarray_eltptr(a,(a)->i-1)) : NULL)
-#define utarray_eltidx(a,e) (((char*)(e) >= (char*)((a)->d)) ? (((char*)(e) - (char*)((a)->d))/(a)->icd.sz) : -1)
+#define utarray_eltidx(a,e) (((char*)(e) >= (char*)((a)->d)) ? (((char*)(e) - (char*)((a)->d))/(ssize_t)(a)->icd.sz) : -1)
 
 /* last we pre-define a few icd for common utarrays of ints and strings */
 static void utarray_str_cpy(void *dst, const void *src) {
