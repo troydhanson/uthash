@@ -769,7 +769,7 @@ asciidoc.install(2);
 <span id="author">Troy D. Hanson</span><br />
 <span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
 <span id="revnumber">version 1.9.8,</span>
-<span id="revdate">January 2013</span>
+<span id="revdate">March 2013</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -796,7 +796,7 @@ structures.</p></div>
 <div class="olist arabic"><ol class="arabic">
 <li>
 <p>
-add
+add/replace
 </p>
 </li>
 <li>
@@ -886,6 +886,9 @@ FreeBSD
 </p>
 </li>
 </ul></div>
+<div class="paragraph"><p>Windows users: as of 2013 it&#8217;s been a while since I had the environment to test
+uthash under Visual Studio. If someone wants to run the unit tests under the latest
+Visual Studio and confirm that its still clean, that&#8217;d be appreciated.</p></div>
 <div class="sect3">
 <h4 id="_test_suite">Test suite</h4>
 <div class="paragraph"><p>To run the test suite, enter the <code>tests</code> directory. Then,</p></div>
@@ -916,50 +919,74 @@ It is free and open source.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_getting_help">Getting help</h3>
-<div class="paragraph"><p>You can email the author at <a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a> or message @troydhanson on Twitter.</p></div>
+<div class="paragraph"><p>I encourage people to use the public Google Group to ask questions:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>uthash@googlegroups.com</code></pre>
+</div></div>
+<div class="paragraph"><p>You can browse it at:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>https://groups.google.com/d/forum/uthash</code></pre>
+</div></div>
+<div class="paragraph"><p>If you are experienced with uthash and like to answer questions, please join the
+group and chime in when someone asks a question. That would be a great help!</p></div>
+<div class="sect3">
+<h4 id="_contacting_the_author">Contacting the author</h4>
+<div class="paragraph"><p>You can email me at <a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a> or message @troydhanson on Twitter.  I
+can&#8217;t always answer my email, and when I do, it&#8217;s sometimes weeks later. Sorry!</p></div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_resources">Resources</h3>
-<div class="paragraph"><p>Users of uthash may wish to follow the news feed for information about new
-releases. Also, there are some extra bonus headers included with uthash.</p></div>
-<div class="dlist"><dl>
-<dt class="hdlist1">
-News
-</dt>
-<dd>
+<h3 id="_contributing">Contributing</h3>
+<div class="paragraph"><p>If you add a new feature or fix something in uthash or in the extras, please
+make a pull request on Github. For anything other than a trivial change, include
+a unit test and documentation if you possibly can. (And don&#8217;t be discouraged if
+it takes weeks or even months for me to merge it. Sorry, my life is busy!) Thanks!</p></div>
+</div>
+<div class="sect2">
+<h3 id="_extras_included">Extras included</h3>
+<div class="paragraph"><p>Three "extras" come with uthash. These provide lists, dynamic arrays and
+strings:</p></div>
+<div class="ulist"><ul>
+<li>
 <p>
- The author has a news feed for <a href="http://troydhanson.wordpress.com/">software updates</a> <span class="image">
+<a href="utlist.html">utlist.h</a> provides linked list macros for C structures.
+</p>
+</li>
+<li>
+<p>
+<a href="utarray.html">utarray.h</a> implements dynamic arrays using macros.
+</p>
+</li>
+<li>
+<p>
+<a href="utstring.html">utstring.h</a> implements a basic dynamic string.
+</p>
+</li>
+</ul></div>
+<div class="sect3">
+<h4 id="_other_software">Other software</h4>
+<div class="paragraph"><p>Other open-source software by the author is listed at <a href="http://tkhanson.net">http://tkhanson.net</a>.</p></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_news">News</h3>
+<div class="paragraph"><p>The author has a blog for <a href="http://troydhanson.wordpress.com/">software updates</a>
+<span class="image">
 <img src="rss.png" alt="(RSS)" />
-</span>. You can also follow @troydhanson on Twitter for updates.
-</p>
-</dd>
-<dt class="hdlist1">
-Extras included with uthash
-</dt>
-<dd>
-<p>
- uthash ships with these "extras"-- independent headers similar to uthash.
- First <a href="utlist.html">utlist.h</a> provides linked list macros for C structures.
- Second, <a href="utarray.html">utarray.h</a> implements dynamic arrays using macros.
- Third, <a href="utstring.html">utstring.h</a> implements a basic dynamic string.
-</p>
-</dd>
-<dt class="hdlist1">
-Other software
-</dt>
-<dd>
-<p>
- Other open-source software by the author is listed at <a href="http://tkhanson.net">http://tkhanson.net</a>.
-</p>
-</dd>
-</dl></div>
+</span>. You can also follow @troydhanson on Twitter for updates.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_who_8217_s_using_it">Who&#8217;s using it?</h3>
-<div class="paragraph"><p>Since releasing uthash in 2006, it has been downloaded tens of thousands of
-times, incorporated into commercial software, academic research, and into other
-open-source software.  It has also been added to the native package repositories
-for a number of Linux and BSD distros.</p></div>
+<div class="paragraph"><p>Uthash was downloaded around 30,000 times between 2006-2013 then transitioned to
+GitHub. It&#8217;s been incorporated into commercial software, academic research, and
+into other open-source software. It has also been added to the native package
+repositories for a number of Unix-y distros.</p></div>
+<div class="paragraph"><p>When uthash was written, there were fewer options for doing generic hash tables
+in C than exist today. There are faster hash tables, more memory-efficient hash
+tables, with very different API&#8217;s today. But, like driving a minivan, uthash is
+convenient, and gets the job done without drawing a lot of attention to itself.</p></div>
 </div>
 </div>
 </div>
@@ -1108,6 +1135,10 @@ Otherwise we just modify the structure that already exists.</p></div>
 <div class="paragraph"><p>Why doesn&#8217;t uthash check key uniqueness for you? It saves the cost of a hash
 lookup for those programs which don&#8217;t need it- for example, programs whose keys
 are generated by an incrementing, non-repeating counter.</p></div>
+<div class="paragraph"><p>However, if replacement is a common operation, it is possible to use the
+<code>HASH_REPLACE</code> macro. This macro, before adding the item, will try to find an
+item with the same key and delete it first. It also returns a pointer to the
+replaced item, so the user has a chance to de-allocate its memory.</p></div>
 </div>
 <div class="sect3">
 <h4 id="_passing_the_hash_pointer_into_functions">Passing the hash pointer into functions</h4>
@@ -1137,6 +1168,12 @@ void add_user(struct my_struct **users, int user_id, char *name) { ...
 the hash macros modify it (in other words, they modify the <em>pointer itself</em> not
 just what it points to).</p></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_replace_item">Replace item</h3>
+<div class="paragraph"><p><code>HASH_REPLACE</code> macros are equivalent to HASH_ADD macros except they attempt
+to find and delete the item first. If it find and deletes and item, it will
+also return that items pointer as an output parameter.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_find_item">Find item</h3>
@@ -1185,7 +1222,9 @@ structure we want to remove from the hash.</p></div>
 <h4 id="_uthash_never_frees_your_structure">uthash never frees your structure</h4>
 <div class="paragraph"><p>Deleting a structure just removes it from the hash table-- it doesn&#8217;t <code>free</code>
 it.  The choice of when to free your structure is entirely up to you; uthash
-will never free your structure.</p></div>
+will never free your structure. For example when using <code>HASH_REPLACE</code> macros,
+a replaced output argument is returned back, in order to make it possible for
+the user to de-allocate it.</p></div>
 </div>
 <div class="sect3">
 <h4 id="_delete_can_change_the_pointer">Delete can change the pointer</h4>
@@ -2742,7 +2781,7 @@ cellspacing="0" cellpadding="4">
 <col width="75%" />
 <thead>
 <tr>
-<th align="left" valign="top">macro         </th>
+<th align="left" valign="top">macro            </th>
 <th align="left" valign="top"> arguments</th>
 </tr>
 </thead>
@@ -2750,6 +2789,10 @@ cellspacing="0" cellpadding="4">
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_INT</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_INT</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(head, keyfiled_name, item_ptr,replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_INT</code></p></td>
@@ -2760,12 +2803,20 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr)</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_STR</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(head,keyfield_name, item_ptr, replaced_item_ptr)</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_STR</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(head, key_ptr, item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_PTR</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_PTR</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_PTR</code></p></td>
@@ -2814,6 +2865,10 @@ cellspacing="0" cellpadding="4">
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND</code></p></td>
@@ -2920,6 +2975,15 @@ item_ptr
 </p>
 </dd>
 <dt class="hdlist1">
+replaced_item_ptr
+</dt>
+<dd>
+<p>
+    used in HASH_REPLACE macros. This is an output parameter that is set to point
+    to the replaced item (if no item is replaced it is set to NULL).
+</p>
+</dd>
+<dt class="hdlist1">
 cmp
 </dt>
 <dd>
@@ -2950,7 +3014,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-01-07 03:00:43 EST
+Last updated 2013-03-10 13:01:17 EDT
 </div>
 </div>
 </body>
