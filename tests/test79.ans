@@ -1,0 +1,8 @@
+added 10 100
+id 10, tag 100
+added 11 101
+id 10, tag 100
+id 11, tag 101
+replaced 11 that had tag 101 with tag 102
+id 10, tag 100
+id 11, tag 102

@@ -158,6 +158,16 @@ do {                                                                            
 
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
         HASH_ADD_KEYPTR(hh,head,&((add)->fieldname),keylen_in,add)
+
+#define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
+do {                                                                             \
+  replaced=NULL;                                                                 \
+  HASH_FIND(hh,head,&((add)->fieldname),keylen_in,replaced);                     \
+  if (replaced!=NULL) {                                                          \
+     HASH_DELETE(hh,head,replaced);                                              \
+  };                                                                             \
+  HASH_ADD(hh,head,fieldname,keylen_in,add);                                     \
+} while(0)
  
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
 do {                                                                             \
@@ -242,14 +252,20 @@ do {                                                                            
     HASH_FIND(hh,head,findstr,strlen(findstr),out)
 #define HASH_ADD_STR(head,strfield,add)                                          \
     HASH_ADD(hh,head,strfield,strlen(add->strfield),add)
+#define HASH_REPLACE_STR(head,strfield,add,replaced)                             \
+  HASH_REPLACE(hh,head,strfield,strlen(add->strfield),replaced)
 #define HASH_FIND_INT(head,findint,out)                                          \
     HASH_FIND(hh,head,findint,sizeof(int),out)
 #define HASH_ADD_INT(head,intfield,add)                                          \
     HASH_ADD(hh,head,intfield,sizeof(int),add)
+#define HASH_REPLACE_INT(head,intfield,add,replaced)                             \
+    HASH_REPLACE(hh,head,intfield,sizeof(int),add,replaced)
 #define HASH_FIND_PTR(head,findptr,out)                                          \
     HASH_FIND(hh,head,findptr,sizeof(void *),out)
 #define HASH_ADD_PTR(head,ptrfield,add)                                          \
     HASH_ADD(hh,head,ptrfield,sizeof(void *),add)
+#define HASH_REPLACE_PTR(head,ptrfield,add)                                      \
+    HASH_REPLACE(hh,head,ptrfield,sizeof(void *),add,replaced)
 #define HASH_DEL(head,delptr)                                                    \
     HASH_DELETE(hh,head,delptr)
 
