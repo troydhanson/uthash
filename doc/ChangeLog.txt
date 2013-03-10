@@ -3,7 +3,7 @@ uthash ChangeLog
 
 Version 1.9.8 (2013-01-09)
 --------------------------
-* `HASH_REPLACE` now in uthash (thanks, Nick V!)
+* `HASH_REPLACE` now in uthash (thanks, Nick Vatamaniuc!)
 * fixed clang warnings (thanks wynnw!)
 * transitioned to GitHub
 * uthash has been downloaded 29,000+ times since 2006 on SourceForge
