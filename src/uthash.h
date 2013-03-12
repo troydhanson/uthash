@@ -466,7 +466,7 @@ do {                                                                            
 #endif
 #define HASH_SFH(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
-  char *_sfh_key=(char*)(key);                                                   \
+  unsigned char *_sfh_key=(unsigned char*)(key);                                 \
   uint32_t _sfh_tmp, _sfh_len = keylen;                                          \
                                                                                  \
   int _sfh_rem = _sfh_len & 3;                                                   \
@@ -476,7 +476,7 @@ do {                                                                            
   /* Main loop */                                                                \
   for (;_sfh_len > 0; _sfh_len--) {                                              \
     hashv    += get16bits (_sfh_key);                                            \
-    _sfh_tmp       = (get16bits (_sfh_key+2) << 11) ^ hashv;                     \
+    _sfh_tmp       = (uint32_t)(get16bits (_sfh_key+2)) << 11  ^ hashv;          \
     hashv     = (hashv << 16) ^ _sfh_tmp;                                        \
     _sfh_key += 2*sizeof (uint16_t);                                             \
     hashv    += hashv >> 11;                                                     \
@@ -486,7 +486,7 @@ do {                                                                            
   switch (_sfh_rem) {                                                            \
     case 3: hashv += get16bits (_sfh_key);                                       \
             hashv ^= hashv << 16;                                                \
-            hashv ^= _sfh_key[sizeof (uint16_t)] << 18;                          \
+            hashv ^= (uint32_t)(_sfh_key[sizeof (uint16_t)] << 18);              \
             hashv += hashv >> 11;                                                \
             break;                                                               \
     case 2: hashv += get16bits (_sfh_key);                                       \
