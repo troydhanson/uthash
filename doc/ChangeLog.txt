@@ -1,14 +1,16 @@
 uthash ChangeLog
 ================
 
+Click to return to the link:index.html[uthash home page].
+
 Version 1.9.8 (2013-03-10)
 --------------------------
 * `HASH_REPLACE` now in uthash (thanks, Nick Vatamaniuc!)
 * fixed clang warnings (thanks wynnw!)
-* transitioned to GitHub
+* fixed `utarray_insert` when inserting past array end (thanks Rob Willett!)
+* you can now find http://troydhanson.github.com/uthash/[uthash on GitHub]
+* there's a https://groups.google.com/d/forum/uthash[uthash Google Group]
 * uthash has been downloaded 29,000+ times since 2006 on SourceForge
-
-Click to return to the link:index.html[uthash home page].
 
 Version 1.9.7 (2012-10-09)
 --------------------------

@@ -80,6 +80,10 @@ test75: test utstring with utstring_findR (Joe Wei)
 test76: test utstring with _utstring_find (Joe Wei)
 test77: test utstring with _utstring_findR (Joe Wei)
 test78: test utlist "2" family with flexible Prev/Next naming eg. DL_DELETE2
+test79: test HASH_REPLACE
+test80: test utarray_insert past end of array
+test81: test utarray_insert past end of array
+test82: test utarray_inserta past end of array
 
 
 Other Make targets

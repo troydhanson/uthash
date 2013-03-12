@@ -116,8 +116,8 @@ typedef struct {
 #define _utarray_eltptr(a,j) ((char*)((a)->d + ((a)->icd.sz*(j) )))
 
 #define utarray_insert(a,p,j) do {                                            \
+  if (j > (a)->i) utarray_resize(a,j);                                        \
   utarray_reserve(a,1);                                                       \
-  if (j > (a)->i) break;                                                      \
   if ((j) < (a)->i) {                                                         \
     memmove( _utarray_eltptr(a,(j)+1), _utarray_eltptr(a,j),                  \
              ((a)->i - (j))*((a)->icd.sz));                                   \
@@ -129,7 +129,7 @@ typedef struct {
 
 #define utarray_inserta(a,w,j) do {                                           \
   if (utarray_len(w) == 0) break;                                             \
-  if (j > (a)->i) break;                                                      \
+  if (j > (a)->i) utarray_resize(a,j);                                        \
   utarray_reserve(a,utarray_len(w));                                          \
   if ((j) < (a)->i) {                                                         \
     memmove(_utarray_eltptr(a,(j)+utarray_len(w)),                            \
