@@ -135,6 +135,7 @@ do {                                                                            
 #define HASH_BLOOM_FREE(tbl) 
 #define HASH_BLOOM_ADD(tbl,hashv) 
 #define HASH_BLOOM_TEST(tbl,hashv) (1)
+#define HASH_BLOOM_BYTELEN 0
 #endif
 
 #define HASH_MAKE_TABLE(hh,head)                                                 \
@@ -847,6 +848,12 @@ do {                                                                            
     (head)=NULL;                                                                 \
   }                                                                              \
 } while(0)
+
+#define HASH_OVERHEAD(hh,head)                                                   \
+ (size_t)((((head)->hh.tbl->num_items   * sizeof(UT_hash_handle))   +            \
+           ((head)->hh.tbl->num_buckets * sizeof(UT_hash_bucket))   +            \
+            (sizeof(UT_hash_table))                                 +            \
+            (HASH_BLOOM_BYTELEN)))
 
 #ifdef NO_DECLTYPE
 #define HASH_ITER(hh,head,el,tmp)                                                \

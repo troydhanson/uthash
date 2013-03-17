@@ -84,6 +84,8 @@ test79: test HASH_REPLACE
 test80: test utarray_insert past end of array
 test81: test utarray_insert past end of array
 test82: test utarray_inserta past end of array
+test83: test HASH_OVERHEAD
+test84: test HASH_OVERHEAD on hash with bloom filter
 
 
 Other Make targets

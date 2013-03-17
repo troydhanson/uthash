@@ -83,11 +83,11 @@ Getting help
 ~~~~~~~~~~~~
 I encourage people to use the public Google Group to ask questions:
 
-  uthash@googlegroups.com
+mailto:uthash@googlegroups.com[]
 
 You can browse it at:
 
-  https://groups.google.com/d/forum/uthash
+https://groups.google.com/d/forum/uthash[]
 
 If you are experienced with uthash and like to answer questions, please join the
 group and chime in when someone asks a question. That would be a great help!
@@ -186,9 +186,20 @@ find and delete items.
 
 A word about memory
 ~~~~~~~~~~~~~~~~~~~
+
+Overhead
+^^^^^^^^
+The hash handle consumes about 32 bytes per item on a 32-bit system, or 56 bytes
+per item on a 64-bit system. The other overhead costs are the buckets and the
+table which are negligible in comparison. You can use `HASH_OVERHEAD` to get
+the overhead size, in bytes, for a hash table. See <<Macro_reference,Macro Reference>>.
+
+How clean up occurs
+^^^^^^^^^^^^^^^^^^^
 Some have asked how uthash cleans up its internal memory. The answer is simple:
 'when you delete the final item' from a hash table, uthash releases all the
 internal memory associated with that hash table, and sets its pointer to NULL.
+
 
 Hash operations
 ---------------
@@ -1731,6 +1742,7 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 |HASH_CLEAR     | (hh_name, head)
 |HASH_SELECT    | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
 |HASH_ITER      | (hh_name, head, item_ptr, tmp_item_ptr)
+|HASH_OVERHEAD  | (hh_name, head)
 |===============================================================================
 
 [NOTE]

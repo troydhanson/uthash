@@ -3,6 +3,12 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
+Version 1.9.8.p1 
+--------------------------
+* fix missing argument in `HASH_REPLACE_STR` (thanks, Alex!)
+* bump version number in source files to match docs (thanks, John Crow!)
+* add `HASH_OVERHEAD` macro to get overhead size for hash table
+
 Version 1.9.8 (2013-03-10)
 --------------------------
 * `HASH_REPLACE` now in uthash (thanks, Nick Vatamaniuc!)
