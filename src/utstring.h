@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2008-2013, Troy D. Hanson   http://uthash.sourceforge.net
+Copyright (c) 2008-2013, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -22,7 +22,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /* a dynamic string implementation using macros 
- * see http://uthash.sourceforge.net/utstring
  */
 #ifndef UTSTRING_H
 #define UTSTRING_H
