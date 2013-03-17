@@ -920,15 +920,9 @@ It is free and open source.</p></div>
 <div class="sect2">
 <h3 id="_getting_help">Getting help</h3>
 <div class="paragraph"><p>I encourage people to use the public Google Group to ask questions:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>uthash@googlegroups.com</code></pre>
-</div></div>
+<div class="paragraph"><p><a href="mailto:uthash@googlegroups.com">uthash@googlegroups.com</a></p></div>
 <div class="paragraph"><p>You can browse it at:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>https://groups.google.com/d/forum/uthash</code></pre>
-</div></div>
+<div class="paragraph"><p><a href="https://groups.google.com/d/forum/uthash">https://groups.google.com/d/forum/uthash</a></p></div>
 <div class="paragraph"><p>If you are experienced with uthash and like to answer questions, please join the
 group and chime in when someone asks a question. That would be a great help!</p></div>
 <div class="sect3">
@@ -1040,9 +1034,19 @@ find and delete items.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_a_word_about_memory">A word about memory</h3>
+<div class="sect3">
+<h4 id="_overhead">Overhead</h4>
+<div class="paragraph"><p>The hash handle consumes about 32 bytes per item on a 32-bit system, or 56 bytes
+per item on a 64-bit system. The other overhead costs are the buckets and the
+table which are negligible in comparison. You can use <code>HASH_OVERHEAD</code> to get
+the overhead size, in bytes, for a hash table. See <a href="#Macro_reference">Macro Reference</a>.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_how_clean_up_occurs">How clean up occurs</h4>
 <div class="paragraph"><p>Some have asked how uthash cleans up its internal memory. The answer is simple:
 <em>when you delete the final item</em> from a hash table, uthash releases all the
 internal memory associated with that hash table, and sets its pointer to NULL.</p></div>
+</div>
 </div>
 </div>
 </div>
@@ -2898,6 +2902,10 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>HASH_ITER</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, item_ptr, tmp_item_ptr)</code></p></td>
 </tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_OVERHEAD</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head)</code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -3014,7 +3022,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-03-10 13:01:17 EDT
+Last updated 2013-03-17 14:15:28 EDT
 </div>
 </div>
 </body>
