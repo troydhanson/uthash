@@ -81,13 +81,9 @@ Follow the links on https://github.com/troydhanson/uthash to clone uthash or get
 
 Getting help
 ~~~~~~~~~~~~
-I encourage people to use the public Google Group to ask questions:
+I encourage people to use the public Google Group to ask questions: mailto:uthash@googlegroups.com[]
 
-mailto:uthash@googlegroups.com[]
-
-You can browse it at:
-
-https://groups.google.com/d/forum/uthash[]
+You can browse it at: https://groups.google.com/d/forum/uthash[]
 
 If you are experienced with uthash and like to answer questions, please join the
 group and chime in when someone asks a question. That would be a great help!
@@ -190,9 +186,10 @@ A word about memory
 Overhead
 ^^^^^^^^
 The hash handle consumes about 32 bytes per item on a 32-bit system, or 56 bytes
-per item on a 64-bit system. The other overhead costs are the buckets and the
-table which are negligible in comparison. You can use `HASH_OVERHEAD` to get
-the overhead size, in bytes, for a hash table. See <<Macro_reference,Macro Reference>>.
+per item on a 64-bit system. The other overhead costs-- the buckets and the
+table-- are negligible in comparison. You can use `HASH_OVERHEAD` to get the
+overhead size, in bytes, for a hash table. See <<Macro_reference,Macro
+Reference>>.
 
 How clean up occurs
 ^^^^^^^^^^^^^^^^^^^
