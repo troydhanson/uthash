@@ -70,6 +70,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define NO_DECLTYPE
 #define LDECLTYPE(x) char*
 #endif
+#elif defined(__ICCARM__)
+#define NO_DECLTYPE
+#define LDECLTYPE(x) char*
 #else                      /* GNU, Sun and other compilers */
 #define LDECLTYPE(x) __typeof(x)
 #endif
@@ -405,7 +408,7 @@ do {                                                                            
 #undef LL_DELETE
 #define LL_DELETE LL_DELETE_VS2008
 #undef LL_DELETE2
-#define LL_DELETE2_VS2008
+#define LL_DELETE2 LL_DELETE2_VS2008
 #undef LL_APPEND2
 #define LL_APPEND2 LL_APPEND2_VS2008
 #undef LL_CONCAT /* no LL_CONCAT_VS2008 */
