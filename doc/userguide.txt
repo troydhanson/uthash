@@ -109,6 +109,8 @@ strings:
  * link:utarray.html[utarray.h] implements dynamic arrays using macros. 
  * link:utstring.html[utstring.h] implements a basic dynamic string.
 
+There's also a small LRU cache API, based on uthash, in `tests/lru_cache`.
+
 Other software
 ^^^^^^^^^^^^^^
 Other open-source software by the author is listed at http://tkhanson.net.

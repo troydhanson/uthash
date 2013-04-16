@@ -132,7 +132,7 @@ int foo_cache_delete(struct foo_cache *cache, int keep_data)
 
     A warning: Even though result is just a pointer,
     you have to call this function with a **ptr,
-    otherwise this shit will blow up in your face.
+    otherwise this will blow up in your face.
 
     @return EINVAL if cache is NULL, 0 otherwise
 */
