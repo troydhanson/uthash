@@ -5,6 +5,7 @@ Click to return to the link:index.html[uthash home page].
 
 Version 1.9.8.p2 
 ----------------
+* added LRU cache example in `tests/lru_cache` (thanks, Oliver Lorenz!)
 * fix LL_DELETE2 for VS2008 (thanks, Greg Davydouski!)
 
 Version 1.9.8.p1 
