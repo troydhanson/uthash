@@ -32,7 +32,7 @@ int main() {
             V_FindCnt++;
         }
     } while (V_FindPos >= 0);
-    printf("FindCnt=%u\n", V_FindCnt);
+    printf("FindCnt=%u\n", (unsigned)V_FindCnt);
 
     utstring_free(s);
     utstring_free(t);

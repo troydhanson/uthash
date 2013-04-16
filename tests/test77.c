@@ -41,7 +41,7 @@ int main() {
             }
             printf("utstring_find()=%ld\n", V_FindPos);
         } while (V_FindPos >= 0);
-        printf("FindCnt=%u\n", V_FindCnt);
+        printf("FindCnt=%u\n", (unsigned)V_FindCnt);
 
         free(V_KMP_Table);
     }

@@ -86,6 +86,7 @@ int infer_hash_function(char *key, size_t keylen, uint32_t hashv) {
   HASH_FNV(key,keylen,num_bkts,ohashv,obkt); if (ohashv == hashv) return FNV;
   HASH_OAT(key,keylen,num_bkts,ohashv,obkt); if (ohashv == hashv) return OAT;
   HASH_MUR(key,keylen,num_bkts,ohashv,obkt); if (ohashv == hashv) return MUR;
+  obkt++; // this quiets an unused variable warning. yes, this is a ugly hack
   return 0;
 }
 
