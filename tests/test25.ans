@@ -1,5 +1,6 @@
 CDL macros
 c b a 
+count = 3
 advancing head pointer
 b a c 
 b a c b a c b a c b 
@@ -12,6 +13,7 @@ deleting (c)
 
 DL macros
 a b c 
+count = 3
 deleting tail c
 a b 
 deleting head a
@@ -20,6 +22,7 @@ deleting head b
 
 LL macros
 a b c 
+count = 3
 deleting tail c
 a b 
 deleting head a

@@ -223,7 +223,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; vertical-align: text-bottom; }
+span.image img { border-style: none; }
 a.image:visited { color: white; }
 
 dl {
@@ -858,8 +858,8 @@ constant-time operations. Appending to a singly-linked list is an <em>O(n)</em>
 operation but appending to a doubly-linked list is constant time using these
 macros.  (This is because, in the utlist implementation of the doubly-linked
 list, the head element&#8217;s <code>prev</code> member points back to the list tail, even when
-the list is non-circular). Sorting is an <em>O(n log(n))</em> operation. Iteration
-and searching are <code>O(n)</code> for all list types.</p></div>
+the list is non-circular). Sorting is an <em>O(n log(n))</em> operation. Iteration,
+counting and searching are <code>O(n)</code> for all list types.</p></div>
 </div>
 </div>
 <div class="sect2">
@@ -968,6 +968,11 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>DL_SEARCH(head,elt,like,cmp);</code></p></td>
 <td align="left" valign="top"><p class="table"><code>CDL_SEARCH(head,elt,like,cmp);</code></p></td>
 </tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_COUNT(head,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_COUNT(head,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_COUNT(head,count);</code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -992,6 +997,7 @@ element. It is not any faster than manually iterating and testing each element.
 There are two forms: the "scalar" version searches for an element using a
 simple equality test on a given structure member, while the general version takes an
 element to which all others in the list will be compared using a <code>cmp</code> function.</p></div>
+<div class="paragraph"><p>The <em>count</em> operation iterates over the list and increments a supplied counter.</p></div>
 <div class="paragraph"><p>The parameters shown in the table above are explained here:</p></div>
 <div class="dlist"><dl>
 <dt class="hdlist1">
@@ -1078,6 +1084,14 @@ val
   <code>field</code>) of the element being sought.
 </p>
 </dd>
+<dt class="hdlist1">
+count
+</dt>
+<dd>
+<p>
+  integer which will be set to the length of the list
+</p>
+</dd>
 </dl></div>
 </div>
 <div class="sect2">
@@ -1109,6 +1123,7 @@ int main(int argc, char *argv[]) {
     el *name, *elt, *tmp, etmp;
 
     char linebuf[BUFLEN];
+    int count;
     FILE *file;
 
     if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
@@ -1123,6 +1138,8 @@ int main(int argc, char *argv[]) {
     }
     DL_SORT(head, namecmp);
     DL_FOREACH(head,elt) printf("%s", elt-&gt;bname);
+    DL_COUNT(head, count);
+    printf("%d number of elements in list\n", count);
 
     memcpy(&amp;etmp.bname, "WES\n", 5);
     DL_SEARCH(head,elt,&amp;etmp,namecmp);
@@ -1161,18 +1178,24 @@ LL_FOREACH2(head,el,next)
 LL_FOREACH_SAFE2(head,el,tmp,next)
 LL_SEARCH_SCALAR2(head,out,field,val,next)
 LL_SEARCH2(head,out,elt,cmp,next)
+LL_COUNT(head,count);
+LL_COUNT2(head,count,next);
 DL_PREPEND2(head,add,prev,next)
 DL_APPEND2(head,add,prev,next)
 DL_CONCAT2(head1,head2,prev,next)
 DL_DELETE2(head,del,prev,next)
 DL_FOREACH2(head,el,next)
 DL_FOREACH_SAFE2(head,el,tmp,next)
+DL_COUNT(head,count);
+DL_COUNT2(head,count,next);
 CDL_PREPEND2(head,add,prev,next)
 CDL_DELETE2(head,del,prev,next)
 CDL_FOREACH2(head,el,next)
 CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
 CDL_SEARCH_SCALAR2(head,out,field,val,next)
-CDL_SEARCH2(head,out,elt,cmp,next)</code></pre>
+CDL_SEARCH2(head,out,elt,cmp,next)
+CDL_COUNT(head,count);
+CDL_COUNT2(head,count,next);</code></pre>
 </div></div>
 </div>
 </div>
@@ -1182,7 +1205,7 @@ CDL_SEARCH2(head,out,elt,cmp,next)</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-03-17 14:17:35 EDT
+Last updated 2013-06-20 14:26:33 CEST
 </div>
 </div>
 </body>

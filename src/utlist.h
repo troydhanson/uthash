@@ -416,6 +416,16 @@ do {                                                                            
 #endif
 /* end VS2008 replacements */
 
+#define LL_COUNT(head, counter)                                                                \
+    LL_COUNT2(head,counter,next)                                                             \
+
+#define LL_COUNT2(head, counter,next)                                                         \
+{                                                                                              \
+    LDECLTYPE(head) _el;                                                                      \
+    counter = 0;                                                                               \
+    LL_FOREACH2(head,_el,next){ ++counter; }                                                    \
+}
+
 #define LL_FOREACH(head,el)                                                                    \
     LL_FOREACH2(head,el,next)
 
@@ -563,6 +573,15 @@ do {                                                                            
   }                                                                                            \
 } while (0) 
 
+#define DL_COUNT(head, counter)                                                                \
+    DL_COUNT2(head,counter,next)                                                             \
+
+#define DL_COUNT2(head, counter,next)                                                         \
+{                                                                                              \
+    LDECLTYPE(head) _el;                                                                      \
+    counter = 0;                                                                               \
+    DL_FOREACH2(head,_el,next){ ++counter; }                                                    \
+}
 
 #define DL_FOREACH(head,el)                                                                    \
     DL_FOREACH2(head,el,next)
@@ -658,6 +677,16 @@ do {                                                                            
      if ((del) == (head)) (head)=(del)->next;                                                  \
   }                                                                                            \
 } while (0) 
+
+#define CDL_COUNT(head, counter)                                                                \
+    CDL_COUNT2(head,counter,next)                                                             \
+
+#define CDL_COUNT2(head, counter,next)                                                         \
+{                                                                                              \
+    LDECLTYPE(head) _el;                                                                      \
+    counter = 0;                                                                               \
+    CDL_FOREACH2(head,_el,next){ ++counter; }                                                  \
+}
 
 #define CDL_FOREACH(head,el)                                                                   \
     CDL_FOREACH2(head,el,next)
