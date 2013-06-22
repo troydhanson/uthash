@@ -10,6 +10,7 @@ el *head = NULL;
 
 int main(int argc, char *argv[]) {
     int i;
+    int count;
     el els[10], *e;
     for(i=0;i<10;i++) els[i].id='a'+i;
 
@@ -21,6 +22,8 @@ int main(int argc, char *argv[]) {
     CDL_FOREACH(head,e) 
         printf("%c ", e->id); 
     printf("\n");
+    CDL_COUNT(head, count);
+    printf("count = %d\n", count);
 
     /* point head to head->next */
     printf("advancing head pointer\n");
@@ -62,6 +65,8 @@ int main(int argc, char *argv[]) {
     DL_FOREACH(head,e) 
         printf("%c ", e->id); 
     printf("\n");
+    DL_COUNT(head, count);
+    printf("count = %d\n", count);
 
     printf("deleting tail c\n");
     DL_DELETE(head,&els[2]);
@@ -89,6 +94,9 @@ int main(int argc, char *argv[]) {
     LL_FOREACH(head,e) 
         printf("%c ", e->id); 
     printf("\n");
+    
+    LL_COUNT(head, count);
+    printf("count = %d\n", count);
 
     printf("deleting tail c\n");
     LL_DELETE(head,&els[2]);

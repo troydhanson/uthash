@@ -54,8 +54,8 @@ constant-time operations. Appending to a singly-linked list is an 'O(n)'
 operation but appending to a doubly-linked list is constant time using these
 macros.  (This is because, in the utlist implementation of the doubly-linked
 list, the head element's `prev` member points back to the list tail, even when
-the list is non-circular). Sorting is an 'O(n log(n))' operation. Iteration
-and searching are `O(n)` for all list types.
+the list is non-circular). Sorting is an 'O(n log(n))' operation. Iteration,
+counting and searching are `O(n)` for all list types.
 
 List elements
 ~~~~~~~~~~~~~
@@ -104,6 +104,7 @@ iterating over them.
 |LL_FOREACH_SAFE(head,elt,tmp) {...}| DL_FOREACH_SAFE(head,elt,tmp) {...} | CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {...}
 |LL_SEARCH_SCALAR(head,elt,mbr,val);| DL_SEARCH_SCALAR(head,elt,mbr,val); | CDL_SEARCH_SCALAR(head,elt,mbr,val);
 |LL_SEARCH(head,elt,like,cmp);| DL_SEARCH(head,elt,like,cmp); | CDL_SEARCH(head,elt,like,cmp);
+|LL_COUNT(head,count);     | DL_COUNT(head,count);      | CDL_COUNT(head,count);
 |===============================================================================
 
 'Prepend' means to insert an element in front of the existing list head (if any),
@@ -131,6 +132,7 @@ There are two forms: the "scalar" version searches for an element using a
 simple equality test on a given structure member, while the general version takes an
 element to which all others in the list will be compared using a `cmp` function.
 
+The 'count' operation iterates over the list and increments a supplied counter.
 
 The parameters shown in the table above are explained here:
 
@@ -164,6 +166,8 @@ mbr::
 val::
   In the scalar search macro, specifies the value of (of structure member
   `field`) of the element being sought.
+count::
+  integer which will be set to the length of the list
 
 Example
 ~~~~~~~
@@ -194,6 +198,7 @@ int main(int argc, char *argv[]) {
     el *name, *elt, *tmp, etmp;
 
     char linebuf[BUFLEN];
+    int count;
     FILE *file;
 
     if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
@@ -208,6 +213,8 @@ int main(int argc, char *argv[]) {
     }
     DL_SORT(head, namecmp);
     DL_FOREACH(head,elt) printf("%s", elt->bname);
+    DL_COUNT(head, count);
+    printf("%d number of elements in list\n", count);
 
     memcpy(&etmp.bname, "WES\n", 5);
     DL_SEARCH(head,elt,&etmp,namecmp);
@@ -247,18 +254,24 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  LL_FOREACH_SAFE2(head,el,tmp,next)
  LL_SEARCH_SCALAR2(head,out,field,val,next)
  LL_SEARCH2(head,out,elt,cmp,next)
+ LL_COUNT(head,count);
+ LL_COUNT2(head,count,next);
  DL_PREPEND2(head,add,prev,next)
  DL_APPEND2(head,add,prev,next)
  DL_CONCAT2(head1,head2,prev,next)
  DL_DELETE2(head,del,prev,next)
  DL_FOREACH2(head,el,next)
  DL_FOREACH_SAFE2(head,el,tmp,next)
+ DL_COUNT(head,count);
+ DL_COUNT2(head,count,next);
  CDL_PREPEND2(head,add,prev,next)
  CDL_DELETE2(head,del,prev,next)
  CDL_FOREACH2(head,el,next)
  CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
  CDL_SEARCH_SCALAR2(head,out,field,val,next)
  CDL_SEARCH2(head,out,elt,cmp,next)
+ CDL_COUNT(head,count);
+ CDL_COUNT2(head,count,next);
 
 // vim: set tw=80 wm=2 syntax=asciidoc: 
 
