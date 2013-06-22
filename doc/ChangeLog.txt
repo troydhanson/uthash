@@ -3,6 +3,10 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
+Version 1.9.8.p3 
+----------------
+* added LL_COUNT/DL_COUNT/CDL_COUNT (thansk, Paul Praet!)
+
 Version 1.9.8.p2 
 ----------------
 * added LRU cache example in `tests/lru_cache` (thanks, Oliver Lorenz!)
