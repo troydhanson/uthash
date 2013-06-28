@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     CDL_FOREACH(head,e) 
         printf("%c ", e->id); 
     printf("\n");
-    CDL_COUNT(head, count);
+    CDL_COUNT(head,e, count);
     printf("count = %d\n", count);
 
     /* point head to head->next */
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     DL_FOREACH(head,e) 
         printf("%c ", e->id); 
     printf("\n");
-    DL_COUNT(head, count);
+    DL_COUNT(head,e, count);
     printf("count = %d\n", count);
 
     printf("deleting tail c\n");
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
         printf("%c ", e->id); 
     printf("\n");
     
-    LL_COUNT(head, count);
+    LL_COUNT(head,e,count);
     printf("count = %d\n", count);
 
     printf("deleting tail c\n");

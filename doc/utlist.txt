@@ -104,7 +104,7 @@ iterating over them.
 |LL_FOREACH_SAFE(head,elt,tmp) {...}| DL_FOREACH_SAFE(head,elt,tmp) {...} | CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {...}
 |LL_SEARCH_SCALAR(head,elt,mbr,val);| DL_SEARCH_SCALAR(head,elt,mbr,val); | CDL_SEARCH_SCALAR(head,elt,mbr,val);
 |LL_SEARCH(head,elt,like,cmp);| DL_SEARCH(head,elt,like,cmp); | CDL_SEARCH(head,elt,like,cmp);
-|LL_COUNT(head,count);     | DL_COUNT(head,count);      | CDL_COUNT(head,count);
+|LL_COUNT(head,elt,count); | DL_COUNT(head,elt,count);  | CDL_COUNT(head,elt,count);
 |===============================================================================
 
 'Prepend' means to insert an element in front of the existing list head (if any),
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
     }
     DL_SORT(head, namecmp);
     DL_FOREACH(head,elt) printf("%s", elt->bname);
-    DL_COUNT(head, count);
+    DL_COUNT(head, elt, count);
     printf("%d number of elements in list\n", count);
 
     memcpy(&etmp.bname, "WES\n", 5);
@@ -254,24 +254,24 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  LL_FOREACH_SAFE2(head,el,tmp,next)
  LL_SEARCH_SCALAR2(head,out,field,val,next)
  LL_SEARCH2(head,out,elt,cmp,next)
- LL_COUNT(head,count);
- LL_COUNT2(head,count,next);
+ LL_COUNT(head,el,count);
+ LL_COUNT2(head,el,count,next);
  DL_PREPEND2(head,add,prev,next)
  DL_APPEND2(head,add,prev,next)
  DL_CONCAT2(head1,head2,prev,next)
  DL_DELETE2(head,del,prev,next)
  DL_FOREACH2(head,el,next)
  DL_FOREACH_SAFE2(head,el,tmp,next)
- DL_COUNT(head,count);
- DL_COUNT2(head,count,next);
+ DL_COUNT(head,el,count);
+ DL_COUNT2(head,el,count,next);
  CDL_PREPEND2(head,add,prev,next)
  CDL_DELETE2(head,del,prev,next)
  CDL_FOREACH2(head,el,next)
  CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
  CDL_SEARCH_SCALAR2(head,out,field,val,next)
  CDL_SEARCH2(head,out,elt,cmp,next)
- CDL_COUNT(head,count);
- CDL_COUNT2(head,count,next);
+ CDL_COUNT(head,el,count);
+ CDL_COUNT2(head,el,count,next);
 
 // vim: set tw=80 wm=2 syntax=asciidoc: 
 
