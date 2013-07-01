@@ -751,18 +751,22 @@ do {                                                                            
                       _hs_qsize--;                                               \
                   } else if ( (_hs_qsize == 0) || !(_hs_q) ) {                   \
                       _hs_e = _hs_p;                                             \
-                      _hs_p = (UT_hash_handle*)((_hs_p->next) ?                  \
-                              ((void*)((char*)(_hs_p->next) +                    \
-                              (head)->hh.tbl->hho)) : NULL);                     \
+                      if (_hs_p){                                                \
+                        _hs_p = (UT_hash_handle*)((_hs_p->next) ?                \
+                                ((void*)((char*)(_hs_p->next) +                  \
+                                (head)->hh.tbl->hho)) : NULL);                   \
+                       }                                                         \
                       _hs_psize--;                                               \
                   } else if ((                                                   \
                       cmpfcn(DECLTYPE(head)(ELMT_FROM_HH((head)->hh.tbl,_hs_p)), \
                              DECLTYPE(head)(ELMT_FROM_HH((head)->hh.tbl,_hs_q))) \
                              ) <= 0) {                                           \
                       _hs_e = _hs_p;                                             \
-                      _hs_p = (UT_hash_handle*)((_hs_p->next) ?                  \
-                              ((void*)((char*)(_hs_p->next) +                    \
-                              (head)->hh.tbl->hho)) : NULL);                     \
+                      if (_hs_p){                                                \
+                        _hs_p = (UT_hash_handle*)((_hs_p->next) ?                \
+                               ((void*)((char*)(_hs_p->next) +                   \
+                               (head)->hh.tbl->hho)) : NULL);                    \
+                       }                                                         \
                       _hs_psize--;                                               \
                   } else {                                                       \
                       _hs_e = _hs_q;                                             \
@@ -777,13 +781,17 @@ do {                                                                            
                   } else {                                                       \
                       _hs_list = _hs_e;                                          \
                   }                                                              \
+                  if (_hs_e) {                                                   \
                   _hs_e->prev = ((_hs_tail) ?                                    \
                      ELMT_FROM_HH((head)->hh.tbl,_hs_tail) : NULL);              \
+                  }                                                              \
                   _hs_tail = _hs_e;                                              \
               }                                                                  \
               _hs_p = _hs_q;                                                     \
           }                                                                      \
-          _hs_tail->next = NULL;                                                 \
+          if (_hs_tail){                                                         \
+            _hs_tail->next = NULL;                                               \
+          }                                                                      \
           if ( _hs_nmerges <= 1 ) {                                              \
               _hs_looping=0;                                                     \
               (head)->hh.tbl->tail = _hs_tail;                                   \
