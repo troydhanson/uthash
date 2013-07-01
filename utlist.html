@@ -969,9 +969,9 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>CDL_SEARCH(head,elt,like,cmp);</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_COUNT(head,count);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_COUNT(head,count);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_COUNT(head,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>LL_COUNT(head,elt,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_COUNT(head,elt,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_COUNT(head,elt,count);</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -1138,7 +1138,7 @@ int main(int argc, char *argv[]) {
     }
     DL_SORT(head, namecmp);
     DL_FOREACH(head,elt) printf("%s", elt-&gt;bname);
-    DL_COUNT(head, count);
+    DL_COUNT(head, elt, count);
     printf("%d number of elements in list\n", count);
 
     memcpy(&amp;etmp.bname, "WES\n", 5);
@@ -1178,24 +1178,24 @@ LL_FOREACH2(head,el,next)
 LL_FOREACH_SAFE2(head,el,tmp,next)
 LL_SEARCH_SCALAR2(head,out,field,val,next)
 LL_SEARCH2(head,out,elt,cmp,next)
-LL_COUNT(head,count);
-LL_COUNT2(head,count,next);
+LL_COUNT(head,el,count);
+LL_COUNT2(head,el,count,next);
 DL_PREPEND2(head,add,prev,next)
 DL_APPEND2(head,add,prev,next)
 DL_CONCAT2(head1,head2,prev,next)
 DL_DELETE2(head,del,prev,next)
 DL_FOREACH2(head,el,next)
 DL_FOREACH_SAFE2(head,el,tmp,next)
-DL_COUNT(head,count);
-DL_COUNT2(head,count,next);
+DL_COUNT(head,el,count);
+DL_COUNT2(head,el,count,next);
 CDL_PREPEND2(head,add,prev,next)
 CDL_DELETE2(head,del,prev,next)
 CDL_FOREACH2(head,el,next)
 CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
 CDL_SEARCH_SCALAR2(head,out,field,val,next)
 CDL_SEARCH2(head,out,elt,cmp,next)
-CDL_COUNT(head,count);
-CDL_COUNT2(head,count,next);</code></pre>
+CDL_COUNT(head,el,count);
+CDL_COUNT2(head,el,count,next);</code></pre>
 </div></div>
 </div>
 </div>
@@ -1205,7 +1205,7 @@ CDL_COUNT2(head,count,next);</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-06-20 14:26:33 CEST
+Last updated 2013-06-28 10:24:22 CEST
 </div>
 </div>
 </body>
