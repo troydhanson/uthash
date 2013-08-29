@@ -155,7 +155,7 @@ _UNUSED_ static void utstring_printf(UT_string *s, const char *fmt, ...) {
 /* Build KMP table from left to right. */
 _UNUSED_ static void _utstring_BuildTable(
     const char *P_Needle, 
-    size_t P_NeedleLen, 
+    ssize_t P_NeedleLen, 
     long *P_KMP_Table)
 {
     long i, j;
@@ -195,7 +195,7 @@ _UNUSED_ static void _utstring_BuildTable(
 /* Build KMP table from right to left. */
 _UNUSED_ static void _utstring_BuildTableR(
     const char *P_Needle, 
-    size_t P_NeedleLen, 
+    ssize_t P_NeedleLen, 
     long *P_KMP_Table)
 {
     long i, j;
@@ -304,7 +304,7 @@ _UNUSED_ static long utstring_find(
     UT_string *s, 
     long P_StartPosition,   /* Start from 0. -1 means last position. */
     const char *P_Needle, 
-    size_t P_NeedleLen)
+    ssize_t P_NeedleLen)
 {
     long V_StartPosition;
     long V_HaystackLen;
@@ -350,7 +350,7 @@ _UNUSED_ static long utstring_findR(
     UT_string *s, 
     long P_StartPosition,   /* Start from 0. -1 means last position. */
     const char *P_Needle, 
-    size_t P_NeedleLen)
+    ssize_t P_NeedleLen)
 {
     long V_StartPosition;
     long V_HaystackLen;
