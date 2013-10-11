@@ -37,7 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+
+#ifndef oom
 #define oom() exit(-1)
+#endif
 
 typedef struct {
     char *d;
@@ -109,6 +112,21 @@ do {                                                             \
   if ((src)->i) memcpy(&(dst)->d[(dst)->i], (src)->d, (src)->i); \
   (dst)->i += (src)->i;                                          \
   (dst)->d[(dst)->i]='\0';                                       \
+} while(0)
+
+#define utstring_append_len(dst, src, len)                                    \
+do {                                                                           \
+    while ((dst)->n-(dst)->i <= (len)) utstring_reserve((dst),((dst)->n)*2);   \
+    memcpy(&(dst)->d[(dst)->i], (src), (len));                                 \
+    (dst)->i+=(len);                                                           \
+    (dst)->d[(dst)->i]='\0';                                                   \
+} while(0)
+
+#define utstring_append_c(dst, c)                                             \
+do {                                                                           \
+    if ((dst)->i >= (dst)->n) utstring_reserve((dst),((dst)->n)*2);            \
+    (dst)->d[(dst)->i++] = (c);                                                \
+    (dst)->d[(dst)->i]='\0';                                                   \
 } while(0)
 
 #define utstring_len(s) ((unsigned)((s)->i))
