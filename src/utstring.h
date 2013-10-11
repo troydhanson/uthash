@@ -37,7 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+
+#ifndef oom
 #define oom() exit(-1)
+#endif
 
 typedef struct {
     char *d;
