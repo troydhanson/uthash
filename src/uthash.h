@@ -265,7 +265,7 @@ do {                                                                            
     HASH_FIND(hh,head,findptr,sizeof(void *),out)
 #define HASH_ADD_PTR(head,ptrfield,add)                                          \
     HASH_ADD(hh,head,ptrfield,sizeof(void *),add)
-#define HASH_REPLACE_PTR(head,ptrfield,add)                                      \
+#define HASH_REPLACE_PTR(head,ptrfield,add,replaced)                             \
     HASH_REPLACE(hh,head,ptrfield,sizeof(void *),add,replaced)
 #define HASH_DEL(head,delptr)                                                    \
     HASH_DELETE(hh,head,delptr)
