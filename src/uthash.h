@@ -174,8 +174,8 @@ do {                                                                            
 do {                                                                             \
  unsigned _ha_bkt;                                                               \
  (add)->hh.next = NULL;                                                          \
- (add)->hh.key = (char*)keyptr;                                                  \
- (add)->hh.keylen = (unsigned)keylen_in;                                                   \
+ (add)->hh.key = (char*)(keyptr);                                                \
+ (add)->hh.keylen = (unsigned)(keylen_in);                                       \
  if (!(head)) {                                                                  \
     head = (add);                                                                \
     (head)->hh.prev = NULL;                                                      \
@@ -265,7 +265,7 @@ do {                                                                            
     HASH_FIND(hh,head,findptr,sizeof(void *),out)
 #define HASH_ADD_PTR(head,ptrfield,add)                                          \
     HASH_ADD(hh,head,ptrfield,sizeof(void *),add)
-#define HASH_REPLACE_PTR(head,ptrfield,add)                                      \
+#define HASH_REPLACE_PTR(head,ptrfield,add,replaced)                             \
     HASH_REPLACE(hh,head,ptrfield,sizeof(void *),add,replaced)
 #define HASH_DEL(head,delptr)                                                    \
     HASH_DELETE(hh,head,delptr)
@@ -419,7 +419,7 @@ do {                                                                            
   unsigned char *_hj_key=(unsigned char*)(key);                                  \
   hashv = 0xfeedbeef;                                                            \
   _hj_i = _hj_j = 0x9e3779b9;                                                    \
-  _hj_k = (unsigned)keylen;                                                      \
+  _hj_k = (unsigned)(keylen);                                                      \
   while (_hj_k >= 12) {                                                          \
     _hj_i +=    (_hj_key[0] + ( (unsigned)_hj_key[1] << 8 )                      \
         + ( (unsigned)_hj_key[2] << 16 )                                         \
