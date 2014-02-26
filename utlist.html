@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.8" />
+<meta name="generator" content="AsciiDoc 8.6.7" />
 <title>utlist: linked list macros for C structures</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -87,14 +87,10 @@ ul, ol, li > p {
 ul > li     { color: #aaa; }
 ul > li > * { color: black; }
 
-.monospaced, code, pre {
-  font-family: "Courier New", Courier, monospace;
-  font-size: inherit;
-  color: navy;
+pre {
   padding: 0;
   margin: 0;
 }
-
 
 #author {
   color: #527bbd;
@@ -419,6 +415,12 @@ div.unbreakable { page-break-inside: avoid; }
  *
  * */
 
+tt {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+}
+
 div.tableblock {
   margin-top: 1.0em;
   margin-bottom: 1.5em;
@@ -451,6 +453,12 @@ div.tableblock > table[frame="vsides"] {
  * html5 specific
  *
  * */
+
+.monospaced {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+}
 
 table.tableblock {
   margin-top: 1.0em;
@@ -531,8 +539,6 @@ body.manpage div.sectionbody {
 @media print {
   body.manpage div#toc { display: none; }
 }
-
-
 @media screen {
   body {
     max-width: 50em; /* approximately 80 characters wide */
@@ -767,9 +773,9 @@ asciidoc.install(2);
 <div id="header">
 <h1>utlist: linked list macros for C structures</h1>
 <span id="author">Troy D. Hanson</span><br />
-<span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
+<span id="email"><tt>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.9.8,</span>
-<span id="revdate">March 2013</span>
+<span id="revdate">March 2014</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -785,17 +791,17 @@ asciidoc.install(2);
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>A set of general-purpose <em>linked list</em> macros for C structures are included with
-uthash in <code>utlist.h</code>.  To use these macros in your own C program, just
-copy <code>utlist.h</code> into your source directory and use it in your programs.</p></div>
+uthash in <tt>utlist.h</tt>.  To use these macros in your own C program, just
+copy <tt>utlist.h</tt> into your source directory and use it in your programs.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>#include "utlist.h"</code></pre>
+<pre><tt>#include "utlist.h"</tt></pre>
 </div></div>
 <div class="paragraph"><p>These macros support the basic linked list operations: adding and deleting
 elements, sorting them and iterating over them.</p></div>
 <div class="sect2">
 <h3 id="_download">Download</h3>
-<div class="paragraph"><p>To download the <code>utlist.h</code> header file,
+<div class="paragraph"><p>To download the <tt>utlist.h</tt> header file,
 follow the links on <a href="https://github.com/troydhanson/uthash">https://github.com/troydhanson/uthash</a> to clone uthash or get a zip file,
 then look in the src/ sub-directory.</p></div>
 </div>
@@ -857,29 +863,29 @@ Windows, using Visual Studio 2008, Visual Studio 2010, or Cygwin/MinGW.
 constant-time operations. Appending to a singly-linked list is an <em>O(n)</em>
 operation but appending to a doubly-linked list is constant time using these
 macros.  (This is because, in the utlist implementation of the doubly-linked
-list, the head element&#8217;s <code>prev</code> member points back to the list tail, even when
+list, the head element&#8217;s <tt>prev</tt> member points back to the list tail, even when
 the list is non-circular). Sorting is an <em>O(n log(n))</em> operation. Iteration,
-counting and searching are <code>O(n)</code> for all list types.</p></div>
+counting and searching are <tt>O(n)</tt> for all list types.</p></div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_list_elements">List elements</h3>
 <div class="paragraph"><p>You can use any structure with these macros, as long as the structure
-contains a <code>next</code> pointer. If you want to make a doubly-linked list,
-the element also needs to have a <code>prev</code> pointer.</p></div>
+contains a <tt>next</tt> pointer. If you want to make a doubly-linked list,
+the element also needs to have a <tt>prev</tt> pointer.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>typedef struct element {
+<pre><tt>typedef struct element {
     char *name;
     struct element *prev; /* needed for a doubly-linked list only */
     struct element *next; /* needed for singly- or doubly-linked lists */
-} element;</code></pre>
+} element;</tt></pre>
 </div></div>
-<div class="paragraph"><p>You can name your structure anything. In the example above it is called <code>element</code>.
+<div class="paragraph"><p>You can name your structure anything. In the example above it is called <tt>element</tt>.
 Within a particular list, all elements must be of the same type.</p></div>
 <div class="sect3">
 <h4 id="_flexible_prev_next_naming">Flexible prev/next naming</h4>
-<div class="paragraph"><p>You can name your <code>prev</code> and <code>next</code> pointers something else. If you do, there is
+<div class="paragraph"><p>You can name your <tt>prev</tt> and <tt>next</tt> pointers something else. If you do, there is
 a <a href="#flex_names">family of macros</a> that work identically but take these names as
 extra arguments.</p></div>
 </div>
@@ -887,10 +893,10 @@ extra arguments.</p></div>
 <div class="sect2">
 <h3 id="_list_head">List head</h3>
 <div class="paragraph"><p>The list head is simply a pointer to your element structure. You can name it
-anything. <strong>It must be initialized to <code>NULL</code></strong>.</p></div>
+anything. <strong>It must be initialized to <tt>NULL</tt></strong>.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>element *head = NULL;</code></pre>
+<pre><tt>element *head = NULL;</tt></pre>
 </div></div>
 </div>
 <div class="sect2">
@@ -914,64 +920,64 @@ cellspacing="0" cellpadding="4">
 </thead>
 <tbody>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_PREPEND(head,add);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_PREPEND(head,add);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_PREPEND(head,add;</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_PREPEND(head,add);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_PREPEND(head,add);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_PREPEND(head,add;</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_PREPEND_ELEM(head,elt,add)</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_PREPEND_ELEM(head,elt,add)</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_PREPEND_ELEM(head,elt,add)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_PREPEND_ELEM(head,elt,add)</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_PREPEND_ELEM(head,elt,add)</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_PREPEND_ELEM(head,elt,add)</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_REPLACE_ELEM(head,elt,add)</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_REPLACE_ELEM(head,elt,add)</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_REPLACE_ELEM(head,elt,add)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_REPLACE_ELEM(head,elt,add)</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_REPLACE_ELEM(head,elt,add)</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_REPLACE_ELEM(head,elt,add)</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_APPEND(head,add);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_APPEND(head,add);</code></p></td>
-<td align="left" valign="top"><p class="table"><code></code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_APPEND(head,add);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_APPEND(head,add);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt></tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_CONCAT(head1,head2);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_CONCAT(head1,head2);</code></p></td>
-<td align="left" valign="top"><p class="table"><code></code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_CONCAT(head1,head2);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_CONCAT(head1,head2);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt></tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_DELETE(head,del);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_DELETE(head,del);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_DELETE(head,del);</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_DELETE(head,del);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_DELETE(head,del);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_DELETE(head,del);</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_SORT(head,cmp);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_SORT(head,cmp);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_SORT(head,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_SORT(head,cmp);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_SORT(head,cmp);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_SORT(head,cmp);</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_FOREACH(head,elt) {&#8230;}</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_FOREACH(head,elt) {&#8230;}</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_FOREACH(head,elt) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_FOREACH(head,elt) {&#8230;}</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_FOREACH(head,elt) {&#8230;}</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_FOREACH(head,elt) {&#8230;}</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_FOREACH_SAFE(head,elt,tmp) {&#8230;}</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_FOREACH_SAFE(head,elt,tmp) {&#8230;}</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_FOREACH_SAFE(head,elt,tmp) {&#8230;}</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_FOREACH_SAFE(head,elt,tmp) {&#8230;}</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {&#8230;}</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_SEARCH_SCALAR(head,elt,mbr,val);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_SEARCH_SCALAR(head,elt,mbr,val);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_SEARCH_SCALAR(head,elt,mbr,val);</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_SEARCH_SCALAR(head,elt,mbr,val);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_SEARCH_SCALAR(head,elt,mbr,val);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_SEARCH_SCALAR(head,elt,mbr,val);</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_SEARCH(head,elt,like,cmp);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_SEARCH(head,elt,like,cmp);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_SEARCH(head,elt,like,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_SEARCH(head,elt,like,cmp);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_SEARCH(head,elt,like,cmp);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_SEARCH(head,elt,like,cmp);</tt></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>LL_COUNT(head,elt,count);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>DL_COUNT(head,elt,count);</code></p></td>
-<td align="left" valign="top"><p class="table"><code>CDL_COUNT(head,elt,count);</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>LL_COUNT(head,elt,count);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>DL_COUNT(head,elt,count);</tt></p></td>
+<td align="left" valign="top"><p class="table"><tt>CDL_COUNT(head,elt,count);</tt></p></td>
 </tr>
 </tbody>
 </table>
@@ -980,23 +986,23 @@ cellspacing="0" cellpadding="4">
 changing the list head to the new element. <em>Append</em> means to add an element at the
 end of the list, so it becomes the new tail element. <em>Concatenate</em> takes two
 properly constructed lists and appends the second list to the first.  (Visual
-Studio 2008 does not support <code>LL_CONCAT</code> and <code>DL_CONCAT</code>, but VS2010 is ok.)
+Studio 2008 does not support <tt>LL_CONCAT</tt> and <tt>DL_CONCAT</tt>, but VS2010 is ok.)
 To prepend before an arbitrary element instead of the list head, use the
-<code>_PREPEND_ELEM</code> macro family. To <em>replace</em> an arbitary list element with another
-element use the <code>_REPLACE_ELEM</code> family of macros.</p></div>
+<tt>_PREPEND_ELEM</tt> macro family. To <em>replace</em> an arbitary list element with another
+element use the <tt>_REPLACE_ELEM</tt> family of macros.</p></div>
 <div class="paragraph"><p>The <em>sort</em> operation never moves the elements in memory; rather it only adjusts
-the list order by altering the <code>prev</code> and <code>next</code> pointers in each element. Also
+the list order by altering the <tt>prev</tt> and <tt>next</tt> pointers in each element. Also
 the sort operation can change the list head to point to a new element.</p></div>
 <div class="paragraph"><p>The <em>foreach</em> operation is for easy iteration over the list from the head to the
-tail. A usage example is shown below. You can of course just use the <code>prev</code> and
-<code>next</code> pointers directly instead of using the <em>foreach</em> macros.
+tail. A usage example is shown below. You can of course just use the <tt>prev</tt> and
+<tt>next</tt> pointers directly instead of using the <em>foreach</em> macros.
 The <em>foreach_safe</em> operation should be used if you plan to delete any of the list
 elements while iterating.</p></div>
 <div class="paragraph"><p>The <em>search</em> operation is a shortcut for iteration in search of a particular
 element. It is not any faster than manually iterating and testing each element.
 There are two forms: the "scalar" version searches for an element using a
 simple equality test on a given structure member, while the general version takes an
-element to which all others in the list will be compared using a <code>cmp</code> function.</p></div>
+element to which all others in the list will be compared using a <tt>cmp</tt> function.</p></div>
 <div class="paragraph"><p>The <em>count</em> operation iterates over the list and increments a supplied counter.</p></div>
 <div class="paragraph"><p>The parameters shown in the table above are explained here:</p></div>
 <div class="dlist"><dl>
@@ -1039,9 +1045,9 @@ like
 </dt>
 <dd>
 <p>
-  An element pointer, having the same type as <code>elt</code>, for which the search macro
-  seeks a match (if found, the match is stored in <code>elt</code>). A match is determined
-  by the given <code>cmp</code> function.
+  An element pointer, having the same type as <tt>elt</tt>, for which the search macro
+  seeks a match (if found, the match is stored in <tt>elt</tt>). A match is determined
+  by the given <tt>cmp</tt> function.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1051,11 +1057,11 @@ cmp
 <p>
   pointer to comparison function which accepts two arguments-- these are
   pointers to two element structures to be compared. The comparison function
-  must return an <code>int</code> that is negative, zero, or positive, which specifies
+  must return an <tt>int</tt> that is negative, zero, or positive, which specifies
   whether the first item should sort before, equal to, or after the second item,
-  respectively. (In other words, the same convention that is used by <code>strcmp</code>).
+  respectively. (In other words, the same convention that is used by <tt>strcmp</tt>).
   Note that under Visual Studio 2008 you may need to declare the two arguments
-  as <code>void *</code> and then cast them back to their actual types.
+  as <tt>void *</tt> and then cast them back to their actual types.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1063,7 +1069,7 @@ tmp
 </dt>
 <dd>
 <p>
-  A pointer of the same type as <code>elt</code>. Used internally. Need not be initialized.
+  A pointer of the same type as <tt>elt</tt>. Used internally. Need not be initialized.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1071,8 +1077,8 @@ mbr
 </dt>
 <dd>
 <p>
-  In the scalar search macro, the name of a member within the <code>elt</code> structure which
-  will be tested (using <code>==</code>) for equality with the value <code>val</code>.
+  In the scalar search macro, the name of a member within the <tt>elt</tt> structure which
+  will be tested (using <tt>==</tt>) for equality with the value <tt>val</tt>.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1081,7 +1087,7 @@ val
 <dd>
 <p>
   In the scalar search macro, specifies the value of (of structure member
-  <code>field</code>) of the element being sought.
+  <tt>field</tt>) of the element being sought.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1101,7 +1107,7 @@ appends each name to a doubly-linked list. Then it sorts and prints them.</p></d
 <div class="listingblock">
 <div class="title">A doubly-linked list</div>
 <div class="content">
-<pre><code>#include &lt;stdio.h&gt;
+<pre><tt>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #include "utlist.h"
@@ -1153,21 +1159,21 @@ int main(int argc, char *argv[]) {
     fclose(file);
 
     return 0;
-}</code></pre>
+}</tt></pre>
 </div></div>
 </div>
 <div class="sect2">
 <h3 id="flex_names">Other names for prev and next</h3>
-<div class="paragraph"><p>If the <code>prev</code> and <code>next</code> fields are named something else, a separate group of
+<div class="paragraph"><p>If the <tt>prev</tt> and <tt>next</tt> fields are named something else, a separate group of
 macros must be used. These work the same as the regular macros, but take the
 field names as extra parameters.</p></div>
 <div class="paragraph"><p>These "flexible field name" macros are shown below. They all end with "2". Each
 operates the same as its counterpart without the 2, but they take the name of
-the <code>prev</code> and <code>next</code> fields (as applicable) as trailing arguments.</p></div>
+the <tt>prev</tt> and <tt>next</tt> fields (as applicable) as trailing arguments.</p></div>
 <div class="literalblock">
 <div class="title">Flexible field name macros</div>
 <div class="content">
-<pre><code>LL_SORT2(list, cmp, next)
+<pre><tt>LL_SORT2(list, cmp, next)
 DL_SORT2(list, cmp, prev, next)
 CDL_SORT2(list, cmp, prev, next)
 LL_PREPEND2(head,add,next)
@@ -1195,7 +1201,7 @@ CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
 CDL_SEARCH_SCALAR2(head,out,field,val,next)
 CDL_SEARCH2(head,out,elt,cmp,next)
 CDL_COUNT(head,el,count);
-CDL_COUNT2(head,el,count,next);</code></pre>
+CDL_COUNT2(head,el,count,next);</tt></pre>
 </div></div>
 </div>
 </div>
@@ -1205,7 +1211,7 @@ CDL_COUNT2(head,el,count,next);</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-06-28 10:24:22 CEST
+Last updated 2014-02-25 21:33:01 EST
 </div>
 </div>
 </body>
