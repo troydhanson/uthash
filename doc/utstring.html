@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.8" />
+<meta name="generator" content="AsciiDoc 8.6.7" />
 <title>utstring: dynamic string macros for C</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -87,14 +87,10 @@ ul, ol, li > p {
 ul > li     { color: #aaa; }
 ul > li > * { color: black; }
 
-.monospaced, code, pre {
-  font-family: "Courier New", Courier, monospace;
-  font-size: inherit;
-  color: navy;
+pre {
   padding: 0;
   margin: 0;
 }
-
 
 #author {
   color: #527bbd;
@@ -223,7 +219,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; vertical-align: text-bottom; }
+span.image img { border-style: none; }
 a.image:visited { color: white; }
 
 dl {
@@ -419,6 +415,12 @@ div.unbreakable { page-break-inside: avoid; }
  *
  * */
 
+tt {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+}
+
 div.tableblock {
   margin-top: 1.0em;
   margin-bottom: 1.5em;
@@ -451,6 +453,12 @@ div.tableblock > table[frame="vsides"] {
  * html5 specific
  *
  * */
+
+.monospaced {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+}
 
 table.tableblock {
   margin-top: 1.0em;
@@ -531,8 +539,6 @@ body.manpage div.sectionbody {
 @media print {
   body.manpage div#toc { display: none; }
 }
-
-
 @media screen {
   body {
     max-width: 50em; /* approximately 80 characters wide */
@@ -767,9 +773,9 @@ asciidoc.install(2);
 <div id="header">
 <h1>utstring: dynamic string macros for C</h1>
 <span id="author">Troy D. Hanson</span><br />
-<span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
+<span id="email"><tt>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.9.8,</span>
-<span id="revdate">March 2013</span>
+<span id="revdate">March 2014</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -785,11 +791,11 @@ asciidoc.install(2);
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>A set of basic dynamic string macros for C programs are included with
-uthash in <code>utstring.h</code>.  To use these in your own C program, just copy
-<code>utstring.h</code> into your source directory and use it in your programs.</p></div>
+uthash in <tt>utstring.h</tt>.  To use these in your own C program, just copy
+<tt>utstring.h</tt> into your source directory and use it in your programs.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>#include "utstring.h"</code></pre>
+<pre><tt>#include "utstring.h"</tt></pre>
 </div></div>
 <div class="paragraph"><p>The dynamic string supports operations such as inserting data, concatenation,
 getting the length and content, substring search, and clear.  It&#8217;s ok to put
@@ -798,7 +804,7 @@ listed below.</p></div>
 <div class="paragraph"><p>Some utstring operations are implemented as functions rather than macros.</p></div>
 <div class="sect2">
 <h3 id="_download">Download</h3>
-<div class="paragraph"><p>To download the <code>utstring.h</code> header file,
+<div class="paragraph"><p>To download the <tt>utstring.h</tt> header file,
 follow the links on <a href="https://github.com/troydhanson/uthash">https://github.com/troydhanson/uthash</a> to clone uthash or get a zip file,
 then look in the src/ sub-directory.</p></div>
 </div>
@@ -831,24 +837,24 @@ Windows, using Visual Studio 2008 and Visual Studio 2010
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_declaration">Declaration</h3>
-<div class="paragraph"><p>The dynamic string itself has the data type <code>UT_string</code>.  It is declared like,</p></div>
+<div class="paragraph"><p>The dynamic string itself has the data type <tt>UT_string</tt>.  It is declared like,</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>UT_string *str;</code></pre>
+<pre><tt>UT_string *str;</tt></pre>
 </div></div>
 </div>
 <div class="sect2">
 <h3 id="_new_and_free">New and free</h3>
-<div class="paragraph"><p>The next step is to create the string using <code>utstring_new</code>. Later when you&#8217;re
-done with it, <code>utstring_free</code> will free it and all its content.</p></div>
+<div class="paragraph"><p>The next step is to create the string using <tt>utstring_new</tt>. Later when you&#8217;re
+done with it, <tt>utstring_free</tt> will free it and all its content.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_manipulation">Manipulation</h3>
-<div class="paragraph"><p>The <code>utstring_printf</code> or <code>utstring_bincpy</code> operations insert (copy) data into
-the string. To concatenate one utstring to another, use <code>utstring_concat</code>.  To
-clear the content of the string, use <code>utstring_clear</code>. The length of the string
-is available from <code>utstring_len</code>, and its content from <code>utstring_body</code>. This
-evaluates to a <code>char*</code>.  The buffer it points to is always null-terminated.
+<div class="paragraph"><p>The <tt>utstring_printf</tt> or <tt>utstring_bincpy</tt> operations insert (copy) data into
+the string. To concatenate one utstring to another, use <tt>utstring_concat</tt>.  To
+clear the content of the string, use <tt>utstring_clear</tt>. The length of the string
+is available from <tt>utstring_len</tt>, and its content from <tt>utstring_body</tt>. This
+evaluates to a <tt>char*</tt>.  The buffer it points to is always null-terminated.
 So, it can be used directly with external functions that expect a string.
 This automatic null terminator is not counted in the length of the string.</p></div>
 </div>
@@ -858,7 +864,7 @@ This automatic null terminator is not counted in the length of the string.</p></
 <div class="listingblock">
 <div class="title">Sample 1</div>
 <div class="content">
-<pre><code>#include &lt;stdio.h&gt;
+<pre><tt>#include &lt;stdio.h&gt;
 #include "utstring.h"
 
 int main() {
@@ -870,14 +876,14 @@ int main() {
 
     utstring_free(s);
     return 0;
-}</code></pre>
+}</tt></pre>
 </div></div>
-<div class="paragraph"><p>The next example demonstrates that <code>utstring_printf</code> <em>appends</em> to the string.
+<div class="paragraph"><p>The next example demonstrates that <tt>utstring_printf</tt> <em>appends</em> to the string.
 It also shows concatenation.</p></div>
 <div class="listingblock">
 <div class="title">Sample 2</div>
 <div class="content">
-<pre><code>#include &lt;stdio.h&gt;
+<pre><tt>#include &lt;stdio.h&gt;
 #include "utstring.h"
 
 int main() {
@@ -899,14 +905,14 @@ int main() {
     utstring_free(s);
     utstring_free(t);
     return 0;
-}</code></pre>
+}</tt></pre>
 </div></div>
 <div class="paragraph"><p>The next example shows how binary data can be inserted into the string. It also
 clears the string and prints new data into it.</p></div>
 <div class="listingblock">
 <div class="title">Sample 3</div>
 <div class="content">
-<pre><code>#include &lt;stdio.h&gt;
+<pre><tt>#include &lt;stdio.h&gt;
 #include "utstring.h"
 
 int main() {
@@ -923,7 +929,7 @@ int main() {
 
     utstring_free(s);
     return 0;
-}</code></pre>
+}</tt></pre>
 </div></div>
 </div>
 </div>
@@ -943,55 +949,55 @@ cellspacing="0" cellpadding="4">
 <col width="44%" />
 <tbody>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_new(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_new(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">allocate a new utstring</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_renew(s)</code></p></td>
-<td align="left" valign="top"><p class="table">allocate a new utstring (if s is <code>NULL</code>) otherwise clears it</p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_renew(s)</tt></p></td>
+<td align="left" valign="top"><p class="table">allocate a new utstring (if s is <tt>NULL</tt>) otherwise clears it</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_free(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_free(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">free an allocated utstring</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_init(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_init(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">init a utstring (non-alloc)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_done(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_done(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">dispose of a utstring (non-allocd)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_printf(s,fmt,&#8230;)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_printf(s,fmt,&#8230;)</tt></p></td>
 <td align="left" valign="top"><p class="table">printf into a utstring (appends)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_bincpy(s,bin,len)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_bincpy(s,bin,len)</tt></p></td>
 <td align="left" valign="top"><p class="table">insert binary data of length len (appends)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_concat(dst,src)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_concat(dst,src)</tt></p></td>
 <td align="left" valign="top"><p class="table">concatenate src utstring to end of dst utstring</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_clear(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_clear(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">clear the content of s (setting its length to 0)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_len(s)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_len(s)</tt></p></td>
 <td align="left" valign="top"><p class="table">obtain the length of s as an unsigned integer</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_body(s)</code></p></td>
-<td align="left" valign="top"><p class="table">get <code>char*</code> to body of s (buffer is always null-terminated)</p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_body(s)</tt></p></td>
+<td align="left" valign="top"><p class="table">get <tt>char*</tt> to body of s (buffer is always null-terminated)</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_find(s,pos,str,len)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_find(s,pos,str,len)</tt></p></td>
 <td align="left" valign="top"><p class="table">forward search from pos for a substring</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>utstring_findR(s,pos,str,len)</code></p></td>
+<td align="left" valign="top"><p class="table"><tt>utstring_findR(s,pos,str,len)</tt></p></td>
 <td align="left" valign="top"><p class="table">reverse search from pos a substring</p></td>
 </tr>
 </tbody>
@@ -1000,13 +1006,13 @@ cellspacing="0" cellpadding="4">
 </div>
 <div class="sect2">
 <h3 id="_new_free_vs_init_done">New/free vs. init/done</h3>
-<div class="paragraph"><p>Use <code>utstring_new</code> and <code>utstring_free</code> to allocate a new string or free it.  If
-the UT_string is statically allocated, use <code>utstring_init</code> and <code>utstring_done</code>
+<div class="paragraph"><p>Use <tt>utstring_new</tt> and <tt>utstring_free</tt> to allocate a new string or free it.  If
+the UT_string is statically allocated, use <tt>utstring_init</tt> and <tt>utstring_done</tt>
 to initialize or free its internal memory.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_substring_search">Substring search</h3>
-<div class="paragraph"><p>Use <code>utstring_find</code> and <code>utstring_findR</code> to search for a substring in a utstring.
+<div class="paragraph"><p>Use <tt>utstring_find</tt> and <tt>utstring_findR</tt> to search for a substring in a utstring.
 It comes in forward and reverse varieties. The reverse search scans from the end of
 the string backward. These take a position to start searching from, measured from 0
 (the start of the utstring).  A negative position is counted from the end of
@@ -1015,20 +1021,20 @@ initial position anchors to the <em>end</em> of the substring being searched for
 e.g., the <em>t</em> in <em>cat</em>. The return value always refers to the offset where the
 substring <em>starts</em> in the utstring.  When no substring match is found, -1 is
 returned.</p></div>
-<div class="paragraph"><p>For example if a utstring called <code>s</code> contains:</p></div>
+<div class="paragraph"><p>For example if a utstring called <tt>s</tt> contains:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>ABC ABCDAB ABCDABCDABDE</code></pre>
+<pre><tt>ABC ABCDAB ABCDABCDABDE</tt></pre>
 </div></div>
-<div class="paragraph"><p>Then these forward and reverse substring searches for <code>ABC</code> produce these results:</p></div>
+<div class="paragraph"><p>Then these forward and reverse substring searches for <tt>ABC</tt> produce these results:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>utstring_find(  s, -9, "ABC", 3 ) = 15
+<pre><tt>utstring_find(  s, -9, "ABC", 3 ) = 15
 utstring_find(  s,  3, "ABC", 3 ) =  4
 utstring_find(  s, 16, "ABC", 3 ) = -1
 utstring_findR( s, -9, "ABC", 3 ) = 11
 utstring_findR( s, 12, "ABC", 3 ) =  4
-utstring_findR( s,  2, "ABC", 3 ) =  0</code></pre>
+utstring_findR( s,  2, "ABC", 3 ) =  0</tt></pre>
 </div></div>
 <div class="sect3">
 <h4 id="_multiple_use_substring_search">"Multiple use" substring search</h4>
@@ -1040,22 +1046,22 @@ substring, it is more efficient to save the KMP table and reuse it.</p></div>
 search functions. The functions involved are:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>_utstring_BuildTable  (build the KMP table for a forward search)
+<pre><tt>_utstring_BuildTable  (build the KMP table for a forward search)
 _utstring_BuildTableR (build the KMP table for a reverse search)
 _utstring_find        (forward search using a prebuilt KMP table)
-_utstring_findR       (reverse search using a prebuilt KMP table)</code></pre>
+_utstring_findR       (reverse search using a prebuilt KMP table)</tt></pre>
 </div></div>
 <div class="paragraph"><p>This is an example of building a forward KMP table for the substring "ABC", and
 then using it in a search:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>long *KPM_TABLE, offset;
+<pre><tt>long *KPM_TABLE, offset;
 KPM_TABLE = (long *)malloc( sizeof(long) * (strlen("ABC")) + 1));
 _utstring_BuildTable("ABC", 3, KPM_TABLE);
 offset = _utstring_find(utstring_body(s), utstring_len(s), "ABC", 3, KPM_TABLE );
-free(KPM_TABLE);</code></pre>
+free(KPM_TABLE);</tt></pre>
 </div></div>
-<div class="paragraph"><p>Note that the internal <code>_utstring_find</code> has the length of the UT_string as its
+<div class="paragraph"><p>Note that the internal <tt>_utstring_find</tt> has the length of the UT_string as its
 second argument, rather than the start position. You can emulate the position
 parameter by adding to the string start address and subtracting from its length.</p></div>
 </div>
@@ -1067,7 +1073,7 @@ parameter by adding to the string start address and subtracting from its length.
 <div id="footer">
 <div id="footer-text">
 Version 1.9.8<br />
-Last updated 2013-03-17 14:17:35 EDT
+Last updated 2014-02-25 21:32:58 EST
 </div>
 </div>
 </body>

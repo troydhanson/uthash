@@ -3,17 +3,13 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
-Version 1.9.8.p3 
-----------------
+Version 1.9.9 (2014-02-25)
+--------------------------
+* made HASH_ADD_STR compatible with char* or char[] (thanks, Samuel Thibault!)
+* fixed header inclusion of sys/types.h for ssize_t (thanks, Fernando Campos!)
 * added LL_COUNT/DL_COUNT/CDL_COUNT (thansk, Paul Praet!)
-
-Version 1.9.8.p2 
-----------------
 * added LRU cache example in `tests/lru_cache` (thanks, Oliver Lorenz!)
 * fix LL_DELETE2 for VS2008 (thanks, Greg Davydouski!)
-
-Version 1.9.8.p1 
-----------------
 * fix missing argument in `HASH_REPLACE_STR` (thanks, Alex!)
 * bump version number in source files to match docs (thanks, John Crow!)
 * add `HASH_OVERHEAD` macro to get overhead size for hash table

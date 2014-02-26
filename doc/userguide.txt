@@ -1,7 +1,7 @@
 uthash User Guide
 =================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.9.8, March 2013
+v1.9.9, February 2014
 
 To download uthash, follow this link back to the
 https://github.com/troydhanson/uthash[GitHub project page].
@@ -57,9 +57,8 @@ This software can be used in C and C++ programs.  It has been tested on:
  * OpenBSD
  * FreeBSD
 
-Windows users: as of 2013 it's been a while since I had the environment to test
-uthash under Visual Studio. If someone wants to run the unit tests under the latest
-Visual Studio and confirm that its still clean, that'd be appreciated.
+Windows users: as of 2014 it's been a few years since I had the environment to
+test uthash under Visual Studio. 
 
 Test suite
 ^^^^^^^^^^
