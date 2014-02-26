@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTARRAY_H
 #define UTARRAY_H
 
-#define UTARRAY_VERSION 1.9.8
+#define UTARRAY_VERSION 1.9.9
 
 #ifdef __GNUC__
 #define _UNUSED_ __attribute__ ((__unused__)) 

@@ -1,7 +1,7 @@
 utarray: dynamic array macros for C 
 ===================================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.9.8, March 2014
+v1.9.9, March 2014
 
 Here's a link back to the https://github.com/troydhanson/uthash[GitHub project page].
 

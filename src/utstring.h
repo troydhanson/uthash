@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTSTRING_H
 #define UTSTRING_H
 
-#define UTSTRING_VERSION 1.9.8
+#define UTSTRING_VERSION 1.9.9
 
 #ifdef __GNUC__
 #define _UNUSED_ __attribute__ ((__unused__)) 
