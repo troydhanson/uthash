@@ -3,6 +3,10 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
+Version 1.9.9.1 (2014-03-25)
+--------------------------
+* fix utstring pointer math on >4GB strings (thanks, Thomas Bottesch!)
+
 Version 1.9.9 (2014-02-25)
 --------------------------
 * made HASH_ADD_STR compatible with char* or char[] (thanks, Samuel Thibault!)

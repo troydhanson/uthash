@@ -128,7 +128,7 @@ _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list a
       n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, cp);
       va_end(cp);
 
-      if ((n > -1) && (n < (int)(s->n-s->i))) {
+      if ((n > -1) && ((size_t) n < (s->n-s->i))) {
         s->i += n;
         return;
       }
