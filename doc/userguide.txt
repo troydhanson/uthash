@@ -327,7 +327,7 @@ just what it points to).
 Replace item
 ~~~~~~~~~~~~
 `HASH_REPLACE` macros are equivalent to HASH_ADD macros except they attempt
-to find and delete the item first. If it find and deletes and item, it will
+to find and delete the item first. If it finds and deletes an item, it will
 also return that items pointer as an output parameter.
 
 
