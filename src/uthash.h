@@ -373,14 +373,15 @@ do {                                                                            
       hashv ^= (hashv << 5) + (hashv >> 2) + _hs_key[_sx_i];                     \
   bkt = hashv & (num_bkts-1);                                                    \
 } while (0)
-
+/* FNV-1a variation */
 #define HASH_FNV(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _fn_i;                                                                \
   char *_hf_key=(char*)(key);                                                    \
   hashv = 2166136261UL;                                                          \
   for(_fn_i=0; _fn_i < keylen; _fn_i++)                                          \
-      hashv = (hashv * 16777619) ^ _hf_key[_fn_i];                               \
+      hashv = hashv ^ _hf_key[_fn_i];                                            \
+      hashv = hashv * 16777619;                                                  \
   bkt = hashv & (num_bkts-1);                                                    \
 } while(0) 
  
