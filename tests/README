@@ -84,8 +84,8 @@ test79: test HASH_REPLACE
 test80: test utarray_insert past end of array
 test81: test utarray_insert past end of array
 test82: test utarray_inserta past end of array
-test83: test HASH_OVERHEAD
-test84: test HASH_OVERHEAD on hash with bloom filter
+test83: test HASH_REPLACE_STR with char[] key
+test84: test HASH_REPLACE_STR with char* key
 
 
 Other Make targets
@@ -103,8 +103,8 @@ emit_keys: reads a data file of unique strings, emits as keys w/HASH_EMIT_KEYS=1
 all_funcs: a script which executes the test suite with every hash function
 win32tests:builds and runs the test suite under Microsoft Visual Studio
 
-LINUX-ONLY
-----------
+LINUX/FREEBSD
+-------------
 hashscan:  tool to examine a running process and get info on its hash tables
 test_sleep:used as a subject for inspection by hashscan
 
