@@ -254,7 +254,7 @@ do {                                                                            
 #define HASH_ADD_STR(head,strfield,add)                                          \
     HASH_ADD(hh,head,strfield[0],strlen(add->strfield),add)
 #define HASH_REPLACE_STR(head,strfield,add,replaced)                             \
-  HASH_REPLACE(hh,head,strfield,strlen(add->strfield),add,replaced)
+    HASH_REPLACE(hh,head,strfield[0],strlen(add->strfield),add,replaced)
 #define HASH_FIND_INT(head,findint,out)                                          \
     HASH_FIND(hh,head,findint,sizeof(int),out)
 #define HASH_ADD_INT(head,intfield,add)                                          \
