@@ -7,6 +7,7 @@ Version 1.9.9.1 (2014-00-00)
 --------------------------
 * fix utstring pointer math on >4GB strings (thanks, Thomas Bottesch!)
 * change FNV hash to FNV-1a varation (thanks, dwest1975!)
+* fix bug in HASH_REPLACE_STR (thanks, Ilya Kaliman!)
 
 Version 1.9.9 (2014-02-25)
 --------------------------
