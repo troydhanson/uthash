@@ -357,7 +357,7 @@ do {                                                                            
   unsigned _hb_keylen=keylen;                                                    \
   char *_hb_key=(char*)(key);                                                    \
   (hashv) = 0;                                                                   \
-  while (_hb_keylen--)  { (hashv) = ((hashv) * 33) + *_hb_key++; }               \
+  while (_hb_keylen--)  { (hashv) = ((hashv) << 5 + (hashv)) + *_hb_key++; }               \
   bkt = (hashv) & (num_bkts-1);                                                  \
 } while (0)
 
