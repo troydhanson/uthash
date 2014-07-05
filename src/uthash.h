@@ -351,13 +351,13 @@ do {                                                                            
 #define HASH_FCN HASH_JEN
 #endif
 
-/* The Bernstein hash function, used in Perl prior to v5.6 */
+/* The Bernstein hash function, used in Perl prior to v5.6. Note (x<<5+x)=x*33. */
 #define HASH_BER(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hb_keylen=keylen;                                                    \
   char *_hb_key=(char*)(key);                                                    \
   (hashv) = 0;                                                                   \
-  while (_hb_keylen--)  { (hashv) = ((hashv) << 5 + (hashv)) + *_hb_key++; }               \
+  while (_hb_keylen--)  { (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++; }   \
   bkt = (hashv) & (num_bkts-1);                                                  \
 } while (0)
 

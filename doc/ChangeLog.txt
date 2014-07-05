@@ -5,6 +5,7 @@ Click to return to the link:index.html[uthash home page].
 
 Version 1.9.9.1 (2014-00-00)
 --------------------------
+* use shift in Bernstein hash instead of multiply (thanks, Jimmy Zhuo!)
 * switch ssize_t types in utarray/utstring to size_t (thanks, Hong Xu!)
 * fix utstring pointer math on >4GB strings (thanks, Thomas Bottesch!)
 * change FNV hash to FNV-1a varation (thanks, dwest1975!)
