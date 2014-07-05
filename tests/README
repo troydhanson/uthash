@@ -103,7 +103,7 @@ Set EXTRA_CFLAGS with this Makefile to use a specific hash function:
 
 Other files
 ================================================================================
-keystats:  key statistics analyzer. See the User Guide (http://uthash.sf.net)
+keystats:  key statistics analyzer. See the uthash User Guide.
 emit_keys: reads a data file of unique strings, emits as keys w/HASH_EMIT_KEYS=1
 all_funcs: a script which executes the test suite with every hash function
 win32tests:builds and runs the test suite under Microsoft Visual Studio
