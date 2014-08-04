@@ -120,9 +120,33 @@ void *utvector_next(UT_vector *v, void *cur) {
   return n;
 }
 
+void *utvector_head(UT_vector *v) {
+  if (v->i == 0) return NULL;
+  return v->d;
+}
+
+void *utvector_tail(UT_vector *v) {
+  if (v->i == 0) return NULL;
+  return v->d + ((v->i - 1) * v->mm.sz);
+}
+
 void *utvector_pop(UT_vector *v) {
   if (v->i == 0) return NULL;
   return v->d + (--(v->i) * v->mm.sz);
+}
+
+/* shifting is not very efficient. we end up throwing away/fini'ing the
+ * head of the vector, then doing a memmove, then having to init a new slot.
+ * we don't return the shifted item because its been fini'd, and we have
+ * no caller memory to copy it into anyway. a cpy_shift maybe handy */
+void utvector_shift(UT_vector *v) {
+  assert (v->i);
+  if (v->mm.fini) v->mm.fini(v->d, 1); 
+  v->i--;
+  memmove(v->d, v->d + v->mm.sz, (v->n-1)*v->mm.sz);
+  char *b = v->d + ((v->n-1) * v->mm.sz);
+  if (v->mm.init) v->mm.init(b, 1); 
+  else            memset(b, 0, v->mm.sz);
 }
 
 void utvector_push(UT_vector *v, void *e) {

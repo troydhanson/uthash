@@ -9,3 +9,7 @@ test8: test utextend past initial size int
 test9: test utextend past initial size utstring
 test10: test utvector_pop on empty list (int)
 test11: test utvector_pop on empty list (utstring)
+test12: test utvector head/tail (int)
+test13: test utvector head/tail (utstring)
+test14: test utvector_shift (int)
+test15: test utvector_shift (utstring)
