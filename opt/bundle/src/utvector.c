@@ -66,8 +66,9 @@ void utvector_reserve(UT_vector *v, unsigned num) {
   char *d = realloc(v->d, (n + v->n) * v->mm.sz);
   if (!d) oom();
   v->d = d;
-  if (v->mm.init) v->mm.init(&v->d[v->n], n); 
-  else            memset(&v->d[v->n], 0, n*v->mm.sz);
+  void *b = v->d + (v->n * v->mm.sz); // start of newly allocated area
+  if (v->mm.init) v->mm.init(b, n); 
+  else            memset(b, 0, n*v->mm.sz);
   v->n = n + v->n;
 }
 
