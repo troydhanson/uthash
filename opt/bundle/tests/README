@@ -1,0 +1,7 @@
+test1: test utvector init/fini
+test2: test utvector of int, push, next
+test3: test utvector push, pop, extend
+test4: test utvector_copy
+test5: test utvector of utstring
+test6: test utvector of utstring more ops
+test7: test utvector of utstring even more ops

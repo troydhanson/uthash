@@ -1,0 +1,13 @@
+The "bundle" directory is an alternative way to use uthash, utarray, utlist, 
+utstring and utvector in your programs. You can copy the bundle directory
+entirely into your own source tree, then use CFLAGS to add bundle/include
+to your include-header search path (-I). 
+
+There are two upshots of this. One is that you can just #include "libut.h"
+instead of uthash.h, utarray.h, etc. So it is a convenient wrapper. 
+
+The other benefit of using the bundle is that if you do a "make" in bundle/
+it builds bundle/src/libut.a, which you can then link into your program 
+using LDFLAGS -Lbundle/src -lut. This makes the utvector available. 
+
+This also links in the plumbing that allows making a utvector of utstrings.
