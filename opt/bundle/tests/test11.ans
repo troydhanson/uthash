@@ -1,0 +1,9 @@
+extend
+iterate
+hello
+pop
+hello
+iterate
+pop
+(null)
+iterate

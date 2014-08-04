@@ -120,9 +120,9 @@ void *utvector_next(UT_vector *v, void *cur) {
   return n;
 }
 
-void utvector_pop(UT_vector *v) {
-  assert(v->i);
-  v->i--;
+void *utvector_pop(UT_vector *v) {
+  if (v->i == 0) return NULL;
+  return v->d + (--(v->i) * v->mm.sz);
 }
 
 void utvector_push(UT_vector *v, void *e) {

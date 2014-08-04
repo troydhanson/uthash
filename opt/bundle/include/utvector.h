@@ -64,7 +64,7 @@ void utvector_copy(UT_vector *dst, UT_vector *src);
 void utvector_free(UT_vector *v);
 void *utvector_extend(UT_vector *v);
 void *utvector_next(UT_vector *v, void *cur);
-void utvector_pop(UT_vector *v);
+void *utvector_pop(UT_vector *v);
 void utvector_push(UT_vector *v, void *e);
 unsigned utvector_len(UT_vector *v);
 

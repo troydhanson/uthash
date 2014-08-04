@@ -1,0 +1,6 @@
+extend
+1000
+pop
+result: non-null 1000
+pop
+result: null 0

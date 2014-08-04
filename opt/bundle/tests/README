@@ -7,3 +7,5 @@ test6: test utvector of utstring more ops
 test7: test utvector of utstring even more ops
 test8: test utextend past initial size int
 test9: test utextend past initial size utstring
+test10: test utvector_pop on empty list (int)
+test11: test utvector_pop on empty list (utstring)
