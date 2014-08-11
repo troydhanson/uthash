@@ -56,12 +56,12 @@ do {                                                                            
 } while(0)
 #endif
 
-/* a number of the hash function use uint32_t which isn't defined on win32 */
-#ifdef _MSC_VER
+/* a number of the hash function use uint32_t which isn't defined on Pre Visual Studio 2010 */
+#if defined(_MSC_VER) && _MSC_VER < 1600
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
 #else
-#include <inttypes.h>   /* uint32_t */
+#include <stdint.h>   /* uint32_t */
 #endif
 
 #define UTHASH_VERSION 1.9.9
