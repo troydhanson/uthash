@@ -32,13 +32,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    As decltype is only available in newer compilers (VS2010 or gcc 4.3+
    when compiling c++ source) this code uses whatever method is needed
    or, for VS2008 where neither is available, uses casting workarounds. */
-#ifdef _MSC_VER         /* MS compiler */
+#if defined(_MSC_VER)   /* MS compiler */
 #if _MSC_VER >= 1600 && defined(__cplusplus)  /* VS2010 or newer in C++ mode */
 #define DECLTYPE(x) (decltype(x))
 #else                   /* VS2008 or older (or VS2010 in C mode) */
 #define NO_DECLTYPE
 #define DECLTYPE(x)
 #endif
+#elif defined(__BORLANDC__) || defined(__LCC__) || defined(__WATCOMC__)
+#define NO_DECLTYPE
+#define DECLTYPE(x)
 #else                   /* GNU, Sun and other compilers */
 #define DECLTYPE(x) (__typeof(x))
 #endif
@@ -49,19 +52,25 @@ do {                                                                            
   char **_da_dst = (char**)(&(dst));                                             \
   *_da_dst = (char*)(src);                                                       \
 } while(0)
-#else 
+#else
 #define DECLTYPE_ASSIGN(dst,src)                                                 \
 do {                                                                             \
   (dst) = DECLTYPE(dst)(src);                                                    \
 } while(0)
 #endif
 
-/* a number of the hash function use uint32_t which isn't defined on win32 */
-#ifdef _MSC_VER
+/* a number of the hash function use uint32_t which isn't defined on Pre VS2010 */
+#if defined (_WIN32)
+#if defined(_MSC_VER) && _MSC_VER >= 1600
+#include <stdint.h>
+#elif defined(__WATCOMC__)
+#include <stdint.h>
+#else
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
+#endif
 #else
-#include <inttypes.h>   /* uint32_t */
+#include <stdint.h>
 #endif
 
 #define UTHASH_VERSION 1.9.9
