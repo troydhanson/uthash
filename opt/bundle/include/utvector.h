@@ -22,7 +22,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /* utvector
- * 
+ *
  * maintain a contiguous buffer of 'n' elements ('i' occupied)
  * the 'n' buffers are deep-inited at the time of allocation
  * the vector leaves popped slots as-is, clearing them on re-use

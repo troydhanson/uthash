@@ -25,7 +25,7 @@ int main(int argc,char *argv[]) {
     if (argc > 1) nloops = atoi(argv[1]);
 
     if ( (file = fopen( "test14.dat", "r" )) == NULL ) {
-        perror("can't open: "); 
+        perror("can't open: ");
         exit(-1);
     }
 
@@ -54,7 +54,7 @@ int main(int argc,char *argv[]) {
     }
     if (gettimeofday(&tv2,NULL) == -1) perror("gettimeofday: ");
     elapsed_usec = ((tv2.tv_sec - tv1.tv_sec) * 1000000) + (tv2.tv_usec - tv1.tv_usec);
-    printf("lookup on %d of %d (%.2f%%) names succeeded (%.2f usec)\n", j, i, 
+    printf("lookup on %d of %d (%.2f%%) names succeeded (%.2f usec)\n", j, i,
        j*100.0/i, (double)(elapsed_usec));
     if (++loopnum < nloops) goto again;
     fclose(file);

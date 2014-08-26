@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     LL_CONCAT(headA,headB);
     LL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
 
-    headA=NULL; 
+    headA=NULL;
     headB=NULL;
     LL_APPEND(headA,&els[0]);
     LL_APPEND(headB,&els[1]);

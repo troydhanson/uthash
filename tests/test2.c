@@ -1,5 +1,5 @@
 #include "uthash.h"
-#include <time.h> 
+#include <time.h>
 #include <stdlib.h>   /* malloc */
 #include <stdio.h>    /* printf */
 

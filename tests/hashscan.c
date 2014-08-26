@@ -102,7 +102,7 @@ int read_mem(void *dst, pid_t pid, void *start, size_t len) {
   io_desc.piod_len = len;
 
   ret = ptrace(PT_IO, pid, (void *) &io_desc, 0);
-  
+
   if (ret) {
     vv("read_mem: ptrace failed: %s\n", strerror(errno));
     return -1;
@@ -142,10 +142,10 @@ void found(int fd, char* peer_sig, pid_t pid) {
   UT_hash_bucket *bkts=NULL;
   UT_hash_handle hh;
   size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
-  char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr, 
+  char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
        *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL,
        *hash_fcn=NULL, sat[10];
-  unsigned char *bloombv=NULL; 
+  unsigned char *bloombv=NULL;
   static int fileno=0;
   char keyfile[50];
   unsigned char bloom_nbits=0;
@@ -274,7 +274,7 @@ void found(int fd, char* peer_sig, pid_t pid) {
        if ((read_mem(&peer_bloombv, pid, (void *)peer_bloombv_ptr, sizeof(void*)) == 0) &&
           (read_mem(bloombv, pid, (void *)peer_bloombv, bloom_len) == 0)) {
 #else
-       if ((read_mem(&peer_bloombv, fd, (off_t)peer_bloombv_ptr, sizeof(void*)) == 0) && 
+       if ((read_mem(&peer_bloombv, fd, (off_t)peer_bloombv_ptr, sizeof(void*)) == 0) &&
           (read_mem(bloombv, fd, (off_t)peer_bloombv, bloom_len) == 0)) {
 #endif
           /* calculate saturation */
@@ -308,7 +308,7 @@ Address            items    ideal  buckets mxch/<10 fl bloom/sat fcn keys saved 
   printf("Address            ideal    items  buckets mc fl bloom/sat fcn keys saved to\n");
   printf("------------------ ----- -------- -------- -- -- --------- --- -------------\n");
   printf("%-18p %4.0f%% %8u %8u %2u %s %s %s %s\n",
-    (void*)peer_tbl, 
+    (void*)peer_tbl,
     (tbl->num_items - tbl->nonideal_items) * 100.0 / tbl->num_items,
     tbl->num_items,
     tbl->num_buckets,
@@ -320,11 +320,11 @@ Address            items    ideal  buckets mxch/<10 fl bloom/sat fcn keys saved 
 
 #if 0
   printf("read peer tbl:\n");
-  printf("num_buckets: %u\n", tbl->num_buckets); 
-  printf("num_items: %u\n", tbl->num_items); 
-  printf("nonideal_items: %u (%.2f%%)\n", tbl->nonideal_items, 
-    tbl->nonideal_items*100.0/tbl->num_items); 
-  printf("expand: %s\n", tbl->noexpand ? "inhibited": "normal"); 
+  printf("num_buckets: %u\n", tbl->num_buckets);
+  printf("num_items: %u\n", tbl->num_items);
+  printf("nonideal_items: %u (%.2f%%)\n", tbl->nonideal_items,
+    tbl->nonideal_items*100.0/tbl->num_items);
+  printf("expand: %s\n", tbl->noexpand ? "inhibited": "normal");
   if (getkeys) printf("keys written to %s\n", keyfile);
 #endif
 
@@ -365,25 +365,25 @@ void sigscan(pid_t pid, void *start, void *end, uint32_t sig) {
       fprintf(stderr, "PT_IO returned less than page size in sigscan()\n");
       return;
     }
-    
+
     /* iterate over the the page using the signature size and look for the sig */
     for (pos = buf; pos < (buf + page_size); pos += sizeof(sig)) {
       if (*(uint32_t *) pos == sig) {
         found(pid, (char *) io_desc.piod_offs + (pos - buf), pid);
       }
     }
-    
-    /* 
+
+    /*
      * 'end' is inclusive (the address of the last valid byte), so if the current offset
      * plus a page is beyond 'end', we're already done. since all vm map entries consist
-     * of entire pages and 'end' is inclusive, current offset plus one page should point 
+     * of entire pages and 'end' is inclusive, current offset plus one page should point
      * exactly one byte beyond 'end'. this is assert()ed below to be on the safe side.
      */
     if (io_desc.piod_offs + page_size > end) {
       assert(io_desc.piod_offs + page_size == (end + 1));
       break;
     }
-    
+
     /* advance to the next page */
     io_desc.piod_offs += page_size;
   }
@@ -431,7 +431,7 @@ int scan(pid_t pid) {
     fprintf(stderr,"failed to wait for pid %u: %s\n",(unsigned)pid, strerror(errno));
     goto die;
   }
-  
+
   /* read memory map using ptrace */
   vv("listing peer virtual memory areas\n");
   vm_entry.pve_entry = 0;
@@ -440,9 +440,9 @@ int scan(pid_t pid) {
     /* set pve_pathlen every turn, it gets overwritten by ptrace */
     vm_entry.pve_pathlen = MAXPATHLEN;
     errno = 0;
-    
+
     ret = ptrace(PT_VM_ENTRY, pid, (void *) &vm_entry, 0);
-    
+
     if (ret) {
       if (errno == ENOENT) {
         /* we've reached the last entry */
@@ -451,9 +451,9 @@ int scan(pid_t pid) {
       fprintf(stderr, "fetching vm map entry failed: %s (%i)\n", strerror(errno), errno);
       goto die;
     }
-    
+
     vvv("vmmap entry: start: %p, end: %p", (void *) vm_entry.pve_start, (void *) vm_entry.pve_end);
-    
+
     /* skip unreadable or vnode-backed entries */
     if (!(vm_entry.pve_prot & VM_PROT_READ) || vm_entry.pve_pathlen > 0) {
       vvv(" -> skipped (not readable or vnode-backed)\n");
@@ -470,14 +470,14 @@ int scan(pid_t pid) {
   }
 
   vv("peer has %u virtual memory areas\n", num_vmas);
-  
+
   /* look for the hash signature */
   vv("scanning peer memory for hash table signatures\n");
   for(i=0;i<num_vmas;i++) {
     vma = vmas[i];
     sigscan(pid, vma.start, vma.end, sig);
   }
- 
+
 die:
   vv("detaching and resuming peer\n");
   if (ptrace(PT_DETACH, pid, NULL, 0) == -1) {
@@ -493,7 +493,7 @@ int scan(pid_t pid) {
   unsigned i, num_vmas = 0;
   int memfd;
   void *pstart, *pend, *unused;
-  
+
   /* attach to the target process and wait for it to suspend */
   vv("attaching to peer\n");
   if (ptrace(PTRACE_ATTACH,pid,NULL,NULL) == -1) {
@@ -541,7 +541,7 @@ int scan(pid_t pid) {
     vma = vmas[i];
     pstart = (void*)vma.start;
     pend = (void*)vma.end;
-    /*fprintf(stderr,"scanning %p-%p %.4s %.5s\n", pstart, pend, 
+    /*fprintf(stderr,"scanning %p-%p %.4s %.5s\n", pstart, pend,
               vma.perms, vma.device);*/
     sigscan(memfd, vma.start, vma.end, sig, pid);
   }
@@ -581,7 +581,7 @@ int main(int argc, char *argv[]) {
         break;
     }
   }
- 
+
   if (optind < argc) pid=atoi(argv[optind++]);
   else usage(argv[0]);
 

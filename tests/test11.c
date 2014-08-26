@@ -7,8 +7,8 @@
 
 #if 0
 /* Print a message if the hash's no-expand flag is set. */
-#undef uthash_noexpand_fyi 
-#undef uthash_expand_fyi 
+#undef uthash_noexpand_fyi
+#undef uthash_expand_fyi
 #define uthash_noexpand_fyi(tbl) printf("noexpand set\n");
 #define uthash_expand_fyi(tbl) printf("hash expanded\n");
 #endif
@@ -30,7 +30,7 @@ int main(int argc,char *argv[]) {
     FILE *file;
 
     if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
-        perror("can't open: "); 
+        perror("can't open: ");
         exit(-1);
     }
 
@@ -42,7 +42,7 @@ int main(int argc,char *argv[]) {
 
     fclose(file);
     HASH_SORT(names,namecmp);
-    for(name=names;name;name=(name_rec*)(name->hh.next)) 
+    for(name=names;name;name=(name_rec*)(name->hh.next))
       printf("%s",name->boy_name);
 
    return 0;

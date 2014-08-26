@@ -21,7 +21,7 @@ int main(int argc,char *argv[]) {
     int i=0,j=0;
 
     if ( (file = fopen( "test14.dat", "r" )) == NULL ) {
-        perror("can't open: "); 
+        perror("can't open: ");
         exit(-1);
     }
 

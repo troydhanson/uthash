@@ -19,7 +19,7 @@ int main(int argc,char *argv[]) {
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);
     }
-    
+
     printf("hash contains %d items\n", HASH_COUNT(users));
    return 0;
 }

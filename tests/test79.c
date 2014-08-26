@@ -1,4 +1,4 @@
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <stdio.h>
 #include "uthash.h"
 
@@ -12,14 +12,14 @@ typedef struct hs_t {
 static void pr(hs_t **hdpp){
   hs_t *el, *tmp, *hdp = *hdpp;
   HASH_ITER(hh, hdp, el, tmp){
-    printf("id %d, tag %d\n",el->id,el->tag);    
+    printf("id %d, tag %d\n",el->id,el->tag);
   }
 }
 
 int main(int argc, char *argv[]) {
 
   hs_t *hs_head=NULL, *tmp, *replaced=NULL;
-    
+
   tmp = (hs_t*)malloc(sizeof(hs_t));
   tmp->id = 10;
   tmp->tag = 100;

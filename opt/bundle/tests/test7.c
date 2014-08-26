@@ -8,7 +8,7 @@ void dump(UT_vector *v) {
 }
 
 int main() {
-  int i; 
+  int i;
   UT_vector v; utvector_init(&v, utvector_utstring);
   UT_vector *k;
 

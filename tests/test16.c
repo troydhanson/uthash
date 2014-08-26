@@ -7,11 +7,11 @@
 struct inner {
     int a;
     int b;
-}; 
+};
 
 struct my_event {
-    struct inner is;           /* key is aggregate of this field */ 
-    char event_code;           /* and this field.                */    
+    struct inner is;           /* key is aggregate of this field */
+    char event_code;           /* and this field.                */
     int user_id;
     UT_hash_handle hh;         /* makes this structure hashable */
 };
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     struct my_event *e, ev, *events = NULL;
     unsigned i, keylen;
 
-    keylen =   offsetof(struct my_event, event_code) + sizeof(char)                         
+    keylen =   offsetof(struct my_event, event_code) + sizeof(char)
              - offsetof(struct my_event, is);
 
     for(i = 0; i < 10; i++) {
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 
     /* look for one specific event */
     memset(&ev,0,sizeof(struct my_event));
-    ev.is.a = 5 * (60*60*24*365);          
+    ev.is.a = 5 * (60*60*24*365);
     ev.is.b = 0;
     ev.event_code = 'b';
     HASH_FIND( hh, events, &ev.is, keylen , e);
