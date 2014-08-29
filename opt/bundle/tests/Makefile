@@ -2,10 +2,10 @@ PROGS=test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test11 test12
       test13 test14 test15
 OBJS=$(patsubst %,%.o,$(PROGS))
 
-CFLAGS = -I../include -L../src
+CFLAGS = -I../include
 CFLAGS += -g
-CFLAGS += -Wall 
-LDFLAGS=-lut
+CFLAGS += -Wall -Wextra
+LDFLAGS=-lut -L../src
 
 TEST_TARGET=run_tests
 TESTS=./do_tests
