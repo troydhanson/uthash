@@ -2,7 +2,7 @@ OBJS=libut.a
 all: $(OBJS) 
 INCDIR=../include
 CFLAGS=-I$(INCDIR)
-CFLAGS+=-Wall
+CFLAGS+=-Wall -Wextra
 CFLAGS+=-g
 
 libut.a: libut.o utvector.o 

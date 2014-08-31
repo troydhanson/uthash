@@ -164,7 +164,7 @@ _UNUSED_ static void _utstring_BuildTable(
     i = 0;
     j = i - 1;
     P_KMP_Table[i] = j;
-    while (i < P_NeedleLen)
+    while (i < (long) P_NeedleLen)
     {
         while ( (j > -1) && (P_Needle[i] != P_Needle[j]) )
         {
@@ -172,7 +172,7 @@ _UNUSED_ static void _utstring_BuildTable(
         }
         i++;
         j++;
-        if (i < P_NeedleLen)
+        if (i < (long) P_NeedleLen)
         {
             if (P_Needle[i] == P_Needle[j])
             {
@@ -206,7 +206,7 @@ _UNUSED_ static void _utstring_BuildTableR(
     P_KMP_Table[i + 1] = j;
     while (i >= 0)
     {
-        while ( (j < P_NeedleLen) && (P_Needle[i] != P_Needle[j]) )
+        while ( (j < (long) P_NeedleLen) && (P_Needle[i] != P_Needle[j]) )
         {
            j = P_KMP_Table[j + 1];
         }
@@ -321,7 +321,7 @@ _UNUSED_ static long utstring_find(
         V_StartPosition = P_StartPosition;
     }
     V_HaystackLen = s->i - V_StartPosition;
-    if ( (V_HaystackLen >= P_NeedleLen) && (P_NeedleLen > 0) )
+    if ( (V_HaystackLen >= (long) P_NeedleLen) && (P_NeedleLen > 0) )
     {
         V_KMP_Table = (long *)malloc(sizeof(long) * (P_NeedleLen + 1));
         if (V_KMP_Table != NULL)
@@ -367,7 +367,7 @@ _UNUSED_ static long utstring_findR(
         V_StartPosition = P_StartPosition;
     }
     V_HaystackLen = V_StartPosition + 1;
-    if ( (V_HaystackLen >= P_NeedleLen) && (P_NeedleLen > 0) )
+    if ( (V_HaystackLen >= (long) P_NeedleLen) && (P_NeedleLen > 0) )
     {
         V_KMP_Table = (long *)malloc(sizeof(long) * (P_NeedleLen + 1));
         if (V_KMP_Table != NULL)
