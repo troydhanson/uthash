@@ -5,7 +5,7 @@
 
 struct my_struct {
     const char *name;          /* key */
-    int id;                    
+    int id;
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
         s->name = *n;
         s->id = i++;
-        HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );  
+        HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );
     }
 
     HASH_FIND_STR( users, "betty", s);

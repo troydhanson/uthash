@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "utvector.h"
 
 /* utvector
- * 
+ *
  * maintain a contiguous buffer of 'n' elements ('i' occupied)
  * the 'n' buffers are deep-inited at the time of allocation
  * the vector leaves popped slots as-is, clearing them on re-use
@@ -67,7 +67,7 @@ void utvector_reserve(UT_vector *v, unsigned num) {
   if (!d) oom();
   v->d = d;
   void *b = v->d + (v->n * v->mm.sz); // start of newly allocated area
-  if (v->mm.init) v->mm.init(b, n); 
+  if (v->mm.init) v->mm.init(b, n);
   else            memset(b, 0, n*v->mm.sz);
   v->n = n + v->n;
 }
@@ -90,7 +90,7 @@ void utvector_clear(UT_vector *v) {
 }
 
 void utvector_copy(UT_vector *dst, UT_vector *src) { /* dst, src both inited */
-  assert(dst->mm.sz == src->mm.sz); // double check that its inited 
+  assert(dst->mm.sz == src->mm.sz); // double check that its inited
   utvector_clear(dst);
   utvector_reserve(dst, src->i);
   dst->i = src->i;
@@ -141,11 +141,11 @@ void *utvector_pop(UT_vector *v) {
  * no caller memory to copy it into anyway. a cpy_shift maybe handy */
 void utvector_shift(UT_vector *v) {
   assert (v->i);
-  if (v->mm.fini) v->mm.fini(v->d, 1); 
+  if (v->mm.fini) v->mm.fini(v->d, 1);
   v->i--;
   memmove(v->d, v->d + v->mm.sz, (v->n-1)*v->mm.sz);
   char *b = v->d + ((v->n-1) * v->mm.sz);
-  if (v->mm.init) v->mm.init(b, 1); 
+  if (v->mm.init) v->mm.init(b, 1);
   else            memset(b, 0, v->mm.sz);
 }
 

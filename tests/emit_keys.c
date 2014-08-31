@@ -21,12 +21,12 @@ int main(int argc,char *argv[]) {
     int i=0;
 
     if (argc != 2) {
-        fprintf(stderr,"usage: %s file\n", argv[0]); 
+        fprintf(stderr,"usage: %s file\n", argv[0]);
         exit(-1);
     }
 
     if ( (file = fopen( argv[1], "r" )) == NULL ) {
-        perror("can't open: "); 
+        perror("can't open: ");
         exit(-1);
     }
 

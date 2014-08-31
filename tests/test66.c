@@ -11,7 +11,7 @@ typedef struct person_t {
 int main(int argc, char*argv[]) {
     person_t *people=NULL, *person;
     const char **name;
-    const char * names[] = { "bob", "jack", "gary", "ty", "bo", "phil", "art", 
+    const char * names[] = { "bob", "jack", "gary", "ty", "bo", "phil", "art",
                       "gil", "buck", "ted", NULL };
     int id=0;
 
@@ -28,9 +28,9 @@ int main(int argc, char*argv[]) {
 
     for(name=names; *name; name++) {
         HASH_FIND_STR(people,*name,*p);
-        if (person) 
+        if (person)
             printf("found %s (id %d)\n", person->first_name, person->id);
-        else 
+        else
             printf("failed to find %s\n", *name);
     }
    return 0;

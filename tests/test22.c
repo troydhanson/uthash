@@ -14,8 +14,8 @@ typedef struct {
 } msg_t;
 
 typedef struct {
-    char encoding; 
-    int text[]; 
+    char encoding;
+    int text[];
 } lookup_key_t;
 
 int main(int argc, char *argv[]) {

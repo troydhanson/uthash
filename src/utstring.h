@@ -21,7 +21,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* a dynamic string implementation using macros 
+/* a dynamic string implementation using macros
  */
 #ifndef UTSTRING_H
 #define UTSTRING_H
@@ -29,9 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UTSTRING_VERSION 1.9.9
 
 #ifdef __GNUC__
-#define _UNUSED_ __attribute__ ((__unused__)) 
+#define _UNUSED_ __attribute__ ((__unused__))
 #else
-#define _UNUSED_ 
+#define _UNUSED_
 #endif
 
 #include <stdlib.h>
@@ -155,8 +155,8 @@ _UNUSED_ static void utstring_printf(UT_string *s, const char *fmt, ...) {
  ******************************************************************************/
 /* Build KMP table from left to right. */
 _UNUSED_ static void _utstring_BuildTable(
-    const char *P_Needle, 
-    size_t P_NeedleLen, 
+    const char *P_Needle,
+    size_t P_NeedleLen,
     long *P_KMP_Table)
 {
     long i, j;
@@ -195,8 +195,8 @@ _UNUSED_ static void _utstring_BuildTable(
 
 /* Build KMP table from right to left. */
 _UNUSED_ static void _utstring_BuildTableR(
-    const char *P_Needle, 
-    size_t P_NeedleLen, 
+    const char *P_Needle,
+    size_t P_NeedleLen,
     long *P_KMP_Table)
 {
     long i, j;
@@ -235,10 +235,10 @@ _UNUSED_ static void _utstring_BuildTableR(
 
 /* Search data from left to right. ( Multiple search mode. ) */
 _UNUSED_ static long _utstring_find(
-    const char *P_Haystack, 
-    size_t P_HaystackLen, 
-    const char *P_Needle, 
-    size_t P_NeedleLen, 
+    const char *P_Haystack,
+    size_t P_HaystackLen,
+    const char *P_Needle,
+    size_t P_NeedleLen,
     long *P_KMP_Table)
 {
     long i, j;
@@ -268,10 +268,10 @@ _UNUSED_ static long _utstring_find(
 
 /* Search data from right to left. ( Multiple search mode. ) */
 _UNUSED_ static long _utstring_findR(
-    const char *P_Haystack, 
-    size_t P_HaystackLen, 
-    const char *P_Needle, 
-    size_t P_NeedleLen, 
+    const char *P_Haystack,
+    size_t P_HaystackLen,
+    const char *P_Needle,
+    size_t P_NeedleLen,
     long *P_KMP_Table)
 {
     long i, j;
@@ -302,9 +302,9 @@ _UNUSED_ static long _utstring_findR(
 
 /* Search data from left to right. ( One time search mode. ) */
 _UNUSED_ static long utstring_find(
-    UT_string *s, 
+    UT_string *s,
     long P_StartPosition,   /* Start from 0. -1 means last position. */
-    const char *P_Needle, 
+    const char *P_Needle,
     size_t P_NeedleLen)
 {
     long V_StartPosition;
@@ -328,10 +328,10 @@ _UNUSED_ static long utstring_find(
         {
             _utstring_BuildTable(P_Needle, P_NeedleLen, V_KMP_Table);
 
-            V_FindPosition = _utstring_find(s->d + V_StartPosition, 
-                                            V_HaystackLen, 
-                                            P_Needle, 
-                                            P_NeedleLen, 
+            V_FindPosition = _utstring_find(s->d + V_StartPosition,
+                                            V_HaystackLen,
+                                            P_Needle,
+                                            P_NeedleLen,
                                             V_KMP_Table);
             if (V_FindPosition >= 0)
             {
@@ -348,9 +348,9 @@ _UNUSED_ static long utstring_find(
 
 /* Search data from right to left. ( One time search mode. ) */
 _UNUSED_ static long utstring_findR(
-    UT_string *s, 
+    UT_string *s,
     long P_StartPosition,   /* Start from 0. -1 means last position. */
-    const char *P_Needle, 
+    const char *P_Needle,
     size_t P_NeedleLen)
 {
     long V_StartPosition;
@@ -374,10 +374,10 @@ _UNUSED_ static long utstring_findR(
         {
             _utstring_BuildTableR(P_Needle, P_NeedleLen, V_KMP_Table);
 
-            V_FindPosition = _utstring_findR(s->d, 
-                                             V_HaystackLen, 
-                                             P_Needle, 
-                                             P_NeedleLen, 
+            V_FindPosition = _utstring_findR(s->d,
+                                             V_HaystackLen,
+                                             P_Needle,
+                                             P_NeedleLen,
                                              V_KMP_Table);
 
             free(V_KMP_Table);

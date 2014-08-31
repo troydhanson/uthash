@@ -36,7 +36,7 @@ void add_to_cache(char *key, char *value)
     entry->key = strdup(key);
     entry->value = strdup(value);
     HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
-    
+
     // prune the cache to MAX_CACHE_SIZE
     if (HASH_COUNT(cache) >= MAX_CACHE_SIZE) {
         HASH_ITER(hh, cache, entry, tmp_entry) {
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   int i=0;
 
   if ( (file = fopen( "test65.dat", "r" )) == NULL ) {
-      perror("can't open: "); 
+      perror("can't open: ");
       exit(-1);
   }
 

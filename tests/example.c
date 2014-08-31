@@ -5,7 +5,7 @@
 
 struct my_struct {
     int id;                    /* key */
-    char name[10];             
+    char name[10];
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
@@ -36,12 +36,12 @@ void delete_user(struct my_struct *user) {
 }
 
 void delete_all() {
-  struct my_struct *current_user, *tmp; 
+  struct my_struct *current_user, *tmp;
 
   HASH_ITER(hh, users, current_user, tmp) {
     HASH_DEL(users,current_user);  /* delete it (users advances to next) */
     free(current_user);            /* free it */
-  } 
+  }
 }
 
 void print_users() {

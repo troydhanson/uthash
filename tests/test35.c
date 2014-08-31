@@ -13,9 +13,9 @@ int main(int argc,char *argv[]) {
     elt *head = NULL;
     elt elts[10];
     char label[6];
-    for(i=0;i<10;i++) { 
-      elts[i].s = (char*)malloc(6); 
-      strncpy(elts[i].s, "hello",6); 
+    for(i=0;i<10;i++) {
+      elts[i].s = (char*)malloc(6);
+      strncpy(elts[i].s, "hello",6);
       elts[i].s[0] = 'a' + i;
       printf("%d: %s\n", i, elts[i].s);
       HASH_ADD_KEYPTR(hh, head, elts[i].s, 6, &elts[i]);
@@ -23,7 +23,7 @@ int main(int argc,char *argv[]) {
 
     /* look up each element and verify the result pointer */
     strncpy(label, "hello", 6);
-    for(i=0;i<10;i++) { 
+    for(i=0;i<10;i++) {
       elt *e;
       label[0] = 'a' + i;
       HASH_FIND(hh,head,label,6,e);

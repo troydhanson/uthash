@@ -8,8 +8,8 @@ void dump(UT_vector *v) {
 }
 
 int main() {
-  int i; 
-  UT_string *t; 
+  int i;
+  UT_string *t;
   UT_vector v; utvector_init(&v, utvector_utstring);
   UT_string s; utstring_init(&s);
 

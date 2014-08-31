@@ -11,13 +11,13 @@ typedef struct person_t {
 int main(int argc, char*argv[]) {
     person_t *people=NULL, *person, *new_person, *tmp;
     const char **name;
-    const char * names[] = { "bob", "jack", "gary", "ty", "bo", "phil", "art", 
+    const char * names[] = { "bob", "jack", "gary", "ty", "bo", "phil", "art",
                       "gil", "buck", "ted", NULL };
     int id=0;
 
     for(name=names; *name; name++) {
         if ( (person = (person_t*)malloc(sizeof(person_t))) == NULL) exit(-1);
-        person->first_name = malloc(10); 
+        person->first_name = malloc(10);
         strncpy(person->first_name, *name,10);
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);

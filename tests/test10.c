@@ -23,9 +23,9 @@ int main(int argc,char *argv[]) {
     }
 
     /*
-    printf("hh items: %d, alth items: %d\n", 
+    printf("hh items: %d, alth items: %d\n",
             users->hh.tbl->num_items, users->alth.tbl->num_items);
-    printf("hh buckets: %d, alth buckets: %d\n", 
+    printf("hh buckets: %d, alth buckets: %d\n",
             users->hh.tbl->num_buckets, users->alth.tbl->num_buckets);
     */
 

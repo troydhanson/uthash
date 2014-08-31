@@ -9,7 +9,7 @@ typedef struct example_user_t {
 } example_user_t;
 
 int rev(void *_a, void *_b) {
-    example_user_t *a = (example_user_t*)_a; 
+    example_user_t *a = (example_user_t*)_a;
     example_user_t *b = (example_user_t*)_b;
     printf("called for a:%d, b:%d\n",a->id, b->id);
     return (a->id - b->id);
