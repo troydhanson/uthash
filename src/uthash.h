@@ -388,9 +388,10 @@ do {                                                                            
   unsigned _fn_i;                                                                \
   char *_hf_key=(char*)(key);                                                    \
   hashv = 2166136261UL;                                                          \
-  for(_fn_i=0; _fn_i < keylen; _fn_i++)                                          \
+  for(_fn_i=0; _fn_i < keylen; _fn_i++) {                                        \
       hashv = hashv ^ _hf_key[_fn_i];                                            \
       hashv = hashv * 16777619;                                                  \
+  }                                                                              \
   bkt = hashv & (num_bkts-1);                                                    \
 } while(0)
 
