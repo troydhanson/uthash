@@ -99,10 +99,6 @@ strings:
  * link:utarray.html[utarray.h] implements dynamic arrays using macros. 
  * link:utstring.html[utstring.h] implements a basic dynamic string.
 
-Other software
-^^^^^^^^^^^^^^
-Other open-source software by the author is listed at http://tkhanson.net.
-
 History
 ~~~~~~~
 I wrote uthash in 2004-2006 for my own purposes. Originally it was hosted on 
