@@ -775,7 +775,7 @@ asciidoc.install(2);
 <span id="author">Troy D. Hanson</span><br />
 <span id="email"><tt>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.9.9,</span>
-<span id="revdate">March 2014</span>
+<span id="revdate">November 2014</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -784,6 +784,14 @@ asciidoc.install(2);
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">As of 2015 uthash is unmaintained software.</td>
+</tr></table>
+</div>
 <div class="paragraph"><p>To download uthash, follow this link back to the
 <a href="https://github.com/troydhanson/uthash">GitHub project page</a>.</p></div>
 </div>
@@ -828,11 +836,6 @@ iterate
 <li>
 <p>
 sort
-</p>
-</li>
-<li>
-<p>
-select
 </p>
 </li>
 </ol></div>
@@ -924,22 +927,14 @@ It is free and open source.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_getting_help">Getting help</h3>
-<div class="paragraph"><p>I encourage people to use the public Google Group to ask questions: <a href="mailto:uthash@googlegroups.com">uthash@googlegroups.com</a></p></div>
-<div class="paragraph"><p>You can browse it at: <a href="https://groups.google.com/d/forum/uthash">https://groups.google.com/d/forum/uthash</a></p></div>
-<div class="paragraph"><p>If you are experienced with uthash and like to answer questions, please join the
-group and chime in when someone asks a question. That would be a great help!</p></div>
-<div class="sect3">
-<h4 id="_contacting_the_author">Contacting the author</h4>
-<div class="paragraph"><p>You can email me at <a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a> or message @troydhanson on Twitter.  I
-can&#8217;t always answer my email, and when I do, it&#8217;s sometimes weeks later. Sorry!</p></div>
-</div>
+<div class="paragraph"><p>Please use the <a href="https://groups.google.com/d/forum/uthash">uthash Google Group</a> to
+ask questions. You can email it at <a href="mailto:uthash@googlegroups.com">uthash@googlegroups.com</a>. Please do not
+contact me directly. I can no longer answer any uthash questions or fix any bugs.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_contributing">Contributing</h3>
-<div class="paragraph"><p>If you add a new feature or fix something in uthash or in the extras, please
-make a pull request on Github. For anything other than a trivial change, include
-a unit test and documentation if you possibly can. (And don&#8217;t be discouraged if
-it takes weeks or even months for me to merge it. Sorry, my life is busy!) Thanks!</p></div>
+<div class="paragraph"><p>You are welcome to fork uthash and make changes in your own repo. I have
+stopped maintaining uthash as of 2015.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_extras_included">Extras included</h3>
@@ -962,29 +957,23 @@ strings:</p></div>
 </p>
 </li>
 </ul></div>
-<div class="paragraph"><p>There&#8217;s also a small LRU cache API, based on uthash, in <tt>tests/lru_cache</tt>.</p></div>
 <div class="sect3">
 <h4 id="_other_software">Other software</h4>
 <div class="paragraph"><p>Other open-source software by the author is listed at <a href="http://tkhanson.net">http://tkhanson.net</a>.</p></div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_news">News</h3>
-<div class="paragraph"><p>The author has a blog for <a href="http://troydhanson.wordpress.com/">software updates</a>
-<span class="image">
-<img src="rss.png" alt="(RSS)" />
-</span>. You can also follow @troydhanson on Twitter for updates.</p></div>
-</div>
-<div class="sect2">
-<h3 id="_who_8217_s_using_it">Who&#8217;s using it?</h3>
-<div class="paragraph"><p>Uthash was downloaded around 30,000 times between 2006-2013 then transitioned to
-GitHub. It&#8217;s been incorporated into commercial software, academic research, and
-into other open-source software. It has also been added to the native package
-repositories for a number of Unix-y distros.</p></div>
+<h3 id="_history">History</h3>
+<div class="paragraph"><p>I wrote uthash in 2004-2006 for my own purposes. Originally it was hosted on
+SourceForge.  Uthash was downloaded around 30,000 times between 2006-2013 then
+transitioned to GitHub. It&#8217;s been incorporated into commercial software,
+academic research, and into other open-source software. It has also been added
+to the native package repositories for a number of Unix-y distros.</p></div>
 <div class="paragraph"><p>When uthash was written, there were fewer options for doing generic hash tables
 in C than exist today. There are faster hash tables, more memory-efficient hash
 tables, with very different API&#8217;s today. But, like driving a minivan, uthash is
-convenient, and gets the job done without drawing a lot of attention to itself.</p></div>
+convenient, and gets the job done for many purposes.</p></div>
+<div class="paragraph"><p>As of 2015 I have stopped maintaining uthash altogether.</p></div>
 </div>
 </div>
 </div>
@@ -3026,7 +3015,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 1.9.9<br />
-Last updated 2014-06-26 08:25:37 EDT
+Last updated 2014-11-18 21:25:41 EST
 </div>
 </div>
 </body>

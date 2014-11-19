@@ -20,6 +20,7 @@ CFLAGS = -I$(HASHDIR)
 CFLAGS += -g
 #CFLAGS += -Wstrict-aliasing=2
 CFLAGS += -Wall 
+#CFLAGS += -Wextra 
 #CFLAGS += -std=c89
 CFLAGS += ${EXTRA_CFLAGS}
 

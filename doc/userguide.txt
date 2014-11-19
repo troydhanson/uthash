@@ -1,7 +1,9 @@
 uthash User Guide
 =================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.9.9, March 2014
+v1.9.9, November 2014
+
+NOTE: As of 2015 uthash is unmaintained software.
 
 To download uthash, follow this link back to the
 https://github.com/troydhanson/uthash[GitHub project page].
@@ -24,7 +26,6 @@ This software supports these operations on items in a hash table:
 4. count
 5. iterate
 6. sort
-7. select 
 
 Is it fast?
 ~~~~~~~~~~~
@@ -80,24 +81,14 @@ Follow the links on https://github.com/troydhanson/uthash to clone uthash or get
 
 Getting help
 ~~~~~~~~~~~~
-I encourage people to use the public Google Group to ask questions: mailto:uthash@googlegroups.com[]
-
-You can browse it at: https://groups.google.com/d/forum/uthash[]
-
-If you are experienced with uthash and like to answer questions, please join the
-group and chime in when someone asks a question. That would be a great help!
-
-Contacting the author
-^^^^^^^^^^^^^^^^^^^^^
-You can email me at tdh@tkhanson.net or message @troydhanson on Twitter.  I
-can't always answer my email, and when I do, it's sometimes weeks later. Sorry!
+Please use the https://groups.google.com/d/forum/uthash[uthash Google Group] to
+ask questions. You can email it at uthash@googlegroups.com. Please do not
+contact me directly. I can no longer answer any uthash questions or fix any bugs.
 
 Contributing
 ~~~~~~~~~~~~
-If you add a new feature or fix something in uthash or in the extras, please
-make a pull request on Github. For anything other than a trivial change, include
-a unit test and documentation if you possibly can. (And don't be discouraged if
-it takes weeks or even months for me to merge it. Sorry, my life is busy!) Thanks!
+You are welcome to fork uthash and make changes in your own repo. I have
+stopped maintaining uthash as of 2015.
 
 Extras included
 ~~~~~~~~~~~~~~~
@@ -108,28 +99,24 @@ strings:
  * link:utarray.html[utarray.h] implements dynamic arrays using macros. 
  * link:utstring.html[utstring.h] implements a basic dynamic string.
 
-There's also a small LRU cache API, based on uthash, in `tests/lru_cache`.
-
 Other software
 ^^^^^^^^^^^^^^
 Other open-source software by the author is listed at http://tkhanson.net.
 
-News
-~~~~
-The author has a blog for http://troydhanson.wordpress.com/[software updates]
-image:rss.png[(RSS)]. You can also follow @troydhanson on Twitter for updates.
-
-Who's using it?
-~~~~~~~~~~~~~~~
-Uthash was downloaded around 30,000 times between 2006-2013 then transitioned to
-GitHub. It's been incorporated into commercial software, academic research, and
-into other open-source software. It has also been added to the native package
-repositories for a number of Unix-y distros. 
+History
+~~~~~~~
+I wrote uthash in 2004-2006 for my own purposes. Originally it was hosted on 
+SourceForge.  Uthash was downloaded around 30,000 times between 2006-2013 then
+transitioned to GitHub. It's been incorporated into commercial software,
+academic research, and into other open-source software. It has also been added
+to the native package repositories for a number of Unix-y distros. 
 
 When uthash was written, there were fewer options for doing generic hash tables
 in C than exist today. There are faster hash tables, more memory-efficient hash
 tables, with very different API's today. But, like driving a minivan, uthash is
-convenient, and gets the job done without drawing a lot of attention to itself.
+convenient, and gets the job done for many purposes. 
+
+As of 2015 I have stopped maintaining uthash altogether.
 
 Your structure
 --------------

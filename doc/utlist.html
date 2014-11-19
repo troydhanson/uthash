@@ -775,7 +775,7 @@ asciidoc.install(2);
 <span id="author">Troy D. Hanson</span><br />
 <span id="email"><tt>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.9.9,</span>
-<span id="revdate">March 2014</span>
+<span id="revdate">November 2014</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -859,13 +859,50 @@ Windows, using Visual Studio 2008, Visual Studio 2010, or Cygwin/MinGW.
 </ul></div>
 <div class="sect3">
 <h4 id="_efficiency">Efficiency</h4>
-<div class="paragraph"><p>For all types of lists, prepending elements and deleting elements are
-constant-time operations. Appending to a singly-linked list is an <em>O(n)</em>
-operation but appending to a doubly-linked list is constant time using these
-macros.  (This is because, in the utlist implementation of the doubly-linked
-list, the head element&#8217;s <tt>prev</tt> member points back to the list tail, even when
-the list is non-circular). Sorting is an <em>O(n log(n))</em> operation. Iteration,
-counting and searching are <tt>O(n)</tt> for all list types.</p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+Prepending elements
+</dt>
+<dd>
+<p>
+ Constant-time on all list types.
+</p>
+</dd>
+<dt class="hdlist1">
+Appending
+</dt>
+<dd>
+<p>
+ <em>O(n)</em> on singly-linked lists; constant-time on doubly-linked list.
+ (The utlist implementation of the doubly-linked list keeps a tail pointer in
+ <tt>head-&gt;prev</tt> so that append can be done in constant time).
+</p>
+</dd>
+<dt class="hdlist1">
+Deleting elements
+</dt>
+<dd>
+<p>
+ <em>O(n)</em> on singly-linked lists; constant-time on doubly-linked list.
+</p>
+</dd>
+<dt class="hdlist1">
+Sorting
+</dt>
+<dd>
+<p>
+ <em>O(n log(n))</em> for all list types.
+</p>
+</dd>
+<dt class="hdlist1">
+Iteration, counting and searching
+</dt>
+<dd>
+<p>
+ <em>O(n)</em> for all list types.
+</p>
+</dd>
+</dl></div>
 </div>
 </div>
 <div class="sect2">
@@ -1211,7 +1248,7 @@ CDL_COUNT2(head,el,count,next);</tt></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.9.9<br />
-Last updated 2014-02-25 21:47:59 EST
+Last updated 2014-11-18 21:11:36 EST
 </div>
 </div>
 </body>

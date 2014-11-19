@@ -1,7 +1,7 @@
 utlist: linked list macros for C structures
 ===========================================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.9.9, March 2014
+v1.9.9, November 2014
 
 Here's a link back to the https://github.com/troydhanson/uthash[GitHub project page].
 
@@ -49,13 +49,18 @@ Three types of linked lists are supported:
 
 Efficiency
 ^^^^^^^^^^
-For all types of lists, prepending elements and deleting elements are
-constant-time operations. Appending to a singly-linked list is an 'O(n)'
-operation but appending to a doubly-linked list is constant time using these
-macros.  (This is because, in the utlist implementation of the doubly-linked
-list, the head element's `prev` member points back to the list tail, even when
-the list is non-circular). Sorting is an 'O(n log(n))' operation. Iteration,
-counting and searching are `O(n)` for all list types.
+Prepending elements::
+ Constant-time on all list types.
+Appending::
+ 'O(n)' on singly-linked lists; constant-time on doubly-linked list. 
+ (The utlist implementation of the doubly-linked list keeps a tail pointer in 
+ `head->prev` so that append can be done in constant time).
+Deleting elements::
+ 'O(n)' on singly-linked lists; constant-time on doubly-linked list. 
+Sorting:: 
+ 'O(n log(n))' for all list types.
+Iteration, counting and searching:: 
+ 'O(n)' for all list types.
 
 List elements
 ~~~~~~~~~~~~~
