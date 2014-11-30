@@ -647,6 +647,13 @@ do {                                                                            
  *****************************************************************************/
 #define CDL_PREPEND(head,add)                                                                  \
     CDL_PREPEND2(head,add,prev,next)
+    
+#define CDL_APPEND_END(head,add)                                                               \
+if (NULL == head) {                                                                            \
+  CDL_PREPEND(head,add);                                                                       \
+} else {                                                                                       \
+  CDL_PREPEND_ELEM(head, head, add);                                                           \
+}
 
 #define CDL_PREPEND2(head,add,prev,next)                                                       \
 do {                                                                                           \
