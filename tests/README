@@ -86,7 +86,8 @@ test81: test utarray_insert past end of array
 test82: test utarray_inserta past end of array
 test83: test HASH_REPLACE_STR with char[] key
 test84: test HASH_REPLACE_STR with char* key
-test85: CDL_APPEND_END
+test85: CDL_APPEND
+test86: CDL_CONCAT
 
 
 Other Make targets

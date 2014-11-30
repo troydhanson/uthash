@@ -647,13 +647,6 @@ do {                                                                            
  *****************************************************************************/
 #define CDL_PREPEND(head,add)                                                                  \
     CDL_PREPEND2(head,add,prev,next)
-    
-#define CDL_APPEND_END(head,add)                                                               \
-if (NULL == head) {                                                                            \
-  CDL_PREPEND(head,add);                                                                       \
-} else {                                                                                       \
-  CDL_PREPEND_ELEM(head, head, add);                                                           \
-}
 
 #define CDL_PREPEND2(head,add,prev,next)                                                       \
 do {                                                                                           \
@@ -668,6 +661,43 @@ do {                                                                            
  }                                                                                             \
 (head)=(add);                                                                                  \
 } while (0)
+
+#define CDL_APPEND(head,add)                                                                   \
+    CDL_APPEND2(head,add,prev,next)
+
+#define CDL_APPEND2(head,add,prev,next)                                                        \
+do {                                                                                           \
+  if (head) {                                                                                  \
+      (add)->prev = (head)->prev;                                                              \
+      (head)->prev->next = (add);                                                              \
+      (head)->prev = (add);                                                                    \
+      (add)->next = head;                                                                      \
+  } else {                                                                                     \
+      (head)=(add);                                                                            \
+      (head)->prev = (head);                                                                   \
+      (head)->next = head;                                                                     \
+  }                                                                                            \
+} while (0)
+
+#define CDL_CONCAT(head1,head2)                                                                \
+    CDL_CONCAT2(head1,head2,prev,next)
+
+#define CDL_CONCAT2(head1,head2,prev,next)                                                     \
+do {                                                                                           \
+  LDECLTYPE(head1) _tmp;                                                                       \
+  if (head2) {                                                                                 \
+    if (head1) {                                                                               \
+        _tmp = (head2)->prev;                                                                  \
+        (head2)->prev = (head1)->prev;                                                         \
+        (head1)->prev->next = (head2);                                                         \
+        (head1)->prev = _tmp;                                                                  \
+        _tmp->next = (head1);                                                                  \
+    } else {                                                                                   \
+        (head1)=(head2);                                                                       \
+    }                                                                                          \
+  }                                                                                            \
+} while (0)
+
 
 #define CDL_DELETE(head,del)                                                                   \
     CDL_DELETE2(head,del,prev,next)

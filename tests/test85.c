@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
         strncpy(name->bname,linebuf,BUFLEN);
-        CDL_APPEND_END(head, name);
+        CDL_APPEND(head, name);
     }
     printf("-----> INSERTED\n");
     CDL_FOREACH(head,tmp) printf("%s", tmp->bname);
