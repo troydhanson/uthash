@@ -88,6 +88,7 @@ test83: test HASH_REPLACE_STR with char[] key
 test84: test HASH_REPLACE_STR with char* key
 test85: CDL_APPEND
 test86: CDL_CONCAT
+test87: CDL_POP_LAST DL_POP_LAST
 
 
 Other Make targets
