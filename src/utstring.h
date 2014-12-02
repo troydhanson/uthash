@@ -150,6 +150,17 @@ _UNUSED_ static void utstring_printf(UT_string *s, const char *fmt, ...) {
    va_end(ap);
 }
 
+#define utstring_truncate(s,amt)                           \
+do {                                                       \
+  size_t ext = (size_t) (amt) + 1 - (s)->n;                \
+  if (ext < (size_t) (amt)) {                              \
+    utstring_reserve((s), ext);                            \
+    memset((s)->d + (s)->n - ext, 0, ext);                 \
+  }                                                        \
+  (s)->i = amt;                                            \
+  (s)->d[amt] = '\0';                                      \
+} while(0)
+
 /*******************************************************************************
  * begin substring search functions                                            *
  ******************************************************************************/
