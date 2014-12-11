@@ -1,6 +1,9 @@
 HTML=$(patsubst %.txt,%.html,$(wildcard *.txt))
 
 all: $(HTML)
+
+clean:
+	rm $(HTML)
   
 # when each target of a multi-target rule has its own prereq 
 # we use a static pattern rule. 

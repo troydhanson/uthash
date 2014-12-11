@@ -164,6 +164,7 @@ Operations
 | utstring_body(s) | get `char*` to body of s (buffer is always null-terminated)
 | utstring_find(s,pos,str,len) | forward search from pos for a substring
 | utstring_findR(s,pos,str,len) | reverse search from pos a substring
+| utstring_truncate(s,len) | change utstring length, extending with `NULL`s if needed
 |===============================================================================
 
 New/free vs. init/done
