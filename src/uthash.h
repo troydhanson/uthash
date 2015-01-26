@@ -869,10 +869,11 @@ do {                                                                            
 } while(0)
 
 #define HASH_OVERHEAD(hh,head)                                                   \
+ ((head) ? (                                                                     \
  (size_t)((((head)->hh.tbl->num_items   * sizeof(UT_hash_handle))   +            \
            ((head)->hh.tbl->num_buckets * sizeof(UT_hash_bucket))   +            \
             (sizeof(UT_hash_table))                                 +            \
-            (HASH_BLOOM_BYTELEN)))
+            (HASH_BLOOM_BYTELEN)))) : 0)
 
 #ifdef NO_DECLTYPE
 #define HASH_ITER(hh,head,el,tmp)                                                \
