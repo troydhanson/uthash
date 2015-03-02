@@ -175,7 +175,7 @@ do {                                                                            
   HASH_FIND(hh,head,&((add)->fieldname),keylen_in,replaced);                     \
   if (replaced!=NULL) {                                                          \
      HASH_DELETE(hh,head,replaced);                                              \
-  };                                                                             \
+  }                                                                              \
   HASH_ADD(hh,head,fieldname,keylen_in,add);                                     \
 } while(0)
 
