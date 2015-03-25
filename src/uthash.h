@@ -364,7 +364,7 @@ do {                                                                            
 #define HASH_BER(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hb_keylen=keylen;                                                    \
-  char *_hb_key=(char*)(key);                                                    \
+  const char *_hb_key=(const char*)(key);                                        \
   (hashv) = 0;                                                                   \
   while (_hb_keylen--)  { (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++; }   \
   bkt = (hashv) & (num_bkts-1);                                                  \
@@ -376,7 +376,7 @@ do {                                                                            
 #define HASH_SAX(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _sx_i;                                                                \
-  char *_hs_key=(char*)(key);                                                    \
+  const char *_hs_key=(const char*)(key);                                        \
   hashv = 0;                                                                     \
   for(_sx_i=0; _sx_i < keylen; _sx_i++)                                          \
       hashv ^= (hashv << 5) + (hashv >> 2) + _hs_key[_sx_i];                     \
@@ -386,7 +386,7 @@ do {                                                                            
 #define HASH_FNV(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _fn_i;                                                                \
-  char *_hf_key=(char*)(key);                                                    \
+  const char *_hf_key=(const char*)(key);                                        \
   hashv = 2166136261UL;                                                          \
   for(_fn_i=0; _fn_i < keylen; _fn_i++) {                                        \
       hashv = hashv ^ _hf_key[_fn_i];                                            \
@@ -398,7 +398,7 @@ do {                                                                            
 #define HASH_OAT(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _ho_i;                                                                \
-  char *_ho_key=(char*)(key);                                                    \
+  const char *_ho_key=(const char*)(key);                                        \
   hashv = 0;                                                                     \
   for(_ho_i=0; _ho_i < keylen; _ho_i++) {                                        \
       hashv += _ho_key[_ho_i];                                                   \
@@ -427,7 +427,7 @@ do {                                                                            
 #define HASH_JEN(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hj_i,_hj_j,_hj_k;                                                    \
-  unsigned char *_hj_key=(unsigned char*)(key);                                  \
+  unsigned const char *_hj_key=(unsigned const char*)(key);                      \
   hashv = 0xfeedbeef;                                                            \
   _hj_i = _hj_j = 0x9e3779b9;                                                    \
   _hj_k = (unsigned)(keylen);                                                    \
@@ -478,7 +478,7 @@ do {                                                                            
 #endif
 #define HASH_SFH(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
-  unsigned char *_sfh_key=(unsigned char*)(key);                                 \
+  unsigned const char *_sfh_key=(unsigned const char*)(key);                     \
   uint32_t _sfh_tmp, _sfh_len = keylen;                                          \
                                                                                  \
   int _sfh_rem = _sfh_len & 3;                                                   \
