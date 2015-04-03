@@ -626,7 +626,7 @@ do {                                                                            
  (addhh)->hh_prev = NULL;                                                        \
  if (head.hh_head) { (head).hh_head->hh_prev = (addhh); }                        \
  (head).hh_head=addhh;                                                           \
- if (head.count >= ((head.expand_mult+1) * HASH_BKT_CAPACITY_THRESH)             \
+ if ((head.count >= ((head.expand_mult+1) * HASH_BKT_CAPACITY_THRESH))           \
      && (addhh)->tbl->noexpand != 1) {                                           \
        HASH_EXPAND_BUCKETS((addhh)->tbl);                                        \
  }                                                                               \
