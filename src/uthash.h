@@ -261,7 +261,7 @@ do {                                                                            
 #define HASH_FIND_STR(head,findstr,out)                                          \
     HASH_FIND(hh,head,findstr,(unsigned)strlen(findstr),out)
 #define HASH_ADD_STR(head,strfield,add)                                          \
-    HASH_ADD(hh,head,strfield[0],strlen(add->strfield),add)
+    HASH_ADD(hh,head,strfield[0],(unsigned int)strlen(add->strfield),add)
 #define HASH_REPLACE_STR(head,strfield,add,replaced)                             \
     HASH_REPLACE(hh,head,strfield[0],(unsigned)strlen(add->strfield),add,replaced)
 #define HASH_FIND_INT(head,findint,out)                                          \
