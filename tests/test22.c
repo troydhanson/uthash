@@ -4,11 +4,11 @@
 #include <string.h>    /* memset       */
 #include "uthash.h"
 
-#define UTF32 1
+#define UTF32 '\x1'
 
 typedef struct {
   UT_hash_handle hh;
-  int len;
+  size_t len;
   char encoding;      /* these two fields */
   int text[];         /* comprise the key */
 } msg_t;
