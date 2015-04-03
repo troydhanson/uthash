@@ -668,7 +668,7 @@ do {                                                                            
 #define CDL_DELETE2(head,del,prev,next)                                                        \
 do {                                                                                           \
   if ( ((head)==(del)) && ((head)->next == (head))) {                                          \
-      (head) = 0L;                                                                             \
+      (head) = NULL;                                                                             \
   } else {                                                                                     \
      (del)->next->prev = (del)->prev;                                                          \
      (del)->prev->next = (del)->next;                                                          \
