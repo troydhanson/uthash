@@ -18,7 +18,7 @@ int main(int argc,char *argv[]) {
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);
-        printf("num_items in hash: %d\n", user->hh.tbl->num_items);
+        printf("num_items in hash: %u\n", user->hh.tbl->num_items);
     }
 
     /* delete each even ID */
@@ -27,7 +27,7 @@ int main(int argc,char *argv[]) {
         if (tmp) {
             HASH_DEL(users,tmp);
             free(tmp);
-            printf("deleted; num_items in hash: %d\n", user->hh.tbl->num_items);
+            printf("deleted; num_items in hash: %u\n", user->hh.tbl->num_items);
         } else printf("user id %d not found\n", i);
     }
    return 0;

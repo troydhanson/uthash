@@ -20,6 +20,6 @@ int main(int argc,char *argv[]) {
         HASH_ADD_INT(users,id,user);
     }
 
-    printf("hash contains %d items\n", HASH_COUNT(users));
+    printf("hash contains %u items\n", HASH_COUNT(users));
    return 0;
 }
