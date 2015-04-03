@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     int count;
     el els[10], *e;
     el *head = NULL;
-    for(i=0;i<10;i++) els[i].id='a'+i;
+    for(i=0;i<10;i++) els[i].id=(int)'a'+i;
 
     /* test CDL macros */
     printf("CDL macros\n");
