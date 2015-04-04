@@ -6,12 +6,11 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-el *head = NULL;
-
 static int eltcmp(el *a, el *b) {return a->id - b->id;}
 
 int main(int argc, char *argv[]) {
     int i;
+    el *head = NULL;
     el els[10], *e, *tmp, *tmp2;
     for(i=0;i<10;i++) els[i].id='a'+i;
 

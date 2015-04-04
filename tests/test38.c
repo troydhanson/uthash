@@ -7,9 +7,8 @@ struct test_t {
   UT_hash_handle hh;
 };
 
-struct test_t *tests=NULL, *test;
-
 int main(void) {
+  struct test_t *tests=NULL, *test;
   int a, b;
   for (b=0; b < 3; b++) {
     for (a=0; a < 10; a++) {

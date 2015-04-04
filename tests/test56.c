@@ -24,12 +24,11 @@ static int namecmp(void *_a, void *_b) {
     return strcmp(a->bname,b->bname);
 }
 
-el *head = NULL; /* important- initialize to NULL! */
-
 int main(int argc, char *argv[]) {
     el *name, *elt, *tmp, etmp;
     int i;
     example_user_t *user, *users=NULL;
+    el *head = NULL; /* important- initialize to NULL! */
 
     char linebuf[BUFLEN];
     FILE *file;

@@ -14,10 +14,9 @@ static int namecmp(el *a, el *b) {
     return strcmp(a->bname,b->bname);
 }
 
-el *head = NULL;
-
 int main(int argc, char *argv[]) {
     el *name, *tmp;
+    el *head = NULL;
 
     char linebuf[BUFLEN];
     FILE *file;

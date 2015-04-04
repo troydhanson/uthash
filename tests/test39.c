@@ -7,12 +7,11 @@ typedef struct {
   UT_hash_handle hh;
 } ns_t;
 
-ns_t *head = NULL;
-
 int main() {
   const char *keys[] = {"eins", "zwei", "drei"};
   unsigned i;
   ns_t *nsp;
+  ns_t *head = NULL;
 
   for(i=0; i < sizeof(keys)/sizeof(keys[0]); i++) {
     printf("adding key %s\n", keys[i]);
