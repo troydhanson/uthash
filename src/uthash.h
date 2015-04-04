@@ -447,7 +447,7 @@ do {                                                                            
      _hj_key += 12;                                                              \
      _hj_k -= 12U;                                                               \
   }                                                                              \
-  hashv += keylen;                                                               \
+  hashv += (unsigned)keylen;                                                     \
   switch ( _hj_k ) {                                                             \
      case 11: hashv += ( (unsigned)_hj_key[10] << 24 ); /* FALLTHROUGH */        \
      case 10: hashv += ( (unsigned)_hj_key[9] << 16 );  /* FALLTHROUGH */        \
