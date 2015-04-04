@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 
     for(i = 0; i < 10; i++) {
         e = (struct my_event*)malloc(sizeof(struct my_event));
+        if (e == NULL) exit(-1);
         memset(e,0,sizeof(struct my_event));
         e->is.a = i * (60*60*24*365);          /* i years (sec)*/
         e->is.b = 0;

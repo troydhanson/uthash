@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 
     /* allocate and initialize our structure */
     msg = (msg_t*)malloc( sizeof(msg_t) + sizeof(beijing) );
+    if (msg == NULL) exit(-1);
     memset(msg, 0, sizeof(msg_t)+sizeof(beijing)); /* zero fill */
     msg->len = sizeof(beijing);
     msg->encoding = UTF32;
@@ -44,6 +45,7 @@ int main(int argc, char *argv[]) {
     msg=NULL;
 
     lookup_key = (lookup_key_t*)malloc(sizeof(*lookup_key) + sizeof(beijing));
+    if (lookup_key == NULL) exit(-1);
     memset(lookup_key, 0, sizeof(*lookup_key) + sizeof(beijing));
     lookup_key->encoding = UTF32;
     memcpy(lookup_key->text, beijing, sizeof(beijing));

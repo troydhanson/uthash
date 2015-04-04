@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
     record_t l, *p, *r, *tmp, *records = NULL;
 
     r = (record_t*)malloc( sizeof(record_t) );
+    if (r == NULL) exit(-1);
     memset(r, 0, sizeof(record_t));
     r->key.a = 'a';
     r->key.b = 1;

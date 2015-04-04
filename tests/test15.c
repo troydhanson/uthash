@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
 
     for (n = names; *n != NULL; n++) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        if (s == NULL) exit(-1);
         strncpy(s->name, *n,10UL);
         s->id = i++;
         HASH_ADD_STR( users, name, s );

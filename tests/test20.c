@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
 
     /* allocate our structure. initialize to some values */
     s = (struct my_struct*)calloc(1UL,sizeof(struct my_struct));
+    if (s == NULL) exit(-1);
     memcpy(s->bkey, binary, sizeof(binary));
 
     /* add to hash table using general macro */

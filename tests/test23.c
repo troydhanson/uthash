@@ -15,18 +15,21 @@ int main() {
   /* first item */
   k = 12345;
   i = (item*)malloc(sizeof(item));
+  if (i == NULL) exit(-1);
   i->key = k; i->data = 0;
   HASH_ADD_INT(items,key,i);
 
   /* second item */
   k = 6789;
   i = (item*)malloc(sizeof(item));
+  if (i == NULL) exit(-1);
   i->key = k; i->data = 0;
   HASH_ADD_INT(items,key,i);
 
   /* third item */
   k = 98765;
   i = (item*)malloc(sizeof(item));
+  if (i == NULL) exit(-1);
   i->key = k; i->data = 0;
   HASH_ADD_INT(items,key,i);
 
