@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
-        strncpy(name->bname,linebuf,BUFLEN);
+        strncpy(name->bname,linebuf,sizeof(name->bname));
         DL_PREPEND(head, name);
     }
     /* DL_SORT(head, namecmp); */

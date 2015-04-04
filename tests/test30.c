@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
-        strncpy(name->bname,linebuf,BUFLEN);
+        strncpy(name->bname,linebuf,sizeof(name->bname));
         CDL_PREPEND(head, name);
     }
     CDL_SORT(head, namecmp);

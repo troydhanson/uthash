@@ -19,7 +19,8 @@ struct my_event {
 
 int main(int argc, char *argv[]) {
     struct my_event *e, ev, *events = NULL;
-    unsigned i, keylen;
+    unsigned keylen;
+    int i;
 
     keylen =   offsetof(struct my_event, event_code) + sizeof(char)
              - offsetof(struct my_event, is);

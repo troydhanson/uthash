@@ -28,11 +28,11 @@ int main(int argc,char *argv[]) {
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         i++;
         if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) exit(-1);
-        strncpy(name->boy_name,linebuf,BUFLEN);
+        strncpy(name->boy_name,linebuf,sizeof(name->boy_name));
         HASH_ADD_STR(names,boy_name,name);
     }
 
-    fseek(file,0,SEEK_SET);
+    fseek(file,0L,SEEK_SET);
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         HASH_FIND_STR(names,linebuf,name);

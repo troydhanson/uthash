@@ -31,13 +31,13 @@ int main(int argc, char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
-        strncpy(name->bname,linebuf,BUFLEN);
+        strncpy(name->bname,linebuf,sizeof(name->bname));
         DL_APPEND(head, name);
     }
     DL_SORT(head, namecmp);
     DL_FOREACH(head,elt) printf("%s", elt->bname);
 
-    memcpy(&etmp.bname, "WES\n", 5);
+    memcpy(etmp.bname, "WES\n", 5UL);
     DL_SEARCH(head,elt,&etmp,namecmp);
     if (elt) printf("found %s\n", elt->bname);
 
