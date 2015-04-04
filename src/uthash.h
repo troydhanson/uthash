@@ -607,14 +607,14 @@ do {                                                                   \
 /* iterate over items in a known bucket to find desired item */
 #define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,out)                       \
 do {                                                                             \
- if (head.hh_head) DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head));          \
- else out=NULL;                                                                  \
+ if (head.hh_head) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head)); }      \
+ else { out=NULL; }                                                              \
  while (out) {                                                                   \
     if ((out)->hh.keylen == keylen_in) {                                           \
-        if ((HASH_KEYCMP((out)->hh.key,keyptr,keylen_in)) == 0) break;             \
+        if ((HASH_KEYCMP((out)->hh.key,keyptr,keylen_in)) == 0) { break; }         \
     }                                                                            \
-    if ((out)->hh.hh_next) DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,(out)->hh.hh_next)); \
-    else out = NULL;                                                             \
+    if ((out)->hh.hh_next) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,(out)->hh.hh_next)); } \
+    else { out = NULL; }                                                         \
  }                                                                               \
 } while(0)
 
@@ -703,8 +703,8 @@ do {                                                                            
            }                                                                     \
            _he_thh->hh_prev = NULL;                                              \
            _he_thh->hh_next = _he_newbkt->hh_head;                               \
-           if (_he_newbkt->hh_head) _he_newbkt->hh_head->hh_prev =               \
-                _he_thh;                                                         \
+           if (_he_newbkt->hh_head) { _he_newbkt->hh_head->hh_prev =             \
+                _he_thh; }                                                       \
            _he_newbkt->hh_head = _he_thh;                                        \
            _he_thh = _he_hh_nxt;                                                 \
         }                                                                        \
@@ -750,7 +750,7 @@ do {                                                                            
                   _hs_q = (UT_hash_handle*)((_hs_q->next != NULL) ?              \
                           ((void*)((char*)(_hs_q->next) +                        \
                           (head)->hh.tbl->hho)) : NULL);                         \
-                  if (! (_hs_q) ) break;                                         \
+                  if (! (_hs_q) ) { break; }                                     \
               }                                                                  \
               _hs_qsize = _hs_insize;                                            \
               while ((_hs_psize > 0) || ((_hs_qsize > 0) && (_hs_q != NULL))) {  \
