@@ -57,7 +57,8 @@ int main(int argc, char *argv[]) {
   FILE *file;
   int i=0;
 
-  if ( (file = fopen( "test65.dat", "r" )) == NULL ) {
+  file = fopen( "test65.dat", "r" );
+  if (file == NULL) {
       perror("can't open: ");
       exit(-1);
   }

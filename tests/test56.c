@@ -36,13 +36,15 @@ int main(int argc, char *argv[]) {
     UT_string *s;
     char binary[] = "\xff\xff";
 
-    if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
+    file = fopen( "test11.dat", "r" );
+    if (file == NULL) {
         perror("can't open: ");
         exit(-1);
     }
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
-        if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
+        name = (el*)malloc(sizeof(el));
+        if (name == NULL) exit(-1);
         strncpy(name->bname,linebuf,sizeof(name->bname));
         DL_APPEND(head, name);
     }
@@ -62,7 +64,8 @@ int main(int argc, char *argv[]) {
 
     /* create elements */
     for(i=0;i<10;i++) {
-        if ( (user = (example_user_t*)malloc(sizeof(example_user_t))) == NULL) exit(-1);
+        user = (example_user_t*)malloc(sizeof(example_user_t));
+        if (user == NULL) exit(-1);
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);

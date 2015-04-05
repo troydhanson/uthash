@@ -16,7 +16,8 @@ int main(int argc, char*argv[]) {
     int id=0;
 
     for(name=names; *name; name++) {
-        if ( (person = (person_t*)malloc(sizeof(person_t))) == NULL) exit(-1);
+        person = (person_t*)malloc(sizeof(person_t));
+        if (person == NULL) exit(-1);
         strncpy(person->first_name, *name,10UL);
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);

@@ -29,7 +29,8 @@ int main(int argc,char *argv[]) {
 
     /* create elements */
     for(i=0;i<10;i++) {
-        if ( (user = (example_user_t*)malloc(sizeof(example_user_t))) == NULL) exit(-1);
+        user = (example_user_t*)malloc(sizeof(example_user_t));
+        if (user == NULL) exit(-1);
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);

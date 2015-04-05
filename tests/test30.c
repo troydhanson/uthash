@@ -23,13 +23,15 @@ int main(int argc, char *argv[]) {
     char linebuf[BUFLEN];
     FILE *file;
 
-    if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
+    file = fopen( "test11.dat", "r" );
+    if (file == NULL) {
         perror("can't open: ");
         exit(-1);
     }
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
-        if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
+        name = (el*)malloc(sizeof(el));
+        if (name == NULL) exit(-1);
         strncpy(name->bname,linebuf,sizeof(name->bname));
         CDL_PREPEND(head, name);
     }
