@@ -31,7 +31,7 @@ int main(int argc,char *argv[]) {
         HASH_ADD_INT(users,id,user);
     }
 
-    for(user=users; user; user=(example_user_t*)(user->hh.next)) {
+    for(user=users; user!=NULL; user=(example_user_t*)(user->hh.next)) {
         printf("user %d\n", user->id);
     }
 
@@ -39,7 +39,7 @@ int main(int argc,char *argv[]) {
     HASH_SELECT(ah,ausers,hh,users,evens);
     HASH_SRT(ah,ausers,idcmp);
 
-    for(user=ausers; user; user=(example_user_t*)(user->ah.next)) {
+    for(user=ausers; user!=NULL; user=(example_user_t*)(user->ah.next)) {
         printf("auser %d\n", user->id);
     }
    return 0;

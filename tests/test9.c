@@ -24,7 +24,7 @@ int main(int argc,char *argv[]) {
     /* delete each ID */
     for(i=0;i<1000;i+=2) {
         HASH_FIND_INT(users,&i,tmp);
-        if (tmp) {
+        if (tmp != NULL) {
             printf("user %d, cookie %d\n", tmp->id, tmp->cookie);
         } else printf("user id %d not found\n", i);
     }

@@ -27,7 +27,7 @@ int main(int argc,char *argv[]) {
       elt *e;
       label[0] = 'a' + i;
       HASH_FIND(hh,head,label,6UL,e);
-      if (e) {
+      if (e != NULL) {
         printf( "found %s\n", e->s);
         printf( "right address? %s\n", (e == &elts[i]) ? "yes" : "no");
       }

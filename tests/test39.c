@@ -24,7 +24,7 @@ int main() {
   for(i=0; i < sizeof(keys)/sizeof(keys[0]); i++) {
     printf("looking for key %s... ", keys[i]);
     HASH_FIND(hh,head,keys[i],strlen(keys[i]),nsp);
-    printf("%s.\n", (nsp?"found":"not found"));
+    printf("%s.\n", (nsp!=NULL)?"found":"not found");
   }
   return 0;
 }

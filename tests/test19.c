@@ -39,12 +39,12 @@ int main(int argc,char *argv[]) {
 
     printf("sorting users ascending\n");
     HASH_SRT(hh,users,ascending_sort);
-    for(user=users; user; user=(example_user_t*)user->hh.next)
+    for(user=users; user!=NULL; user=(example_user_t*)user->hh.next)
       printf("user %d\n", user->id);
 
     printf("sorting altusers descending\n");
     HASH_SRT(alth,altusers,descending_sort);
-    for(user=altusers; user; user=(example_user_t*)user->alth.next)
+    for(user=altusers; user!=NULL; user=(example_user_t*)user->alth.next)
       printf("altuser %d\n", user->id);
 
     /* HASH_FSCK(hh,users); */

@@ -26,7 +26,7 @@ int main(int argc,char *argv[]) {
     }
 
     /* delete them all, pathologically */
-    while(users) {
+    while(users != NULL) {
       printf("deleting id %i\n", users->id);
       HASH_DEL(users,users); /* single head/deletee var! */
     }

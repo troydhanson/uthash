@@ -32,15 +32,15 @@ int main(int argc,char *argv[]) {
 
     i=9;
     HASH_FIND_INT(users,&i,tmp);
-    printf("%d %s in hh\n", i, (tmp ? "found" : "not found"));
+    printf("%d %s in hh\n", i, (tmp != NULL) ? "found" : "not found");
     HASH_FIND(alth,altusers,&i,sizeof(int),tmp);
-    printf("%d %s in alth\n", i, (tmp ? "found" : "not found"));
+    printf("%d %s in alth\n", i, (tmp != NULL) ? "found" : "not found");
 
     i=10;
     HASH_FIND_INT(users,&i,tmp);
-    printf("%d %s in hh\n", i, (tmp ? "found" : "not found"));
+    printf("%d %s in hh\n", i, (tmp != NULL) ? "found" : "not found");
     HASH_FIND(alth,altusers,&i,sizeof(int),tmp);
-    printf("%d %s in alth\n", i, (tmp ? "found" : "not found"));
+    printf("%d %s in alth\n", i, (tmp != NULL) ? "found" : "not found");
 
    return 0;
 }

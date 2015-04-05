@@ -23,6 +23,6 @@ int main(int argc, char *argv[]) {
     /* look up the structure we just added */
     HASH_FIND( hh, bins, binary, sizeof(binary), t );
 
-    if (t) printf("found\n");
+    if (t != NULL) printf("found\n");
    return 0;
 }

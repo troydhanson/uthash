@@ -24,7 +24,7 @@ int main(int argc,char *argv[]) {
     /* delete each even ID */
     for(i=0;i<10;i+=2) {
         HASH_FIND_INT(users,&i,tmp);
-        if (tmp) {
+        if (tmp != NULL) {
             HASH_DEL(users,tmp);
             free(tmp);
         } else printf("user id %d not found\n", i);
@@ -32,8 +32,8 @@ int main(int argc,char *argv[]) {
 
     i=9;
     HASH_FIND_INT(users,&i,tmp);
-    if (tmp) {
-        while(tmp) {
+    if (tmp != NULL) {
+        while (tmp != NULL) {
             printf("id %d, following prev...\n", tmp->id);
             tmp = (example_user_t*)tmp->hh.prev;
         }

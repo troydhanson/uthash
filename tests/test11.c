@@ -44,7 +44,7 @@ int main(int argc,char *argv[]) {
 
     fclose(file);
     HASH_SORT(names,namecmp);
-    for(name=names;name;name=(name_rec*)(name->hh.next))
+    for(name=names; name!=NULL; name=(name_rec*)(name->hh.next))
       printf("%s",name->boy_name);
 
    return 0;

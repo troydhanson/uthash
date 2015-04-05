@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     lookup_key->encoding = UTF32;
     memcpy(lookup_key->text, beijing, sizeof(beijing));
     HASH_FIND( hh, msgs, &lookup_key->encoding, keylen, msg );
-    if (msg) printf("found \n");
+    if (msg != NULL) printf("found \n");
     free(lookup_key);
 
     HASH_ITER(hh, msgs, msg, tmp) {

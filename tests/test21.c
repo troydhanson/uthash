@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     l.key.b = 1;
     HASH_FIND(hh, records, &l.key, sizeof(record_key_t), p);
 
-    if (p) printf("found %c %d\n", p->key.a, p->key.b);
+    if (p != NULL) printf("found %c %d\n", p->key.a, p->key.b);
 
     HASH_ITER(hh, records, p, tmp) {
       HASH_DEL(records, p);

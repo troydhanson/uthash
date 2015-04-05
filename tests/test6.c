@@ -39,7 +39,7 @@ int main(int argc,char *argv[]) {
     /* delete each ID */
     for(i=0;i<10;i++) {
         HASH_FIND_INT(users,&i,tmp);
-        if (tmp) {
+        if (tmp != NULL) {
             HASH_DEL(users,tmp);
             free(tmp);
         } else printf("user id %d not found\n", i);
