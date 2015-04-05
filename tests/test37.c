@@ -8,7 +8,7 @@ typedef struct {
     UT_hash_handle ah;
 } example_user_t;
 
-#define EVENS(x) ((((example_user_t*)(x))->id & 1) == 0)
+#define EVENS(x) ((((example_user_t*)(x))->id % 2) == 0)
 
 static int idcmp(void *_a, void *_b) {
   example_user_t *a = (example_user_t*)_a;

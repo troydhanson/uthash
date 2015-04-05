@@ -8,10 +8,10 @@ typedef struct {
     UT_hash_handle ah;
 } example_user_t;
 
-#define EVENS(x) (((x)->id & 1) == 0)
+#define EVENS(x) (((x)->id % 2) == 0)
 static int evens(void *userv) {
   example_user_t *user = (example_user_t*)userv;
-  return ((user->id & 1) ? 0 : 1);
+  return ((user->id % 2) ? 0 : 1);
 }
 
 static int idcmp(void *_a, void *_b) {
