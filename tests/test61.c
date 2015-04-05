@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "utarray.h"
 
-int strsort(const void *_a, const void *_b) {
+static int strsort(const void *_a, const void *_b) {
   char *a = *(char**)_a;
   char *b = *(char**)_b;
   return strcmp(a,b);

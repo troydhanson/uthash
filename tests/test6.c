@@ -14,11 +14,11 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
-void *alt_malloc(size_t sz) {
+static void *alt_malloc(size_t sz) {
     if (sz == sizeof(UT_hash_table)) printf("%s\n", "alt malloc table");
     return malloc(sz);
 }
-void alt_free(void *ptr) {
+static void alt_free(void *ptr) {
     /* printf("%s\n", "alt_free"); */
     free(ptr);
 }

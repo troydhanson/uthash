@@ -9,12 +9,12 @@ typedef struct {
 } example_user_t;
 
 #define EVENS(x) (((x)->id & 1) == 0)
-int evens(void *userv) {
+static int evens(void *userv) {
   example_user_t *user = (example_user_t*)userv;
   return ((user->id & 1) ? 0 : 1);
 }
 
-int idcmp(void *_a, void *_b) {
+static int idcmp(void *_a, void *_b) {
   example_user_t *a = (example_user_t*)_a;
   example_user_t *b = (example_user_t*)_b;
   return (a->id - b->id);

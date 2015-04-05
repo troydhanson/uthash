@@ -10,7 +10,7 @@ typedef struct {
 
 #define EVENS(x) ((((example_user_t*)(x))->id & 1) == 0)
 
-int idcmp(void *_a, void *_b) {
+static int idcmp(void *_a, void *_b) {
   example_user_t *a = (example_user_t*)_a;
   example_user_t *b = (example_user_t*)_b;
   return (a->id - b->id);

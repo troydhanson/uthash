@@ -8,7 +8,7 @@ typedef struct el {
 
 el *head = NULL;
 
-int eltcmp(el *a, el *b) {return a->id - b->id;}
+static int eltcmp(el *a, el *b) {return a->id - b->id;}
 
 int main(int argc, char *argv[]) {
     int i;
