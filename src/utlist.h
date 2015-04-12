@@ -193,11 +193,11 @@ do {                                                                            
           if (!_ls_q) break;                                                                   \
         }                                                                                      \
         _ls_qsize = _ls_insize;                                                                \
-        while (_ls_psize > 0 || (_ls_qsize > 0 && _ls_q)) {                                    \
+        while ((_ls_psize > 0) || ((_ls_qsize > 0) && _ls_q)) {                                \
           if (_ls_psize == 0) {                                                                \
             _ls_e = _ls_q; _SV(_ls_q,list); _ls_q =                                            \
               _NEXT(_ls_q,list,next); _RS(list); _ls_qsize--;                                  \
-          } else if (_ls_qsize == 0 || !_ls_q) {                                               \
+          } else if ((_ls_qsize == 0) || (!_ls_q)) {                                           \
             _ls_e = _ls_p; _SV(_ls_p,list); _ls_p =                                            \
               _NEXT(_ls_p,list,next); _RS(list); _ls_psize--;                                  \
           } else if (cmp(_ls_p,_ls_q) <= 0) {                                                  \
@@ -668,7 +668,7 @@ do {                                                                            
 #define CDL_DELETE2(head,del,prev,next)                                                        \
 do {                                                                                           \
   if ( ((head)==(del)) && ((head)->next == (head))) {                                          \
-      (head) = 0L;                                                                             \
+      (head) = NULL;                                                                             \
   } else {                                                                                     \
      (del)->next->prev = (del)->prev;                                                          \
      (del)->prev->next = (del)->next;                                                          \
@@ -689,7 +689,7 @@ do {                                                                            
     CDL_FOREACH2(head,el,next)
 
 #define CDL_FOREACH2(head,el,next)                                                             \
-    for(el=head;el;el=((el)->next==head ? 0L : (el)->next))
+    for(el=head;el;el=(((el)->next==head) ? 0L : (el)->next))
 
 #define CDL_FOREACH_SAFE(head,el,tmp1,tmp2)                                                    \
     CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
