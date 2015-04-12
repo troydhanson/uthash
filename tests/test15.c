@@ -17,13 +17,14 @@ int main(int argc, char *argv[]) {
 
     for (n = names; *n != NULL; n++) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        strncpy(s->name, *n,10);
+        if (s == NULL) exit(-1);
+        strncpy(s->name, *n,10UL);
         s->id = i++;
         HASH_ADD_STR( users, name, s );
     }
 
     HASH_FIND_STR( users, "betty", s);
-    if (s) printf("betty's id is %d\n", s->id);
+    if (s != NULL) printf("betty's id is %d\n", s->id);
 
     /* free the hash table contents */
     HASH_ITER(hh, users, s, tmp) {

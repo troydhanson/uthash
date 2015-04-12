@@ -8,7 +8,7 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
-int rev(void *_a, void *_b) {
+static int rev(void *_a, void *_b) {
     example_user_t *a = (example_user_t*)_a;
     example_user_t *b = (example_user_t*)_b;
     printf("called for a:%d, b:%d\n",a->id, b->id);
@@ -21,7 +21,8 @@ int main(int argc,char *argv[]) {
 
     /* create elements */
     for(i=9;i>=0;i--) {
-        if ( (user = (example_user_t*)malloc(sizeof(example_user_t))) == NULL) exit(-1);
+        user = (example_user_t*)malloc(sizeof(example_user_t));
+        if (user == NULL) exit(-1);
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);
@@ -38,7 +39,8 @@ int main(int argc,char *argv[]) {
 
     printf("adding 10-20\n");
     for(i=20;i>=10;i--) {
-        if ( (user = (example_user_t*)malloc(sizeof(example_user_t))) == NULL) exit(-1);
+        user = (example_user_t*)malloc(sizeof(example_user_t));
+        if (user == NULL) exit(-1);
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);

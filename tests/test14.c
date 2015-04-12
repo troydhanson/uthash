@@ -20,19 +20,21 @@ int main(int argc,char *argv[]) {
     FILE *file;
     int i=0,j=0;
 
-    if ( (file = fopen( "test14.dat", "r" )) == NULL ) {
+    file = fopen( "test14.dat", "r" );
+    if (file == NULL ) {
         perror("can't open: ");
         exit(-1);
     }
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         i++;
-        if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) exit(-1);
-        strncpy(name->boy_name,linebuf,BUFLEN);
+        name = (name_rec*)malloc(sizeof(name_rec));
+        if (name == NULL) exit(-1);
+        strncpy(name->boy_name,linebuf,sizeof(name->boy_name));
         HASH_ADD_STR(names,boy_name,name);
     }
 
-    fseek(file,0,SEEK_SET);
+    fseek(file,0L,SEEK_SET);
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         HASH_FIND_STR(names,linebuf,name);

@@ -6,13 +6,12 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-el *head = NULL;
-
 int main(int argc, char *argv[]) {
     int i;
     int count;
     el els[10], *e;
-    for(i=0;i<10;i++) els[i].id='a'+i;
+    el *head = NULL;
+    for(i=0;i<10;i++) els[i].id=(int)'a'+i;
 
     /* test CDL macros */
     printf("CDL macros\n");

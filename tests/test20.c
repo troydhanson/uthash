@@ -11,10 +11,11 @@ struct my_struct {
 
 int main(int argc, char *argv[]) {
     struct my_struct *s, *t, *bins = NULL;
-    char binary[5] = {3,1,4,1,6};
+    char binary[5] = {'\3','\1','\4','\1','\6'};
 
     /* allocate our structure. initialize to some values */
-    s = (struct my_struct*)calloc(1,sizeof(struct my_struct));
+    s = (struct my_struct*)calloc(1UL,sizeof(struct my_struct));
+    if (s == NULL) exit(-1);
     memcpy(s->bkey, binary, sizeof(binary));
 
     /* add to hash table using general macro */
@@ -23,6 +24,6 @@ int main(int argc, char *argv[]) {
     /* look up the structure we just added */
     HASH_FIND( hh, bins, binary, sizeof(binary), t );
 
-    if (t) printf("found\n");
+    if (t != NULL) printf("found\n");
    return 0;
 }

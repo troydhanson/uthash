@@ -16,7 +16,8 @@ int main(int argc, char*argv[]) {
     int id=0;
 
     for(name=names; *name; name++) {
-        if ( (person = (person_t*)malloc(sizeof(person_t))) == NULL) exit(-1);
+        person = (person_t*)malloc(sizeof(person_t));
+        if (person == NULL) exit(-1);
         person->first_name = malloc(10);
         strncpy(person->first_name, *name,10);
         person->id = id++;

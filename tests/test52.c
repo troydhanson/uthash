@@ -7,13 +7,13 @@ typedef struct {
     char *s;
 } intchar_t;
 
-void intchar_copy(void *_dst, const void *_src) {
+static void intchar_copy(void *_dst, const void *_src) {
   intchar_t *dst = (intchar_t*)_dst, *src = (intchar_t*)_src;
   dst->a = src->a;
   dst->s = src->s ? strdup(src->s) : NULL;
 }
 
-void intchar_dtor(void *_elt) {
+static void intchar_dtor(void *_elt) {
   intchar_t *elt = (intchar_t*)_elt;
   if (elt->s) free(elt->s);
 }

@@ -8,9 +8,9 @@ typedef struct {
     UT_hash_handle ah;
 } example_user_t;
 
-#define EVENS(x) ((((example_user_t*)(x))->id & 1) == 0)
+#define EVENS(x) ((((example_user_t*)(x))->id % 2) == 0)
 
-int idcmp(void *_a, void *_b) {
+static int idcmp(void *_a, void *_b) {
   example_user_t *a = (example_user_t*)_a;
   example_user_t *b = (example_user_t*)_b;
   return (a->id - b->id);
@@ -27,7 +27,7 @@ int main(int argc,char *argv[]) {
         HASH_ADD_INT(users,id,user);
     }
 
-    for(user=users; user; user=(example_user_t*)(user->hh.next)) {
+    for(user=users; user!=NULL; user=(example_user_t*)(user->hh.next)) {
         printf("user %d\n", user->id);
     }
     printf("users count: %u\n", HASH_CNT(hh,users));
@@ -36,14 +36,14 @@ int main(int argc,char *argv[]) {
     HASH_SELECT(ah,ausers,hh,users,EVENS);
     HASH_SRT(ah,ausers,idcmp);
 
-    for(user=ausers; user; user=(example_user_t*)(user->ah.next)) {
+    for(user=ausers; user!=NULL; user=(example_user_t*)(user->ah.next)) {
         printf("auser %d\n", user->id);
     }
     printf("ausers count: %u\n", HASH_CNT(ah,ausers));
     HASH_CLEAR(ah,ausers);
     printf("cleared ausers.\n");
     printf("ausers count: %u\n", HASH_CNT(ah,ausers));
-    for(user=ausers; user; user=(example_user_t*)(user->ah.next)) {
+    for(user=ausers; user!=NULL; user=(example_user_t*)(user->ah.next)) {
         printf("auser %d\n", user->id);
     }
     printf("users count: %u\n", HASH_CNT(hh,users));

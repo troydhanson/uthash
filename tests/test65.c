@@ -16,7 +16,7 @@ struct CacheEntry {
 };
 struct CacheEntry *cache = NULL;
 
-char * /*value*/ find_in_cache(char *key)
+static char * /*value*/ find_in_cache(char *key)
 {
     struct CacheEntry *entry;
     HASH_FIND_STR(cache, key, entry);
@@ -29,7 +29,7 @@ char * /*value*/ find_in_cache(char *key)
     return NULL;
 }
 
-void add_to_cache(char *key, char *value)
+static void add_to_cache(char *key, char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
     entry = malloc(sizeof(struct CacheEntry));
@@ -57,7 +57,8 @@ int main(int argc, char *argv[]) {
   FILE *file;
   int i=0;
 
-  if ( (file = fopen( "test65.dat", "r" )) == NULL ) {
+  file = fopen( "test65.dat", "r" );
+  if (file == NULL) {
       perror("can't open: ");
       exit(-1);
   }
