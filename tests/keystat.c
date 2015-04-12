@@ -120,7 +120,8 @@ int main(int argc, char *argv[]) {
           if (done || err) break;
           if (keylen > max_keylen) max_keylen=keylen;
 
-          if ( (keyt = (stat_key*)malloc(sizeof(stat_key))) == NULL) {
+          keyt = (stat_key*)malloc(sizeof(stat_key));
+          if (keyt == NULL) {
               fprintf(stderr,"out of memory\n");
               exit(-1);
           }
@@ -129,7 +130,8 @@ int main(int argc, char *argv[]) {
 #ifdef UNALIGNED_KEYS
           padding = i%8;
 #endif
-          if ( (keyt->key = (char*)malloc(padding+keylen)) == NULL) {
+          keyt->key = (char*)malloc(padding+keylen);
+          if (keyt->key == NULL) {
               fprintf(stderr,"out of memory\n");
               exit(-1);
           }

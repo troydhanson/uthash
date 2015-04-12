@@ -31,7 +31,8 @@ int main(int argc,char *argv[]) {
     }
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
-        if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) exit(-1);
+        name = (name_rec*)malloc(sizeof(name_rec));
+        if (name == NULL) exit(-1);
         strncpy(name->boy_name,linebuf,sizeof(name->boy_name));
         HASH_ADD_STR(names,boy_name,name);
         i++;
