@@ -63,25 +63,25 @@ typedef struct stat_key {
 #define CHAIN_20  3
 #define CHAIN_100 4
 #define CHAIN_MAX 5
-static void hash_chain_len_histogram(UT_hash_table *tbl) {
+static void hash_chain_len_histogram(const UT_hash_table *tbl) {
   unsigned i, bkt_hist[CHAIN_MAX+1];
-  double pct = 100.0/tbl->num_buckets;
+  double pct = 100.0/(double)tbl->num_buckets;
   memset(bkt_hist,0,sizeof(bkt_hist));
   for(i=0; i < tbl->num_buckets; i++) {
       unsigned count = tbl->buckets[i].count;
-      if (count == 0) bkt_hist[CHAIN_0]++;
-      else if (count < 5) bkt_hist[CHAIN_5]++;
-      else if (count < 10) bkt_hist[CHAIN_10]++;
-      else if (count < 20) bkt_hist[CHAIN_20]++;
-      else if (count < 100) bkt_hist[CHAIN_100]++;
+      if (count == 0U) bkt_hist[CHAIN_0]++;
+      else if (count < 5U) bkt_hist[CHAIN_5]++;
+      else if (count < 10U) bkt_hist[CHAIN_10]++;
+      else if (count < 20U) bkt_hist[CHAIN_20]++;
+      else if (count < 100U) bkt_hist[CHAIN_100]++;
       else bkt_hist[CHAIN_MAX]++;
   }
-  fprintf(stderr, "Buckets with     0 items: %.1f%%\n", bkt_hist[CHAIN_0 ]*pct);
-  fprintf(stderr, "Buckets with <   5 items: %.1f%%\n", bkt_hist[CHAIN_5 ]*pct);
-  fprintf(stderr, "Buckets with <  10 items: %.1f%%\n", bkt_hist[CHAIN_10]*pct);
-  fprintf(stderr, "Buckets with <  20 items: %.1f%%\n", bkt_hist[CHAIN_20]*pct);
-  fprintf(stderr, "Buckets with < 100 items: %.1f%%\n", bkt_hist[CHAIN_100]*pct);
-  fprintf(stderr, "Buckets with > 100 items: %.1f%%\n", bkt_hist[CHAIN_MAX]*pct);
+  fprintf(stderr, "Buckets with     0 items: %.1f%%\n", (double)bkt_hist[CHAIN_0 ]*pct);
+  fprintf(stderr, "Buckets with <   5 items: %.1f%%\n", (double)bkt_hist[CHAIN_5 ]*pct);
+  fprintf(stderr, "Buckets with <  10 items: %.1f%%\n", (double)bkt_hist[CHAIN_10]*pct);
+  fprintf(stderr, "Buckets with <  20 items: %.1f%%\n", (double)bkt_hist[CHAIN_20]*pct);
+  fprintf(stderr, "Buckets with < 100 items: %.1f%%\n", (double)bkt_hist[CHAIN_100]*pct);
+  fprintf(stderr, "Buckets with > 100 items: %.1f%%\n", (double)bkt_hist[CHAIN_MAX]*pct);
 }
 
 int main(int argc, char *argv[]) {
