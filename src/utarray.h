@@ -85,8 +85,8 @@ typedef struct {
 } while(0)
 
 #define utarray_reserve(a,by) do {                                            \
-  if (((a)->i+by) > ((a)->n)) {                                               \
-    while(((a)->i+by) > ((a)->n)) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }     \
+  if (((a)->i+(by)) > ((a)->n)) {                                             \
+    while(((a)->i+(by)) > ((a)->n)) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }   \
     if ( ((a)->d=(char*)realloc((a)->d, (a)->n*(a)->icd.sz)) == NULL) oom();  \
   }                                                                           \
 } while(0)
