@@ -100,7 +100,7 @@ do {                                                       \
 do {                                                       \
   utstring_reserve((s),(l)+1);                               \
   if (l) memcpy(&(s)->d[(s)->i], b, l);                    \
-  (s)->i += l;                                               \
+  (s)->i += (l);                                           \
   (s)->d[(s)->i]='\0';                                         \
 } while(0)
 
