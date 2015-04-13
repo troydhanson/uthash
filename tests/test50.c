@@ -12,7 +12,7 @@ int main() {
   l=2; utarray_push_back(nums, &l);
 
   p=NULL;
-  while( (p=(long*)utarray_next(nums,p))) printf("%ld\n", *p);
+  while( (p=(long*)utarray_next(nums,p)) != NULL ) printf("%ld\n", *p);
 
   utarray_free(nums);
   return 0;

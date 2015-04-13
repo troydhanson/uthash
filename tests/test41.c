@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         CDL_DELETE(head,e);
     }
     printf("\n");
-    if (head) printf("non-null head\n");
+    if (head != NULL) printf("non-null head\n");
 
     /* test DL macros */
     printf("DL macros\n");
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
         DL_DELETE(head,e);
     }
     printf("\n");
-    if (head) printf("non-null head\n");
+    if (head != NULL) printf("non-null head\n");
 
     /* test LL macros */
     printf("LL macros\n");
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
         LL_DELETE(head,e);
     }
     printf("\n");
-    if (head) printf("non-null head\n");
+    if (head != NULL) printf("non-null head\n");
 
     return 0;
 }

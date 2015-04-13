@@ -85,15 +85,15 @@ static void hash_chain_len_histogram(UT_hash_table *tbl) {
 }
 
 int main(int argc, char *argv[]) {
-    int dups=0, rc, fd, done=0, err=0, want, i=0, padding=0, v=1, percent=100;
+    int dups=0, rc, fd, done=0, err=0, want, i, padding=0, v=1, percent=100;
     unsigned keylen, max_keylen=0, verbose=0;
     const char *filename = "/dev/stdin";
     char *dst;
     stat_key *keyt, *keytmp, *keys=NULL, *keys2=NULL;
     struct timeval start_tm, end_tm, elapsed_tm, elapsed_tm2, elapsed_tm3;
 
-    if ((argc >= 3) && !strcmp(argv[1],"-p")) {percent = atoi(argv[2]); v = 3;}
-    if ((argc >= v) && !strcmp(argv[v],"-v")) {verbose=1; v++;}
+    if ((argc >= 3) && (strcmp(argv[1],"-p") == 0)) {percent = atoi(argv[2]); v = 3;}
+    if ((argc >= v) && (strcmp(argv[v],"-v") == 0)) {verbose=1; v++;}
     if (argc >= v) filename=argv[v];
     fd=open(filename,MODE);
 
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    for(i=0; !done; i++) {
+    for(i=0; done==0; i++) {
 
           want = sizeof(int);
           dst = (char*)&keylen;
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
                 err=1;
               } else if (rc >= 0) { want -= rc; dst += rc; goto readmore2; }
           }
-          if (err) break;
+          if (err != 0) break;
           /* if percent was set to something less than 100%, skip some keys*/
           if (((rand()*1.0) / RAND_MAX) > ((percent*1.0)/100)) {
             free(keyt->key-padding);
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
 
           /* eliminate dups */
           HASH_FIND(hh,keys,keyt->key,keylen,keytmp);
-          if (keytmp) {
+          if (keytmp != NULL) {
               dups++;
               free(keyt->key - padding);
             free(keyt);
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
           }
     }
 
-    if (verbose) {
+    if (verbose != 0) {
       unsigned key_count = HASH_COUNT(keys);
       fprintf(stderr,"max key length: %u\n", max_keylen);
       fprintf(stderr,"number unique keys: %u\n", key_count);
@@ -191,27 +191,27 @@ int main(int argc, char *argv[]) {
     gettimeofday(&start_tm,NULL);
     for(keyt = keys; keyt != NULL; keyt=(stat_key*)keyt->hh.next) {
         HASH_FIND(hh2,keys2,keyt->key,keyt->len,keytmp);
-        if (!keytmp) fprintf(stderr,"internal error, key not found\n");
+        if (keytmp == NULL) fprintf(stderr,"internal error, key not found\n");
     }
     gettimeofday(&end_tm,NULL);
     timersub(&end_tm, &start_tm, &elapsed_tm2);
 
     /* now delete all items in the new hash, measuring elapsed time */
     gettimeofday(&start_tm,NULL);
-    while (keys2) {
+    while (keys2 != NULL) {
         keytmp = keys2;
         HASH_DELETE(hh2,keys2,keytmp);
     }
     gettimeofday(&end_tm,NULL);
     timersub(&end_tm, &start_tm, &elapsed_tm3);
 
-    if (!err) {
+    if (err == 0) {
         printf("%.3f,%d,%d,%d,%s,%ld,%ld,%ld\n",
         1-(1.0*keys->hh.tbl->nonideal_items/keys->hh.tbl->num_items),
         keys->hh.tbl->num_items,
         keys->hh.tbl->num_buckets,
         dups,
-        (keys->hh.tbl->noexpand ? "nx" : "ok"),
+        (keys->hh.tbl->noexpand != 0U) ? "nx" : "ok",
         (elapsed_tm.tv_sec * 1000000) + elapsed_tm.tv_usec,
         (elapsed_tm2.tv_sec * 1000000) + elapsed_tm2.tv_usec,
         (elapsed_tm3.tv_sec * 1000000) + elapsed_tm3.tv_usec );
