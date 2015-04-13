@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     el els[20], *e, *tmp;
     el *headA = NULL;
     el *headB = NULL;
-    for(i=0;i<20;i++) els[i].id='a'+i;
+    for(i=0;i<20;i++) els[i].id=(int)'a'+i;
 
     /* test LL macros */
     printf("LL replace elem\n");
