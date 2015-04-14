@@ -366,7 +366,9 @@ do {                                                                            
   unsigned _hb_keylen=keylen;                                                    \
   const unsigned char *_hb_key=(const unsigned char*)(key);                      \
   (hashv) = 0;                                                                   \
-  while (_hb_keylen-- != 0U) { (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++; } \
+  while (_hb_keylen-- != 0U) {                                                   \
+      (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++;                         \
+  }                                                                              \
   bkt = (hashv) & (num_bkts-1U);                                                 \
 } while (0)
 
@@ -378,8 +380,9 @@ do {                                                                            
   unsigned _sx_i;                                                                \
   const unsigned char *_hs_key=(const unsigned char*)(key);                      \
   hashv = 0;                                                                     \
-  for(_sx_i=0; _sx_i < keylen; _sx_i++)                                          \
+  for(_sx_i=0; _sx_i < keylen; _sx_i++) {                                        \
       hashv ^= (hashv << 5) + (hashv >> 2) + _hs_key[_sx_i];                     \
+  }                                                                              \
   bkt = hashv & (num_bkts-1U);                                                   \
 } while (0)
 /* FNV-1a variation */
