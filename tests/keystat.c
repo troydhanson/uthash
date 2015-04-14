@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
     timersub(&end_tm, &start_tm, &elapsed_tm3);
 
     if (err == 0) {
-        printf("%.3f,%d,%d,%d,%s,%ld,%ld,%ld\n",
+        printf("%.3f,%u,%u,%d,%s,%ld,%ld,%ld\n",
         1-(1.0*keys->hh.tbl->nonideal_items/keys->hh.tbl->num_items),
         keys->hh.tbl->num_items,
         keys->hh.tbl->num_buckets,

@@ -9,7 +9,8 @@ typedef struct example_user_t {
 } example_user_t;
 
 int main(int argc,char *argv[]) {
-    int i,c;
+    int i;
+    unsigned c;
     example_user_t *user, *tmp, *users=NULL;
 
     /* create elements */
@@ -27,7 +28,7 @@ int main(int argc,char *argv[]) {
 
 
     c = HASH_COUNT(users);
-    printf("%d users. Deleting odd id's...\n", c);
+    printf("%u users. Deleting odd id's...\n", c);
     /* delete the odd id's */
     HASH_ITER(hh, users, user, tmp) {
         if (user->id & 1) HASH_DEL(users,user);
@@ -39,14 +40,14 @@ int main(int argc,char *argv[]) {
     }
 
     c = HASH_COUNT(users);
-    printf("%d users. Deleting remaining id's...\n", c);
+    printf("%u users. Deleting remaining id's...\n", c);
     /* delete all that are left */
     HASH_ITER(hh, users, user, tmp) {
         HASH_DEL(users,user);
     }
 
     c = HASH_COUNT(users);
-    printf("%d users.\n", c);
+    printf("%u users.\n", c);
     /* show the hash */
     for(user=users; user != NULL; user=(example_user_t*)(user->hh.next)) {
         printf("user %d, cookie %d\n", user->id, user->cookie);
