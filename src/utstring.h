@@ -49,9 +49,9 @@ typedef struct {
 #define utstring_reserve(s,amt)                            \
 do {                                                       \
   if (((s)->n - (s)->i) < (size_t)(amt)) {                 \
-     (s)->d = (char*)realloc((s)->d, (s)->n + amt);        \
+     (s)->d = (char*)realloc((s)->d, (s)->n + (amt));      \
      if ((s)->d == NULL) oom();                            \
-     (s)->n += amt;                                        \
+     (s)->n += (amt);                                      \
   }                                                        \
 } while(0)
 
@@ -100,7 +100,7 @@ do {                                                       \
 do {                                                       \
   utstring_reserve((s),(l)+1);                               \
   if (l) memcpy(&(s)->d[(s)->i], b, l);                    \
-  (s)->i += l;                                               \
+  (s)->i += (l);                                           \
   (s)->d[(s)->i]='\0';                                         \
 } while(0)
 
