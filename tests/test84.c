@@ -18,8 +18,8 @@ int main(int argc, char*argv[]) {
     for(name=names; *name; name++) {
         person = (person_t*)malloc(sizeof(person_t));
         if (person == NULL) exit(-1);
-        person->first_name = malloc(10);
-        strncpy(person->first_name, *name,10);
+        person->first_name = malloc(10UL);
+        strncpy(person->first_name, *name,10UL);
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);
         printf("added %s (id %d)\n", person->first_name, person->id);
@@ -33,8 +33,8 @@ int main(int argc, char*argv[]) {
         if (person) {
             printf("found %s (id %d)\n", person->first_name, person->id);
             new_person  = malloc(sizeof(person_t));
-            new_person->first_name = malloc(10);
-            strncpy(new_person->first_name, person->first_name,10);
+            new_person->first_name = malloc(10UL);
+            strncpy(new_person->first_name, person->first_name,10UL);
             new_person->id = person->id*10;
             HASH_REPLACE_STR(people,first_name,new_person,tmp);
             printf("replaced (%c) with %s (id %d)\n", tmp?'y':'n', new_person->first_name, new_person->id);

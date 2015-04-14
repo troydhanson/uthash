@@ -22,11 +22,11 @@ int main(int argc,char *argv[]) {
     }
 
    size_t s = HASH_OVERHEAD(hh,users);
-   printf("overhead %s\n", (s==0)?"zero":"non-zero");
+   printf("overhead %s\n", (s==0U)?"zero":"non-zero");
    HASH_CLEAR(hh,users);  
    // should free those elements 
    // but this test is not concerned with that
    s = HASH_OVERHEAD(hh,users);
-   printf("overhead %s\n", (s==0)?"zero":"non-zero");
+   printf("overhead %s\n", (s==0U)?"zero":"non-zero");
    return 0;
 }

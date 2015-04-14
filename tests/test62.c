@@ -11,7 +11,7 @@
 #define yn(rc) (rc?"y":"n")
 int main(int argc,char*argv[]) {
   unsigned rc;
-  char *c = malloc(8);
+  char *c = malloc(8UL);
   *(c+0) = 0x00;  unsigned *al = (unsigned*)(c+0);
   *(c+1) = 0x01;  unsigned *u1 = (unsigned*)(c+1);
   *(c+2) = 0x02;  unsigned *u2 = (unsigned*)(c+2);

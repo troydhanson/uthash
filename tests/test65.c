@@ -7,7 +7,7 @@
 // by Jehiah Czebotar 2011 - jehiah@gmail.com
 // this code is in the public domain http://unlicense.org/
 
-#define MAX_CACHE_SIZE 50  /* a real value would be much larger */
+#define MAX_CACHE_SIZE 50U  /* a real value would be much larger */
 
 struct CacheEntry {
     char *key;
