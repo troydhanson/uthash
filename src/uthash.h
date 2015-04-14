@@ -115,7 +115,7 @@ do {                                                                            
 
 #ifdef HASH_BLOOM
 #define HASH_BLOOM_BITLEN (1ULL << HASH_BLOOM)
-#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8) + ((HASH_BLOOM_BITLEN%8) ? 1:0)
+#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8U) + (((HASH_BLOOM_BITLEN%8U)!=0U) ? 1U : 0U)
 #define HASH_BLOOM_MAKE(tbl)                                                     \
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
@@ -130,14 +130,14 @@ do {                                                                            
   uthash_free((tbl)->bloom_bv, HASH_BLOOM_BYTELEN);                              \
 } while (0)
 
-#define HASH_BLOOM_BITSET(bv,idx) (bv[(idx)/8] |= (1U << ((idx)%8)))
-#define HASH_BLOOM_BITTEST(bv,idx) (bv[(idx)/8] & (1U << ((idx)%8)))
+#define HASH_BLOOM_BITSET(bv,idx) (bv[(idx)/8U] |= (1U << ((idx)%8U)))
+#define HASH_BLOOM_BITTEST(bv,idx) (bv[(idx)/8U] & (1U << ((idx)%8U)))
 
 #define HASH_BLOOM_ADD(tbl,hashv)                                                \
-  HASH_BLOOM_BITSET((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1)))
+  HASH_BLOOM_BITSET((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1U)))
 
 #define HASH_BLOOM_TEST(tbl,hashv)                                               \
-  HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1)))
+  HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1U)))
 
 #else
 #define HASH_BLOOM_MAKE(tbl)
@@ -364,10 +364,10 @@ do {                                                                            
 #define HASH_BER(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hb_keylen=keylen;                                                    \
-  const char *_hb_key=(const char*)(key);                                        \
+  const unsigned char *_hb_key=(const unsigned char*)(key);                      \
   (hashv) = 0;                                                                   \
-  while (_hb_keylen--)  { (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++; }   \
-  bkt = (hashv) & (num_bkts-1);                                                  \
+  while (_hb_keylen-- != 0U) { (hashv) = (((hashv) << 5) + (hashv)) + *_hb_key++; } \
+  bkt = (hashv) & (num_bkts-1U);                                                 \
 } while (0)
 
 
@@ -376,29 +376,29 @@ do {                                                                            
 #define HASH_SAX(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _sx_i;                                                                \
-  const char *_hs_key=(const char*)(key);                                        \
+  const unsigned char *_hs_key=(const unsigned char*)(key);                      \
   hashv = 0;                                                                     \
   for(_sx_i=0; _sx_i < keylen; _sx_i++)                                          \
       hashv ^= (hashv << 5) + (hashv >> 2) + _hs_key[_sx_i];                     \
-  bkt = hashv & (num_bkts-1);                                                    \
+  bkt = hashv & (num_bkts-1U);                                                   \
 } while (0)
 /* FNV-1a variation */
 #define HASH_FNV(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _fn_i;                                                                \
-  const char *_hf_key=(const char*)(key);                                        \
-  hashv = 2166136261UL;                                                          \
+  const unsigned char *_hf_key=(const unsigned char*)(key);                      \
+  hashv = 2166136261U;                                                           \
   for(_fn_i=0; _fn_i < keylen; _fn_i++) {                                        \
       hashv = hashv ^ _hf_key[_fn_i];                                            \
-      hashv = hashv * 16777619;                                                  \
+      hashv = hashv * 16777619U;                                                 \
   }                                                                              \
-  bkt = hashv & (num_bkts-1);                                                    \
+  bkt = hashv & (num_bkts-1U);                                                   \
 } while(0)
 
 #define HASH_OAT(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _ho_i;                                                                \
-  const char *_ho_key=(const char*)(key);                                        \
+  const unsigned char *_ho_key=(const unsigned char*)(key);                      \
   hashv = 0;                                                                     \
   for(_ho_i=0; _ho_i < keylen; _ho_i++) {                                        \
       hashv += _ho_key[_ho_i];                                                   \
@@ -408,7 +408,7 @@ do {                                                                            
   hashv += (hashv << 3);                                                         \
   hashv ^= (hashv >> 11);                                                        \
   hashv += (hashv << 15);                                                        \
-  bkt = hashv & (num_bkts-1);                                                    \
+  bkt = hashv & (num_bkts-1U);                                                   \
 } while(0)
 
 #define HASH_JEN_MIX(a,b,c)                                                      \
@@ -428,8 +428,8 @@ do {                                                                            
 do {                                                                             \
   unsigned _hj_i,_hj_j,_hj_k;                                                    \
   unsigned const char *_hj_key=(unsigned const char*)(key);                      \
-  hashv = 0xfeedbeef;                                                            \
-  _hj_i = _hj_j = 0x9e3779b9;                                                    \
+  hashv = 0xfeedbeefu;                                                           \
+  _hj_i = _hj_j = 0x9e3779b9u;                                                   \
   _hj_k = (unsigned)(keylen);                                                    \
   while (_hj_k >= 12U) {                                                         \
     _hj_i +=    (_hj_key[0] + ( (unsigned)_hj_key[1] << 8 )                      \
@@ -481,16 +481,16 @@ do {                                                                            
   unsigned const char *_sfh_key=(unsigned const char*)(key);                     \
   uint32_t _sfh_tmp, _sfh_len = keylen;                                          \
                                                                                  \
-  int _sfh_rem = _sfh_len & 3;                                                   \
+  unsigned _sfh_rem = _sfh_len & 3U;                                             \
   _sfh_len >>= 2;                                                                \
-  hashv = 0xcafebabe;                                                            \
+  hashv = 0xcafebabeu;                                                           \
                                                                                  \
   /* Main loop */                                                                \
-  for (;_sfh_len > 0; _sfh_len--) {                                              \
+  for (;_sfh_len > 0U; _sfh_len--) {                                             \
     hashv    += get16bits (_sfh_key);                                            \
     _sfh_tmp       = (uint32_t)(get16bits (_sfh_key+2)) << 11  ^ hashv;          \
     hashv     = (hashv << 16) ^ _sfh_tmp;                                        \
-    _sfh_key += 2*sizeof (uint16_t);                                             \
+    _sfh_key += 2U*sizeof (uint16_t);                                            \
     hashv    += hashv >> 11;                                                     \
   }                                                                              \
                                                                                  \
@@ -517,7 +517,7 @@ do {                                                                            
     hashv += hashv >> 17;                                                        \
     hashv ^= hashv << 25;                                                        \
     hashv += hashv >> 6;                                                         \
-    bkt = hashv & (num_bkts-1);                                                  \
+    bkt = hashv & (num_bkts-1U);                                                 \
 } while(0)
 
 #ifdef HASH_USING_NO_STRICT_ALIASING
@@ -556,24 +556,24 @@ do {                                                                            
 #define MUR_FMIX(_h) \
 do {                 \
   _h ^= _h >> 16;    \
-  _h *= 0x85ebca6b;  \
+  _h *= 0x85ebca6bu; \
   _h ^= _h >> 13;    \
-  _h *= 0xc2b2ae35l; \
+  _h *= 0xc2b2ae35uL;\
   _h ^= _h >> 16;    \
 } while(0)
 
 #define HASH_MUR(key,keylen,num_bkts,hashv,bkt)                        \
 do {                                                                   \
   const uint8_t *_mur_data = (const uint8_t*)(key);                    \
-  const int _mur_nblocks = (keylen) / 4;                               \
-  uint32_t _mur_h1 = 0xf88D5353;                                       \
-  uint32_t _mur_c1 = 0xcc9e2d51;                                       \
-  uint32_t _mur_c2 = 0x1b873593;                                       \
+  const int _mur_nblocks = (int)(keylen) / 4;                          \
+  uint32_t _mur_h1 = 0xf88D5353u;                                      \
+  uint32_t _mur_c1 = 0xcc9e2d51u;                                      \
+  uint32_t _mur_c2 = 0x1b873593u;                                      \
   uint32_t _mur_k1 = 0;                                                \
   const uint8_t *_mur_tail;                                            \
   const uint32_t *_mur_blocks = (const uint32_t*)(_mur_data+_mur_nblocks*4); \
   int _mur_i;                                                          \
-  for(_mur_i = -_mur_nblocks; _mur_i; _mur_i++) {                      \
+  for(_mur_i = -_mur_nblocks; _mur_i!=0; _mur_i++) {                   \
     _mur_k1 = MUR_GETBLOCK(_mur_blocks,_mur_i);                        \
     _mur_k1 *= _mur_c1;                                                \
     _mur_k1 = MUR_ROTL32(_mur_k1,15);                                  \
@@ -581,11 +581,11 @@ do {                                                                   \
                                                                        \
     _mur_h1 ^= _mur_k1;                                                \
     _mur_h1 = MUR_ROTL32(_mur_h1,13);                                  \
-    _mur_h1 = _mur_h1*5+0xe6546b64;                                    \
+    _mur_h1 = _mur_h1*5U + 0xe6546b64u;                                \
   }                                                                    \
   _mur_tail = (const uint8_t*)(_mur_data + _mur_nblocks*4);            \
   _mur_k1=0;                                                           \
-  switch((keylen) & 3) {                                               \
+  switch((keylen) & 3U) {                                              \
     case 3: _mur_k1 ^= _mur_tail[2] << 16;      /* FALLTHROUGH */      \
     case 2: _mur_k1 ^= _mur_tail[1] << 8;       /* FALLTHROUGH */      \
     case 1: _mur_k1 ^= _mur_tail[0];                                   \
@@ -597,7 +597,7 @@ do {                                                                   \
   _mur_h1 ^= (keylen);                                                 \
   MUR_FMIX(_mur_h1);                                                   \
   hashv = _mur_h1;                                                     \
-  bkt = hashv & (num_bkts-1);                                          \
+  bkt = hashv & (num_bkts-1U);                                         \
 } while(0)
 #endif  /* HASH_USING_NO_STRICT_ALIASING */
 
@@ -910,8 +910,8 @@ typedef struct UT_hash_bucket {
 } UT_hash_bucket;
 
 /* random signature used only to find hash tables in external analysis */
-#define HASH_SIGNATURE 0xa0111fe1
-#define HASH_BLOOM_SIGNATURE 0xb12220f2
+#define HASH_SIGNATURE 0xa0111fe1u
+#define HASH_BLOOM_SIGNATURE 0xb12220f2u
 
 typedef struct UT_hash_table {
    UT_hash_bucket *buckets;
@@ -941,7 +941,7 @@ typedef struct UT_hash_table {
 #ifdef HASH_BLOOM
    uint32_t bloom_sig; /* used only to test bloom exists in external analysis */
    uint8_t *bloom_bv;
-   char bloom_nbits;
+   uint8_t bloom_nbits;
 #endif
 
 } UT_hash_table;
