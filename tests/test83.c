@@ -32,6 +32,7 @@ int main(int argc, char*argv[]) {
         if (person != NULL) {
             printf("found %s (id %d)\n", person->first_name, person->id);
             new_person  = malloc(sizeof(person_t));
+            if (new_person == NULL) exit(-1);
             memcpy(new_person, person, sizeof(person_t));
             new_person->id = person->id*10;
             HASH_REPLACE_STR(people,first_name,new_person,tmp);

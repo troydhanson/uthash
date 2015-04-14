@@ -33,6 +33,7 @@ static void add_to_cache(char *key, char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
     entry = malloc(sizeof(struct CacheEntry));
+    if (entry == NULL) exit(-1);
     entry->key = strdup(key);
     entry->value = strdup(value);
     HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
