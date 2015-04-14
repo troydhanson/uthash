@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 
     memcpy(etmp.bname, "WES\n", 5UL);
     DL_SEARCH(head,elt,&etmp,namecmp);
-    if (elt) printf("found %s\n", elt->bname);
+    if (elt != NULL) printf("found %s\n", elt->bname);
 
     /* now delete each element, use the safe iterator */
     DL_FOREACH_SAFE(head,elt,tmp) {

@@ -16,7 +16,7 @@ int main() {
 
   /* the other form of iteration starting from NULL (back) */
   p=NULL;
-  while ( (p=(int*)utarray_prev(nums,p))) {
+  while ( (p=(int*)utarray_prev(nums,p)) != NULL ) {
     printf("%d\n",*p);
   }
 

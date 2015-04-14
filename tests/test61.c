@@ -20,7 +20,7 @@ int main() {
   s = "three"; utarray_push_back(strs, &s);
 
   p = NULL;
-  while ( (p=(char**)utarray_next(strs,p))) {
+  while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
     s = *p;
     printf("%s\n",s);
   }
@@ -29,11 +29,11 @@ int main() {
   utarray_sort(strs,strsort);
 
   p = NULL;
-  while ( (p=(char**)utarray_next(strs,p))) {
+  while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
     s = *p;
     printf("finding %s\n",s);
     p = utarray_find(strs,&s,strsort);
-    printf(" %s\n", p ? (*p) : "failed");
+    printf(" %s\n", (p != NULL) ? (*p) : "failed");
   }
 
   utarray_free(strs);

@@ -15,7 +15,7 @@ int main(int argc, char*argv[]) {
                       "gil", "buck", "ted", NULL };
     int id=0;
 
-    for(name=names; *name; name++) {
+    for(name=names; *name!=NULL; name++) {
         person = (person_t*)malloc(sizeof(person_t));
         if (person == NULL) exit(-1);
         strncpy(person->first_name, *name,sizeof(person->first_name));
@@ -27,9 +27,9 @@ int main(int argc, char*argv[]) {
     person=NULL;
     person_t **p=&person;
 
-    for(name=names; *name; name++) {
+    for(name=names; *name!=NULL; name++) {
         HASH_FIND_STR(people,*name,*p);
-        if (person)
+        if (person != NULL)
             printf("found %s (id %d)\n", person->first_name, person->id);
         else
             printf("failed to find %s\n", *name);

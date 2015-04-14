@@ -18,7 +18,7 @@ int main() {
   e->i = 1;
   HASH_ADD_PTR(hash,key,e);
   HASH_FIND_PTR(hash, &someaddr, d);
-  if (d) printf("found\n");
+  if (d != NULL) printf("found\n");
 
   /* release memory */
   HASH_DEL(hash,e);

@@ -8,7 +8,7 @@
 #define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 0x3) == 2)
 #define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 0x3) == 3)
 
-#define yn(rc) (rc?"y":"n")
+#define yn(rc) ((rc!=0U)?"y":"n")
 int main(int argc,char*argv[]) {
   unsigned rc;
   char *c = malloc(8UL);

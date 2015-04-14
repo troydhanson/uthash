@@ -10,7 +10,7 @@ int main() {
   s = "hello"; utarray_push_back(strs, &s);
   s = "world"; utarray_push_back(strs, &s);
   p = NULL;
-  while ( (p=(char**)utarray_next(strs,p))) {
+  while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
     printf("%s\n",*p);
   }
 
