@@ -7,11 +7,11 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-el *headA, *headB = NULL;
-
 int main(int argc, char *argv[]) {
     int i;
     el els[20], *e, *tmp, *tmp2;
+    el *headA = NULL;
+    el *headB = NULL;
     for(i=0;i<20;i++) els[i].id='a'+i;
 
     /* test CDL macros */

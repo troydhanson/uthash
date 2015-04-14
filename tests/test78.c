@@ -6,11 +6,10 @@ typedef struct el {
     struct el *Next, *Prev;
 } el;
 
-el *head = NULL;
-
 int main(int argc, char *argv[]) {
     int i;
     el els[10], *e;
+    el *head = NULL;
     for(i=0;i<10;i++) els[i].id='a'+i;
 
     /* test CDL macros */

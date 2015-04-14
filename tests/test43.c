@@ -6,11 +6,10 @@ typedef struct {
     int b;
 } intpair_t;
 
-UT_icd pairicd = { sizeof(intpair_t),NULL,NULL,NULL};
-
 int main() {
   UT_array *pairs, *pairs_cpy;
   intpair_t it, *ip;
+  UT_icd pairicd = { sizeof(intpair_t),NULL,NULL,NULL};
   size_t zero=0;
   utarray_new(pairs, &pairicd);
   printf("length is %d\n", utarray_len(pairs));

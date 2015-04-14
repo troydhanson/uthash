@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include "utarray.h"
 
-UT_icd long_icd = {sizeof(long), NULL, NULL, NULL };
-
 int main() {
   UT_array *nums;
   long l, *p;
+  UT_icd long_icd = {sizeof(long), NULL, NULL, NULL };
   utarray_new(nums, &long_icd);
 
   l=1; utarray_push_back(nums, &l);
