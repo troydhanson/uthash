@@ -12,7 +12,7 @@
 #define uthash_noexpand_fyi(t) die()
 #define UNALIGNED_KEYS 0
 
-void die() {
+static void die() {
   fprintf(stderr,"expansion inhibited\n");
   exit(-1);
 }
@@ -22,7 +22,7 @@ void die() {
  * gives much more accurate elapsed times under Windows. */
 #if (( defined __CYGWIN__ ) || ( defined __MINGW32__ ))
 #include <windows.h>
-void win_gettimeofday(struct timeval* p, void* tz /* IGNORED */) {
+static void win_gettimeofday(struct timeval* p, void* tz /* IGNORED */) {
   LARGE_INTEGER q;
   static long long freq;
   static long long cyg_timer;
@@ -63,7 +63,7 @@ typedef struct stat_key {
 #define CHAIN_20  3
 #define CHAIN_100 4
 #define CHAIN_MAX 5
-void hash_chain_len_histogram(UT_hash_table *tbl) {
+static void hash_chain_len_histogram(UT_hash_table *tbl) {
   unsigned i, bkt_hist[CHAIN_MAX+1];
   double pct = 100.0/tbl->num_buckets;
   memset(bkt_hist,0,sizeof(bkt_hist));
