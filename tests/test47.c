@@ -22,7 +22,7 @@ int main() {
     printf("%s\n", utstring_body(t));
     printf("length t now: %u\n", utstring_len(t));
 
-
+    utstring_free(t);
     utstring_free(s);
     return 0;
 }

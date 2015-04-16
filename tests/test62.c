@@ -57,5 +57,6 @@ int main(int argc,char*argv[]) {
   rc = MUR_GETBLOCK(u3,0); printf("%x\n", rc);
 #endif
 
+  free(c);
   return 0;
 }
