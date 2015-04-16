@@ -104,7 +104,10 @@ run_tests: $(PROGS)
 run_tests_mingw: $(PROGS)
 	/bin/sh do_tests.mingw
 
-.PHONY: clean
+astyle:
+	astyle -n --style=kr --indent-switches --add-brackets *.c
+
+.PHONY: clean astyle
 
 clean:	
 	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe
