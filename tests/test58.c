@@ -31,7 +31,7 @@ int main(int argc,char *argv[]) {
     printf("%u users. Deleting odd id's...\n", c);
     /* delete the odd id's */
     HASH_ITER(hh, users, user, tmp) {
-        if (user->id & 1) HASH_DEL(users,user);
+        if ((user->id & 1) != 0) HASH_DEL(users,user);
     }
 
     /* show the hash */
