@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
   hs_t *hs_head=NULL, *tmp, *replaced=NULL;
 
   tmp = (hs_t*)malloc(sizeof(hs_t));
+  if (tmp == NULL) exit(-1);
   tmp->id = 10;
   tmp->tag = 100;
   HASH_REPLACE_INT(hs_head,id,tmp,replaced);
@@ -32,6 +33,7 @@ int main(int argc, char *argv[]) {
   pr(&hs_head);
 
   tmp = (hs_t*)malloc(sizeof(hs_t));
+  if (tmp == NULL) exit(-1);
   tmp->id=11;
   tmp->tag = 101;
   HASH_REPLACE_INT(hs_head,id,tmp,replaced);
@@ -43,6 +45,7 @@ int main(int argc, char *argv[]) {
   pr(&hs_head);
 
   tmp = (hs_t*)malloc(sizeof(hs_t));
+  if (tmp == NULL) exit(-1);
   tmp->id=11;
   tmp->tag = 102;
   HASH_REPLACE_INT(hs_head,id,tmp,replaced);

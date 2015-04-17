@@ -19,6 +19,7 @@ int main(int argc, char*argv[]) {
         person = (person_t*)malloc(sizeof(person_t));
         if (person == NULL) exit(-1);
         person->first_name = malloc(10UL);
+        if (person->first_name == NULL) exit(-1);
         strncpy(person->first_name, *name,10UL);
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);
@@ -33,7 +34,9 @@ int main(int argc, char*argv[]) {
         if (person != NULL) {
             printf("found %s (id %d)\n", person->first_name, person->id);
             new_person  = malloc(sizeof(person_t));
+            if (new_person == NULL) exit(-1);
             new_person->first_name = malloc(10UL);
+            if (new_person->first_name == NULL) exit(-1);
             strncpy(new_person->first_name, person->first_name,10UL);
             new_person->id = person->id*10;
             HASH_REPLACE_STR(people,first_name,new_person,tmp);

@@ -466,6 +466,7 @@ static int scan(pid_t pid) {
     vma.start = (void *)vm_entry.pve_start;
     vma.end = (void *)vm_entry.pve_end;
     vmas = (vma_t *) realloc(vmas, (num_vmas + 1) * sizeof(vma_t));
+    if (vmas == NULL) exit(-1);
     vmas[num_vmas++] = vma;
   }
 
@@ -523,6 +524,7 @@ static int scan(pid_t pid) {
       if (vma.perms[0] != 'r') continue;          /* only readable vma's */
       if (memcmp(vma.device,"fd",2)==0) continue; /* skip mapped files */
       vmas = (vma_t*)realloc(vmas, (num_vmas+1) * sizeof(vma_t));
+      if (vmas == NULL) exit(-1);
       vmas[num_vmas++] = vma;
     }
   }

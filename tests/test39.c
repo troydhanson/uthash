@@ -16,6 +16,7 @@ int main() {
   for(i=0; i < sizeof(keys)/sizeof(keys[0]); i++) {
     printf("adding key %s\n", keys[i]);
     nsp = (ns_t*)malloc(sizeof(ns_t));
+    if (nsp == NULL) exit(-1);
     nsp->name = keys[i];
     HASH_ADD_KEYPTR(hh,head,nsp->name,strlen(nsp->name),nsp);
   }

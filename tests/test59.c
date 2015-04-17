@@ -17,6 +17,7 @@ int main(int argc, char *argvp[]) {
 
   /* make initial element */
   item_t *i = malloc(sizeof(*i));
+  if (i == NULL) exit(-1);
   strcpy(i->name, "bob");
   i->sub = NULL;
   i->val = 0;
@@ -24,6 +25,7 @@ int main(int argc, char *argvp[]) {
 
   /* add a sub hash table off this element */
   item_t *s = malloc(sizeof(*s));
+  if (s == NULL) exit(-1);
   strcpy(s->name, "age");
   s->sub = NULL;
   s->val = 37;
