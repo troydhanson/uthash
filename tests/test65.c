@@ -7,7 +7,7 @@
 // by Jehiah Czebotar 2011 - jehiah@gmail.com
 // this code is in the public domain http://unlicense.org/
 
-#define MAX_CACHE_SIZE 50  /* a real value would be much larger */
+#define MAX_CACHE_SIZE 50U  /* a real value would be much larger */
 
 struct CacheEntry {
     char *key;
@@ -20,7 +20,7 @@ static char * /*value*/ find_in_cache(char *key)
 {
     struct CacheEntry *entry;
     HASH_FIND_STR(cache, key, entry);
-    if (entry) {
+    if (entry != NULL) {
         // remove it (so the subsequent add will throw it on the front of the list)
         HASH_DELETE(hh, cache, entry);
         HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
@@ -33,6 +33,7 @@ static void add_to_cache(char *key, char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
     entry = malloc(sizeof(struct CacheEntry));
+    if (entry == NULL) exit(-1);
     entry->key = strdup(key);
     entry->value = strdup(value);
     HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);

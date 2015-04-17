@@ -6,12 +6,12 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-el *headA = NULL, *headB = NULL;
-
 int main(int argc, char *argv[]) {
     int i;
     el els[10], *e;
-    for(i=0;i<10;i++) els[i].id='a'+i;
+    el *headA = NULL;
+    el *headB = NULL;
+    for(i=0;i<10;i++) els[i].id=(int)'a'+i;
 
     /* test LL macros */
     printf("LL macros\n");

@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     }
 
     HASH_FIND_STR( users, "betty", s);
-    if (s) printf("betty's id is %d\n", s->id);
+    if (s != NULL) printf("betty's id is %d\n", s->id);
 
     /* free the hash table contents */
     HASH_ITER(hh, users, s, tmp) {

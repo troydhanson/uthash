@@ -76,7 +76,7 @@ int getkeys=0;
 char *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT","MUR"};
 
 /* given a peer key/len/hashv, reverse engineer its hash function */
-int infer_hash_function(char *key, size_t keylen, uint32_t hashv) {
+static int infer_hash_function(char *key, size_t keylen, uint32_t hashv) {
   uint32_t obkt, ohashv, num_bkts=0x01000000; /* anything ok */
   /* BER SAX FNV OAT JEN SFH */
   HASH_JEN(key,keylen,num_bkts,ohashv,obkt); if (ohashv == hashv) return JEN;
@@ -92,7 +92,7 @@ int infer_hash_function(char *key, size_t keylen, uint32_t hashv) {
 
 /* read peer's memory from addr for len bytes, store into our dst */
 #ifdef __FreeBSD__
-int read_mem(void *dst, pid_t pid, void *start, size_t len) {
+static int read_mem(void *dst, pid_t pid, void *start, size_t len) {
   struct ptrace_io_desc io_desc;
   int ret;
 
@@ -114,7 +114,7 @@ int read_mem(void *dst, pid_t pid, void *start, size_t len) {
   return 0;
 }
 #else
-int read_mem(void *dst, int fd, off_t start, size_t len) {
+static int read_mem(void *dst, int fd, off_t start, size_t len) {
   int rc;
   size_t bytes_read=0;
   if (lseek(fd, start, SEEK_SET) == (off_t)-1) {
@@ -132,12 +132,12 @@ int read_mem(void *dst, int fd, off_t start, size_t len) {
 #endif
 
 /* later compensate for possible presence of bloom filter */
-char *tbl_from_sig_addr(char *sig) {
+static char *tbl_from_sig_addr(char *sig) {
   return (sig - offsetof(UT_hash_table,signature));
 }
 
 #define HS_BIT_TEST(v,i) (v[i/8] & (1U << (i%8)))
-void found(int fd, char* peer_sig, pid_t pid) {
+static void found(int fd, char* peer_sig, pid_t pid) {
   UT_hash_table *tbl=NULL;
   UT_hash_bucket *bkts=NULL;
   UT_hash_handle hh;
@@ -338,7 +338,7 @@ Address            items    ideal  buckets mxch/<10 fl bloom/sat fcn keys saved 
 
 
 #ifdef __FreeBSD__
-void sigscan(pid_t pid, void *start, void *end, uint32_t sig) {
+static void sigscan(pid_t pid, void *start, void *end, uint32_t sig) {
   struct ptrace_io_desc io_desc;
   int page_size = getpagesize();
   char *buf;
@@ -389,7 +389,7 @@ void sigscan(pid_t pid, void *start, void *end, uint32_t sig) {
   }
 }
 #else
-void sigscan(int fd, off_t start, off_t end, uint32_t sig, pid_t pid) {
+static void sigscan(int fd, off_t start, off_t end, uint32_t sig, pid_t pid) {
   int rlen;
   uint32_t u;
   off_t at=0;
@@ -414,7 +414,7 @@ void sigscan(int fd, off_t start, off_t end, uint32_t sig, pid_t pid) {
 
 
 #ifdef __FreeBSD__
-int scan(pid_t pid) {
+static int scan(pid_t pid) {
   vma_t *vmas=NULL, vma;
   unsigned i, num_vmas = 0;
   int ret;
@@ -486,7 +486,7 @@ die:
   return 0;
 }
 # else
-int scan(pid_t pid) {
+static int scan(pid_t pid) {
   FILE *mapf;
   char mapfile[30], memfile[30], line[100];
   vma_t *vmas=NULL, vma;
@@ -559,7 +559,7 @@ int scan(pid_t pid) {
 #endif
 
 
-void usage(const char *prog) {
+static void usage(const char *prog) {
   fprintf(stderr,"usage: %s [-v] [-k] <pid>\n", prog);
   exit(-1);
 }

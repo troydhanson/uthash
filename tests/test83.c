@@ -15,10 +15,10 @@ int main(int argc, char*argv[]) {
                       "gil", "buck", "ted", NULL };
     int id=0;
 
-    for(name=names; *name; name++) {
+    for(name=names; *name!=NULL; name++) {
         person = (person_t*)malloc(sizeof(person_t));
         if (person == NULL) exit(-1);
-        strncpy(person->first_name, *name,10);
+        strncpy(person->first_name, *name,sizeof(person->first_name));
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);
         printf("added %s (id %d)\n", person->first_name, person->id);
@@ -27,16 +27,17 @@ int main(int argc, char*argv[]) {
     person=NULL;
     person_t **p=&person;
 
-    for(name=names; *name; name++) {
+    for(name=names; *name!=NULL; name++) {
         HASH_FIND_STR(people,*name,*p);
-        if (person) {
+        if (person != NULL) {
             printf("found %s (id %d)\n", person->first_name, person->id);
             new_person  = malloc(sizeof(person_t));
+            if (new_person == NULL) exit(-1);
             memcpy(new_person, person, sizeof(person_t));
             new_person->id = person->id*10;
             HASH_REPLACE_STR(people,first_name,new_person,tmp);
-            printf("replaced (%c) with %s (id %d)\n", tmp?'y':'n', new_person->first_name, new_person->id);
-            if (tmp) free(tmp);
+            printf("replaced (%c) with %s (id %d)\n", (tmp!=NULL)?'y':'n', new_person->first_name, new_person->id);
+            if (tmp != NULL) free(tmp);
         } else {
             printf("failed to find %s\n", *name);
         }
