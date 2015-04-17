@@ -144,7 +144,7 @@ do {                                                                            
 #define HASH_BLOOM_FREE(tbl)
 #define HASH_BLOOM_ADD(tbl,hashv)
 #define HASH_BLOOM_TEST(tbl,hashv) (1)
-#define HASH_BLOOM_BYTELEN 0
+#define HASH_BLOOM_BYTELEN 0U
 #endif
 
 #define HASH_MAKE_TABLE(hh,head)                                                 \
@@ -684,10 +684,10 @@ do {                                                                            
     struct UT_hash_handle *_he_thh, *_he_hh_nxt;                                 \
     UT_hash_bucket *_he_new_buckets, *_he_newbkt;                                \
     _he_new_buckets = (UT_hash_bucket*)uthash_malloc(                            \
-             2U * tbl->num_buckets * sizeof(struct UT_hash_bucket));             \
+             2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));            \
     if (!_he_new_buckets) { uthash_fatal( "out of memory"); }                    \
     memset(_he_new_buckets, 0,                                                   \
-            2U * tbl->num_buckets * sizeof(struct UT_hash_bucket));              \
+            2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));             \
     tbl->ideal_chain_maxlen =                                                    \
        (tbl->num_items >> (tbl->log2_num_buckets+1U)) +                          \
        (((tbl->num_items & ((tbl->num_buckets*2U)-1U)) != 0U) ? 1U : 0U);        \
@@ -876,7 +876,7 @@ do {                                                                            
  (size_t)(((head)->hh.tbl->num_items   * sizeof(UT_hash_handle))   +             \
           ((head)->hh.tbl->num_buckets * sizeof(UT_hash_bucket))   +             \
            sizeof(UT_hash_table)                                   +             \
-           (HASH_BLOOM_BYTELEN))) : 0)
+           (HASH_BLOOM_BYTELEN))) : 0U)
 
 #ifdef NO_DECLTYPE
 #define HASH_ITER(hh,head,el,tmp)                                                \
