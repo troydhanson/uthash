@@ -491,7 +491,7 @@ do {                                                                            
   /* Main loop */                                                                \
   for (;_sfh_len > 0U; _sfh_len--) {                                             \
     hashv    += get16bits (_sfh_key);                                            \
-    _sfh_tmp       = (uint32_t)(get16bits (_sfh_key+2)) << 11  ^ hashv;          \
+    _sfh_tmp  = ((uint32_t)(get16bits (_sfh_key+2)) << 11) ^ hashv;              \
     hashv     = (hashv << 16) ^ _sfh_tmp;                                        \
     _sfh_key += 2U*sizeof (uint16_t);                                            \
     hashv    += hashv >> 11;                                                     \
@@ -574,7 +574,7 @@ do {                                                                   \
   uint32_t _mur_c2 = 0x1b873593u;                                      \
   uint32_t _mur_k1 = 0;                                                \
   const uint8_t *_mur_tail;                                            \
-  const uint32_t *_mur_blocks = (const uint32_t*)(_mur_data+_mur_nblocks*4); \
+  const uint32_t *_mur_blocks = (const uint32_t*)(_mur_data+(_mur_nblocks*4)); \
   int _mur_i;                                                          \
   for(_mur_i = -_mur_nblocks; _mur_i!=0; _mur_i++) {                   \
     _mur_k1 = MUR_GETBLOCK(_mur_blocks,_mur_i);                        \
@@ -584,9 +584,9 @@ do {                                                                   \
                                                                        \
     _mur_h1 ^= _mur_k1;                                                \
     _mur_h1 = MUR_ROTL32(_mur_h1,13);                                  \
-    _mur_h1 = _mur_h1*5U + 0xe6546b64u;                                \
+    _mur_h1 = (_mur_h1*5U) + 0xe6546b64u;                              \
   }                                                                    \
-  _mur_tail = (const uint8_t*)(_mur_data + _mur_nblocks*4);            \
+  _mur_tail = (const uint8_t*)(_mur_data + (_mur_nblocks*4));          \
   _mur_k1=0;                                                           \
   switch((keylen) & 3U) {                                              \
     case 3: _mur_k1 ^= _mur_tail[2] << 16;      /* FALLTHROUGH */      \
@@ -630,7 +630,7 @@ do {                                                                            
  if (head.hh_head != NULL) { (head).hh_head->hh_prev = (addhh); }                \
  (head).hh_head=addhh;                                                           \
  if ((head.count >= ((head.expand_mult+1U) * HASH_BKT_CAPACITY_THRESH))          \
-     && (addhh)->tbl->noexpand != 1U) {                                          \
+     && ((addhh)->tbl->noexpand != 1U)) {                                        \
        HASH_EXPAND_BUCKETS((addhh)->tbl);                                        \
  }                                                                               \
 } while(0)
@@ -880,12 +880,12 @@ do {                                                                            
 
 #ifdef NO_DECLTYPE
 #define HASH_ITER(hh,head,el,tmp)                                                \
-for((el)=(head), (*(char**)(&(tmp)))=(char*)((head!=NULL)?(head)->hh.next:NULL); \
-  el != NULL; (el)=(tmp),(*(char**)(&(tmp)))=(char*)((tmp!=NULL)?(tmp)->hh.next:NULL))
+for(((el)=(head)), ((*(char**)(&(tmp)))=(char*)((head!=NULL)?(head)->hh.next:NULL)); \
+  (el) != NULL; ((el)=(tmp)), ((*(char**)(&(tmp)))=(char*)((tmp!=NULL)?(tmp)->hh.next:NULL)))
 #else
 #define HASH_ITER(hh,head,el,tmp)                                                \
-for((el)=(head),(tmp)=DECLTYPE(el)((head!=NULL)?(head)->hh.next:NULL);           \
-  el != NULL; (el)=(tmp),(tmp)=DECLTYPE(el)((tmp!=NULL)?(tmp)->hh.next:NULL))
+for(((el)=(head)), ((tmp)=DECLTYPE(el)((head!=NULL)?(head)->hh.next:NULL));      \
+  (el) != NULL; ((el)=(tmp)), ((tmp)=DECLTYPE(el)((tmp!=NULL)?(tmp)->hh.next:NULL)))
 #endif
 
 /* obtain a count of items in the hash */
