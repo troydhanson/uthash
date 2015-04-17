@@ -872,7 +872,7 @@ do {                                                                            
 } while(0)
 
 #define HASH_OVERHEAD(hh,head)                                                   \
- ((head) ? (                                                                     \
+ ((head != NULL) ? (                                                             \
  (size_t)((((head)->hh.tbl->num_items   * sizeof(UT_hash_handle))   +            \
            ((head)->hh.tbl->num_buckets * sizeof(UT_hash_bucket))   +            \
             (sizeof(UT_hash_table))                                 +            \
