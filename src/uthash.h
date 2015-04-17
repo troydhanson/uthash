@@ -347,7 +347,7 @@ do {                                                                            
 do {                                                                             \
     unsigned _klen = fieldlen;                                                   \
     write(HASH_EMIT_KEYS, &_klen, sizeof(_klen));                                \
-    write(HASH_EMIT_KEYS, keyptr, fieldlen);                                     \
+    write(HASH_EMIT_KEYS, keyptr, (unsigned long)fieldlen);                      \
 } while (0)
 #else
 #define HASH_EMIT_KEY(hh,head,keyptr,fieldlen)
@@ -363,7 +363,7 @@ do {                                                                            
 /* The Bernstein hash function, used in Perl prior to v5.6. Note (x<<5+x)=x*33. */
 #define HASH_BER(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
-  unsigned _hb_keylen=keylen;                                                    \
+  unsigned _hb_keylen=(unsigned)keylen;                                          \
   const unsigned char *_hb_key=(const unsigned char*)(key);                      \
   (hashv) = 0;                                                                   \
   while (_hb_keylen-- != 0U) {                                                   \
@@ -482,7 +482,7 @@ do {                                                                            
 #define HASH_SFH(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned const char *_sfh_key=(unsigned const char*)(key);                     \
-  uint32_t _sfh_tmp, _sfh_len = keylen;                                          \
+  uint32_t _sfh_tmp, _sfh_len = (uint32_t)keylen;                                \
                                                                                  \
   unsigned _sfh_rem = _sfh_len & 3U;                                             \
   _sfh_len >>= 2;                                                                \
@@ -501,7 +501,7 @@ do {                                                                            
   switch (_sfh_rem) {                                                            \
     case 3: hashv += get16bits (_sfh_key);                                       \
             hashv ^= hashv << 16;                                                \
-            hashv ^= (uint32_t)(_sfh_key[sizeof (uint16_t)] << 18);              \
+            hashv ^= (uint32_t)(_sfh_key[sizeof (uint16_t)]) << 18;              \
             hashv += hashv >> 11;                                                \
             break;                                                               \
     case 2: hashv += get16bits (_sfh_key);                                       \
@@ -561,7 +561,7 @@ do {                 \
   _h ^= _h >> 16;    \
   _h *= 0x85ebca6bu; \
   _h ^= _h >> 13;    \
-  _h *= 0xc2b2ae35uL;\
+  _h *= 0xc2b2ae35u; \
   _h ^= _h >> 16;    \
 } while(0)
 
@@ -589,15 +589,15 @@ do {                                                                   \
   _mur_tail = (const uint8_t*)(_mur_data + (_mur_nblocks*4));          \
   _mur_k1=0;                                                           \
   switch((keylen) & 3U) {                                              \
-    case 3: _mur_k1 ^= _mur_tail[2] << 16;      /* FALLTHROUGH */      \
-    case 2: _mur_k1 ^= _mur_tail[1] << 8;       /* FALLTHROUGH */      \
-    case 1: _mur_k1 ^= _mur_tail[0];                                   \
+    case 3: _mur_k1 ^= (uint32_t)_mur_tail[2] << 16; /* FALLTHROUGH */ \
+    case 2: _mur_k1 ^= (uint32_t)_mur_tail[1] << 8;  /* FALLTHROUGH */ \
+    case 1: _mur_k1 ^= (uint32_t)_mur_tail[0];                         \
     _mur_k1 *= _mur_c1;                                                \
     _mur_k1 = MUR_ROTL32(_mur_k1,15);                                  \
     _mur_k1 *= _mur_c2;                                                \
     _mur_h1 ^= _mur_k1;                                                \
   }                                                                    \
-  _mur_h1 ^= (keylen);                                                 \
+  _mur_h1 ^= (uint32_t)(keylen);                                       \
   MUR_FMIX(_mur_h1);                                                   \
   hashv = _mur_h1;                                                     \
   bkt = hashv & (num_bkts-1U);                                         \
