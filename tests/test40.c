@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
 
     for (n = names; *n != NULL; n++) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        if (s == NULL) exit(-1);
         s->name = *n;
         s->id = i++;
         HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );

@@ -16,7 +16,7 @@ struct CacheEntry {
 };
 struct CacheEntry *cache = NULL;
 
-static char * /*value*/ find_in_cache(char *key)
+static char * /*value*/ find_in_cache(const char *key)
 {
     struct CacheEntry *entry;
     HASH_FIND_STR(cache, key, entry);
@@ -29,7 +29,7 @@ static char * /*value*/ find_in_cache(char *key)
     return NULL;
 }
 
-static void add_to_cache(char *key, char *value)
+static void add_to_cache(const char *key, const char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
     entry = malloc(sizeof(struct CacheEntry));
