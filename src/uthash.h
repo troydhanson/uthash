@@ -536,10 +536,10 @@ do {                                                                            
 #if (defined(__i386__) || defined(__x86_64__)  || defined(_M_IX86))
 #define MUR_GETBLOCK(p,i) p[i]
 #else /* non intel */
-#define MUR_PLUS0_ALIGNED(p) (((unsigned long)p & 0x3) == 0)
-#define MUR_PLUS1_ALIGNED(p) (((unsigned long)p & 0x3) == 1)
-#define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 0x3) == 2)
-#define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 0x3) == 3)
+#define MUR_PLUS0_ALIGNED(p) (((unsigned long)p & 3UL) == 0UL)
+#define MUR_PLUS1_ALIGNED(p) (((unsigned long)p & 3UL) == 1UL)
+#define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 3UL) == 2UL)
+#define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 3UL) == 3UL)
 #define WP(p) ((uint32_t*)((unsigned long)(p) & ~3UL))
 #if (defined(__BIG_ENDIAN__) || defined(SPARC) || defined(__ppc__) || defined(__ppc64__))
 #define MUR_THREE_ONE(p) ((((*WP(p))&0x00ffffff) << 8) | (((*(WP(p)+1))&0xff000000) >> 24))
