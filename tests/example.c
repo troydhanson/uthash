@@ -11,40 +11,45 @@ struct my_struct {
 
 struct my_struct *users = NULL;
 
-void add_user(int user_id, char *name) {
+void add_user(int user_id, char *name)
+{
     struct my_struct *s;
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
     if (s==NULL) {
-      s = (struct my_struct*)malloc(sizeof(struct my_struct));
-      s->id = user_id;
-      HASH_ADD_INT( users, id, s );  /* id: name of key field */
+        s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        s->id = user_id;
+        HASH_ADD_INT( users, id, s );  /* id: name of key field */
     }
     strcpy(s->name, name);
 }
 
-struct my_struct *find_user(int user_id) {
+struct my_struct *find_user(int user_id)
+{
     struct my_struct *s;
 
     HASH_FIND_INT( users, &user_id, s );  /* s: output pointer */
     return s;
 }
 
-void delete_user(struct my_struct *user) {
+void delete_user(struct my_struct *user)
+{
     HASH_DEL( users, user);  /* user: pointer to deletee */
     free(user);
 }
 
-void delete_all() {
-  struct my_struct *current_user, *tmp;
+void delete_all()
+{
+    struct my_struct *current_user, *tmp;
 
-  HASH_ITER(hh, users, current_user, tmp) {
-    HASH_DEL(users,current_user);  /* delete it (users advances to next) */
-    free(current_user);            /* free it */
-  }
+    HASH_ITER(hh, users, current_user, tmp) {
+        HASH_DEL(users,current_user);  /* delete it (users advances to next) */
+        free(current_user);            /* free it */
+    }
 }
 
-void print_users() {
+void print_users()
+{
     struct my_struct *s;
 
     for(s=users; s != NULL; s=(struct my_struct*)(s->hh.next)) {
@@ -52,23 +57,28 @@ void print_users() {
     }
 }
 
-int name_sort(struct my_struct *a, struct my_struct *b) {
+int name_sort(struct my_struct *a, struct my_struct *b)
+{
     return strcmp(a->name,b->name);
 }
 
-int id_sort(struct my_struct *a, struct my_struct *b) {
+int id_sort(struct my_struct *a, struct my_struct *b)
+{
     return (a->id - b->id);
 }
 
-void sort_by_name() {
+void sort_by_name()
+{
     HASH_SORT(users, name_sort);
 }
 
-void sort_by_id() {
+void sort_by_id()
+{
     HASH_SORT(users, id_sort);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     char in[10];
     int id=1, running=1;
     struct my_struct *s;
@@ -93,7 +103,8 @@ int main(int argc, char *argv[]) {
                 break;
             case 2:
                 printf("id?\n");
-                gets(in); id = atoi(in);
+                gets(in);
+                id = atoi(in);
                 printf("name?\n");
                 add_user(id, gets(in));
                 break;
@@ -105,8 +116,11 @@ int main(int argc, char *argv[]) {
             case 4:
                 printf("id?\n");
                 s = find_user(atoi(gets(in)));
-                if (s) delete_user(s);
-                else printf("id unknown\n");
+                if (s) {
+                    delete_user(s);
+                } else {
+                    printf("id unknown\n");
+                }
                 break;
             case 5:
                 delete_all();

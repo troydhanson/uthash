@@ -1,7 +1,8 @@
 #include <stdio.h>    /* printf */
 #include "utstring.h"
 
-int main() {
+int main()
+{
     UT_string *s,*t;
     char V_TestStr[] = "There are two needle\0s in this \0haystack with needle\0s.";
     char V_NeedleStr[] = "needle\0s";
@@ -19,15 +20,13 @@ int main() {
 
     V_FindCnt = 0;
     V_FindPos = 0;
-    do
-    {
-        V_FindPos = utstring_find(s, 
-                                  V_FindPos, 
-                                  utstring_body(t), 
+    do {
+        V_FindPos = utstring_find(s,
+                                  V_FindPos,
+                                  utstring_body(t),
                                   utstring_len(t));
         printf("utstring_find()=%ld\n", V_FindPos);
-        if (V_FindPos >= 0)
-        {
+        if (V_FindPos >= 0) {
             V_FindPos++;
             V_FindCnt++;
         }

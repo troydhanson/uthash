@@ -18,13 +18,15 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-static int namecmp(void *_a, void *_b) {
+static int namecmp(void *_a, void *_b)
+{
     el *a = (el*)_a;
     el *b = (el*)_b;
     return strcmp(a->bname,b->bname);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     el *name, *elt, *tmp, etmp;
     int i;
     example_user_t *user, *users=NULL;
@@ -44,7 +46,9 @@ int main(int argc, char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         name = (el*)malloc(sizeof(el));
-        if (name == NULL) exit(-1);
+        if (name == NULL) {
+            exit(-1);
+        }
         strncpy(name->bname,linebuf,sizeof(name->bname));
         DL_APPEND(head, name);
     }
@@ -55,19 +59,23 @@ int main(int argc, char *argv[]) {
 
     memcpy(etmp.bname, "WES\n", 5UL);
     DL_SEARCH(head,elt,&etmp,namecmp);
-    if (elt != NULL) printf("found %s\n", elt->bname);
+    if (elt != NULL) {
+        printf("found %s\n", elt->bname);
+    }
 
     /* now delete each element, use the safe iterator */
     DL_FOREACH_SAFE(head,elt,tmp) {
-      DL_DELETE(head,elt);
+        DL_DELETE(head,elt);
     }
 
     fclose(file);
 
     /* create elements */
-    for(i=0;i<10;i++) {
+    for(i=0; i<10; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
-        if (user == NULL) exit(-1);
+        if (user == NULL) {
+            exit(-1);
+        }
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);

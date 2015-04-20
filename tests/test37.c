@@ -10,20 +10,24 @@ typedef struct {
 
 #define EVENS(x) ((((example_user_t*)(x))->id % 2) == 0)
 
-static int idcmp(void *_a, void *_b) {
-  example_user_t *a = (example_user_t*)_a;
-  example_user_t *b = (example_user_t*)_b;
-  return (a->id - b->id);
+static int idcmp(void *_a, void *_b)
+{
+    example_user_t *a = (example_user_t*)_a;
+    example_user_t *b = (example_user_t*)_b;
+    return (a->id - b->id);
 }
 
-int main(int argc,char *argv[]) {
+int main(int argc,char *argv[])
+{
     int i;
     example_user_t *user, *users=NULL, *ausers=NULL;
 
     /* create elements */
-    for(i=0;i<10;i++) {
+    for(i=0; i<10; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
-        if (user == NULL) exit(-1);
+        if (user == NULL) {
+            exit(-1);
+        }
         user->id = i;
         HASH_ADD_INT(users,id,user);
     }
@@ -48,5 +52,5 @@ int main(int argc,char *argv[]) {
         printf("auser %d\n", user->id);
     }
     printf("users count: %u\n", HASH_CNT(hh,users));
-   return 0;
+    return 0;
 }

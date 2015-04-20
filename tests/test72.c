@@ -7,12 +7,15 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int i;
     el els[20], *e, *tmp, *tmp2;
     el *headA = NULL;
     el *headB = NULL;
-    for(i=0;i<20;i++) els[i].id=(int)'a'+i;
+    for(i=0; i<20; i++) {
+        els[i].id=(int)'a'+i;
+    }
 
     /* test CDL macros */
     printf("CDL replace elem\n");

@@ -10,26 +10,31 @@ struct my_struct {
 };
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     const char **n, *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
     int i=0;
 
     for (n = names; *n != NULL; n++) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        if (s == NULL) exit(-1);
+        if (s == NULL) {
+            exit(-1);
+        }
         s->name = *n;
         s->id = i++;
         HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );
     }
 
     HASH_FIND_STR( users, "betty", s);
-    if (s != NULL) printf("betty's id is %d\n", s->id);
+    if (s != NULL) {
+        printf("betty's id is %d\n", s->id);
+    }
 
     /* free the hash table contents */
     HASH_ITER(hh, users, s, tmp) {
-      HASH_DEL(users, s);
-      free(s);
+        HASH_DEL(users, s);
+        free(s);
     }
     return 0;
 }

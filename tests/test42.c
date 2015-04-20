@@ -6,13 +6,19 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-static int eltcmp(el *a, el *b) {return a->id - b->id;}
+static int eltcmp(el *a, el *b)
+{
+    return a->id - b->id;
+}
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int i;
     el *head = NULL;
     el els[10], *e, *tmp, *tmp2;
-    for(i=0;i<10;i++) els[i].id=(int)'a'+i;
+    for(i=0; i<10; i++) {
+        els[i].id=(int)'a'+i;
+    }
 
     /* test LL macros */
     printf("LL macros\n");
@@ -24,9 +30,13 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
     LL_SEARCH_SCALAR(head, e, id, 'b');
-    if (e != NULL) printf("search scalar found b\n");
+    if (e != NULL) {
+        printf("search scalar found b\n");
+    }
     LL_SEARCH(head, e, &els[0], eltcmp);
-    if (e != NULL) printf("search found %c\n",e->id);
+    if (e != NULL) {
+        printf("search found %c\n",e->id);
+    }
     LL_FOREACH_SAFE(head,e,tmp) {
         LL_DELETE(head,e);
     }
@@ -43,9 +53,13 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
     DL_SEARCH_SCALAR(head, e, id, 'b');
-    if (e != NULL) printf("search scalar found b\n");
+    if (e != NULL) {
+        printf("search scalar found b\n");
+    }
     DL_SEARCH(head, e, &els[0], eltcmp);
-    if (e != NULL) printf("search found %c\n",e->id);
+    if (e != NULL) {
+        printf("search found %c\n",e->id);
+    }
     DL_FOREACH_SAFE(head,e,tmp) {
         DL_DELETE(head,e);
     }
@@ -61,9 +75,13 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
     CDL_SEARCH_SCALAR(head, e, id, 'b');
-    if (e != NULL) printf("search scalar found b\n");
+    if (e != NULL) {
+        printf("search scalar found b\n");
+    }
     CDL_SEARCH(head, e, &els[0], eltcmp);
-    if (e != NULL) printf("search found %c\n",e->id);
+    if (e != NULL) {
+        printf("search found %c\n",e->id);
+    }
     CDL_FOREACH_SAFE(head,e,tmp,tmp2) {
         CDL_DELETE(head,e);
     }

@@ -33,7 +33,9 @@ static void add_to_cache(const char *key, const char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
     entry = malloc(sizeof(struct CacheEntry));
-    if (entry == NULL) exit(-1);
+    if (entry == NULL) {
+        exit(-1);
+    }
     entry->key = strdup(key);
     entry->value = strdup(value);
     HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
@@ -53,22 +55,23 @@ static void add_to_cache(const char *key, const char *value)
 }
 
 /* main added by Troy D. Hanson */
-int main(int argc, char *argv[]) {
-  char linebuf[100], nbuf[10];
-  FILE *file;
-  int i=0;
+int main(int argc, char *argv[])
+{
+    char linebuf[100], nbuf[10];
+    FILE *file;
+    int i=0;
 
-  file = fopen( "test65.dat", "r" );
-  if (file == NULL) {
-      perror("can't open: ");
-      exit(-1);
-  }
+    file = fopen( "test65.dat", "r" );
+    if (file == NULL) {
+        perror("can't open: ");
+        exit(-1);
+    }
 
-  while (fgets(linebuf,sizeof(linebuf),file) != NULL) {
-    snprintf(nbuf,sizeof(nbuf),"%u",i++);
-    add_to_cache(linebuf, nbuf);
-  }
+    while (fgets(linebuf,sizeof(linebuf),file) != NULL) {
+        snprintf(nbuf,sizeof(nbuf),"%u",i++);
+        add_to_cache(linebuf, nbuf);
+    }
 
-  fclose(file);
-  return 0;
+    fclose(file);
+    return 0;
 }

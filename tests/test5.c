@@ -9,14 +9,17 @@ typedef struct example_user_t {
     UT_hash_handle alth;
 } example_user_t;
 
-int main(int argc,char *argv[]) {
+int main(int argc,char *argv[])
+{
     int i,j;
     example_user_t *user, *tmp, *users=NULL, *altusers=NULL;
 
     /* create elements */
-    for(i=0;i<10;i++) {
+    for(i=0; i<10; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
-        if (user == NULL) exit(-1);
+        if (user == NULL) {
+            exit(-1);
+        }
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);
@@ -24,11 +27,14 @@ int main(int argc,char *argv[]) {
     }
 
     /* find cookie corresponding to each even ID */
-    for(i=0;i<10;i+=2) {
+    for(i=0; i<10; i+=2) {
         j=i*i;
         HASH_FIND(alth,altusers,&j,sizeof(int),tmp);
-        if (tmp != NULL) printf("cookie %d found, user id %d\n", tmp->cookie, tmp->id);
-        else printf("cookie %d not found\n", j);
+        if (tmp != NULL) {
+            printf("cookie %d found, user id %d\n", tmp->cookie, tmp->id);
+        } else {
+            printf("cookie %d not found\n", j);
+        }
     }
-   return 0;
+    return 0;
 }

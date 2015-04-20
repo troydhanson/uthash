@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "utstring.h"
 
-int main() {
+int main()
+{
     UT_string *s, *t;
 
     utstring_new(s);

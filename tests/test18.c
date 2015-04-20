@@ -8,14 +8,17 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
-int main(int argc,char *argv[]) {
+int main(int argc,char *argv[])
+{
     int i;
     example_user_t *user, *users=NULL;
 
     /* create elements */
-    for(i=0;i<10;i++) {
+    for(i=0; i<10; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
-        if (user == NULL) exit(-1);
+        if (user == NULL) {
+            exit(-1);
+        }
         user->id = i;
         user->cookie = i*i;
         HASH_ADD_INT(users,id,user);
@@ -27,8 +30,8 @@ int main(int argc,char *argv[]) {
 
     /* delete them all, pathologically */
     while(users != NULL) {
-      printf("deleting id %i\n", users->id);
-      HASH_DEL(users,users); /* single head/deletee var! */
+        printf("deleting id %i\n", users->id);
+        HASH_DEL(users,users); /* single head/deletee var! */
     }
-   return 0;
+    return 0;
 }
