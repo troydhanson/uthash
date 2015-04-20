@@ -3,10 +3,10 @@
 #include <inttypes.h>
 #include "uthash.h"
 
-#define MUR_PLUS0_ALIGNED(p) (((unsigned long)p & 0x3) == 0)
-#define MUR_PLUS1_ALIGNED(p) (((unsigned long)p & 0x3) == 1)
-#define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 0x3) == 2)
-#define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 0x3) == 3)
+#define MUR_PLUS0_ALIGNED(p) (((unsigned long)p & 3UL) == 0UL)
+#define MUR_PLUS1_ALIGNED(p) (((unsigned long)p & 3UL) == 1UL)
+#define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 3UL) == 2UL)
+#define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 3UL) == 3UL)
 
 #define yn(rc) ((rc!=0U)?"y":"n")
 int main(int argc,char*argv[]) {
