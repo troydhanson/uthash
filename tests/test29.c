@@ -36,12 +36,16 @@ int main(int argc, char *argv[]) {
         DL_APPEND(head, name);
     }
     DL_SORT(head, namecmp);
-    DL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    DL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     /* now delete the list head */
     printf("deleting head %shead->prev: %s", head->bname, head->prev->bname);
     DL_DELETE(head,head);
-    DL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    DL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     fclose(file);
 

@@ -34,7 +34,9 @@ int main(int argc, char *argv[]) {
         DL_PREPEND(head, name);
     }
     /* DL_SORT(head, namecmp); */
-    DL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    DL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     fclose(file);
 

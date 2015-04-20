@@ -36,7 +36,9 @@ int main(int argc, char *argv[]) {
         LL_PREPEND(head, name);
     }
     LL_SORT(head, namecmp);
-    LL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    LL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     fclose(file);
 

@@ -49,7 +49,9 @@ int main(int argc, char *argv[]) {
         DL_APPEND(head, name);
     }
     DL_SORT(head, namecmp);
-    DL_FOREACH(head,elt) printf("%s", elt->bname);
+    DL_FOREACH(head,elt) {
+        printf("%s", elt->bname);
+    }
 
     memcpy(etmp.bname, "WES\n", 5UL);
     DL_SEARCH(head,elt,&etmp,namecmp);

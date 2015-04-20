@@ -34,7 +34,9 @@ int main(int argc, char *argv[]) {
         CDL_PREPEND(head, name);
     }
     /* CDL_SORT(head, namecmp); */
-    CDL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    CDL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     fclose(file);
 
