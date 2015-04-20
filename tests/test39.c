@@ -13,7 +13,7 @@ int main() {
   ns_t *nsp;
   ns_t *head = NULL;
 
-  for(i=0; i < sizeof(keys)/sizeof(keys[0]); i++) {
+  for(i=0; i < (sizeof(keys)/sizeof(keys[0])); i++) {
     printf("adding key %s\n", keys[i]);
     nsp = (ns_t*)malloc(sizeof(ns_t));
     if (nsp == NULL) exit(-1);
@@ -22,7 +22,7 @@ int main() {
   }
   printf("hash count is %u\n", HASH_COUNT(head));
 
-  for(i=0; i < sizeof(keys)/sizeof(keys[0]); i++) {
+  for(i=0; i < (sizeof(keys)/sizeof(keys[0])); i++) {
     printf("looking for key %s... ", keys[i]);
     HASH_FIND(hh,head,keys[i],strlen(keys[i]),nsp);
     printf("%s.\n", (nsp!=NULL)?"found":"not found");
