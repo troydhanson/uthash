@@ -114,8 +114,8 @@ do {                                                                            
 } while (0)
 
 #ifdef HASH_BLOOM
-#define HASH_BLOOM_BITLEN (1ULL << HASH_BLOOM)
-#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8U) + (((HASH_BLOOM_BITLEN%8U)!=0U) ? 1U : 0U)
+#define HASH_BLOOM_BITLEN (1UL << HASH_BLOOM)
+#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8UL) + (((HASH_BLOOM_BITLEN%8UL)!=0UL) ? 1UL : 0UL)
 #define HASH_BLOOM_MAKE(tbl)                                                     \
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
