@@ -114,8 +114,8 @@ do {                                                                            
 } while (0)
 
 #ifdef HASH_BLOOM
-#define HASH_BLOOM_BITLEN (1ULL << HASH_BLOOM)
-#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8U) + (((HASH_BLOOM_BITLEN%8U)!=0U) ? 1U : 0U)
+#define HASH_BLOOM_BITLEN (1UL << HASH_BLOOM)
+#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8UL) + (((HASH_BLOOM_BITLEN%8UL)!=0UL) ? 1UL : 0UL)
 #define HASH_BLOOM_MAKE(tbl)                                                     \
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
@@ -450,7 +450,7 @@ do {                                                                            
      _hj_key += 12;                                                              \
      _hj_k -= 12U;                                                               \
   }                                                                              \
-  hashv += (unsigned)keylen;                                                     \
+  hashv += (unsigned)(keylen);                                                   \
   switch ( _hj_k ) {                                                             \
      case 11: hashv += ( (unsigned)_hj_key[10] << 24 ); /* FALLTHROUGH */        \
      case 10: hashv += ( (unsigned)_hj_key[9] << 16 );  /* FALLTHROUGH */        \
@@ -605,7 +605,7 @@ do {                                                                   \
 #endif  /* HASH_USING_NO_STRICT_ALIASING */
 
 /* key comparison function; return 0 if keys equal */
-#define HASH_KEYCMP(a,b,len) memcmp(a,b,(unsigned long)len)
+#define HASH_KEYCMP(a,b,len) memcmp(a,b,(unsigned long)(len))
 
 /* iterate over items in a known bucket to find desired item */
 #define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,out)                       \
@@ -613,7 +613,7 @@ do {                                                                            
  if (head.hh_head != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head)); } \
  else { out=NULL; }                                                              \
  while (out != NULL) {                                                           \
-    if ((out)->hh.keylen == keylen_in) {                                           \
+    if ((out)->hh.keylen == (keylen_in)) {                                       \
         if ((HASH_KEYCMP((out)->hh.key,keyptr,keylen_in)) == 0) { break; }         \
     }                                                                            \
     if ((out)->hh.hh_next != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,(out)->hh.hh_next)); } \
