@@ -18,13 +18,15 @@ typedef struct name_rec {
     UT_hash_handle hh;
 } name_rec;
 
-static int namecmp(void *_a, void *_b) {
+static int namecmp(void *_a, void *_b)
+{
     name_rec *a = (name_rec*)_a;
     name_rec *b = (name_rec*)_b;
     return strcmp(a->boy_name,b->boy_name);
 }
 
-int main(int argc,char *argv[]) {
+int main(int argc,char *argv[])
+{
     name_rec *name, *names=NULL;
     char linebuf[BUFLEN];
     FILE *file;
@@ -37,16 +39,19 @@ int main(int argc,char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         name = (name_rec*)malloc(sizeof(name_rec));
-        if (name == NULL) exit(-1);
+        if (name == NULL) {
+            exit(-1);
+        }
         strncpy(name->boy_name,linebuf,sizeof(name->boy_name));
         HASH_ADD_STR(names,boy_name,name);
     }
 
     fclose(file);
     HASH_SORT(names,namecmp);
-    for(name=names; name!=NULL; name=(name_rec*)(name->hh.next))
-      printf("%s",name->boy_name);
+    for(name=names; name!=NULL; name=(name_rec*)(name->hh.next)) {
+        printf("%s",name->boy_name);
+    }
 
-   return 0;
+    return 0;
 }
 

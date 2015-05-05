@@ -17,17 +17,20 @@ struct my_event {
 };
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct my_event *e, ev, *events = NULL;
     unsigned keylen;
     int i;
 
     keylen =   offsetof(struct my_event, event_code) + sizeof(char)
-             - offsetof(struct my_event, is);
+               - offsetof(struct my_event, is);
 
     for(i = 0; i < 10; i++) {
         e = (struct my_event*)malloc(sizeof(struct my_event));
-        if (e == NULL) exit(-1);
+        if (e == NULL) {
+            exit(-1);
+        }
         memset(e,0,sizeof(struct my_event));
         e->is.a = i * (60*60*24*365);          /* i years (sec)*/
         e->is.b = 0;
@@ -43,6 +46,8 @@ int main(int argc, char *argv[]) {
     ev.is.b = 0;
     ev.event_code = 'b';
     HASH_FIND( hh, events, &ev.is, keylen , e);
-    if (e != NULL) printf("found: user %d, unix time %d\n", e->user_id, e->is.a);
-   return 0;
+    if (e != NULL) {
+        printf("found: user %d, unix time %d\n", e->user_id, e->is.a);
+    }
+    return 0;
 }

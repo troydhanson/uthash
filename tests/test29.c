@@ -10,13 +10,15 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-static int namecmp(void *_a, void *_b) {
+static int namecmp(void *_a, void *_b)
+{
     el *a = (el*)_a;
     el *b = (el*)_b;
     return strcmp(a->bname,b->bname);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     el *name, *tmp;
     el *head = NULL;
 
@@ -31,17 +33,23 @@ int main(int argc, char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         name = (el*)malloc(sizeof(el));
-        if (name == NULL) exit(-1);
+        if (name == NULL) {
+            exit(-1);
+        }
         strncpy(name->bname,linebuf,sizeof(name->bname));
         DL_APPEND(head, name);
     }
     DL_SORT(head, namecmp);
-    DL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    DL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     /* now delete the list head */
     printf("deleting head %shead->prev: %s", head->bname, head->prev->bname);
     DL_DELETE(head,head);
-    DL_FOREACH(head,tmp) printf("%s", tmp->bname);
+    DL_FOREACH(head,tmp) {
+        printf("%s", tmp->bname);
+    }
 
     fclose(file);
 

@@ -15,14 +15,17 @@ typedef struct name_rec {
     UT_hash_handle hh;
 } name_rec;
 
-int main(int argc,char *argv[]) {
+int main(int argc,char *argv[])
+{
     name_rec *name, *names=NULL;
     char linebuf[BUFLEN];
     FILE *file;
     int i=0,j,nloops=3,loopnum=0,miss;
     struct timeval tv1,tv2;
     long elapsed_usec;
-    if (argc > 1) nloops = atoi(argv[1]);
+    if (argc > 1) {
+        nloops = atoi(argv[1]);
+    }
 
     if ( (file = fopen( "test14.dat", "r" )) == NULL ) {
         perror("can't open: ");
@@ -31,34 +34,49 @@ int main(int argc,char *argv[]) {
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         i++;
-        if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) exit(-1);
+        if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) {
+            exit(-1);
+        }
         strncpy(name->boy_name,linebuf,BUFLEN);
         HASH_ADD_STR(names,boy_name,name);
     }
 
-  again:
+again:
     if (fseek(file,0,SEEK_SET) == -1) {
-       fprintf(stderr,"fseek failed: %s\n", strerror(errno));
+        fprintf(stderr,"fseek failed: %s\n", strerror(errno));
     }
     j=0;
 
-    if (gettimeofday(&tv1,NULL) == -1) perror("gettimeofday: ");
+    if (gettimeofday(&tv1,NULL) == -1) {
+        perror("gettimeofday: ");
+    }
     while (fgets(linebuf,BUFLEN,file) != NULL) {
         /* if we do 10 loops, the first has a 0% miss rate,
          * the second has a 10% miss rate, etc */
         miss = ((rand()*1.0/RAND_MAX) < (loopnum*1.0/nloops)) ? 1 : 0;
         /* generate a miss if we want one */
-        if (miss) { linebuf[0]++; if (linebuf[1] != '\0') linebuf[1]++; }
+        if (miss) {
+            linebuf[0]++;
+            if (linebuf[1] != '\0') {
+                linebuf[1]++;
+            }
+        }
         HASH_FIND_STR(names,linebuf,name);
-        if (name) j++;
+        if (name) {
+            j++;
+        }
     }
-    if (gettimeofday(&tv2,NULL) == -1) perror("gettimeofday: ");
+    if (gettimeofday(&tv2,NULL) == -1) {
+        perror("gettimeofday: ");
+    }
     elapsed_usec = ((tv2.tv_sec - tv1.tv_sec) * 1000000) + (tv2.tv_usec - tv1.tv_usec);
     printf("lookup on %d of %d (%.2f%%) names succeeded (%.2f usec)\n", j, i,
-       j*100.0/i, (double)(elapsed_usec));
-    if (++loopnum < nloops) goto again;
+           j*100.0/i, (double)(elapsed_usec));
+    if (++loopnum < nloops) {
+        goto again;
+    }
     fclose(file);
 
-   return 0;
+    return 0;
 }
 

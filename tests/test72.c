@@ -7,12 +7,15 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int i;
     el els[20], *e, *tmp, *tmp2;
     el *headA = NULL;
     el *headB = NULL;
-    for(i=0;i<20;i++) els[i].id=(int)'a'+i;
+    for(i=0; i<20; i++) {
+        els[i].id=(int)'a'+i;
+    }
 
     /* test CDL macros */
     printf("CDL replace elem\n");
@@ -20,24 +23,42 @@ int main(int argc, char *argv[]) {
     CDL_PREPEND(headA,&els[2]);
     CDL_PREPEND(headA,&els[1]);
     CDL_PREPEND(headA,&els[0]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     /* replace head elem */
     CDL_REPLACE_ELEM(headA, &els[0], &els[4]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
     CDL_REPLACE_ELEM(headA, &els[4], &els[5]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     /* replace last elem */
     CDL_REPLACE_ELEM(headA, &els[3], &els[6]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
     CDL_REPLACE_ELEM(headA, &els[6], &els[7]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     /* replace middle elem */
     CDL_REPLACE_ELEM(headA, &els[1], &els[8]);
     CDL_REPLACE_ELEM(headA, &els[2], &els[9]);
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     /* replace all just to be sure the list is intact... */
     i = 10;
@@ -45,13 +66,22 @@ int main(int argc, char *argv[]) {
         CDL_REPLACE_ELEM(headA, e, &els[i]);
         i++;
     }
-    CDL_FOREACH(headA,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headA,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     /* single elem */
     CDL_PREPEND(headB, &els[18]);
-    CDL_FOREACH(headB,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headB,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
     CDL_REPLACE_ELEM(headB, &els[18], &els[19]);
-    CDL_FOREACH(headB,e) printf("%c ", e->id); printf("\n");
+    CDL_FOREACH(headB,e) {
+        printf("%c ", e->id);
+    }
+    printf("\n");
 
     return 0;
 }
