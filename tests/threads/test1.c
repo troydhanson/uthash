@@ -30,12 +30,12 @@ void *thread_routine_r( void *arg ) {
 
     for(i=0;i<LOOPS;i++) {
       if (pthread_rwlock_rdlock(&lock) != 0) {
-        fprintf(stderr,"can't acquire readlock\n");
+        fprintf(stderr,"can't acquire read lock\n");
         exit(-1);
       }
       HASH_FIND_INT(elts, &i, e);
-      pthread_rwlock_unlock(&lock);
       if (e) num_found++;
+      pthread_rwlock_unlock(&lock);
     }
     return (void*)num_found;
 }
@@ -108,4 +108,9 @@ int main() {
 
     i = HASH_COUNT(elts);
     printf("final count of items in hash: %u\n", i);
+
+    if (pthread_rwlock_destroy(&lock) != 0) {
+      fprintf(stderr,"lock destroy failed\n");
+      exit(-1);
+    }
 }
