@@ -67,4 +67,9 @@ int main() {
 
     i = HASH_COUNT(elts);
     printf("final count of items in hash: %u\n", i);
+
+    if (pthread_rwlock_destroy(&lock) != 0) {
+      fprintf(stderr,"lock destroy failed\n");
+      exit(-1);
+    }
 }
