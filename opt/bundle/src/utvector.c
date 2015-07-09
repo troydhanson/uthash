@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2014, Troy D. Hanson     http://troydhanson.github.com/uthash/
+Copyright (c) 2003-2015, Troy D. Hanson     http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@ void oom(void) {
   exit(-1);
 }
 
-UT_vector *utvector_new(UT_vector_mm *mm) {
+UT_vector *utvector_new(const UT_vector_mm *mm) {
   UT_vector *v = malloc(sizeof(UT_vector)); if (!v) return NULL;
   utvector_init(v,mm);
   return v;
@@ -52,7 +52,7 @@ unsigned utvector_len(UT_vector *v) {
   return v->i;
 }
 
-void utvector_init(UT_vector *v, UT_vector_mm *mm) {
+void utvector_init(UT_vector *v, const UT_vector_mm *mm) {
   v->mm = *mm;  // struct copy
   v->i = v->n = 0;
   v->d = NULL;
@@ -133,6 +133,11 @@ void *utvector_tail(UT_vector *v) {
 void *utvector_pop(UT_vector *v) {
   if (v->i == 0) return NULL;
   return v->d + (--(v->i) * v->mm.sz);
+}
+
+void *utvector_elt(UT_vector *v, unsigned i) {
+  if (i >= v->i) return NULL;
+  return v->d + (i * v->mm.sz);
 }
 
 /* shifting is not very efficient. we end up throwing away/fini'ing the
