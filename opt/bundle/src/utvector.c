@@ -154,10 +154,11 @@ void utvector_shift(UT_vector *v) {
   else            memset(b, 0, v->mm.sz);
 }
 
-void utvector_push(UT_vector *v, void *e) {
+void *utvector_push(UT_vector *v, void *e) {
   void *b  = utvector_extend(v);
   if (v->mm.copy) v->mm.copy(b, e, 1);
   else            memcpy(b, e, v->mm.sz);
+  return v->d + ((v->i - 1) * v->mm.sz);
 }
 
 
