@@ -43,10 +43,10 @@ typedef struct {
 } UT_mm;
 
 void *utmm_new(const UT_mm *mm, size_t n);
-void utmm_init(const UT_mm *mm, char *buf, size_t n);
-void utmm_fini(const UT_mm *mm, char *buf, size_t n);
-void utmm_clear(const UT_mm *mm, char *buf, size_t n);
-void utmm_copy(const UT_mm *mm, char *dst, char *src, size_t n);
+void utmm_init(const UT_mm *mm, void *buf, size_t n);
+void utmm_fini(const UT_mm *mm, void *buf, size_t n);
+void utmm_clear(const UT_mm *mm, void *buf, size_t n);
+void utmm_copy(const UT_mm *mm, void *dst, void *src, size_t n);
 
 /* convenient predefined mm */
 extern UT_mm* utmm_int;

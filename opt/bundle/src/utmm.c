@@ -35,7 +35,8 @@ void *utmm_new(const UT_mm *mm, size_t n) {
   fprintf(stderr,"oom"); exit(-1); 
 }
 
-void utmm_init(const UT_mm *mm, char *buf, size_t n) {
+void utmm_init(const UT_mm *mm, void *_buf, size_t n) {
+  char *buf = (char*)_buf;
   if (mm->init == NULL) {
     memset(buf,0,n*mm->sz);
     return;
@@ -46,7 +47,8 @@ void utmm_init(const UT_mm *mm, char *buf, size_t n) {
   }
 }
 
-void utmm_fini(const UT_mm *mm, char *buf, size_t n) {
+void utmm_fini(const UT_mm *mm, void *_buf, size_t n) {
+  char *buf = (char*)_buf;
   if (mm->fini == NULL) return;
   while(n--) {
     mm->fini(buf);
@@ -54,7 +56,8 @@ void utmm_fini(const UT_mm *mm, char *buf, size_t n) {
   }
 }
 
-void utmm_clear(const UT_mm *mm, char *buf, size_t n) {
+void utmm_clear(const UT_mm *mm, void *_buf, size_t n) {
+  char *buf = (char*)_buf;
   if (mm->clear == NULL) {
     memset(buf,0,n*mm->sz);
     return;
@@ -65,7 +68,9 @@ void utmm_clear(const UT_mm *mm, char *buf, size_t n) {
   }
 }
 
-void utmm_copy(const UT_mm *mm, char *dst, char *src, size_t n) {
+void utmm_copy(const UT_mm *mm, void *_dst, void *_src, size_t n) {
+  char *dst = (char*)_dst;
+  char *src = (char*)_src;
   if (mm->copy == NULL) {
     memcpy(dst,src,n*mm->sz);
     return;
