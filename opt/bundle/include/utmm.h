@@ -48,4 +48,8 @@ void utmm_fini(UT_mm *mm, char *buf, size_t n);
 void utmm_clear(UT_mm *mm, char *buf, size_t n);
 void utmm_copy(UT_mm *mm, char *dst, char *src, size_t n);
 
+/* convenient predefined mm */
+extern UT_mm* utmm_int;
+extern UT_mm* utstring_mm;
+
 #endif /* __UTMM_H_ */

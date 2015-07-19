@@ -23,51 +23,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "libut.h"
 
-static void utstring_init_wrapper(void *_buf, unsigned num) {
+static void utstring_init_wrapper(void *_buf) {
   UT_string *buf = (UT_string*)_buf;
-  unsigned i;
-  for(i=0; i < num; i++) {
-    utstring_init(buf);
-    buf++;
-  }
+  utstring_init(buf);
 }
 
-static void utstring_done_wrapper(void *_buf, unsigned num) {
+static void utstring_done_wrapper(void *_buf) {
   UT_string *buf = (UT_string*)_buf;
-  unsigned i;
-  for(i=0; i < num; i++) {
-    utstring_done(buf);
-    buf++;
-  }
+  utstring_done(buf);
 }
 
-static void utstring_clear_wrapper(void *_buf, unsigned num) {
+static void utstring_clear_wrapper(void *_buf) {
   UT_string *buf = (UT_string*)_buf;
-  unsigned i;
-  for(i=0; i < num; i++) {
-    utstring_clear(buf);
-    buf++;
-  }
+  utstring_clear(buf);
 }
 
-static void utstring_copy_wrapper(void *_dst, void *_src, unsigned num) {
+static void utstring_copy_wrapper(void *_dst, void *_src) {
   UT_string *dst = (UT_string*)_dst;
   UT_string *src = (UT_string*)_src;
-  unsigned i;
-  for(i=0; i < num; i++) {
-    utstring_concat(dst,src);
-    dst++;
-    src++;
-  }
+  utstring_concat(dst,src);
 }
 
-/* a few basic vector types as described via mm that can be passed to utvector_init/new */
-static UT_vector_mm utvector_utstring_mm = {
+static UT_mm _utstring_mm = {
   .sz = sizeof(UT_string),
   .init = utstring_init_wrapper,
   .fini = utstring_done_wrapper,
   .copy = utstring_copy_wrapper,
   .clear = utstring_clear_wrapper
 };
-UT_vector_mm* utvector_utstring = &utvector_utstring_mm;
+UT_mm* utstring_mm = &_utstring_mm;
 

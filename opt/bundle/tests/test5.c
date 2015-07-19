@@ -3,7 +3,7 @@
 
 int main() {
   int i; UT_string *p;
-  UT_vector v; utvector_init(&v, utvector_utstring);
+  UT_vector v; utvector_init(&v, utstring_mm);
   UT_string s; utstring_init(&s);
   for(i=0; i<10; i++) {
     utstring_printf(&s, ".");

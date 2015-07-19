@@ -2,7 +2,7 @@
 
 int main() {
   UT_vector v;
-  utvector_init(&v, utvector_int);
+  utvector_init(&v, utmm_int);
   utvector_fini(&v);
   return 0;
 }

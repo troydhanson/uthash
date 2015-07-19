@@ -4,7 +4,7 @@
 int main() {
   int i,*p=NULL;
   UT_vector v;
-  utvector_init(&v, utvector_int);
+  utvector_init(&v, utmm_int);
   for(i=0; i<10; i++) utvector_push(&v, &i);
   printf("len %d\n", utvector_len(&v));
   utvector_pop(&v);

@@ -35,27 +35,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __UTVECTOR_H_
 #define __UTVECTOR_H_
 
-#include <stddef.h>
+#include "utmm.h"
 
-#define INITIAL_SIZE 16
-
-typedef struct _UT_vector_mm {
-   size_t sz;
-   void (*init)(void *buf, unsigned num);             //-> utstring-init
-   void (*fini)(void *buf, unsigned num);             //-> utstring-done
-   void (*copy)(void *dst, void *src, unsigned num);  //-> ustring_concat
-   void (*clear)(void *buf, unsigned num);            //-> utstring-clear
-} UT_vector_mm;
+/* typical usage e.g. a vector of utstring would have
+ *
+   .sz = sizeof(UT_string)
+   .init = utstring-init
+   .fini = utstring-done
+   .copy = ustring_concat
+   .clear= utstring-clear
+ */
 
 typedef struct _UT_vector {
-  UT_vector_mm mm;
+  UT_mm mm;
   unsigned i,n;/* i: index of next available slot, n: num slots */
   char *d;     /* n slots of size icd->sz*/
 } UT_vector;
 
 
-UT_vector *utvector_new(const UT_vector_mm *mm);
-void utvector_init(UT_vector *v, const UT_vector_mm *mm);
+UT_vector *utvector_new(const UT_mm *mm);
+void utvector_init(UT_vector *v, const UT_mm *mm);
 void utvector_reserve(UT_vector *v, unsigned num);
 void utvector_fini(UT_vector *v);
 UT_vector * utvector_clone(UT_vector *src);
@@ -72,6 +71,5 @@ void utvector_shift(UT_vector *v);
 void *utvector_push(UT_vector *v, void *e);
 unsigned utvector_len(UT_vector *v);
 
-extern UT_vector_mm* utvector_int;
 
 #endif /* __UTVECTOR_H_ */

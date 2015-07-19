@@ -4,7 +4,7 @@
 int main() {
   int *p;
   UT_vector v;
-  utvector_init(&v, utvector_int);
+  utvector_init(&v, utmm_int);
 
   printf("extend\n");
   p = (int*)utvector_extend(&v);

@@ -9,7 +9,7 @@ void dump(UT_vector *v) {
 
 int main() {
   int i;
-  UT_vector v; utvector_init(&v, utvector_utstring);
+  UT_vector v; utvector_init(&v, utstring_mm);
   UT_vector *k;
 
   UT_string s; utstring_init(&s);

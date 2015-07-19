@@ -77,3 +77,6 @@ void utmm_copy(UT_mm *mm, char *dst, char *src, size_t n) {
   }
 }
 
+/* convenient predefined utmm */
+static UT_mm _utmm_int = {.sz = sizeof(int)};
+UT_mm* utmm_int = &_utmm_int;

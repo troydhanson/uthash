@@ -4,7 +4,7 @@
 int main() {
   int i,*p=NULL;
   UT_vector v,*k;
-  utvector_init(&v, utvector_int);
+  utvector_init(&v, utmm_int);
   for(i=0; i<10; i++) utvector_push(&v, &i);
 
   k = utvector_clone(&v);

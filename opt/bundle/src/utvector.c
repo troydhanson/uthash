@@ -26,6 +26,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include "utvector.h"
 
+#define INITIAL_SIZE 16
+
 /* utvector
  *
  * maintain a contiguous buffer of 'n' elements ('i' occupied)
@@ -42,7 +44,7 @@ void oom(void) {
   exit(-1);
 }
 
-UT_vector *utvector_new(const UT_vector_mm *mm) {
+UT_vector *utvector_new(const UT_mm *mm) {
   UT_vector *v = malloc(sizeof(UT_vector)); if (!v) return NULL;
   utvector_init(v,mm);
   return v;
@@ -52,7 +54,7 @@ unsigned utvector_len(UT_vector *v) {
   return v->i;
 }
 
-void utvector_init(UT_vector *v, const UT_vector_mm *mm) {
+void utvector_init(UT_vector *v, const UT_mm *mm) {
   v->mm = *mm;  // struct copy
   v->i = v->n = 0;
   v->d = NULL;
@@ -67,13 +69,12 @@ void utvector_reserve(UT_vector *v, unsigned num) {
   if (!d) oom();
   v->d = d;
   void *b = v->d + (v->n * v->mm.sz); // start of newly allocated area
-  if (v->mm.init) v->mm.init(b, n);
-  else            memset(b, 0, n*v->mm.sz);
+  utmm_init(&v->mm,b,n);
   v->n = n + v->n;
 }
 
 void utvector_fini(UT_vector *v) {
-  if (v->mm.fini) v->mm.fini(v->d, v->n);
+  utmm_fini(&v->mm,v->d,v->n);
   free(v->d);
   v->d = NULL;
   v->i = v->n = 0;
@@ -94,9 +95,8 @@ void utvector_copy(UT_vector *dst, UT_vector *src) { /* dst, src both inited */
   utvector_clear(dst);
   utvector_reserve(dst, src->i);
   dst->i = src->i;
-  if (dst->mm.clear) dst->mm.clear(dst->d, src->i);
-  if (src->mm.copy) src->mm.copy(dst->d, src->d, src->i);
-  else                    memcpy(dst->d, src->d, src->mm.sz * src->i);
+  utmm_clear(&dst->mm,dst->d,src->i);
+  utmm_copy(&dst->mm, dst->d, src->d, src->i);
 }
 
 void utvector_free(UT_vector *v) {
@@ -107,7 +107,7 @@ void utvector_free(UT_vector *v) {
 void *utvector_extend(UT_vector *v) {
   utvector_reserve(v,1);
   void *b = v->d + (v->i * v->mm.sz);
-  if (v->mm.clear) v->mm.clear(b,1);
+  utmm_clear(&v->mm,b,1);
   v->i++;
   return b;
 }
@@ -146,22 +146,17 @@ void *utvector_elt(UT_vector *v, unsigned i) {
  * no caller memory to copy it into anyway. a cpy_shift maybe handy */
 void utvector_shift(UT_vector *v) {
   assert (v->i);
-  if (v->mm.fini) v->mm.fini(v->d, 1);
+  utmm_fini(&v->mm,v->d,1);
   v->i--;
   memmove(v->d, v->d + v->mm.sz, (v->n-1)*v->mm.sz);
   char *b = v->d + ((v->n-1) * v->mm.sz);
-  if (v->mm.init) v->mm.init(b, 1);
-  else            memset(b, 0, v->mm.sz);
+  utmm_init(&v->mm,b,1);
 }
 
 void *utvector_push(UT_vector *v, void *e) {
   void *b  = utvector_extend(v);
-  if (v->mm.copy) v->mm.copy(b, e, 1);
-  else            memcpy(b, e, v->mm.sz);
+  utmm_copy(&v->mm, b, e, 1);
   return v->d + ((v->i - 1) * v->mm.sz);
 }
 
 
-/* a few basic vector types as described via mm that can be passed to utvector_init/new */
-static UT_vector_mm utvector_int_mm = {.sz = sizeof(int)};
-UT_vector_mm* utvector_int = &utvector_int_mm;
