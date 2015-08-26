@@ -2,9 +2,10 @@ libut
 
 The "libut" directory is an alternative way to use uthash, utarray, utlist, 
 utstring and utvector in your programs. You can copy the libut directory
-into your own source tree. Doing it this way dereferences symlinks: 
+into your own source tree. Copy it this way to make sure you get the files
+and not just links (-L dereferences symlinks in the source directory):
 
-    cp -RF libut $DESTINATION
+    cp -RL libut $DESTINATION
 
 Then add CFLAGS to your application Makefile to pull in libut/include.
 
