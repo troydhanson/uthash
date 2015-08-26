@@ -8,6 +8,7 @@
 #include "utstring.h"
 #include "utarray.h"
 #include "uthash.h"
+#include "utringbuffer.h"
 #include "utlist.h"
 
 #endif /* __LIBUT_H_ */
