@@ -17,7 +17,7 @@ utvector.o: src/utvector.c $(INCDIR)/utvector.h
 utmm.o: src/utmm.c $(INCDIR)/utmm.h
 	$(CC) $(CFLAGS) -c $<
 
-.PHONY: clean tests
+.PHONY: clean tests install
 
 clean:
 	rm -f $(OBJS) *.o
@@ -25,3 +25,6 @@ clean:
 
 tests: libut.a
 	make -C tests 
+
+install: libut.a
+	cp $< /usr/local/lib
