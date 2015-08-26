@@ -1,6 +1,6 @@
 OBJS=libut.a
 all: $(OBJS) 
-INCDIR=./include
+INCDIR=../include
 CFLAGS=-I$(INCDIR)
 CFLAGS+=-Wall -Wextra
 CFLAGS+=-g

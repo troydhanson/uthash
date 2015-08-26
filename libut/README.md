@@ -14,8 +14,3 @@ using LDFLAGS -Llibut -lut. This makes the utvector available.
 
 This also links in the plumbing that supports having a utvector of utstrings.
 
-NOTE: because the libut/include contains symlinks, to copy this source into
-      another source tree, make sure you deref symlinks to copy their contents.
-      One way to do this, is to use the tar -h option:
-
-    tar cjhf - libut | (cd $DESTDIR; tar xjf -)
