@@ -5,7 +5,7 @@ OBJS=$(patsubst %,%.o,$(PROGS))
 CFLAGS = -I../include
 CFLAGS += -g
 CFLAGS += -Wall -Wextra
-LDFLAGS=-lut -L../src
+LDFLAGS=-L.. -lut 
 
 TEST_TARGET=run_tests
 TESTS=./do_tests

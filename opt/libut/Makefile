@@ -1,6 +1,6 @@
 OBJS=libut.a
 all: $(OBJS) 
-INCDIR=../include
+INCDIR=./include
 CFLAGS=-I$(INCDIR)
 CFLAGS+=-Wall -Wextra
 CFLAGS+=-g
@@ -8,16 +8,20 @@ CFLAGS+=-g
 libut.a: libut.o utvector.o utmm.o
 	ar r $@ $^
 
-libut.o: libut.c $(INCDIR)/libut.h
+libut.o: src/libut.c $(INCDIR)/libut.h
 	$(CC) $(CFLAGS) -c $<
 
-utvector.o: utvector.c $(INCDIR)/utvector.h
+utvector.o: src/utvector.c $(INCDIR)/utvector.h
 	$(CC) $(CFLAGS) -c $<
 
-utmm.o: utmm.c $(INCDIR)/utmm.h
+utmm.o: src/utmm.c $(INCDIR)/utmm.h
 	$(CC) $(CFLAGS) -c $<
 
-.PHONY: clean 
+.PHONY: clean tests
 
 clean:
 	rm -f $(OBJS) *.o
+	make -C tests clean
+
+tests: libut.a
+	make -C tests 
