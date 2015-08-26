@@ -2,15 +2,28 @@ libut
 
 The "libut" directory is an alternative way to use uthash, utarray, utlist, 
 utstring and utvector in your programs. You can copy the libut directory
-entirely into your own source tree, then use CFLAGS to add libut/include
-to your include-header search path (-I). 
+into your own source tree. Doing it this way dereferences symlinks: 
 
-There are two upshots of this. One is that you can just #include "libut.h"
-instead of uthash.h, utarray.h, etc. So it is a convenient wrapper. 
+    cp -RF libut $DESTINATION
 
-The other benefit of using the libut is that if you do a "make" in libut/
-it builds libut/libut.a, which you can then link into your program 
-using LDFLAGS -Llibut -lut. This makes the utvector available. 
+Then add CFLAGS to your application Makefile to pull in libut/include.
 
-This also links in the plumbing that supports having a utvector of utstrings.
+    CFLAGS=-I libut/include
 
+You can use libut.h as a wrapper to pull in uthash.h, utarray.h, etc. 
+
+    #include "libut.h"
+
+utvector
+
+The utvector is an alternative to utarray. It is a bit more efficient.
+It's object code, not just a header. To use utvector, build libut.a:
+
+    cd libut
+    make
+
+Link it into your program using:
+
+    LDFLAGS=-Llibut -lut
+
+Examples of using utvector are in libut/tests.
