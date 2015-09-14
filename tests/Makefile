@@ -14,7 +14,7 @@ PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test66 test67 test68 test69 test70 test71 test72 test73 \
         test74 test75 test76 test77 test78 test79 test80 test81 \
         test82 test83 test84 test85
-CFLAGS = -I$(HASHDIR) 
+CFLAGS += -I$(HASHDIR)
 #CFLAGS += -DHASH_BLOOM=16
 #CFLAGS += -O2
 CFLAGS += -g
@@ -81,22 +81,24 @@ cplusplus:
 	CC=$(CXX) $(MAKE) all 
 
 example: example.c $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) -o $@ $(@).c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
 $(PROGS) $(UTILS) : $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) -o $@ $(@).c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
 hashscan : $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) $(MUR_CFLAGS) -o $@ $(@).c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
 sleep_test : $(HASHDIR)/uthash.h 
-	$(CC) $(CFLAGS) -DHASH_BLOOM=16 -o $@ $(@).c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
 
 $(FUNCS) : $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) -DHASH_FUNCTION=HASH_$@ -o keystat.$@ keystat.c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_$@ \
+		$(LDFLAGS) -o keystat.$@ keystat.c
 
 $(SPECIAL_FUNCS) : $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) $(MUR_CFLAGS) -DHASH_FUNCTION=HASH_$@ -o keystat.$@ keystat.c 
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) -DHASH_FUNCTION=HASH_$@ \
+		$(LDFLAGS) -o keystat.$@ keystat.c
 
 run_tests: $(PROGS)
 	perl $(TESTS)
