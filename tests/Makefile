@@ -102,7 +102,7 @@ run_tests: $(PROGS)
 	perl $(TESTS)
 
 run_tests_mingw: $(PROGS)
-	/bin/sh do_tests.mingw
+	/bin/bash do_tests.mingw
 
 astyle:
 	astyle -n --style=kr --indent-switches --add-brackets *.c
