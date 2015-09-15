@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # utility to macro-expand a test program
 CC=gcc

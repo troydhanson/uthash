@@ -13,4 +13,6 @@ stage:
 	rm -if ${TMP}/*
 	cp *.html *.css *.png ${TMP}
 
-
+.PHONY: clean
+clean:
+	$(RM) $(HTML)
