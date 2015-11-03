@@ -4,7 +4,7 @@ PROGS = test1 test2
 # Thread support requires compiler-specific options
 # ----------------------------------------------------------------------------
 # GNU 
-CFLAGS = -I$(HASHDIR) -g -pthread
+CFLAGS += -I$(HASHDIR) -g -pthread
 # Solaris (Studio 11) 
 #CFLAGS = -I$(HASHDIR) -g -mt
 # ----------------------------------------------------------------------------
@@ -16,7 +16,7 @@ endif
 all: $(PROGS) run_tests
 
 $(PROGS) : $(HASHDIR)/uthash.h
-	$(CC) $(CFLAGS) -o $@ $(@).c 
+	$(CC) $(CPPLFAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
 debug:
 	$(MAKE) all HASH_DEBUG=1

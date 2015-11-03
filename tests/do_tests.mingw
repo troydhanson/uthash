@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "MinGW test script starting"
 
