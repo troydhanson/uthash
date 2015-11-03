@@ -38,7 +38,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>  /* memset, etc */
 #include <stdlib.h>  /* exit */
 
+#ifndef oom
 #define oom() exit(-1)
+#endif
 
 typedef void (ctor_f)(void *dst, const void *src);
 typedef void (dtor_f)(void *elt);
