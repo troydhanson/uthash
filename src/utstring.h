@@ -52,9 +52,10 @@ typedef struct {
 #define utstring_reserve(s,amt)                            \
 do {                                                       \
   if (((s)->n - (s)->i) < (size_t)(amt)) {                 \
-    char *tmp = (char*)realloc((s)->d, (s)->n + (amt));    \
-    if (tmp == NULL) oom();                                \
-    (s)->d = tmp;                                          \
+    char *utstring_tmp = (char*)realloc(                   \
+      (s)->d, (s)->n + (amt));                             \
+    if (utstring_tmp == NULL) oom();                       \
+    (s)->d = utstring_tmp;                                 \
     (s)->n += (amt);                                       \
   }                                                        \
 } while(0)

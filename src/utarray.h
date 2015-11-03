@@ -88,11 +88,11 @@ typedef struct {
 
 #define utarray_reserve(a,by) do {                                            \
   if (((a)->i+(by)) > ((a)->n)) {                                             \
-    char *tmp;                                                                \
+    char *utarray_tmp;                                                        \
     while(((a)->i+(by)) > ((a)->n)) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }   \
-    tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                           \
-    if (tmp == NULL) oom();                                                   \
-    (a)->d=tmp;                                                               \
+    utarray_tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                   \
+    if (utarray_tmp == NULL) oom();                                           \
+    (a)->d=utarray_tmp;                                                       \
   }                                                                           \
 } while(0)
 
