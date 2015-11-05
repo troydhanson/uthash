@@ -38,7 +38,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+#ifndef oom
 #define oom() exit(-1)
+#endif
 
 typedef struct {
     char *d;
@@ -49,9 +52,11 @@ typedef struct {
 #define utstring_reserve(s,amt)                            \
 do {                                                       \
   if (((s)->n - (s)->i) < (size_t)(amt)) {                 \
-     (s)->d = (char*)realloc((s)->d, (s)->n + (amt));      \
-     if ((s)->d == NULL) oom();                            \
-     (s)->n += (amt);                                      \
+    char *utstring_tmp = (char*)realloc(                   \
+      (s)->d, (s)->n + (amt));                             \
+    if (utstring_tmp == NULL) oom();                       \
+    (s)->d = utstring_tmp;                                 \
+    (s)->n += (amt);                                       \
   }                                                        \
 } while(0)
 
