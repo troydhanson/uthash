@@ -1191,6 +1191,7 @@ int main(int argc, char *argv[]) {
     /* now delete each element, use the safe iterator */
     DL_FOREACH_SAFE(head,elt,tmp) {
       DL_DELETE(head,elt);
+      free(elt);
     }
 
     fclose(file);
