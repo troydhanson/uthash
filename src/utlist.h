@@ -497,6 +497,15 @@ do {                                                                            
  }                                                                                             \
 } while (0)                                                                                    \
 
+#define LL_APPEND_ELEM(head, el, add)                                                          \
+do {                                                                                           \
+ assert(head != NULL);                                                                         \
+ assert(el != NULL);                                                                           \
+ assert(add != NULL);                                                                          \
+ (add)->next = (el)->next;                                                                     \
+ (el)->next = (add);                                                                           \
+} while (0)                                                                                    \
+
 
 /******************************************************************************
  * doubly linked list macros (non-circular)                                   *
@@ -638,6 +647,21 @@ do {                                                                            
   (head) = (add);                                                                              \
  } else {                                                                                      \
   (add)->prev->next = (add);                                                                   \
+ }                                                                                             \
+} while (0)                                                                                    \
+
+#define DL_APPEND_ELEM(head, el, add)                                                          \
+do {                                                                                           \
+ assert(head != NULL);                                                                         \
+ assert(el != NULL);                                                                           \
+ assert(add != NULL);                                                                          \
+ (add)->next = (el)->next;                                                                     \
+ (add)->prev = (el);                                                                           \
+ (el)->next = (add);                                                                           \
+ if ((add)->next) {                                                                            \
+  (add)->next->prev = (add);                                                                   \
+ } else {                                                                                      \
+  (head)->prev = (add);                                                                        \
  }                                                                                             \
 } while (0)                                                                                    \
 
