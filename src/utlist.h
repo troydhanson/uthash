@@ -482,21 +482,24 @@ do {                                                                            
 
 #define LL_PREPEND_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
- LDECLTYPE(head) _tmp;                                                                         \
- assert(head != NULL);                                                                         \
- assert(el != NULL);                                                                           \
- assert(add != NULL);                                                                          \
- (add)->next = (el);                                                                           \
- if ((head) == (el)) {                                                                         \
-  (head) = (add);                                                                              \
+ if((el)) {                                                                                    \
+  LDECLTYPE(head) _tmp;                                                                        \
+  assert(head != NULL);                                                                        \
+  assert(add != NULL);                                                                         \
+  (add)->next = (el);                                                                          \
+  if ((head) == (el)) {                                                                        \
+   (head) = (add);                                                                             \
+  } else {                                                                                     \
+   _tmp = head;                                                                                \
+   while (_tmp->next && (_tmp->next != (el))) {                                                \
+    _tmp = _tmp->next;                                                                         \
+   }                                                                                           \
+   if (_tmp->next) {                                                                           \
+     _tmp->next = (add);                                                                       \
+   }                                                                                           \
+  }                                                                                            \
  } else {                                                                                      \
-  _tmp = head;                                                                                 \
-  while (_tmp->next && (_tmp->next != (el))) {                                                 \
-   _tmp = _tmp->next;                                                                          \
-  }                                                                                            \
-  if (_tmp->next) {                                                                            \
-    _tmp->next = (add);                                                                        \
-  }                                                                                            \
+  LL_APPEND2(head, add, next);                                                                 \
  }                                                                                             \
 } while (0)                                                                                    \
 
@@ -505,11 +508,14 @@ do {                                                                            
 
 #define LL_APPEND_ELEM2(head, el, add)                                                         \
 do {                                                                                           \
- assert(head != NULL);                                                                         \
- assert(el != NULL);                                                                           \
- assert(add != NULL);                                                                          \
- (add)->next = (el)->next;                                                                     \
- (el)->next = (add);                                                                           \
+ if((el)) {                                                                                    \
+  assert(head != NULL);                                                                        \
+  assert(add != NULL);                                                                         \
+  (add)->next = (el)->next;                                                                    \
+  (el)->next = (add);                                                                          \
+ } else {                                                                                      \
+  LL_PREPEND2(head, add, next);                                                                \
+ }                                                                                             \
 } while (0)                                                                                    \
 
 #define LL_APPEND_ELEM(head, el, add)                                                          \
@@ -648,16 +654,19 @@ do {                                                                            
 
 #define DL_PREPEND_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
- assert(head != NULL);                                                                         \
- assert(el != NULL);                                                                           \
- assert(add != NULL);                                                                          \
- (add)->next = (el);                                                                           \
- (add)->prev = (el)->prev;                                                                     \
- (el)->prev = (add);                                                                           \
- if ((head) == (el)) {                                                                         \
-  (head) = (add);                                                                              \
+ if((el)) {                                                                                    \
+  assert(head != NULL);                                                                        \
+  assert(add != NULL);                                                                         \
+  (add)->next = (el);                                                                          \
+  (add)->prev = (el)->prev;                                                                    \
+  (el)->prev = (add);                                                                          \
+  if ((head) == (el)) {                                                                        \
+   (head) = (add);                                                                             \
+  } else {                                                                                     \
+   (add)->prev->next = (add);                                                                  \
+  }                                                                                            \
  } else {                                                                                      \
-  (add)->prev->next = (add);                                                                   \
+  DL_APPEND2(head, add, prev, next);                                                           \
  }                                                                                             \
 } while (0)                                                                                    \
 
@@ -666,16 +675,19 @@ do {                                                                            
 
 #define DL_APPEND_ELEM2(head, el, add, prev, next)                                             \
 do {                                                                                           \
- assert(head != NULL);                                                                         \
- assert(el != NULL);                                                                           \
- assert(add != NULL);                                                                          \
- (add)->next = (el)->next;                                                                     \
- (add)->prev = (el);                                                                           \
- (el)->next = (add);                                                                           \
- if ((add)->next) {                                                                            \
-  (add)->next->prev = (add);                                                                   \
+ if((el)) {                                                                                    \
+  assert(head != NULL);                                                                        \
+  assert(add != NULL);                                                                         \
+  (add)->next = (el)->next;                                                                    \
+  (add)->prev = (el);                                                                          \
+  (el)->next = (add);                                                                          \
+  if ((add)->next) {                                                                           \
+   (add)->next->prev = (add);                                                                  \
+  } else {                                                                                     \
+   (head)->prev = (add);                                                                       \
+  }                                                                                            \
  } else {                                                                                      \
-  (head)->prev = (add);                                                                        \
+  DL_PREPEND2(head, add, prev, next);                                                          \
  }                                                                                             \
 } while (0)                                                                                    \
 
