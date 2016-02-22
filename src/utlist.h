@@ -457,7 +457,7 @@ do {                                                                            
     }                                                                                          \
 } while(0)
 
-#define LL_REPLACE_ELEM(head, el, add)                                                         \
+#define LL_REPLACE_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
  LDECLTYPE(head) _tmp;                                                                         \
  assert(head != NULL);                                                                         \
@@ -477,7 +477,10 @@ do {                                                                            
  }                                                                                             \
 } while (0)
 
-#define LL_PREPEND_ELEM(head, el, add)                                                         \
+#define LL_REPLACE_ELEM(head, el, add)                                                         \
+    LL_REPLACE_ELEM2(head, el, add, next)
+
+#define LL_PREPEND_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
  LDECLTYPE(head) _tmp;                                                                         \
  assert(head != NULL);                                                                         \
@@ -497,7 +500,10 @@ do {                                                                            
  }                                                                                             \
 } while (0)                                                                                    \
 
-#define LL_APPEND_ELEM(head, el, add)                                                          \
+#define LL_PREPEND_ELEM(head, el, add)                                                         \
+    LL_PREPEND_ELEM2(head, el, add, next)
+
+#define LL_APPEND_ELEM2(head, el, add)                                                         \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -506,6 +512,8 @@ do {                                                                            
  (el)->next = (add);                                                                           \
 } while (0)                                                                                    \
 
+#define LL_APPEND_ELEM(head, el, add)                                                          \
+    LL_APPEND_ELEM2(head, el, add, next)
 
 /******************************************************************************
  * doubly linked list macros (non-circular)                                   *
@@ -609,7 +617,7 @@ do {                                                                            
 #define DL_SEARCH_SCALAR2 LL_SEARCH_SCALAR2
 #define DL_SEARCH2 LL_SEARCH2
 
-#define DL_REPLACE_ELEM(head, el, add)                                                         \
+#define DL_REPLACE_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -635,7 +643,10 @@ do {                                                                            
  }                                                                                             \
 } while (0)
 
-#define DL_PREPEND_ELEM(head, el, add)                                                         \
+#define DL_REPLACE_ELEM(head, el, add)                                                         \
+    DL_REPLACE_ELEM2(head, el, add, prev, next)
+
+#define DL_PREPEND_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -650,7 +661,10 @@ do {                                                                            
  }                                                                                             \
 } while (0)                                                                                    \
 
-#define DL_APPEND_ELEM(head, el, add)                                                          \
+#define DL_PREPEND_ELEM(head, el, add)                                                         \
+    DL_PREPEND_ELEM2(head, el, add, prev, next)
+
+#define DL_APPEND_ELEM2(head, el, add, prev, next)                                             \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -665,6 +679,8 @@ do {                                                                            
  }                                                                                             \
 } while (0)                                                                                    \
 
+#define DL_APPEND_ELEM(head, el, add)                                                          \
+   DL_APPEND_ELEM2(head, el, add, prev, next)
 
 /******************************************************************************
  * circular doubly linked list macros                                         *
@@ -692,7 +708,7 @@ do {                                                                            
 #define CDL_DELETE2(head,del,prev,next)                                                        \
 do {                                                                                           \
   if ( ((head)==(del)) && ((head)->next == (head))) {                                          \
-      (head) = NULL;                                                                             \
+      (head) = NULL;                                                                           \
   } else {                                                                                     \
      (del)->next->prev = (del)->prev;                                                          \
      (del)->prev->next = (del)->next;                                                          \
@@ -743,7 +759,7 @@ do {                                                                            
     }                                                                                          \
 } while(0)
 
-#define CDL_REPLACE_ELEM(head, el, add)                                                        \
+#define CDL_REPLACE_ELEM2(head, el, add, prev, next)                                           \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -763,7 +779,10 @@ do {                                                                            
  }                                                                                             \
 } while (0)
 
-#define CDL_PREPEND_ELEM(head, el, add)                                                        \
+#define CDL_REPLACE_ELEM(head, el, add)                                                        \
+    CDL_REPLACE_ELEM2(head, el, add, prev, next)
+
+#define CDL_PREPEND_ELEM2(head, el, add, prev, next)                                           \
 do {                                                                                           \
  assert(head != NULL);                                                                         \
  assert(el != NULL);                                                                           \
@@ -776,6 +795,9 @@ do {                                                                            
   (head) = (add);                                                                              \
  }                                                                                             \
 } while (0)                                                                                    \
+
+#define CDL_PREPEND_ELEM(head, el, add)                                                        \
+    CDL_PREPEND_ELEM2(head, el, add, prev, next)
 
 #endif /* UTLIST_H */
 
