@@ -506,7 +506,7 @@ do {                                                                            
 #define LL_PREPEND_ELEM(head, el, add)                                                         \
     LL_PREPEND_ELEM2(head, el, add, next)
 
-#define LL_APPEND_ELEM2(head, el, add)                                                         \
+#define LL_APPEND_ELEM2(head, el, add, next)                                                   \
 do {                                                                                           \
  if((el)) {                                                                                    \
   assert(head != NULL);                                                                        \
