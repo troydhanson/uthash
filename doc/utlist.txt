@@ -155,7 +155,7 @@ del::
 elt::
   A pointer that will be assigned to each list element in succession (see
   example) in the case of iteration macros; or, the output pointer from
-  the search macros; or the element to be prepended to or replaced.
+  the search macros.
 ref::
   Reference element for prepend and append operations that will be
   prepended before or appended after.
