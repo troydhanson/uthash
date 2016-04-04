@@ -19,7 +19,7 @@ The array <<operations,operations>> are based loosely on the C++ STL vector meth
 
 Internally the dynamic array contains a contiguous memory region into which
 the elements are copied. This buffer is grown as needed using `realloc` to
-accomodate all the data that is pushed into it.
+accommodate all the data that is pushed into it.
 
 Download
 ~~~~~~~~

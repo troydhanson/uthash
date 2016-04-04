@@ -122,7 +122,7 @@ To prepend before an arbitrary element instead of the list head, use the
 `_PREPEND_ELEM` macro family.
 To append after an arbitrary element element instead of the list head, use the
 `_APPEND_ELEM` macro family.
-To 'replace' an arbitary list element with another element use the `_REPLACE_ELEM`
+To 'replace' an arbitrary list element with another element use the `_REPLACE_ELEM`
 family of macros.
 
 The 'sort' operation never moves the elements in memory; rather it only adjusts
