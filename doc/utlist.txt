@@ -98,10 +98,11 @@ iterating over them.
 [width="100%",cols="10<m,10<m,10<m",grid="cols",options="header"]
 |===============================================================================
 |Singly-linked             | Doubly-linked              | Circular, doubly-linked
-|LL_PREPEND(head,add);     | DL_PREPEND(head,add);      | CDL_PREPEND(head,add;
-|LL_PREPEND_ELEM(head,elt,add) | DL_PREPEND_ELEM(head,elt,add) | CDL_PREPEND_ELEM(head,elt,add) 
-|LL_REPLACE_ELEM(head,elt,add) | DL_REPLACE_ELEM(head,elt,add) | CDL_REPLACE_ELEM(head,elt,add) 
-|LL_APPEND(head,add);      | DL_APPEND(head,add);       | 
+|LL_PREPEND(head,add);     | DL_PREPEND(head,add);      | CDL_PREPEND(head,add);
+|LL_PREPEND_ELEM(head,ref,add); | DL_PREPEND_ELEM(head,ref,add); | CDL_PREPEND_ELEM(head,ref,add); 
+|LL_APPEND_ELEM(head,ref,add); | DL_APPEND_ELEM(head,ref,add); | CDL_APPEND_ELEM(head,ref,add); 
+|LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add); 
+|LL_APPEND(head,add);      | DL_APPEND(head,add);       | CDL_APPEND(head,add);
 |LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    | 
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
@@ -118,8 +119,11 @@ end of the list, so it becomes the new tail element. 'Concatenate' takes two
 properly constructed lists and appends the second list to the first.  (Visual
 Studio 2008 does not support `LL_CONCAT` and `DL_CONCAT`, but VS2010 is ok.)
 To prepend before an arbitrary element instead of the list head, use the
-`_PREPEND_ELEM` macro family. To 'replace' an arbitary list element with another
-element use the `_REPLACE_ELEM` family of macros.
+`_PREPEND_ELEM` macro family.
+To append after an arbitrary element element instead of the list head, use the
+`_APPEND_ELEM` macro family.
+To 'replace' an arbitrary list element with another element use the `_REPLACE_ELEM`
+family of macros.
 
 The 'sort' operation never moves the elements in memory; rather it only adjusts
 the list order by altering the `prev` and `next` pointers in each element. Also
@@ -146,11 +150,19 @@ head::
 add::
   A pointer to the list element structure you are adding to the list.
 del::
-  A pointer to the list element structure you are deleting from the list.
+  A pointer to the list element structure you are replacing or
+  deleting from the list.
 elt::
   A pointer that will be assigned to each list element in succession (see
   example) in the case of iteration macros; or, the output pointer from
-  the search macros; or the element to be prepended to or replaced.
+  the search macros.
+ref::
+  Reference element for prepend and append operations that will be
+  prepended before or appended after.
+  If `ref` is a pointer with value NULL, the new element will be appended to the
+  list for _PREPEND_ELEM() operations and prepended for _APPEND_ELEM() operations.
+  `ref` must be the name of a pointer variable and cannot be literally NULL,
+  use _PREPEND() and _APPEND() macro family instead.
 like::
   An element pointer, having the same type as `elt`, for which the search macro 
   seeks a match (if found, the match is stored in `elt`). A match is determined
@@ -228,6 +240,7 @@ int main(int argc, char *argv[]) {
     /* now delete each element, use the safe iterator */
     DL_FOREACH_SAFE(head,elt,tmp) {
       DL_DELETE(head,elt);
+      free(elt);
     }
 
     fclose(file);
@@ -248,35 +261,43 @@ operates the same as its counterpart without the 2, but they take the name of
 the `prev` and `next` fields (as applicable) as trailing arguments.
 
 .Flexible field name macros
- LL_SORT2(list, cmp, next)
- DL_SORT2(list, cmp, prev, next)
- CDL_SORT2(list, cmp, prev, next)
- LL_PREPEND2(head,add,next)
- LL_CONCAT2(head1,head2,next)
- LL_APPEND2(head,add,next)
- LL_DELETE2(head,del,next)
- LL_FOREACH2(head,el,next)
- LL_FOREACH_SAFE2(head,el,tmp,next)
- LL_SEARCH_SCALAR2(head,out,field,val,next)
- LL_SEARCH2(head,out,elt,cmp,next)
- LL_COUNT(head,el,count);
- LL_COUNT2(head,el,count,next);
- DL_PREPEND2(head,add,prev,next)
- DL_APPEND2(head,add,prev,next)
- DL_CONCAT2(head1,head2,prev,next)
- DL_DELETE2(head,del,prev,next)
- DL_FOREACH2(head,el,next)
- DL_FOREACH_SAFE2(head,el,tmp,next)
- DL_COUNT(head,el,count);
- DL_COUNT2(head,el,count,next);
- CDL_PREPEND2(head,add,prev,next)
- CDL_DELETE2(head,del,prev,next)
- CDL_FOREACH2(head,el,next)
- CDL_FOREACH_SAFE2(head,el,tmp1,tmp2,prev,next)
- CDL_SEARCH_SCALAR2(head,out,field,val,next)
- CDL_SEARCH2(head,out,elt,cmp,next)
- CDL_COUNT(head,el,count);
- CDL_COUNT2(head,el,count,next);
+ LL_SORT2(list, cmp, next);
+ DL_SORT2(list, cmp, prev, next);
+ CDL_SORT2(list, cmp, prev, next);
+ LL_PREPEND2(head, add, next);
+ LL_PREPEND_ELEM2(head, ref, add, next);
+ LL_APPEND_ELEM2(head, ref, add, next);
+ LL_REPLACE_ELEM(head, del, add, next);
+ LL_CONCAT2(head1, head2, next);
+ LL_APPEND2(head, add, next);
+ LL_DELETE2(head, del, next);
+ LL_FOREACH2(head, elt, next) {...}
+ LL_FOREACH_SAFE2(head, elt, tmp, next) {...}
+ LL_SEARCH_SCALAR2(head, out, field, val, next);
+ LL_SEARCH2(head, out, elt, cmp, next);
+ LL_COUNT2(head, elt, count, next);
+ DL_PREPEND2(head, add, prev, next);
+ DL_PREPEND_ELEM2(head, ref, add, prev, next);
+ DL_APPEND_ELEM2(head, ref, add, prev, next);
+ DL_REPLACE_ELEM2(head, del, add, prev, next);
+ DL_CONCAT2(head1, head2, prev, next);
+ DL_APPEND2(head, add, prev, next);
+ DL_DELETE2(head, del, prev, next);
+ DL_FOREACH2(head, elt, next) {...}
+ DL_FOREACH_SAFE2(head, elt, tmp, next) {...}
+ DL_SEARCH_SCALAR2(head, out, field, val, next);
+ DL_COUNT2(head, elt, count, next);
+ CDL_PREPEND2(head, add, prev, next);
+ CDL_PREPEND_ELEM2(head, ref, add, prev, next);
+ CDL_APPEND_ELEM2(head, ref, add, prev, next);
+ CDL_REPLACE_ELEM2(head, del, add, prev, next);
+ CDL_APPEND2(head, add, prev, next);
+ CDL_DELETE2(head, del, prev, next);
+ CDL_FOREACH2(head, elt, next) {...}
+ CDL_FOREACH_SAFE2(head, elt, tmp1, tmp2, prev, next) {...}
+ CDL_SEARCH_SCALAR2(head, out, field, val, next);
+ CDL_SEARCH2(head, out, elt, cmp, next);
+ CDL_COUNT2(head, elt, count, next);
 
 // vim: set tw=80 wm=2 syntax=asciidoc: 
 

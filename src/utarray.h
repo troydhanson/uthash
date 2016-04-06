@@ -38,7 +38,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>  /* memset, etc */
 #include <stdlib.h>  /* exit */
 
+#ifndef oom
 #define oom() exit(-1)
+#endif
 
 typedef void (ctor_f)(void *dst, const void *src);
 typedef void (dtor_f)(void *elt);
@@ -86,8 +88,11 @@ typedef struct {
 
 #define utarray_reserve(a,by) do {                                            \
   if (((a)->i+(by)) > ((a)->n)) {                                             \
+    char *utarray_tmp;                                                        \
     while(((a)->i+(by)) > ((a)->n)) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }   \
-    if ( ((a)->d=(char*)realloc((a)->d, (a)->n*(a)->icd.sz)) == NULL) oom();  \
+    utarray_tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                   \
+    if (utarray_tmp == NULL) oom();                                           \
+    (a)->d=utarray_tmp;                                                       \
   }                                                                           \
 } while(0)
 

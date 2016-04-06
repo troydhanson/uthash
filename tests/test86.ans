@@ -1,0 +1,79 @@
+CDL appends
+a b c 
+count = 3
+Test CDL_PREPEND_ELEM d with elt NULL
+a b c d 
+Test CDL_PREPEND_ELEM e before item b
+a e b c d 
+Test CDL_APPEND_ELEM f with elt NULL
+f a e b c d 
+Test CDL_APPEND_ELEM g after item b
+f a e b g c d 
+count = 7
+advancing head pointer
+a e b g c d f 
+a e b g c d f a e b g c d f a e b g c d 
+a f d c g b e a f d 
+deleting (b)
+a e g c d f 
+deleting (a)
+e g c d f 
+deleting (c)
+e g d f 
+deleting (g)
+e d f 
+deleting (e)
+d f 
+deleting (d)
+f deleting (f)
+
+DL appends
+a b c 
+count = 3
+Test DL_PREPEND_ELEM d with elt NULL
+a b c d 
+Test DL_PREPEND_ELEM e before item b
+a e b c d 
+Test DL_APPEND_ELEM f with elt NULL
+f a e b c d 
+Test DL_APPEND_ELEM g after item b
+f a e b g c d 
+count = 7
+deleting (b)
+f a e g c d 
+deleting (a)
+f e g c d 
+deleting (c)
+f e g d 
+deleting (g)
+f e d 
+deleting (e)
+f d 
+deleting (d)
+f deleting (f)
+
+LL appends
+a b c 
+count = 3
+Test LL_PREPEND_ELEM d with elt NULL
+a b c d 
+Test LL_PREPEND_ELEM e before item b
+a e b c d 
+Test LL_APPEND_ELEM f with elt NULL
+f a e b c d 
+Test LL_APPEND_ELEM g after item b
+f a e b g c d 
+count = 7
+deleting (b)
+f a e g c d 
+deleting (a)
+f e g c d 
+deleting (c)
+f e g d 
+deleting (g)
+f e d 
+deleting (e)
+f d 
+deleting (d)
+f deleting (f)
+
