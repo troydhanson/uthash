@@ -14,3 +14,6 @@ test13: test utvector head/tail (utstring)
 test14: test utvector_shift (int)
 test15: test utvector_shift (utstring)
 test16: test utvector_elt
+test17: test utvector_erase
+test18: test utvector_erase
+test19: test utvector_erase

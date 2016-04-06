@@ -153,6 +153,18 @@ void utvector_shift(UT_vector *v) {
   utmm_init(&v->mm,b,1);
 }
 
+void utvector_erase(UT_vector *v, unsigned i) {
+  assert(v->i);
+  if (i >= v->i) return;
+  utmm_fini(&v->mm, v->d + (i * v->mm.sz), 1);
+  v->i--;
+  if (v->n - 1 > i) {
+    memmove(v->d + (i * v->mm.sz), v->d + ((i+1) * v->mm.sz), (((v->n-1) - i) * v->mm.sz));
+  }
+  char *b = v->d + ((v->n-1) * v->mm.sz);
+  utmm_init(&v->mm,b,1);
+}
+
 void *utvector_push(UT_vector *v, void *e) {
   void *b  = utvector_extend(v);
   utmm_copy(&v->mm, b, e, 1);
