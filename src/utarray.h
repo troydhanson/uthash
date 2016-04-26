@@ -78,6 +78,7 @@ typedef struct {
 
 #define utarray_new(a,_icd) do {                                              \
   a=(UT_array*)malloc(sizeof(UT_array));                                      \
+  if (a == NULL) oom();                                                       \
   utarray_init(a,_icd);                                                       \
 } while(0)
 
