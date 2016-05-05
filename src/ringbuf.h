@@ -16,11 +16,11 @@ typedef struct _ringbuf {
 } ringbuf;
 
 ringbuf *ringbuf_new(size_t sz);
-int ringbuf_put(ringbuf *, const void *data, size_t len);
-size_t ringbuf_get_pending_size(ringbuf *);
-size_t ringbuf_get_next_chunk(ringbuf *, char **data);
-void ringbuf_mark_consumed(ringbuf *, size_t);
-void ringbuf_free(ringbuf*);
-void ringbuf_clear(ringbuf*);
+int ringbuf_put(ringbuf *r, const void *data, size_t len);
+size_t ringbuf_get_pending_size(ringbuf *r);
+size_t ringbuf_get_next_chunk(ringbuf *r, char **data);
+void ringbuf_mark_consumed(ringbuf *r, size_t len);
+void ringbuf_free(ringbuf *r);
+void ringbuf_clear(ringbuf *r);
 
 #endif /* _RINGBUF_H_ */
