@@ -124,7 +124,7 @@ do {                                                             \
 _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list ap) {
    int n;
    va_list cp;
-   while (1) {
+   for (;;) {
 #ifdef _WIN32
       cp = ap;
 #else
