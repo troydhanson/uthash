@@ -18,7 +18,7 @@ utmm.o: src/utmm.c $(INCDIR)/utmm.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
 ringbuf.o: src/ringbuf.c $(INCDIR)/ringbuf.h
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
 .PHONY: clean tests install
 
