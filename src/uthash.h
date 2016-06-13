@@ -1,4 +1,4 @@
-/*
+;/*
 Copyright (c) 2003-2014, Troy D. Hanson     http://troydhanson.github.com/uthash/
 All rights reserved.
 
@@ -102,6 +102,8 @@ typedef unsigned char uint8_t;
 
 /* calculate the element whose hash handle address is hhe */
 #define ELMT_FROM_HH(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
+/* calculate the hash handle from element address elp */
+#define HH_FROM_ELMT(tbl,elp) ((UT_hash_handle *)(((char*)(elp)) + ((tbl)->hho)))
 
 #define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
 do {                                                                             \
@@ -170,32 +172,63 @@ do {                                                                            
 } while(0)
 
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
-        HASH_ADD_KEYPTR(hh,head,&((add)->fieldname),keylen_in,add)
+    HASH_SADD(hh,(head),fieldname,(keylen_in),(add),NULL)
+ 
+#define HASH_SADD(hh,head,fieldname,keylen_in,add,cmpfcn)                        \
+    HASH_SADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add),(cmpfcn))
 
 #define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
 do {                                                                             \
-  replaced=NULL;                                                                 \
-  HASH_FIND(hh,head,&((add)->fieldname),keylen_in,replaced);                     \
-  if (replaced!=NULL) {                                                          \
-     HASH_DELETE(hh,head,replaced);                                              \
+  (replaced)=NULL;                                                               \
+  HASH_FIND(hh,(head),&((add)->fieldname),(keylen_in),(replaced));               \
+  if ((replaced)!=NULL) {                                                        \
+     HASH_DELETE(hh,(head),(replaced));                                          \
   }                                                                              \
-  HASH_ADD(hh,head,fieldname,keylen_in,add);                                     \
+  HASH_ADD(hh,(head),fieldname,(keylen_in),(add));                               \
 } while(0)
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
+    HASH_SADD_KEYPTR(hh,(head),(keyptr),(keylen_in),(add),NULL)
+
+#define HASH_APPEND_LIST(hh, head, add)                                          \
+do {                                                                             \
+  (add)->hh.next = NULL;                                                         \
+  (add)->hh.prev = ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail);           \
+  (head)->hh.tbl->tail->next = (add);                                            \
+  (head)->hh.tbl->tail = &((add)->hh);                                           \
+} while(0)
+
+
+#define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
 do {                                                                             \
  unsigned _ha_bkt;                                                               \
- (add)->hh.next = NULL;                                                          \
  (add)->hh.key = (char*)(keyptr);                                                \
  (add)->hh.keylen = (unsigned)(keylen_in);                                       \
  if (!(head)) {                                                                  \
-    head = (add);                                                                \
-    (head)->hh.prev = NULL;                                                      \
+    (add)->hh.next = NULL;                                                       \
+    (add)->hh.prev = NULL;                                                       \
+    (head) = (add);                                                              \
     HASH_MAKE_TABLE(hh,head);                                                    \
  } else {                                                                        \
-    (head)->hh.tbl->tail->next = (add);                                          \
-    (add)->hh.prev = ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail);         \
-    (head)->hh.tbl->tail = &((add)->hh);                                         \
+    if (cmpfcn) {                                                                \
+      struct UT_hash_handle *iter = &(head)->hh;                                 \
+      do {                                                                       \
+        if(((int (*)(void *a, void *b)) (cmpfcn))(ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0) \
+          break;                                                                 \
+      } while((iter = iter->next));                                              \
+      if(iter) {                                                                 \
+        (add)->hh.next = iter;                                                   \
+        if(((add)->hh.prev = iter->prev))                                        \
+          HH_FROM_ELMT((head)->hh.tbl, iter->prev)->next = add;                  \
+        else                                                                     \
+          (head) = (add);                                                        \
+        iter->prev = add;                                                        \
+      }                                                                          \
+      else                                                                       \
+        HASH_APPEND_LIST(hh, (head), (add));                                     \
+    }                                                                            \
+    else                                                                         \
+      HASH_APPEND_LIST(hh, (head), (add));                                       \
  }                                                                               \
  (head)->hh.tbl->num_items++;                                                    \
  (add)->hh.tbl = (head)->hh.tbl;                                                 \
