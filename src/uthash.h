@@ -219,8 +219,8 @@ do {                                                                            
 
 #define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
     HASH_ADD_PREAMBLE(hh,(head),(keyptr),(keylen_in),(add))                      \
-    (add)->hh.tbl = (head)->hh.tbl;                                              \
     struct UT_hash_handle *iter = &(head)->hh;                                   \
+    (add)->hh.tbl = (head)->hh.tbl;                                              \
     do {                                                                         \
       if(cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0)     \
         break;                                                                   \
