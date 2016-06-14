@@ -203,8 +203,7 @@ do {                                                                            
     add->hh.prev = NULL;                                                         \
     head = add;                                                                  \
     HASH_MAKE_TABLE(hh,head);                                                    \
- } else {                                                                        \
-   add->hh.tbl = head->hh.tbl;
+ } else {
 
 #define HASH_ADD_EPILOGUE(hh,head,keyptr,keylen_in,add)                          \
       HASH_APPEND_LIST(hh, head, add);                                           \
@@ -220,6 +219,7 @@ do {                                                                            
 
 #define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
     HASH_ADD_PREAMBLE(hh,(head),(keyptr),(keylen_in),(add))                      \
+    (add)->hh.tbl = (head)->hh.tbl;                                              \
     struct UT_hash_handle *iter = &(head)->hh;                                   \
     do {                                                                         \
       if(cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0)     \
@@ -241,6 +241,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
     HASH_ADD_PREAMBLE(hh,(head),(keyptr),(keylen_in),(add))                      \
+    (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(add))
 
 #define HASH_TO_BKT( hashv, num_bkts, bkt )                                      \
