@@ -214,7 +214,7 @@ do {                                                                            
     if (cmpfcn) {                                                                \
       struct UT_hash_handle *iter = &(head)->hh;                                 \
       do {                                                                       \
-        if(((int (*)(void *a, void *b)) (cmpfcn))(ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0) \
+        if((cmpfcn)(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0) \
           break;                                                                 \
       } while((iter = iter->next));                                              \
       if(iter) {                                                                 \
