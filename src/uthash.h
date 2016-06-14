@@ -210,6 +210,7 @@ do {                                                                            
     (head) = (add);                                                              \
     HASH_MAKE_TABLE(hh,head);                                                    \
  } else {                                                                        \
+   (add)->hh.tbl = (head)->hh.tbl;                                               \
     if (cmpfcn) {                                                                \
       struct UT_hash_handle *iter = &(head)->hh;                                 \
       do {                                                                       \
@@ -231,7 +232,6 @@ do {                                                                            
       HASH_APPEND_LIST(hh, (head), (add));                                       \
  }                                                                               \
  (head)->hh.tbl->num_items++;                                                    \
- (add)->hh.tbl = (head)->hh.tbl;                                                 \
  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
          (add)->hh.hashv, _ha_bkt);                                              \
  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt],&(add)->hh);                   \
