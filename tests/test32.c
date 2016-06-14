@@ -10,10 +10,10 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-static int namecmp(el *a, el *b)
+/* static int namecmp(el *a, el *b)
 {
     return strcmp(a->bname,b->bname);
-}
+} */
 
 int main(int argc, char *argv[])
 {

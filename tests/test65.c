@@ -16,6 +16,7 @@ struct CacheEntry {
 };
 struct CacheEntry *cache = NULL;
 
+#if 0
 static char * /*value*/ find_in_cache(const char *key)
 {
     struct CacheEntry *entry;
@@ -28,6 +29,7 @@ static char * /*value*/ find_in_cache(const char *key)
     }
     return NULL;
 }
+#endif
 
 static void add_to_cache(const char *key, const char *value)
 {
