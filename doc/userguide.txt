@@ -370,7 +370,7 @@ The hash table pointer (which initially points to the first item added to the
 hash) can change in response to `HASH_DEL` (i.e. if you delete the first item
 in the hash table).
 
-Iteractive deletion
+Iterative deletion
 ^^^^^^^^^^^^^^^^^^
 The `HASH_ITER` macro is a deletion-safe iteration construct which expands
 to a simple 'for' loop.
