@@ -71,6 +71,9 @@ all: $(PROGS) $(UTILS) $(PLAT_UTILS) $(FUNCS) $(SPECIAL_FUNCS) $(TEST_TARGET)
 
 tests_only: $(PROGS) $(TEST_TARGET)
 
+.gitignore:
+	[ -f "$@" ] || echo "$@" > $@
+
 debug:
 	$(MAKE) all HASH_DEBUG=1
 
@@ -83,14 +86,17 @@ cplusplus:
 example: example.c $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
-$(PROGS) $(UTILS) : $(HASHDIR)/uthash.h
+$(PROGS) $(UTILS) : $(HASHDIR)/uthash.h .gitignore
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	@grep -q '^\$@$$' .gitignore || echo "$@" >> .gitignore
 
 hashscan : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	@grep -q '^\$@$$' .gitignore || echo "$@" >> .gitignore
 
 sleep_test : $(HASHDIR)/uthash.h 
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
+	@grep -q '^\$@$$' .gitignore || echo "$@" >> .gitignore
 
 $(FUNCS) : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_$@ \
@@ -111,6 +117,8 @@ astyle:
 
 .PHONY: clean astyle
 
+.INTERMEDIATE: .gitignore
+
 clean:	
-	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe
+	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe .gitignore
 	rm -rf *.dSYM
