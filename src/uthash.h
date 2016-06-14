@@ -171,11 +171,8 @@ do {                                                                            
   (head)->hh.tbl->signature = HASH_SIGNATURE;                                    \
 } while(0)
 
-#define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
-    HASH_SADD(hh,(head),fieldname,(keylen_in),(add),NULL)
- 
 #define HASH_SADD(hh,head,fieldname,keylen_in,add,cmpfcn)                        \
-    HASH_SADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add),(cmpfcn))
+    HASH_SADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add),cmpfcn)
 
 #define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
 do {                                                                             \
@@ -187,9 +184,6 @@ do {                                                                            
   HASH_ADD(hh,(head),fieldname,(keylen_in),(add));                               \
 } while(0)
 
-#define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
-    HASH_SADD_KEYPTR(hh,(head),(keyptr),(keylen_in),(add),NULL)
-
 #define HASH_APPEND_LIST(hh, head, add)                                          \
 do {                                                                             \
   (add)->hh.next = NULL;                                                         \
@@ -199,46 +193,55 @@ do {                                                                            
 } while(0)
 
 
-#define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
+#define HASH_ADD_PREAMBLE(hh,head,keyptr,keylen_in,add)                          \
 do {                                                                             \
  unsigned _ha_bkt;                                                               \
- (add)->hh.key = (char*)(keyptr);                                                \
- (add)->hh.keylen = (unsigned)(keylen_in);                                       \
- if (!(head)) {                                                                  \
-    (add)->hh.next = NULL;                                                       \
-    (add)->hh.prev = NULL;                                                       \
-    (head) = (add);                                                              \
+ add->hh.key = (char*) keyptr;                                                   \
+ add->hh.keylen = (unsigned) keylen_in;                                          \
+ if (!head) {                                                                    \
+    add->hh.next = NULL;                                                         \
+    add->hh.prev = NULL;                                                         \
+    head = add;                                                                  \
     HASH_MAKE_TABLE(hh,head);                                                    \
  } else {                                                                        \
-   (add)->hh.tbl = (head)->hh.tbl;                                               \
-    if (cmpfcn) {                                                                \
-      struct UT_hash_handle *iter = &(head)->hh;                                 \
-      do {                                                                       \
-        if((cmpfcn)(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0) \
-          break;                                                                 \
-      } while((iter = iter->next));                                              \
-      if(iter) {                                                                 \
-        (add)->hh.next = iter;                                                   \
-        if(((add)->hh.prev = iter->prev))                                        \
-          HH_FROM_ELMT((head)->hh.tbl, iter->prev)->next = add;                  \
-        else                                                                     \
-          (head) = (add);                                                        \
-        iter->prev = add;                                                        \
-      }                                                                          \
-      else                                                                       \
-        HASH_APPEND_LIST(hh, (head), (add));                                     \
-    }                                                                            \
-    else                                                                         \
-      HASH_APPEND_LIST(hh, (head), (add));                                       \
+   add->hh.tbl = head->hh.tbl;
+
+#define HASH_ADD_EPILOGUE(hh,head,keyptr,keylen_in,add)                          \
+      HASH_APPEND_LIST(hh, head, add);                                           \
  }                                                                               \
- (head)->hh.tbl->num_items++;                                                    \
- HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
-         (add)->hh.hashv, _ha_bkt);                                              \
- HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt],&(add)->hh);                   \
- HASH_BLOOM_ADD((head)->hh.tbl,(add)->hh.hashv);                                 \
+ head->hh.tbl->num_items++;                                                      \
+ HASH_FCN(keyptr,keylen_in, head->hh.tbl->num_buckets,                           \
+         add->hh.hashv, _ha_bkt);                                                \
+ HASH_ADD_TO_BKT(head->hh.tbl->buckets[_ha_bkt],&add->hh);                       \
+ HASH_BLOOM_ADD(head->hh.tbl,add->hh.hashv);                                     \
  HASH_EMIT_KEY(hh,head,keyptr,keylen_in);                                        \
  HASH_FSCK(hh,head);                                                             \
 } while(0)
+
+#define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
+    HASH_ADD_PREAMBLE(hh,(head),(keyptr),(keylen_in),(add))                      \
+    struct UT_hash_handle *iter = &(head)->hh;                                   \
+    do {                                                                         \
+      if(cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0)     \
+        break;                                                                   \
+    } while((iter = iter->next));                                                \
+    if(iter) {                                                                   \
+      (add)->hh.next = iter;                                                     \
+      if(((add)->hh.prev = iter->prev))                                          \
+        HH_FROM_ELMT((head)->hh.tbl, iter->prev)->next = add;                    \
+      else                                                                       \
+        (head) = (add);                                                          \
+      iter->prev = add;                                                          \
+    }                                                                            \
+    else                                                                         \
+      HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(add))
+
+#define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
+    HASH_ADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add))
+
+#define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
+    HASH_ADD_PREAMBLE(hh,(head),(keyptr),(keylen_in),(add))                      \
+    HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(add))
 
 #define HASH_TO_BKT( hashv, num_bkts, bkt )                                      \
 do {                                                                             \
