@@ -103,12 +103,31 @@ typedef unsigned char uint8_t;
 /* calculate the element whose hash handle address is hhe */
 #define ELMT_FROM_HH(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
 
+#define HASH_VALUE(keyptr,keylen,hashv)                                          \
+do {                                                                             \
+ unsigned _hf_bkt;                                                               \
+ HASH_FCN(keyptr,keylen,1,hashv,_hf_bkt);                                        \
+} while (0)
+
 #define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
 do {                                                                             \
   out=NULL;                                                                      \
   if (head != NULL) {                                                            \
      unsigned _hf_bkt,_hf_hashv;                                                 \
      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+     if (HASH_BLOOM_TEST((head)->hh.tbl, _hf_hashv) != 0) {                      \
+       HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ],  \
+                        keyptr,keylen,out);                                      \
+     }                                                                           \
+  }                                                                              \
+} while (0)
+
+#define HASH_FIND_BY_HASH_VALUE(hh,head,keyptr,keylen,_hf_hashv,out)             \
+do {                                                                             \
+  out=NULL;                                                                      \
+  if (head != NULL) {                                                            \
+     unsigned _hf_bkt;                                                           \
+     HASH_TO_BKT(_hf_hashv, (head)->hh.tbl->num_buckets, _hf_bkt);               \
      if (HASH_BLOOM_TEST((head)->hh.tbl, _hf_hashv) != 0) {                      \
        HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ],  \
                         keyptr,keylen,out);                                      \
@@ -172,14 +191,24 @@ do {                                                                            
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
         HASH_ADD_KEYPTR(hh,head,&((add)->fieldname),keylen_in,add)
 
+#define HASH_ADD_BY_HASH_VALUE(hh,head,fieldname,keylen_in,hashval,add)          \
+        HASH_ADD_KEYPTR_BY_HASH_VALUE(hh,head,&((add)->fieldname),keylen_in,hashval,add)
+
 #define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
 do {                                                                             \
+  unsigned _hr_hashv;                                                            \
+  HASH_VALUE(&((add)->fieldname), keylen_in, _hr_hashv);                         \
+  HASH_REPLACE_BY_HASH_VALUE(hh,head,fieldname,keylen_in,_hr_hashv,add,replaced);\
+} while(0)
+
+#define HASH_REPLACE_BY_HASH_VALUE(hh,head,fieldname,keylen_in,hashval,add,replaced) \
+do {                                                                             \
   replaced=NULL;                                                                 \
-  HASH_FIND(hh,head,&((add)->fieldname),keylen_in,replaced);                     \
+  HASH_FIND_BY_HASH_VALUE(hh,head,&((add)->fieldname),keylen_in,hashval,replaced); \
   if (replaced!=NULL) {                                                          \
      HASH_DELETE(hh,head,replaced);                                              \
   }                                                                              \
-  HASH_ADD(hh,head,fieldname,keylen_in,add);                                     \
+  HASH_ADD_BY_HASH_VALUE(hh,head,fieldname,keylen_in,hashval,add);               \
 } while(0)
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
@@ -203,6 +232,31 @@ do {                                                                            
          (add)->hh.hashv, _ha_bkt);                                              \
  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt],&(add)->hh);                   \
  HASH_BLOOM_ADD((head)->hh.tbl,(add)->hh.hashv);                                 \
+ HASH_EMIT_KEY(hh,head,keyptr,keylen_in);                                        \
+ HASH_FSCK(hh,head);                                                             \
+} while(0)
+
+#define HASH_ADD_KEYPTR_BY_HASH_VALUE(hh,head,keyptr,keylen_in,hashval,add)      \
+do {                                                                             \
+ unsigned _ha_bkt;                                                               \
+ (add)->hh.next = NULL;                                                          \
+ (add)->hh.key = (char*)(keyptr);                                                \
+ (add)->hh.keylen = (unsigned)(keylen_in);                                       \
+ if (!(head)) {                                                                  \
+    head = (add);                                                                \
+    (head)->hh.prev = NULL;                                                      \
+    HASH_MAKE_TABLE(hh,head);                                                    \
+ } else {                                                                        \
+    (head)->hh.tbl->tail->next = (add);                                          \
+    (add)->hh.prev = ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail);         \
+    (head)->hh.tbl->tail = &((add)->hh);                                         \
+ }                                                                               \
+ (head)->hh.tbl->num_items++;                                                    \
+ (add)->hh.tbl = (head)->hh.tbl;                                                 \
+ (add)->hh.hashv = hashval;                                                      \
+ HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                     \
+ HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt],&(add)->hh);                   \
+ HASH_BLOOM_ADD((head)->hh.tbl,hashval);                                         \
  HASH_EMIT_KEY(hh,head,keyptr,keylen_in);                                        \
  HASH_FSCK(hh,head);                                                             \
 } while(0)
