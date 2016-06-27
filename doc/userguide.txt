@@ -1141,6 +1141,33 @@ always used with the `users_by_name` hash table).
 ----------------------------------------------------------------------
 
 
+Sorted insertion of new items
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you would like to maintain a sorted hash you have two options. The first
+option is to use the HASH_SRT() macro, which will sort any unordered list in
+'O(n log(n))'. This is the best strategy if you're just filling up a hash
+table with items in random order with a single final HASH_SRT() operation
+when all is done. Obviously, this won't do what you want if you need
+the list to be in an ordered state at times between insertion of
+items. You can use HASH_SRT() after every insertion operation, but that will
+yield a computational complexity of 'O(n^2 log(n)'.
+
+The second route you can take is via the sorted add macros.
+The HASH_SADD*() macros work just like their HASH_ADD*() counterparts, but
+with an additional compare function argument:
+
+  int name_sort(struct my_struct *a, struct my_struct *b) {
+    return strcmp(a->name,b->name);
+  }
+
+  HASH_SADD_KEYPTR(hh, items, &item->name, strlen(item->name), item, name_sort);
+
+New items are sorted at insertion time in 'O(n)', thus resulting in a
+total computational complexity of 'O(n^2)' for the creation of the hash
+table with all items.
+For sorted add to work, the list must be in an ordered state before
+insertion of the new item.
+
 Several sort orders
 ~~~~~~~~~~~~~~~~~~~
 It comes as no surprise that two hash tables can have different sort orders, but
@@ -1500,7 +1527,7 @@ ineffective at reducing the chain lengths.
 Imagine a very bad hash function which always puts every item in bucket 0. No
 matter how many times the number of buckets is doubled, the chain length of
 bucket 0 stays the same. In a situation like this, the best behavior is to 
-stop expanding, and accept O(n) lookup performance. This is what uthash
+stop expanding, and accept 'O(n)' lookup performance. This is what uthash
 does. It degrades gracefully if the hash function is ill-suited to the keys.
 
 If two consecutive bucket expansions yield `ideal%` values below 50%, uthash
@@ -1712,23 +1739,27 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 .General macros
 [width="90%",cols="10m,30m",grid="none",options="header"]
 |===============================================================================
-|macro                        | arguments
-|HASH_ADD                     | (hh_name, head, keyfield_name, key_len, item_ptr)
-|HASH_ADD_BY_HASH_VALUE       | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
-|HASH_ADD_KEYPTR              | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_ADD_KEYPTR_BY_HASH_VALUE| (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_REPLACE                 | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_BY_HASH_VALUE   | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
-|HASH_FIND                    | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_FIND_BY_HASH_VALUE      | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_DELETE                  | (hh_name, head, item_ptr)
-|HASH_VALUE                   | (key_ptr, key_len, key_hash)
-|HASH_SRT                     | (hh_name, head, cmp)
-|HASH_CNT                     | (hh_name, head)
-|HASH_CLEAR                   | (hh_name, head)
-|HASH_SELECT                  | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
-|HASH_ITER                    | (hh_name, head, item_ptr, tmp_item_ptr)
-|HASH_OVERHEAD                | (hh_name, head)
+|macro                    | arguments
+|HASH_ADD                 | (hh_name, head, keyfield_name, key_len, item_ptr)
+|HASH_ADD_BY_HVAL         | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
+|HASH_ADD_KEYPTR          | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_ADD_KEYPTR_BY_HVAL  | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_SADD                | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
+|HASH_SADD_BY_HVAL        | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)
+|HASH_SADD_KEYPTR         | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
+|HASH_SADD_KEYPTR_BY_HVAL | (hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)
+|HASH_REPLACE             | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_BY_HVAL     | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
+|HASH_FIND                | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_FIND_BY_HVAL        | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_DELETE              | (hh_name, head, item_ptr)
+|HASH_VALUE               | (key_ptr, key_len, key_hash)
+|HASH_SRT                 | (hh_name, head, cmp)
+|HASH_CNT                 | (hh_name, head)
+|HASH_CLEAR               | (hh_name, head)
+|HASH_SELECT              | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
+|HASH_ITER                | (hh_name, head, item_ptr, tmp_item_ptr)
+|HASH_OVERHEAD            | (hh_name, head)
 |===============================================================================
 
 [NOTE]
@@ -1759,7 +1790,7 @@ key_ptr::
     `HASH_ADD_KEYPTR`, this is the address of the key of the item being added.
 key_hash::
     the hash value of the provided key. This is an input parameter for the
-    `..._BY_HASH_VALUE` macros, and an output parameter for `HASH_VALUE`.
+    `..._BY_HVAL` macros, and an output parameter for `HASH_VALUE`.
     Reusing a cached hash value can be a performance optimization if
     you're going to do repeated lookups for the same key.
 item_ptr::

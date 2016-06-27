@@ -13,7 +13,7 @@ PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test58 test59 test60 test61 test62 test63 test64 test65 \
         test66 test67 test68 test69 test70 test71 test72 test73 \
         test74 test75 test76 test77 test78 test79 test80 test81 \
-        test82 test83 test84 test85 test86
+        test82 test83 test84 test85 test86 test87
 CFLAGS += -I$(HASHDIR)
 #CFLAGS += -DHASH_BLOOM=16
 #CFLAGS += -O2
@@ -71,6 +71,9 @@ all: $(PROGS) $(UTILS) $(PLAT_UTILS) $(FUNCS) $(SPECIAL_FUNCS) $(TEST_TARGET)
 
 tests_only: $(PROGS) $(TEST_TARGET)
 
+GITIGN = .gitignore
+MKGITIGN = [ -f "$(GITIGN)" ] || echo "$(GITIGN)" > $(GITIGN); grep -q '^\$@$$' $(GITIGN) || echo "$@" >> $(GITIGN)
+
 debug:
 	$(MAKE) all HASH_DEBUG=1
 
@@ -85,12 +88,15 @@ example: example.c $(HASHDIR)/uthash.h
 
 $(PROGS) $(UTILS) : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	@$(MKGITIGN)
 
 hashscan : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	@$(MKGITIGN)
 
 sleep_test : $(HASHDIR)/uthash.h 
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
+	@$(MKGITIGN)
 
 $(FUNCS) : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_$@ \
@@ -112,5 +118,5 @@ astyle:
 .PHONY: clean astyle
 
 clean:	
-	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe
+	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe $(GITIGN)
 	rm -rf *.dSYM
