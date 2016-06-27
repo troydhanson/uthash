@@ -16,21 +16,6 @@ struct CacheEntry {
 };
 struct CacheEntry *cache = NULL;
 
-#if 0
-static char * /*value*/ find_in_cache(const char *key)
-{
-    struct CacheEntry *entry;
-    HASH_FIND_STR(cache, key, entry);
-    if (entry != NULL) {
-        // remove it (so the subsequent add will throw it on the front of the list)
-        HASH_DELETE(hh, cache, entry);
-        HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
-        return entry->value;
-    }
-    return NULL;
-}
-#endif
-
 static void add_to_cache(const char *key, const char *value)
 {
     struct CacheEntry *entry, *tmp_entry;

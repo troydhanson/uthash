@@ -193,7 +193,7 @@ do {                                                                            
 #define HASH_SADD(hh,head,fieldname,keylen_in,add,cmpfcn)                        \
     HASH_SADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add),cmpfcn)
 
-#define HASH_SADD_BYHVAL(hh,head,fieldname,keylen_in,hashval,add,cmpfcn)         \
+#define HASH_SADD_BY_HVAL(hh,head,fieldname,keylen_in,hashval,add,cmpfcn)        \
     HASH_SADD_KEYPTR_BY_HVAL(hh,(head),&((add)->fieldname),                      \
                              (keylen_in),(add),cmpfcn)
 
@@ -250,9 +250,9 @@ do {                                                                            
   HASH_FSCK(hh,head);                                                            \
 } while(0)
 
-#define GHV_DIRECT(hh, add, hashval)                                             \
+#define HASH_GHV_DIRECT(hh, add, hashval)                                        \
   (add)->hh.hashv = (hashval)
-#define GHV_COMPUTE(hh, keyptr, keylen_in, add)                                  \
+#define HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add)                             \
   HASH_FCN((keyptr), (keylen_in), (add)->hh.hashv)
 
 #define HASH_ADD_SORTED(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
@@ -276,12 +276,12 @@ do {                                                                            
 
 #define HASH_SADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)    \
 do { unsigned _ha_bkt;                                                           \
-    GHV_DIRECT(hh, add, hashval);                                                \
+    HASH_GHV_DIRECT(hh, add, hashval);                                           \
     HASH_ADD_SORTED(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)                 \
 
 #define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
 do { unsigned _ha_bkt;                                                           \
-    GHV_COMPUTE(hh, keyptr, keylen_in, add);                                     \
+    HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add);                                \
     HASH_ADD_SORTED(hh,head,keyptr,keylen_in,(add)->hh.hashv,add,cmpfcn)
 
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
@@ -289,14 +289,14 @@ do { unsigned _ha_bkt;                                                          
 
 #define HASH_ADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add)            \
 do { unsigned _ha_bkt;                                                           \
-    GHV_DIRECT(hh, add, hashval);                                                \
+    HASH_GHV_DIRECT(hh, add, hashval);                                           \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),hashval,(add))
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
 do { unsigned _ha_bkt;                                                           \
-    GHV_COMPUTE(hh, keyptr, keylen_in, add);                                     \
+    HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add);                                \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(add)->hh.hashv,(add))
