@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     if(replaced == NULL) {
         printf("added %d %d\n",tmp->id,tmp->tag);
     } else {
-        printf("ERROR, ended up replacing a value, replaced: %p\n",replaced);
+        printf("ERROR, ended up replacing a value, replaced: %p\n",(void*)replaced);
     }
 
     pr(&hs_head);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     if(replaced == NULL) {
         printf("added %d %d\n",tmp->id,tmp->tag);
     } else {
-        printf("ERROR, ended up replacing a value, replaced: %p\n",replaced);
+        printf("ERROR, ended up replacing a value, replaced: %p\n",(void*)replaced);
     }
 
     pr(&hs_head);
