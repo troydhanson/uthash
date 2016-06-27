@@ -2871,7 +2871,7 @@ cellspacing="0" cellpadding="4">
 <col width="75%" />
 <thead>
 <tr>
-<th align="left" valign="top">macro            </th>
+<th align="left" valign="top">macro                    </th>
 <th align="left" valign="top"> arguments</th>
 </tr>
 </thead>
@@ -2881,28 +2881,56 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr)</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr)</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_SADD</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>HASH_SADD_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>HASH_SADD_KEYPTR</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr, cmp)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_SADD_KEYPTR_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr)</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>HASH_FIND_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>HASH_DELETE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_VALUE</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(key_ptr, key_len, key_hash)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_SRT</code></p></td>
@@ -2993,6 +3021,17 @@ key_ptr
 </p>
 </dd>
 <dt class="hdlist1">
+key_hash
+</dt>
+<dd>
+<p>
+    the hash value of the provided key. This is an input parameter for the
+    <code>..._BY_HVAL</code> macros, and an output parameter for <code>HASH_VALUE</code>.
+    Reusing a cached hash value can be a performance optimization if
+    you&#8217;re going to do repeated lookups for the same key.
+</p>
+</dd>
+<dt class="hdlist1">
 item_ptr
 </dt>
 <dd>
@@ -3045,7 +3084,7 @@ condition
 <div id="footer-text">
 Version 1.9.9<br />
 Last updated
- 2016-06-14 22:39:27 CEST
+ 2016-06-27 23:50:31 CEST
 </div>
 </div>
 </body>
