@@ -1712,23 +1712,18 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 .General macros
 [width="90%",cols="10m,30m",grid="none",options="header"]
 |===============================================================================
-|macro                        | arguments
-|HASH_ADD                     | (hh_name, head, keyfield_name, key_len, item_ptr)
-|HASH_ADD_BY_HASH_VALUE       | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
-|HASH_ADD_KEYPTR              | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_ADD_KEYPTR_BY_HASH_VALUE| (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_REPLACE                 | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_BY_HASH_VALUE   | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
-|HASH_FIND                    | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_FIND_BY_HASH_VALUE      | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_DELETE                  | (hh_name, head, item_ptr)
-|HASH_VALUE                   | (key_ptr, key_len, key_hash)
-|HASH_SRT                     | (hh_name, head, cmp)
-|HASH_CNT                     | (hh_name, head)
-|HASH_CLEAR                   | (hh_name, head)
-|HASH_SELECT                  | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
-|HASH_ITER                    | (hh_name, head, item_ptr, tmp_item_ptr)
-|HASH_OVERHEAD                | (hh_name, head)
+|macro          | arguments
+|HASH_ADD       | (hh_name, head, keyfield_name, key_len, item_ptr)
+|HASH_ADD_KEYPTR| (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_REPLACE   | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
+|HASH_FIND      | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_DELETE    | (hh_name, head, item_ptr)
+|HASH_SRT       | (hh_name, head, cmp)
+|HASH_CNT       | (hh_name, head)
+|HASH_CLEAR     | (hh_name, head)
+|HASH_SELECT    | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
+|HASH_ITER      | (hh_name, head, item_ptr, tmp_item_ptr)
+|HASH_OVERHEAD  | (hh_name, head)
 |===============================================================================
 
 [NOTE]
@@ -1757,11 +1752,6 @@ key_ptr::
     for `HASH_FIND`, this is a pointer to the key to look up in the hash
     (since it's a pointer, you can't directly pass a literal value here). For
     `HASH_ADD_KEYPTR`, this is the address of the key of the item being added.
-key_hash::
-    the hash value of the provided key. This is an input parameter for the
-    `..._BY_HASH_VALUE` macros, and an output parameter for `HASH_VALUE`.
-    Reusing a cached hash value can be a performance optimization if
-    you're going to do repeated lookups for the same key.
 item_ptr::
     pointer to the structure being added, deleted, or looked up, or the current
     pointer during iteration. This is an input parameter for `HASH_ADD` and
