@@ -87,14 +87,14 @@ typedef struct {
   free(a);                                                                    \
 } while(0)
 
-#define utarray_reserve(a,by) do {                                            \
-  if (((a)->i+(by)) > ((a)->n)) {                                             \
-    char *utarray_tmp;                                                        \
-    while(((a)->i+(by)) > ((a)->n)) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }   \
-    utarray_tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                   \
-    if (utarray_tmp == NULL) oom();                                           \
-    (a)->d=utarray_tmp;                                                       \
-  }                                                                           \
+#define utarray_reserve(a,by) do {                                                        \
+  if (((a)->i+((unsigned)(by))) > ((a)->n)) {                                             \
+    char *utarray_tmp;                                                                    \
+    while(((a)->i+((unsigned)(by))) > ((a)->n)) { (a)->n = ((a)->n ? (2u*(a)->n) : 8u); } \
+    utarray_tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                               \
+    if (utarray_tmp == NULL) oom();                                                       \
+    (a)->d=utarray_tmp;                                                                   \
+  }                                                                                       \
 } while(0)
 
 #define utarray_push_back(a,p) do {                                           \
@@ -115,31 +115,31 @@ typedef struct {
   (a)->i++;                                                                   \
 } while(0)
 
-#define utarray_len(a) ((a)->i)
+#define utarray_len(a) ((size_t)((a)->i))
 
-#define utarray_eltptr(a,j) (((j) < (a)->i) ? _utarray_eltptr(a,j) : NULL)
+#define utarray_eltptr(a,j) ((((unsigned)(j)) < (a)->i) ? _utarray_eltptr(a,((unsigned)(j))) : NULL)
 #define _utarray_eltptr(a,j) ((char*)((a)->d + ((a)->icd.sz*(j) )))
 
-#define utarray_insert(a,p,j) do {                                            \
-  if (j > (a)->i) utarray_resize(a,j);                                        \
-  utarray_reserve(a,1);                                                       \
-  if ((j) < (a)->i) {                                                         \
-    memmove( _utarray_eltptr(a,(j)+1), _utarray_eltptr(a,j),                  \
-             ((a)->i - (j))*((a)->icd.sz));                                   \
-  }                                                                           \
-  if ((a)->icd.copy) { (a)->icd.copy( _utarray_eltptr(a,j), p); }             \
-  else { memcpy(_utarray_eltptr(a,j), p, (a)->icd.sz); };                     \
-  (a)->i++;                                                                   \
+#define utarray_insert(a,p,j) do {                                                        \
+  if (((unsigned)(j)) > (a)->i) utarray_resize(a,((unsigned)(j)));                        \
+  utarray_reserve(a,1u);                                                                  \
+  if (((unsigned)(j)) < (a)->i) {                                                         \
+    memmove( _utarray_eltptr(a,(((unsigned)(j))+1u)), _utarray_eltptr(a,((unsigned)(j))), \
+             ((a)->i - ((unsigned)(j)))*((a)->icd.sz));                                   \
+  }                                                                                       \
+  if ((a)->icd.copy) { (a)->icd.copy( _utarray_eltptr(a,((unsigned)(j))), p); }           \
+  else { memcpy(_utarray_eltptr(a,((unsigned)(j))), p, (a)->icd.sz); };                   \
+  (a)->i++;                                                                               \
 } while(0)
 
-#define utarray_inserta(a,w,j) do {                                           \
-  if (utarray_len(w) == 0) break;                                             \
-  if (j > (a)->i) utarray_resize(a,j);                                        \
-  utarray_reserve(a,utarray_len(w));                                          \
-  if ((j) < (a)->i) {                                                         \
-    memmove(_utarray_eltptr(a,(j)+utarray_len(w)),                            \
-            _utarray_eltptr(a,j),                                             \
-            ((a)->i - (j))*((a)->icd.sz));                                    \
+#define utarray_inserta(a,w,j) do {                                \
+  if (utarray_len(w) == 0) break;                                  \
+  if (((unsigned)(j)) > (a)->i) utarray_resize(a,((unsigned)(j))); \
+  utarray_reserve(a,utarray_len(w));                               \
+  if (((unsigned)(j)) < (a)->i) {                                  \
+    memmove(_utarray_eltptr(a,((unsigned)(j))+utarray_len(w)),     \
+            _utarray_eltptr(a,((unsigned)(j))),                    \
+            ((a)->i - ((unsigned)(j)))*((a)->icd.sz));             \
   }                                                                           \
   if ((a)->icd.copy) {                                                        \
     size_t _ut_i;                                                             \
@@ -153,43 +153,43 @@ typedef struct {
   (a)->i += utarray_len(w);                                                   \
 } while(0)
 
-#define utarray_resize(dst,num) do {                                          \
-  size_t _ut_i;                                                               \
-  if (dst->i > (size_t)(num)) {                                               \
-    if ((dst)->icd.dtor) {                                                    \
-      for(_ut_i=num; _ut_i < dst->i; _ut_i++) {                               \
-        (dst)->icd.dtor(utarray_eltptr(dst,_ut_i));                           \
-      }                                                                       \
-    }                                                                         \
-  } else if (dst->i < (size_t)(num)) {                                        \
-    utarray_reserve(dst,num-dst->i);                                          \
-    if ((dst)->icd.init) {                                                    \
-      for(_ut_i=dst->i; _ut_i < num; _ut_i++) {                               \
-        (dst)->icd.init(utarray_eltptr(dst,_ut_i));                           \
-      }                                                                       \
-    } else {                                                                  \
-      memset(_utarray_eltptr(dst,dst->i),0,(dst)->icd.sz*(num-dst->i));       \
-    }                                                                         \
-  }                                                                           \
-  dst->i = num;                                                               \
+#define utarray_resize(dst,num) do {                                                \
+  size_t _ut_i;                                                                     \
+  if (dst->i > ((size_t)(num))) {                                                   \
+    if ((dst)->icd.dtor) {                                                          \
+      for(_ut_i=((size_t)(num)); _ut_i < dst->i; _ut_i++) {                         \
+        (dst)->icd.dtor(utarray_eltptr(dst,_ut_i));                                 \
+      }                                                                             \
+    }                                                                               \
+  } else if (dst->i < ((size_t)(num))) {                                            \
+    utarray_reserve(dst,((size_t)(num))-dst->i);                                    \
+    if ((dst)->icd.init) {                                                          \
+      for(_ut_i=dst->i; _ut_i < ((size_t)(num)); _ut_i++) {                         \
+        (dst)->icd.init(utarray_eltptr(dst,_ut_i));                                 \
+      }                                                                             \
+    } else {                                                                        \
+      memset(_utarray_eltptr(dst,dst->i),0,(dst)->icd.sz*(((size_t)(num))-dst->i)); \
+    }                                                                               \
+  }                                                                                 \
+  dst->i = num;                                                                     \
 } while(0)
 
 #define utarray_concat(dst,src) do {                                          \
   utarray_inserta((dst),(src),utarray_len(dst));                              \
 } while(0)
 
-#define utarray_erase(a,pos,len) do {                                         \
-  if ((a)->icd.dtor) {                                                        \
-    size_t _ut_i;                                                             \
-    for(_ut_i=0; _ut_i < len; _ut_i++) {                                      \
-      (a)->icd.dtor(utarray_eltptr((a),pos+_ut_i));                           \
-    }                                                                         \
-  }                                                                           \
-  if ((a)->i > (pos+len)) {                                                   \
-    memmove( _utarray_eltptr((a),pos), _utarray_eltptr((a),pos+len),          \
-            (((a)->i)-(pos+len))*((a)->icd.sz));                              \
-  }                                                                           \
-  (a)->i -= (len);                                                            \
+#define utarray_erase(a,pos,len) do {                                                            \
+  if ((a)->icd.dtor) {                                                                           \
+    size_t _ut_i;                                                                                \
+    for(_ut_i=0u; _ut_i < ((unsigned)(len)); _ut_i++) {                                          \
+      (a)->icd.dtor(utarray_eltptr((a),((unsigned)(pos+_ut_i))));                                \
+    }                                                                                            \
+  }                                                                                              \
+  if ((a)->i > ((unsigned)(pos+len))) {                                                          \
+    memmove( _utarray_eltptr((a),((unsigned)(pos))), _utarray_eltptr((a),((unsigned)(pos+len))), \
+            (((a)->i)-((unsigned)(pos+len)))*((a)->icd.sz));                                     \
+  }                                                                                              \
+  (a)->i -= (unsigned)(len);                                                                     \
 } while(0)
 
 #define utarray_renew(a,u) do {                                               \
