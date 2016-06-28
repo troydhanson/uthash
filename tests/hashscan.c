@@ -78,37 +78,36 @@ char *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT","MUR"};
 /* given a peer key/len/hashv, reverse engineer its hash function */
 static int infer_hash_function(char *key, size_t keylen, uint32_t hashv)
 {
-    uint32_t obkt, ohashv, num_bkts=0x01000000; /* anything ok */
+    uint32_t ohashv;
     /* BER SAX FNV OAT JEN SFH */
-    HASH_JEN(key,keylen,num_bkts,ohashv,obkt);
+    HASH_JEN(key,keylen,ohashv);
     if (ohashv == hashv) {
         return JEN;
     }
-    HASH_BER(key,keylen,num_bkts,ohashv,obkt);
+    HASH_BER(key,keylen,ohashv);
     if (ohashv == hashv) {
         return BER;
     }
-    HASH_SFH(key,keylen,num_bkts,ohashv,obkt);
+    HASH_SFH(key,keylen,ohashv);
     if (ohashv == hashv) {
         return SFH;
     }
-    HASH_SAX(key,keylen,num_bkts,ohashv,obkt);
+    HASH_SAX(key,keylen,ohashv);
     if (ohashv == hashv) {
         return SAX;
     }
-    HASH_FNV(key,keylen,num_bkts,ohashv,obkt);
+    HASH_FNV(key,keylen,ohashv);
     if (ohashv == hashv) {
         return FNV;
     }
-    HASH_OAT(key,keylen,num_bkts,ohashv,obkt);
+    HASH_OAT(key,keylen,ohashv);
     if (ohashv == hashv) {
         return OAT;
     }
-    HASH_MUR(key,keylen,num_bkts,ohashv,obkt);
+    HASH_MUR(key,keylen,ohashv);
     if (ohashv == hashv) {
         return MUR;
     }
-    obkt++; // this quiets an unused variable warning. yes, this is a ugly hack
     return 0;
 }
 

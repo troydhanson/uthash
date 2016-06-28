@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2008-2014, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2008-2016, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,7 @@ do {                                                       \
 do {                                                       \
   (s)->n = 0; (s)->i = 0; (s)->d = NULL;                   \
   utstring_reserve(s,100);                                 \
-  (s)->d[0] = '\0'; \
+  (s)->d[0] = '\0';                                        \
 } while(0)
 
 #define utstring_done(s)                                   \
@@ -103,10 +103,10 @@ do {                                                       \
 
 #define utstring_bincpy(s,b,l)                             \
 do {                                                       \
-  utstring_reserve((s),(l)+1);                               \
+  utstring_reserve((s),(l)+1);                             \
   if (l) memcpy(&(s)->d[(s)->i], b, l);                    \
   (s)->i += (l);                                           \
-  (s)->d[(s)->i]='\0';                                         \
+  (s)->d[(s)->i]='\0';                                     \
 } while(0)
 
 #define utstring_concat(dst,src)                                 \

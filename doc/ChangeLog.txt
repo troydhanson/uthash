@@ -3,7 +3,9 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
-NOTE: uthash is no longer maintained as of 2015.
+NOTE: uthash is no longer maintained as of 2015.  The ChangeLog is no longer
+maintained. See the git commit log.
+
 
 Version 1.9.9.1 (2014-11-18)
 --------------------------
