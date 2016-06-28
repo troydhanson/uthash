@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 /*
-Copyright (c) 2003-2015, Troy D. Hanson     http://troydhanson.github.com/uthash/
+Copyright (c) 2003-2016, Troy D. Hanson     http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
