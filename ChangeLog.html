@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.7" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
 <title>uthash ChangeLog</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -87,9 +87,15 @@ ul, ol, li > p {
 ul > li     { color: #aaa; }
 ul > li > * { color: black; }
 
-pre {
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
   padding: 0;
   margin: 0;
+}
+pre {
+  white-space: pre-wrap;
 }
 
 #author {
@@ -219,7 +225,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; }
+span.image img { border-style: none; vertical-align: text-bottom; }
 a.image:visited { color: white; }
 
 dl {
@@ -415,12 +421,6 @@ div.unbreakable { page-break-inside: avoid; }
  *
  * */
 
-tt {
-  font-family: "Courier New", Courier, monospace;
-  font-size: inherit;
-  color: navy;
-}
-
 div.tableblock {
   margin-top: 1.0em;
   margin-bottom: 1.5em;
@@ -453,12 +453,6 @@ div.tableblock > table[frame="vsides"] {
  * html5 specific
  *
  * */
-
-.monospaced {
-  font-family: "Courier New", Courier, monospace;
-  font-size: inherit;
-  color: navy;
-}
 
 table.tableblock {
   margin-top: 1.0em;
@@ -539,6 +533,8 @@ body.manpage div.sectionbody {
 @media print {
   body.manpage div#toc { display: none; }
 }
+
+
 @media screen {
   body {
     max-width: 50em; /* approximately 80 characters wide */
@@ -786,7 +782,8 @@ asciidoc.install(2);
 <td class="icon">
 <div class="title">Note</div>
 </td>
-<td class="content">uthash is no longer maintained as of 2015.</td>
+<td class="content">uthash is no longer maintained as of 2015.  The ChangeLog is no longer
+maintained. See the git commit log.</td>
 </tr></table>
 </div>
 </div>
@@ -849,7 +846,7 @@ added LL_COUNT/DL_COUNT/CDL_COUNT (thansk, Paul Praet!)
 </li>
 <li>
 <p>
-added LRU cache example in <tt>tests/lru_cache</tt> (thanks, Oliver Lorenz!)
+added LRU cache example in <code>tests/lru_cache</code> (thanks, Oliver Lorenz!)
 </p>
 </li>
 <li>
@@ -859,7 +856,7 @@ fix LL_DELETE2 for VS2008 (thanks, Greg Davydouski!)
 </li>
 <li>
 <p>
-fix missing argument in <tt>HASH_REPLACE_STR</tt> (thanks, Alex!)
+fix missing argument in <code>HASH_REPLACE_STR</code> (thanks, Alex!)
 </p>
 </li>
 <li>
@@ -869,7 +866,7 @@ bump version number in source files to match docs (thanks, John Crow!)
 </li>
 <li>
 <p>
-add <tt>HASH_OVERHEAD</tt> macro to get overhead size for hash table
+add <code>HASH_OVERHEAD</code> macro to get overhead size for hash table
 </p>
 </li>
 </ul></div>
@@ -881,7 +878,7 @@ add <tt>HASH_OVERHEAD</tt> macro to get overhead size for hash table
 <div class="ulist"><ul>
 <li>
 <p>
-<tt>HASH_REPLACE</tt> now in uthash (thanks, Nick Vatamaniuc!)
+<code>HASH_REPLACE</code> now in uthash (thanks, Nick Vatamaniuc!)
 </p>
 </li>
 <li>
@@ -891,7 +888,7 @@ fixed clang warnings (thanks wynnw!)
 </li>
 <li>
 <p>
-fixed <tt>utarray_insert</tt> when inserting past array end (thanks Rob Willett!)
+fixed <code>utarray_insert</code> when inserting past array end (thanks Rob Willett!)
 </p>
 </li>
 <li>
@@ -918,7 +915,7 @@ uthash has been downloaded 29,000+ times since 2006 on SourceForge
 <div class="ulist"><ul>
 <li>
 <p>
-utstring now supports substring search using <tt>utstring_find</tt> (thanks, Joe Wei!)
+utstring now supports substring search using <code>utstring_find</code> (thanks, Joe Wei!)
 </p>
 </li>
 <li>
@@ -948,7 +945,7 @@ uthash HASH_MUR compiles under MSVC++ 10 in C mode (thanks, Arun Kirthi Cherian!
 </li>
 <li>
 <p>
-<tt>utstring_printf</tt> now supports format checking (thanks, Donald Carr!)
+<code>utstring_printf</code> now supports format checking (thanks, Donald Carr!)
 </p>
 </li>
 </ul></div>
@@ -987,12 +984,12 @@ edit examples so they do not leak memory (thanks, 任晶磊!)
 <div class="ulist"><ul>
 <li>
 <p>
-added <tt>utarray_renew</tt>
+added <code>utarray_renew</code>
 </p>
 </li>
 <li>
 <p>
-fixed memory leak in <tt>uthash_clear</tt> when using Bloom filter (thanks, Jan Hättig!)
+fixed memory leak in <code>uthash_clear</code> when using Bloom filter (thanks, Jan Hättig!)
 </p>
 </li>
 <li>
@@ -1002,7 +999,7 @@ utarray now copies the UT_icd on array creation rather than storing a pointer
 </li>
 <li>
 <p>
-add parentheses to <tt>HASH_ADD</tt> to fix preprocessing of certain arguments (thanks, Aaron Rosen!)
+add parentheses to <code>HASH_ADD</code> to fix preprocessing of certain arguments (thanks, Aaron Rosen!)
 </p>
 </li>
 <li>
@@ -1024,17 +1021,17 @@ uthash now supports MurmurHash v3
 </li>
 <li>
 <p>
-utlist now includes concatenation macros (<tt>LL_CONCAT</tt> and <tt>DL_CONCAT</tt>)
+utlist now includes concatenation macros (<code>LL_CONCAT</code> and <code>DL_CONCAT</code>)
 </p>
 </li>
 <li>
 <p>
-utarray now supports binary search (<tt>utarray_find</tt>)
+utarray now supports binary search (<code>utarray_find</code>)
 </p>
 </li>
 <li>
 <p>
-utstring now supports a new-or-clear-existing macro (<tt>utstring_renew</tt>)
+utstring now supports a new-or-clear-existing macro (<code>utstring_renew</code>)
 </p>
 </li>
 <li>
@@ -1044,12 +1041,12 @@ documented technique for a multi-level hash table
 </li>
 <li>
 <p>
-clarified scope requirements for <tt>UT_icd</tt> in the utarray documentation
+clarified scope requirements for <code>UT_icd</code> in the utarray documentation
 </p>
 </li>
 <li>
 <p>
-fixed termination when <tt>utstring_clear</tt> is followed by <tt>utstring_body</tt>
+fixed termination when <code>utstring_clear</code> is followed by <code>utstring_body</code>
 </p>
 </li>
 <li>
@@ -1059,12 +1056,12 @@ fixed utarray_inserta macro when used with complex arguments
 </li>
 <li>
 <p>
-on Visual Studio define missing type <tt>uint8_t</tt>
+on Visual Studio define missing type <code>uint8_t</code>
 </p>
 </li>
 <li>
 <p>
-Debian/Ubuntu include uthash in the package <tt>uthash-dev</tt>.
+Debian/Ubuntu include uthash in the package <code>uthash-dev</code>.
 </p>
 </li>
 <li>
@@ -1083,12 +1080,12 @@ for feedback and fixes in this release!</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
-fix an <tt>ifdef</tt> for compatibility with Intel compiler (thanks, degski!)
+fix an <code>ifdef</code> for compatibility with Intel compiler (thanks, degski!)
 </p>
 </li>
 <li>
 <p>
-fix <tt>HASH_ITER</tt> macro to satisfy C++ casting rules (thanks, Erik Bai!)
+fix <code>HASH_ITER</code> macro to satisfy C++ casting rules (thanks, Erik Bai!)
 </p>
 </li>
 </ul></div>
@@ -1100,12 +1097,12 @@ fix <tt>HASH_ITER</tt> macro to satisfy C++ casting rules (thanks, Erik Bai!)
 <div class="ulist"><ul>
 <li>
 <p>
-new <tt>HASH_ITER</tt> macro for more convenient deletion-safe iteration
+new <code>HASH_ITER</code> macro for more convenient deletion-safe iteration
 </p>
 </li>
 <li>
 <p>
-<tt>hashscan</tt> can now run on FreeBSD 8.1 and later (thanks, Markus Gebert!)
+<code>hashscan</code> can now run on FreeBSD 8.1 and later (thanks, Markus Gebert!)
 </p>
 </li>
 <li>
@@ -1115,7 +1112,7 @@ More parens to evaluate complex macro arguments properly (thanks, ngg!)
 </li>
 <li>
 <p>
-Add sz parameter to the <tt>uthash_free</tt> hook for platforms that do their own memory management. Hopefully this minor API change doesn&#8217;t cause too much breakage for people. (thanks, Niall Douglas!)
+Add sz parameter to the <code>uthash_free</code> hook for platforms that do their own memory management. Hopefully this minor API change doesn&#8217;t cause too much breakage for people. (thanks, Niall Douglas!)
 </p>
 </li>
 <li>
@@ -1132,17 +1129,17 @@ uthash has been downloaded 12,294 times
 <div class="ulist"><ul>
 <li>
 <p>
-Fix a redefinition warning when using <tt>uthash.h</tt> and <tt>utstring.h</tt> together
+Fix a redefinition warning when using <code>uthash.h</code> and <code>utstring.h</code> together
 </p>
 </li>
 <li>
 <p>
-Fix a bug in <tt>utstring_init</tt>
+Fix a bug in <code>utstring_init</code>
 </p>
 </li>
 <li>
 <p>
-Added <tt>HASH_FIND_PTR</tt> and <tt>HASH_ADD_PTR</tt> (thanks, Niall Douglas!)
+Added <code>HASH_FIND_PTR</code> and <code>HASH_ADD_PTR</code> (thanks, Niall Douglas!)
 </p>
 </li>
 </ul></div>
@@ -1192,7 +1189,7 @@ uthash has been downloaded 9,616 times
 <div class="ulist"><ul>
 <li>
 <p>
-Added the <tt>hashscan</tt> utility that can report on the size and quality of
+Added the <code>hashscan</code> utility that can report on the size and quality of
   hash tables in a running process (Linux-only)
 </p>
 </li>
@@ -1206,7 +1203,7 @@ Added Bloom filter support. This has the potential to speed up certain
 <p>
 Restored the MurmurHash, which can once again be used, if an additional
   symbol is defined. This is a "safety" by which the user declares they
-  understand that <tt>-fno-strict-aliasing</tt> flag must be used if they are
+  understand that <code>-fno-strict-aliasing</code> flag must be used if they are
   using MurmurHash under gcc with optimization.
 </p>
 </li>
@@ -1222,14 +1219,14 @@ Re-organized the manual into a main section and advanced topics section
 </li>
 <li>
 <p>
-Fixed a bug in <tt>utlist.h</tt> where sorting a singly-linked list threw a
+Fixed a bug in <code>utlist.h</code> where sorting a singly-linked list threw a
   compile-time error.
 </p>
 </li>
 <li>
 <p>
-Fixed a bug in <tt>utlist.h</tt> where a doubly-linked list that is sorted
-  did not maintain the special <tt>head-&gt;prev</tt> pointer back to the list tail.
+Fixed a bug in <code>utlist.h</code> where a doubly-linked list that is sorted
+  did not maintain the special <code>head-&gt;prev</code> pointer back to the list tail.
 </p>
 </li>
 </ul></div>
@@ -1244,14 +1241,14 @@ Fixed a bug in <tt>utlist.h</tt> where a doubly-linked list that is sorted
 The MurmurHash has been removed, and Jenkin&#8217;s hash is once again the default.
   While MurmurHash performed well, it&#8217;s unsafe with regard to the strict
   aliasing rule. This results in incorrect code when compiled with optimization.
-  It&#8217;s not possible to enable <tt>-fno-strict-aliasing</tt> from within a header file.
+  It&#8217;s not possible to enable <code>-fno-strict-aliasing</code> from within a header file.
 </p>
 </li>
 <li>
 <p>
-The linked list macros in <tt>utlist.h</tt> now comply with the strict-aliasing
+The linked list macros in <code>utlist.h</code> now comply with the strict-aliasing
   rule so they generate correct code under high optimization levels (O2 or O3).
-  The use of the <tt>__typeof__</tt> extension, which was originally a GNU extension,
+  The use of the <code>__typeof__</code> extension, which was originally a GNU extension,
   may reduce portability to other compilers that do not support this extension.
   This extension is used in the singly-linked list macros and the sort macros.
 </p>
@@ -1271,12 +1268,12 @@ Support for two new hash functions:
 <div class="ulist"><ul>
 <li>
 <p>
-the Paul Hsieh hash function (<tt>HASH_SFH</tt>)
+the Paul Hsieh hash function (<code>HASH_SFH</code>)
 </p>
 </li>
 <li>
 <p>
-Austin Appleby&#8217;s MurmurHash function (<tt>HASH_MUR</tt>)
+Austin Appleby&#8217;s MurmurHash function (<code>HASH_MUR</code>)
 </p>
 </li>
 </ul></div>
@@ -1288,12 +1285,12 @@ Because of its excellent performance, MurmurHash is now the default hash functio
 </li>
 <li>
 <p>
-<tt>keystats</tt> now has much better elapsed time accuracy under Cygwin and MinGW
+<code>keystats</code> now has much better elapsed time accuracy under Cygwin and MinGW
 </p>
 </li>
 <li>
 <p>
-fixed casting in <tt>HASH_FNV</tt>, <tt>HASH_SAX</tt> and <tt>HASH_OAT</tt> for non-char keys
+fixed casting in <code>HASH_FNV</code>, <code>HASH_SAX</code> and <code>HASH_OAT</code> for non-char keys
 </p>
 </li>
 </ul></div>
@@ -1301,12 +1298,12 @@ fixed casting in <tt>HASH_FNV</tt>, <tt>HASH_SAX</tt> and <tt>HASH_OAT</tt> for 
 <div class="ulist"><ul>
 <li>
 <p>
-a new <tt>HASH_CLEAR</tt> operation clears a hash table in one step.
+a new <code>HASH_CLEAR</code> operation clears a hash table in one step.
 </p>
 </li>
 <li>
 <p>
-a new <tt>HASH_SELECT</tt> operation inserts those elements from one hash that
+a new <code>HASH_SELECT</code> operation inserts those elements from one hash that
   satisfy a given condition into another hash. The selected items have
   dual presence in both hash tables. For example a game could select the
   visible polygons from a hash of all polygons.
@@ -1315,12 +1312,12 @@ a new <tt>HASH_SELECT</tt> operation inserts those elements from one hash that
 <li>
 <p>
 fixed a compile-time error which occurred if the final argument to
-  <tt>HASH_ADD_KEYPTR</tt> was a pointer to an array member like <tt>&amp;a[i]</tt>
+  <code>HASH_ADD_KEYPTR</code> was a pointer to an array member like <code>&amp;a[i]</code>
 </p>
 </li>
 <li>
 <p>
-added another test script <tt>tests/all_funcs</tt> which executes the test suite
+added another test script <code>tests/all_funcs</code> which executes the test suite
   using every supported hash function
 </p>
 </li>
@@ -1378,28 +1375,28 @@ added <a href="http://troydhanson.wordpress.com/feed/">update news</a> <span cla
 <div class="ulist"><ul>
 <li>
 <p>
-Add <tt>HASH_COUNT</tt> for counting items in the hash
+Add <code>HASH_COUNT</code> for counting items in the hash
 </p>
 </li>
 <li>
 <p>
 Compatibility with C++. Satisfy additional casting requirements.
-  Also in the <tt>tests/</tt> directory, running <tt>make cplusplus</tt> now compiles
+  Also in the <code>tests/</code> directory, running <code>make cplusplus</code> now compiles
   all the test programs with the C++ compiler.
 </p>
 </li>
 <li>
 <p>
-Eliminate <tt>elmt</tt> pointer from the UT_hash_handle. Calculate elmt
-  from hash handle address by subtracting <tt>hho</tt> (hash handle offset).
+Eliminate <code>elmt</code> pointer from the UT_hash_handle. Calculate elmt
+  from hash handle address by subtracting <code>hho</code> (hash handle offset).
 </p>
 </li>
 <li>
 <p>
 Contributed by L.S.Chin:
-  Cast <tt>void*</tt> to char* before pointer arithmetic to suppress compiler
+  Cast <code>void*</code> to char* before pointer arithmetic to suppress compiler
   warnings. We assume compilers abide to C standards which impose
-  requirement that <tt>sizeof(void*) == sizeof(char*)</tt>.
+  requirement that <code>sizeof(void*) == sizeof(char*)</code>.
 </p>
 </li>
 <li>
@@ -1422,7 +1419,7 @@ use integer-only math-- no floating point! Support FPU-less CPU&#8217;s.
 </li>
 <li>
 <p>
-eliminate <tt>hash_q</tt> metric, which measured the fraction of items with
+eliminate <code>hash_q</code> metric, which measured the fraction of items with
   non-ideal chain positions. We only need to know if this fraction
   is below 0.5. This is now determined using fast bitwise tests.
 </p>
@@ -1452,24 +1449,24 @@ improved source commenting and improved variable names in structures
 </li>
 <li>
 <p>
-remove <tt>HASH_JSW</tt>. Lengthy random number array made code less readable
+remove <code>HASH_JSW</code>. Lengthy random number array made code less readable
 </p>
 </li>
 <li>
 <p>
-add <tt>HASH_SRT(hh,hash,cmp)</tt> as a generalized <tt>HASH_SORT(hash,cmp)</tt>.
+add <code>HASH_SRT(hh,hash,cmp)</code> as a generalized <code>HASH_SORT(hash,cmp)</code>.
   It was an omission in uthash 1.2 that there was no sort macro for
   hash handles with names other than hh.
 </p>
 </li>
 <li>
 <p>
-Corrected <tt>HASH_FSCK</tt> so it works with any name for the hash handle.
+Corrected <code>HASH_FSCK</code> so it works with any name for the hash handle.
 </p>
 </li>
 <li>
 <p>
-behave properly in pathological <tt>HASH_DEL(a,a)</tt> case where the same
+behave properly in pathological <code>HASH_DEL(a,a)</code> case where the same
   variable references the head and the deletee (advancing the head
   then loses the correct reference to the deletee); fix by using
   scratch area in the hash table to store deletee hash handle.
@@ -1494,7 +1491,7 @@ made tests runnable on MinGW
 <div class="ulist"><ul>
 <li>
 <p>
-new <tt>HASH_SORT</tt> macro
+new <code>HASH_SORT</code> macro
 </p>
 </li>
 <li>
@@ -1550,7 +1547,8 @@ Initial release
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-11-18 21:28:59 EST
+Last updated
+ 2016-06-28 14:48:36 EDT
 </div>
 </div>
 </body>
