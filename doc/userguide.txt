@@ -1,12 +1,13 @@
 uthash User Guide
 =================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.9.9, November 2014
+v1.9.9b, June 2016
 
 NOTE: As of 2015 uthash is unmaintained software.
 
 To download uthash, follow this link back to the
 https://github.com/troydhanson/uthash[GitHub project page].
+Back to my http://troydhanson.github.io/[other projects].
 
 A hash in C
 -----------
@@ -1765,6 +1766,11 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 [NOTE]
 `HASH_ADD_KEYPTR` is used when the structure contains a pointer to the
 key, rather than the key itself. 
+
+The `HASH_VALUE` and `BY_HVAL` macros are a performance mechanism mainly for the
+special case of having different structures, in different hash tables, having
+identical keys. It allows the hash value to be obtained once and then passed
+in to `BY_HVAL` macros, saving the expense of re-computing the hash value.
 
 
 Argument descriptions
