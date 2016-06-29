@@ -1151,7 +1151,7 @@ table with items in random order with a single final HASH_SRT() operation
 when all is done. Obviously, this won't do what you want if you need
 the list to be in an ordered state at times between insertion of
 items. You can use HASH_SRT() after every insertion operation, but that will
-yield a computational complexity of 'O(n^2 log(n)'.
+yield a computational complexity of 'O(n^2 log(n))'.
 
 The second route you can take is via the sorted add macros.
 The HASH_SADD*() macros work just like their HASH_ADD*() counterparts, but
