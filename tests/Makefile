@@ -118,5 +118,5 @@ astyle:
 .PHONY: clean astyle
 
 clean:	
-	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example *.exe $(GITIGN)
+	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example hashscan sleep_test *.exe $(GITIGN)
 	rm -rf *.dSYM
