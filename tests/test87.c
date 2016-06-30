@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <uthash.h>
+#include "uthash.h"
 
 typedef struct
 {
@@ -14,7 +14,7 @@ hstruct_t tst[] = {{{}, "muh1", 2}, {{}, "muh2", 8}, {{}, "muh3", 1}, {{}, "muh4
   {{}, "muh7", 6}, {{}, "muh8", 15}, {{}, "muh9", 6}, {{}, "muh10", 9}, {{}, "muh11", 10}, {{}, "muh12", 43}};
 hstruct_t *hTable;
 
-static int cmpfunc(hstruct_t *s1, hstruct_t *s2)
+static int cmpfunc(const hstruct_t *s1, const hstruct_t *s2)
 {
   if(s1->weight < s2->weight)
     return -1;
