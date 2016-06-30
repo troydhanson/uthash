@@ -234,17 +234,6 @@ do {                                                                            
     HASH_MAKE_TABLE(hh, head);                                                   \
   } else {
 
-#define HASH_ADD_EPILOGUE(hh,head,keyptr,keylen_in,hashval,add)                  \
-    HASH_APPEND_LIST(hh, head, add);                                             \
-  }                                                                              \
-  (head)->hh.tbl->num_items++;                                                   \
-  HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
-  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
-  HASH_BLOOM_ADD((head)->hh.tbl, (add)->hh.hashv);                               \
-  HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
-  HASH_FSCK(hh, head);                                                           \
-} while (0)
-
 #define HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
 HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                              \
   struct UT_hash_handle *_hs_iter = &(head)->hh;                                 \
@@ -262,7 +251,15 @@ HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                             
     }                                                                            \
     _hs_iter->prev = (add);                                                      \
   } else                                                                         \
-HASH_ADD_EPILOGUE(hh, head, keyptr, keylen_in, hashval, add)
+    HASH_APPEND_LIST(hh, head, add);                                             \
+  }                                                                              \
+  (head)->hh.tbl->num_items++;                                                   \
+  HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
+  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
+  HASH_BLOOM_ADD((head)->hh.tbl, (add)->hh.hashv);                               \
+  HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
+  HASH_FSCK(hh, head);                                                           \
+} while (0)
 
 #define HASH_SADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)    \
 do {                                                                             \
@@ -285,7 +282,15 @@ do {                                                                            
   (add)->hh.hashv = (hashval);                                                   \
   HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                            \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
-HASH_ADD_EPILOGUE(hh, head, keyptr, keylen_in, hashval, add)
+    HASH_APPEND_LIST(hh, head, add);                                             \
+  }                                                                              \
+  (head)->hh.tbl->num_items++;                                                   \
+  HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
+  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
+  HASH_BLOOM_ADD((head)->hh.tbl, (add)->hh.hashv);                               \
+  HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
+  HASH_FSCK(hh, head);                                                           \
+} while (0)
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
 do {                                                                             \
@@ -293,7 +298,15 @@ do {                                                                            
   HASH_VALUE(keyptr, keylen_in, (add)->hh.hashv);                                \
   HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                            \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
-HASH_ADD_EPILOGUE(hh, head, keyptr, keylen_in, (add)->hh.hashv, add)
+    HASH_APPEND_LIST(hh, head, add);                                             \
+  }                                                                              \
+  (head)->hh.tbl->num_items++;                                                   \
+  HASH_TO_BKT((add)->hh.hashv, (head)->hh.tbl->num_buckets, _ha_bkt);            \
+  HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
+  HASH_BLOOM_ADD((head)->hh.tbl, (add)->hh.hashv);                               \
+  HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
+  HASH_FSCK(hh, head);                                                           \
+} while (0)
 
 #define HASH_TO_BKT(hashv,num_bkts,bkt)                                          \
 do {                                                                             \
