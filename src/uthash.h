@@ -224,7 +224,7 @@ do {                                                                            
   (head)->hh.tbl->tail = &((add)->hh);                                           \
 } while (0)
 
-#define HASH_ADD_PROLOGUE(hh,head,keyptr,keylen_in,add)                          \
+#define HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
   if (!(head)) {                                                                 \
@@ -232,26 +232,24 @@ do {                                                                            
     (add)->hh.prev = NULL;                                                       \
     (head) = (add);                                                              \
     HASH_MAKE_TABLE(hh, head);                                                   \
-  } else {
-
-#define HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
-HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                              \
-  struct UT_hash_handle *_hs_iter = &(head)->hh;                                 \
-  (add)->hh.tbl = (head)->hh.tbl;                                                \
-  do {                                                                           \
-    if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0)  \
-      break;                                                                     \
-  } while ((_hs_iter = _hs_iter->next));                                         \
-  if (_hs_iter) {                                                                \
-    (add)->hh.next = _hs_iter;                                                   \
-    if (((add)->hh.prev = _hs_iter->prev)) {                                     \
-      HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = (add);                \
+  } else {                                                                       \
+    struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
+    (add)->hh.tbl = (head)->hh.tbl;                                              \
+    do {                                                                         \
+      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
+        break;                                                                   \
+    } while ((_hs_iter = _hs_iter->next));                                       \
+    if (_hs_iter) {                                                              \
+      (add)->hh.next = _hs_iter;                                                 \
+      if (((add)->hh.prev = _hs_iter->prev)) {                                   \
+        HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = (add);              \
+      } else {                                                                   \
+        (head) = (add);                                                          \
+      }                                                                          \
+      _hs_iter->prev = (add);                                                    \
     } else {                                                                     \
-      (head) = (add);                                                            \
+      HASH_APPEND_LIST(hh, head, add);                                           \
     }                                                                            \
-    _hs_iter->prev = (add);                                                      \
-  } else                                                                         \
-    HASH_APPEND_LIST(hh, head, add);                                             \
   }                                                                              \
   (head)->hh.tbl->num_items++;                                                   \
   HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
@@ -280,7 +278,14 @@ HASH_SORTED_ADD(hh, head, keyptr, keylen_in, (add)->hh.hashv, add, cmpfcn)
 do {                                                                             \
   unsigned _ha_bkt;                                                              \
   (add)->hh.hashv = (hashval);                                                   \
-  HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                            \
+  (add)->hh.key = (char*) (keyptr);                                              \
+  (add)->hh.keylen = (unsigned) (keylen_in);                                     \
+  if (!(head)) {                                                                 \
+    (add)->hh.next = NULL;                                                       \
+    (add)->hh.prev = NULL;                                                       \
+    (head) = (add);                                                              \
+    HASH_MAKE_TABLE(hh, head);                                                   \
+  } else {                                                                       \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_APPEND_LIST(hh, head, add);                                             \
   }                                                                              \
@@ -296,7 +301,14 @@ do {                                                                            
 do {                                                                             \
   unsigned _ha_bkt;                                                              \
   HASH_VALUE(keyptr, keylen_in, (add)->hh.hashv);                                \
-  HASH_ADD_PROLOGUE(hh, head, keyptr, keylen_in, add)                            \
+  (add)->hh.key = (char*) (keyptr);                                              \
+  (add)->hh.keylen = (unsigned) (keylen_in);                                     \
+  if (!(head)) {                                                                 \
+    (add)->hh.next = NULL;                                                       \
+    (add)->hh.prev = NULL;                                                       \
+    (head) = (add);                                                              \
+    HASH_MAKE_TABLE(hh, head);                                                   \
+  } else {                                                                       \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_APPEND_LIST(hh, head, add);                                             \
   }                                                                              \
