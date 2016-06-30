@@ -250,11 +250,6 @@ do {                                                                            
   HASH_FSCK(hh,head);                                                            \
 } while(0)
 
-#define HASH_GHV_DIRECT(hh, add, hashval)                                        \
-  (add)->hh.hashv = (hashval)
-#define HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add)                             \
-  HASH_FCN((keyptr), (keylen_in), (add)->hh.hashv)
-
 #define HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
     struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
@@ -276,12 +271,12 @@ do {                                                                            
 
 #define HASH_SADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)    \
 do { unsigned _ha_bkt;                                                           \
-    HASH_GHV_DIRECT(hh, add, hashval);                                           \
+    (add)->hh.hashv = (hashval);                                                 \
     HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)                 \
 
 #define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
 do { unsigned _ha_bkt;                                                           \
-    HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add);                                \
+    HASH_VALUE((keyptr), (keylen_in), (add)->hh.hashv);                          \
     HASH_SORTED_ADD(hh,head,keyptr,keylen_in,(add)->hh.hashv,add,cmpfcn)
 
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
@@ -289,14 +284,14 @@ do { unsigned _ha_bkt;                                                          
 
 #define HASH_ADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add)            \
 do { unsigned _ha_bkt;                                                           \
-    HASH_GHV_DIRECT(hh, add, hashval);                                           \
+    (add)->hh.hashv = (hashval);                                                 \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),hashval,(add))
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
 do { unsigned _ha_bkt;                                                           \
-    HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add);                                \
+    HASH_VALUE((keyptr), (keylen_in), (add)->hh.hashv);                          \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(add)->hh.hashv,(add))
