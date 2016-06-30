@@ -29,7 +29,7 @@ CFLAGS += -DHASH_DEBUG=1
 endif
 
 ifeq ($(HASH_PEDANTIC),1)
-CFLAGS += -pedantic 
+CFLAGS += -pedantic
 endif
 
 TEST_TARGET=run_tests
