@@ -110,31 +110,23 @@ do {                                                                            
   HASH_FCN(keyptr, keylen, hashv);                                               \
 } while (0)
 
-#define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
+#define HASH_FIND_BY_HVAL(hh,head,keyptr,keylen,hashval,out)                     \
 do {                                                                             \
-  out=NULL;                                                                      \
-  if (head != NULL) {                                                            \
-     unsigned _hf_bkt,_hf_hashv;                                                 \
-     HASH_FCN(keyptr, keylen, _hf_hashv);                                        \
-     HASH_TO_BKT(_hf_hashv, (head)->hh.tbl->num_buckets, _hf_bkt);               \
-     if (HASH_BLOOM_TEST((head)->hh.tbl, _hf_hashv) != 0) {                      \
-       HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ],  \
-                        keyptr,keylen,out);                                      \
-     }                                                                           \
+  (out) = NULL;                                                                  \
+  if (head) {                                                                    \
+    unsigned _hf_bkt;                                                            \
+    HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                  \
+    if (HASH_BLOOM_TEST((head)->hh.tbl, hashval) != 0) {                         \
+      HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ], keyptr, keylen, out); \
+    }                                                                            \
   }                                                                              \
 } while (0)
 
-#define HASH_FIND_BY_HVAL(hh,head,keyptr,keylen,_hf_hashv,out)                   \
+#define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
 do {                                                                             \
-  out=NULL;                                                                      \
-  if (head != NULL) {                                                            \
-     unsigned _hf_bkt;                                                           \
-     HASH_TO_BKT(_hf_hashv, (head)->hh.tbl->num_buckets, _hf_bkt);               \
-     if (HASH_BLOOM_TEST((head)->hh.tbl, _hf_hashv) != 0) {                      \
-       HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ],  \
-                        keyptr,keylen,out);                                      \
-     }                                                                           \
-  }                                                                              \
+  unsigned _hf_hashv;                                                            \
+  HASH_VALUE(keyptr, keylen, _hf_hashv);                                         \
+  HASH_FIND_BY_HVAL(hh, head, keyptr, keylen, _hf_hashv, out);                   \
 } while (0)
 
 #ifdef HASH_BLOOM
@@ -190,21 +182,21 @@ do {                                                                            
   (head)->hh.tbl->signature = HASH_SIGNATURE;                                    \
 } while (0)
 
+#define HASH_REPLACE_BY_HVAL(hh,head,fieldname,keylen_in,hashval,add,replaced)   \
+do {                                                                             \
+  (replaced) = NULL;                                                             \
+  HASH_FIND_BY_HVAL(hh, head, &((add)->fieldname), keylen_in, hashval, replaced); \
+  if (replaced) {                                                                \
+     HASH_DELETE(hh, head, replaced);                                            \
+  }                                                                              \
+  HASH_ADD_KEYPTR_BY_HVAL(hh, head, &((add)->fieldname), keylen_in, hashval, add); \
+} while (0)
+
 #define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
 do {                                                                             \
   unsigned _hr_hashv;                                                            \
   HASH_VALUE(&((add)->fieldname), keylen_in, _hr_hashv);                         \
   HASH_REPLACE_BY_HVAL(hh, head, fieldname, keylen_in, _hr_hashv, add, replaced); \
-} while (0)
-
-#define HASH_REPLACE_BY_HVAL(hh,head,fieldname,keylen_in,hashval,add,replaced)   \
-do {                                                                             \
-  replaced=NULL;                                                                 \
-  HASH_FIND_BY_HVAL(hh, head, &((add)->fieldname), keylen_in, hashval, replaced); \
-  if ((replaced)!=NULL) {                                                        \
-     HASH_DELETE(hh, head, replaced);                                            \
-  }                                                                              \
-  HASH_ADD_BY_HVAL(hh, head, fieldname, keylen_in, hashval, add);                \
 } while (0)
 
 #define HASH_APPEND_LIST(hh, head, add)                                          \
