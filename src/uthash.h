@@ -255,21 +255,21 @@ do {                                                                            
 #define HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add)                             \
   HASH_FCN((keyptr), (keylen_in), (add)->hh.hashv)
 
-#define HASH_ADD_SORTED(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
+#define HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)             \
     HASH_ADD_PROLOGUE(hh,(head),(keyptr),(keylen_in),(add))                      \
-    struct UT_hash_handle *iter = &(head)->hh;                                   \
+    struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     do {                                                                         \
-      if(cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, iter), add) > 0)     \
+      if(cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
         break;                                                                   \
-    } while((iter = iter->next));                                                \
-    if(iter) {                                                                   \
-      (add)->hh.next = iter;                                                     \
-      if(((add)->hh.prev = iter->prev))                                          \
-        HH_FROM_ELMT((head)->hh.tbl, iter->prev)->next = add;                    \
+    } while((_hs_iter = _hs_iter->next));                                        \
+    if (_hs_iter) {                                                              \
+      (add)->hh.next = _hs_iter;                                                 \
+      if(((add)->hh.prev = _hs_iter->prev))                                      \
+        HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = add;                \
       else                                                                       \
         (head) = (add);                                                          \
-      iter->prev = add;                                                          \
+      _hs_iter->prev = add;                                                      \
     }                                                                            \
     else                                                                         \
       HASH_ADD_EPILOGUE(hh,(head),(keyptr),(keylen_in),(hashval),(add))
@@ -277,12 +277,12 @@ do {                                                                            
 #define HASH_SADD_KEYPTR_BY_HVAL(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)    \
 do { unsigned _ha_bkt;                                                           \
     HASH_GHV_DIRECT(hh, add, hashval);                                           \
-    HASH_ADD_SORTED(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)                 \
+    HASH_SORTED_ADD(hh,head,keyptr,keylen_in,hashval,add,cmpfcn)                 \
 
 #define HASH_SADD_KEYPTR(hh,head,keyptr,keylen_in,add,cmpfcn)                    \
 do { unsigned _ha_bkt;                                                           \
     HASH_GHV_COMPUTE(hh, keyptr, keylen_in, add);                                \
-    HASH_ADD_SORTED(hh,head,keyptr,keylen_in,(add)->hh.hashv,add,cmpfcn)
+    HASH_SORTED_ADD(hh,head,keyptr,keylen_in,(add)->hh.hashv,add,cmpfcn)
 
 #define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
     HASH_ADD_KEYPTR(hh,(head),&((add)->fieldname),(keylen_in),(add))
