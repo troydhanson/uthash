@@ -76,7 +76,7 @@ typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
 #endif
 
-#define UTHASH_VERSION 1.9.9
+#define UTHASH_VERSION 2.0.0
 
 #ifndef uthash_fatal
 #define uthash_fatal(msg) exit(-1)        /* fatal error (out of memory,etc) */

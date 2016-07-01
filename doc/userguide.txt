@@ -1,9 +1,8 @@
 uthash User Guide
 =================
-Troy D. Hanson <tdh@tkhanson.net>
-v1.9.9b, June 2016
-
-NOTE: As of 2015 uthash is unmaintained software.
+Troy D. Hanson 
+Arthur O'Dwyer
+v2.0.0, July 2016
 
 To download uthash, follow this link back to the
 https://github.com/troydhanson/uthash[GitHub project page].
@@ -33,7 +32,7 @@ Is it fast?
 Add, find and delete are normally constant-time operations. This is influenced
 by your key domain and the hash function. 
 
-This hash aims to be minimalistic and efficient. It's around 900 lines of C.
+This hash aims to be minimalistic and efficient. It's around 1000 lines of C.
 It inlines automatically because it's implemented as macros. It's fast as long
 as the hash function is suited to your keys. You can use the default hash
 function, or easily compare performance and choose from among several other
@@ -53,14 +52,10 @@ C/C++ and platforms
 This software can be used in C and C++ programs.  It has been tested on:
 
  * Linux
- * Mac OS X
  * Windows using Visual Studio 2008 and 2010 
  * Solaris 
  * OpenBSD
  * FreeBSD
-
-Windows users: as of 2014 it's been a few years since I had the environment to
-test uthash under Visual Studio. 
 
 Test suite
 ^^^^^^^^^^
@@ -83,13 +78,12 @@ Follow the links on https://github.com/troydhanson/uthash to clone uthash or get
 Getting help
 ~~~~~~~~~~~~
 Please use the https://groups.google.com/d/forum/uthash[uthash Google Group] to
-ask questions. You can email it at uthash@googlegroups.com. Please do not
-contact me directly. I can no longer answer any uthash questions or fix any bugs.
+ask questions. You can email it at uthash@googlegroups.com. 
 
 Contributing
 ~~~~~~~~~~~~
-You are welcome to fork uthash and make changes in your own repo. I have
-stopped maintaining uthash as of 2015.
+You may submit pull requests through GitHub. However, the maintainers of uthash
+value keeping it unchanged, rather than adding bells and whistles.
 
 Extras included
 ~~~~~~~~~~~~~~~
@@ -113,7 +107,8 @@ in C than exist today. There are faster hash tables, more memory-efficient hash
 tables, with very different API's today. But, like driving a minivan, uthash is
 convenient, and gets the job done for many purposes. 
 
-As of 2015 I have stopped maintaining uthash altogether.
+As of July 2016, uthash is maintained by Arthur O'Dwyer. To accomodate future
+tags, the version was bumped to 2.0.0. The API remains compatible with 1.x.
 
 Your structure
 --------------
