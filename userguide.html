@@ -769,9 +769,7 @@ asciidoc.install(2);
 <div id="header">
 <h1>uthash User Guide</h1>
 <span id="author">Troy D. Hanson</span><br />
-<span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
-<span id="revnumber">version 1.9.9b,</span>
-<span id="revdate">June 2016</span>
+<span id="revdate">Arthur O'Dwyer</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -780,14 +778,7 @@ asciidoc.install(2);
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">As of 2015 uthash is unmaintained software.</td>
-</tr></table>
-</div>
+<div class="paragraph"><p>v2.0.0, July 2016</p></div>
 <div class="paragraph"><p>To download uthash, follow this link back to the
 <a href="https://github.com/troydhanson/uthash">GitHub project page</a>.
 Back to my <a href="http://troydhanson.github.io/">other projects</a>.</p></div>
@@ -841,7 +832,7 @@ sort
 <h3 id="_is_it_fast">Is it fast?</h3>
 <div class="paragraph"><p>Add, find and delete are normally constant-time operations. This is influenced
 by your key domain and the hash function.</p></div>
-<div class="paragraph"><p>This hash aims to be minimalistic and efficient. It&#8217;s around 900 lines of C.
+<div class="paragraph"><p>This hash aims to be minimalistic and efficient. It&#8217;s around 1000 lines of C.
 It inlines automatically because it&#8217;s implemented as macros. It&#8217;s fast as long
 as the hash function is suited to your keys. You can use the default hash
 function, or easily compare performance and choose from among several other
@@ -868,11 +859,6 @@ Linux
 </li>
 <li>
 <p>
-Mac OS X
-</p>
-</li>
-<li>
-<p>
 Windows using Visual Studio 2008 and 2010
 </p>
 </li>
@@ -892,8 +878,6 @@ FreeBSD
 </p>
 </li>
 </ul></div>
-<div class="paragraph"><p>Windows users: as of 2014 it&#8217;s been a few years since I had the environment to
-test uthash under Visual Studio.</p></div>
 <div class="sect3">
 <h4 id="_test_suite">Test suite</h4>
 <div class="paragraph"><p>To run the test suite, enter the <code>tests</code> directory. Then,</p></div>
@@ -925,13 +909,12 @@ It is free and open source.</p></div>
 <div class="sect2">
 <h3 id="_getting_help">Getting help</h3>
 <div class="paragraph"><p>Please use the <a href="https://groups.google.com/d/forum/uthash">uthash Google Group</a> to
-ask questions. You can email it at <a href="mailto:uthash@googlegroups.com">uthash@googlegroups.com</a>. Please do not
-contact me directly. I can no longer answer any uthash questions or fix any bugs.</p></div>
+ask questions. You can email it at <a href="mailto:uthash@googlegroups.com">uthash@googlegroups.com</a>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_contributing">Contributing</h3>
-<div class="paragraph"><p>You are welcome to fork uthash and make changes in your own repo. I have
-stopped maintaining uthash as of 2015.</p></div>
+<div class="paragraph"><p>You may submit pull requests through GitHub. However, the maintainers of uthash
+value keeping it unchanged, rather than adding bells and whistles.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_extras_included">Extras included</h3>
@@ -966,7 +949,8 @@ to the native package repositories for a number of Unix-y distros.</p></div>
 in C than exist today. There are faster hash tables, more memory-efficient hash
 tables, with very different API&#8217;s today. But, like driving a minivan, uthash is
 convenient, and gets the job done for many purposes.</p></div>
-<div class="paragraph"><p>As of 2015 I have stopped maintaining uthash altogether.</p></div>
+<div class="paragraph"><p>As of July 2016, uthash is maintained by Arthur O&#8217;Dwyer. To accomodate future
+tags, the version was bumped to 2.0.0. The API remains compatible with 1.x.</p></div>
 </div>
 </div>
 </div>
@@ -2020,7 +2004,7 @@ table with items in random order with a single final HASH_SRT() operation
 when all is done. Obviously, this won&#8217;t do what you want if you need
 the list to be in an ordered state at times between insertion of
 items. You can use HASH_SRT() after every insertion operation, but that will
-yield a computational complexity of <em>O(n^2 log(n)</em>.</p></div>
+yield a computational complexity of <em>O(n^2 log n)</em>.</p></div>
 <div class="paragraph"><p>The second route you can take is via the sorted add macros.
 The HASH_SADD*() macros work just like their HASH_ADD*() counterparts, but
 with an additional compare function argument:</p></div>
@@ -3087,9 +3071,8 @@ condition
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.9b<br />
 Last updated
- 2016-06-28 14:44:53 EDT
+ 2016-07-01 11:02:04 EDT
 </div>
 </div>
 </body>
