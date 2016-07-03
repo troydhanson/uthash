@@ -88,7 +88,7 @@ test83: test HASH_REPLACE_STR with char[] key
 test84: test HASH_REPLACE_STR with char* key
 test85: test HASH_OVERHEAD on null and non null hash
 test86: test *_APPEND_ELEM / *_PREPEND_ELEM (Thilo Schulz)
-test87: test HASH_SADD*() macro family (Thilo Schulz)
+test87: test HASH_ADD_INORDER() macro (Thilo Schulz)
 
 Other Make targets
 ================================================================================

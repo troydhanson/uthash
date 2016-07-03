@@ -1147,20 +1147,20 @@ the list to be in an ordered state at times between insertion of
 items. You can use HASH_SRT() after every insertion operation, but that will
 yield a computational complexity of 'O(n^2 log n)'.
 
-The second route you can take is via the sorted add macros.
-The HASH_SADD*() macros work just like their HASH_ADD*() counterparts, but
-with an additional compare function argument:
+The second route you can take is via the in-order add and replace macros.
+The `HASH_ADD_INORDER*` macros work just like their `HASH_ADD*` counterparts, but
+with an additional comparison-function argument:
 
   int name_sort(struct my_struct *a, struct my_struct *b) {
     return strcmp(a->name,b->name);
   }
 
-  HASH_SADD_KEYPTR(hh, items, &item->name, strlen(item->name), item, name_sort);
+  HASH_ADD_KEYPTR_INORDER(hh, items, &item->name, strlen(item->name), item, name_sort);
 
 New items are sorted at insertion time in 'O(n)', thus resulting in a
 total computational complexity of 'O(n^2)' for the creation of the hash
 table with all items.
-For sorted add to work, the list must be in an ordered state before
+For in-order add to work, the list must be in an ordered state before
 insertion of the new item.
 
 Several sort orders
@@ -1734,37 +1734,39 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 .General macros
 [width="90%",cols="10m,30m",grid="none",options="header"]
 |===============================================================================
-|macro                    | arguments
-|HASH_ADD                 | (hh_name, head, keyfield_name, key_len, item_ptr)
-|HASH_ADD_BY_HVAL         | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
-|HASH_ADD_KEYPTR          | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_ADD_KEYPTR_BY_HVAL  | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_SADD                | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
-|HASH_SADD_BY_HVAL        | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)
-|HASH_SADD_KEYPTR         | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
-|HASH_SADD_KEYPTR_BY_HVAL | (hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)
-|HASH_REPLACE             | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_BY_HVAL     | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
-|HASH_FIND                | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_FIND_BY_HVAL        | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
-|HASH_DELETE              | (hh_name, head, item_ptr)
-|HASH_VALUE               | (key_ptr, key_len, key_hash)
-|HASH_SRT                 | (hh_name, head, cmp)
-|HASH_CNT                 | (hh_name, head)
-|HASH_CLEAR               | (hh_name, head)
-|HASH_SELECT              | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
-|HASH_ITER                | (hh_name, head, item_ptr, tmp_item_ptr)
-|HASH_OVERHEAD            | (hh_name, head)
+|macro                               | arguments
+|HASH_ADD                            | (hh_name, head, keyfield_name, key_len, item_ptr)
+|HASH_ADD_BYHASHVALUE                | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
+|HASH_ADD_KEYPTR                     | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_ADD_KEYPTR_BYHASHVALUE         | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_ADD_INORDER                    | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
+|HASH_ADD_BYHASHVALUE_INORDER        | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)
+|HASH_ADD_KEYPTR_INORDER             | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
+|HASH_ADD_KEYPTR_BYHASHVALUE_INORDER | (hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)
+|HASH_REPLACE                        | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_BYHASHVALUE            | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_INORDER                | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr, cmp)
+|HASH_REPLACE_BYHASHVALUE_INORDER    | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr, cmp)
+|HASH_FIND                           | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_FIND_BYHASHVALUE               | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_DELETE                         | (hh_name, head, item_ptr)
+|HASH_VALUE                          | (key_ptr, key_len, key_hash)
+|HASH_SRT                            | (hh_name, head, cmp)
+|HASH_CNT                            | (hh_name, head)
+|HASH_CLEAR                          | (hh_name, head)
+|HASH_SELECT                         | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
+|HASH_ITER                           | (hh_name, head, item_ptr, tmp_item_ptr)
+|HASH_OVERHEAD                       | (hh_name, head)
 |===============================================================================
 
 [NOTE]
 `HASH_ADD_KEYPTR` is used when the structure contains a pointer to the
 key, rather than the key itself. 
 
-The `HASH_VALUE` and `BY_HVAL` macros are a performance mechanism mainly for the
+The `HASH_VALUE` and `..._BYHASHVALUE` macros are a performance mechanism mainly for the
 special case of having different structures, in different hash tables, having
 identical keys. It allows the hash value to be obtained once and then passed
-in to `BY_HVAL` macros, saving the expense of re-computing the hash value.
+in to the `..._BYHASHVALUE` macros, saving the expense of re-computing the hash value.
 
 
 Argument descriptions
@@ -1790,17 +1792,17 @@ key_ptr::
     `HASH_ADD_KEYPTR`, this is the address of the key of the item being added.
 key_hash::
     the hash value of the provided key. This is an input parameter for the
-    `..._BY_HVAL` macros, and an output parameter for `HASH_VALUE`.
+    `..._BYHASHVALUE` macros, and an output parameter for `HASH_VALUE`.
     Reusing a cached hash value can be a performance optimization if
     you're going to do repeated lookups for the same key.
 item_ptr::
-    pointer to the structure being added, deleted, or looked up, or the current
-    pointer during iteration. This is an input parameter for `HASH_ADD` and
-    `HASH_DELETE` macros, and an output parameter for `HASH_FIND` and
-    `HASH_ITER`. (When using `HASH_ITER` to iterate, `tmp_item_ptr`
+    pointer to the structure being added, deleted, replaced, or looked up, or the current
+    pointer during iteration. This is an input parameter for the `HASH_ADD`,
+    `HASH_DELETE`, and `HASH_REPLACE` macros, and an output parameter for `HASH_FIND`
+    and `HASH_ITER`. (When using `HASH_ITER` to iterate, `tmp_item_ptr`
     is another variable of the same type as `item_ptr`, used internally).
 replaced_item_ptr::
-    used in HASH_REPLACE macros. This is an output parameter that is set to point
+    used in `HASH_REPLACE` macros. This is an output parameter that is set to point
     to the replaced item (if no item is replaced it is set to NULL).
 cmp::
     pointer to comparison function which accepts two arguments (pointers to
@@ -1813,4 +1815,3 @@ condition::
     structure should be "selected" for addition to the destination hash.
 
 // vim: set tw=80 wm=2 syntax=asciidoc: 
-
