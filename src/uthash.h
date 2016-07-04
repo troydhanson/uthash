@@ -117,7 +117,7 @@ do {                                                                            
     unsigned _hf_bkt;                                                            \
     HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                  \
     if (HASH_BLOOM_TEST((head)->hh.tbl, hashval) != 0) {                         \
-      HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ], keyptr, keylen, out); \
+      HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ], keyptr, keylen, hashval, out); \
     }                                                                            \
   }                                                                              \
 } while (0)
@@ -708,12 +708,12 @@ do {                                                                   \
 #define HASH_KEYCMP(a,b,len) memcmp(a,b,(unsigned long)(len))
 
 /* iterate over items in a known bucket to find desired item */
-#define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,out)                       \
+#define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,hashval,out)               \
 do {                                                                             \
  if (head.hh_head != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head)); } \
  else { out=NULL; }                                                              \
  while (out != NULL) {                                                           \
-    if ((out)->hh.keylen == (keylen_in)) {                                       \
+    if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) {       \
         if ((HASH_KEYCMP((out)->hh.key,keyptr,keylen_in)) == 0) { break; }         \
     }                                                                            \
     if ((out)->hh.hh_next != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,(out)->hh.hh_next)); } \
