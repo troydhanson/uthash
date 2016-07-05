@@ -2005,9 +2005,9 @@ when all is done. Obviously, this won&#8217;t do what you want if you need
 the list to be in an ordered state at times between insertion of
 items. You can use HASH_SRT() after every insertion operation, but that will
 yield a computational complexity of <em>O(n^2 log n)</em>.</p></div>
-<div class="paragraph"><p>The second route you can take is via the sorted add macros.
-The HASH_SADD*() macros work just like their HASH_ADD*() counterparts, but
-with an additional compare function argument:</p></div>
+<div class="paragraph"><p>The second route you can take is via the in-order add and replace macros.
+The <code>HASH_ADD_INORDER*</code> macros work just like their <code>HASH_ADD*</code> counterparts, but
+with an additional comparison-function argument:</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>int name_sort(struct my_struct *a, struct my_struct *b) {
@@ -2016,12 +2016,12 @@ with an additional compare function argument:</p></div>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>HASH_SADD_KEYPTR(hh, items, &amp;item-&gt;name, strlen(item-&gt;name), item, name_sort);</code></pre>
+<pre><code>HASH_ADD_KEYPTR_INORDER(hh, items, &amp;item-&gt;name, strlen(item-&gt;name), item, name_sort);</code></pre>
 </div></div>
 <div class="paragraph"><p>New items are sorted at insertion time in <em>O(n)</em>, thus resulting in a
 total computational complexity of <em>O(n^2)</em> for the creation of the hash
 table with all items.
-For sorted add to work, the list must be in an ordered state before
+For in-order add to work, the list must be in an ordered state before
 insertion of the new item.</p></div>
 </div>
 <div class="sect2">
@@ -2856,7 +2856,7 @@ cellspacing="0" cellpadding="4">
 <col width="75%" />
 <thead>
 <tr>
-<th align="left" valign="top">macro                    </th>
+<th align="left" valign="top">macro                               </th>
 <th align="left" valign="top"> arguments</th>
 </tr>
 </thead>
@@ -2866,7 +2866,7 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_ADD_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_BYHASHVALUE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr)</code></p></td>
 </tr>
 <tr>
@@ -2874,23 +2874,23 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BYHASHVALUE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_SADD</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_INORDER</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_SADD_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_BYHASHVALUE_INORDER</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_SADD_KEYPTR</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_INORDER</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_SADD_KEYPTR_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BYHASHVALUE_INORDER</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
@@ -2898,15 +2898,23 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BYHASHVALUE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_INORDER</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr, cmp)</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BYHASHVALUE_INORDER</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, item_ptr)</code></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"><code>HASH_FIND_BY_HVAL</code></p></td>
+<td align="left" valign="top"><p class="table"><code>HASH_FIND_BYHASHVALUE</code></p></td>
 <td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
 </tr>
 <tr>
@@ -2953,10 +2961,10 @@ cellspacing="0" cellpadding="4">
 key, rather than the key itself.</td>
 </tr></table>
 </div>
-<div class="paragraph"><p>The <code>HASH_VALUE</code> and <code>BY_HVAL</code> macros are a performance mechanism mainly for the
+<div class="paragraph"><p>The <code>HASH_VALUE</code> and <code>..._BYHASHVALUE</code> macros are a performance mechanism mainly for the
 special case of having different structures, in different hash tables, having
 identical keys. It allows the hash value to be obtained once and then passed
-in to <code>BY_HVAL</code> macros, saving the expense of re-computing the hash value.</p></div>
+in to the <code>..._BYHASHVALUE</code> macros, saving the expense of re-computing the hash value.</p></div>
 <div class="sect3">
 <h4 id="_argument_descriptions">Argument descriptions</h4>
 <div class="dlist"><dl>
@@ -3015,7 +3023,7 @@ key_hash
 <dd>
 <p>
     the hash value of the provided key. This is an input parameter for the
-    <code>..._BY_HVAL</code> macros, and an output parameter for <code>HASH_VALUE</code>.
+    <code>..._BYHASHVALUE</code> macros, and an output parameter for <code>HASH_VALUE</code>.
     Reusing a cached hash value can be a performance optimization if
     you&#8217;re going to do repeated lookups for the same key.
 </p>
@@ -3025,10 +3033,10 @@ item_ptr
 </dt>
 <dd>
 <p>
-    pointer to the structure being added, deleted, or looked up, or the current
-    pointer during iteration. This is an input parameter for <code>HASH_ADD</code> and
-    <code>HASH_DELETE</code> macros, and an output parameter for <code>HASH_FIND</code> and
-    <code>HASH_ITER</code>. (When using <code>HASH_ITER</code> to iterate, <code>tmp_item_ptr</code>
+    pointer to the structure being added, deleted, replaced, or looked up, or the current
+    pointer during iteration. This is an input parameter for the <code>HASH_ADD</code>,
+    <code>HASH_DELETE</code>, and <code>HASH_REPLACE</code> macros, and an output parameter for <code>HASH_FIND</code>
+    and <code>HASH_ITER</code>. (When using <code>HASH_ITER</code> to iterate, <code>tmp_item_ptr</code>
     is another variable of the same type as <code>item_ptr</code>, used internally).
 </p>
 </dd>
@@ -3037,7 +3045,7 @@ replaced_item_ptr
 </dt>
 <dd>
 <p>
-    used in HASH_REPLACE macros. This is an output parameter that is set to point
+    used in <code>HASH_REPLACE</code> macros. This is an output parameter that is set to point
     to the replaced item (if no item is replaced it is set to NULL).
 </p>
 </dd>
@@ -3072,8 +3080,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 2.0<br />
-Last updated
- 2016-07-01 11:12:57 EDT
+Last updated 2016-07-05 13:17:29 PDT
 </div>
 </div>
 </body>
