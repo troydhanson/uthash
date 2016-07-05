@@ -3,11 +3,16 @@ uthash ChangeLog
 
 Click to return to the link:index.html[uthash home page].
 
-NOTE: The ChangeLog is no longer maintained. See the git commit log.
+NOTE: This ChangeLog may be incomplete and/or incorrect. See the git commit log.
 
+Version 2.0.1 (2016-07-05)
+--------------------------
+* in-order insertion macros HASH_ADD_INORDER etc (thanks, Thilo Schulz!)
+* by-hashvalue insertion macros HASH_ADD_BYHASHVALUE etc
+* during key comparison, check hashvalue before doing a full memcmp
 
 Version 1.9.9.1 (2014-11-18)
---------------------------
+----------------------------
 * inclusion of experimental libut bundle with utvector in opt/
 * use shift in Bernstein hash instead of multiply (thanks, Jimmy Zhuo!)
 * switch ssize_t types in utarray/utstring to size_t (thanks, Hong Xu!)

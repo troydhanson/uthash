@@ -1,7 +1,7 @@
 uthash User Guide
 =================
 Troy D. Hanson, Arthur O'Dwyer
-v2.0, July 2016
+v2.0.1, July 2016
 
 To download uthash, follow this link back to the
 https://github.com/troydhanson/uthash[GitHub project page].
@@ -106,8 +106,7 @@ in C than exist today. There are faster hash tables, more memory-efficient hash
 tables, with very different API's today. But, like driving a minivan, uthash is
 convenient, and gets the job done for many purposes. 
 
-As of July 2016, uthash is maintained by Arthur O'Dwyer. To accomodate future
-tags, the version was bumped to 2.0.0. The API remains compatible with 1.x.
+As of July 2016, uthash is maintained by Arthur O'Dwyer.
 
 Your structure
 --------------

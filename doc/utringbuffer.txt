@@ -1,7 +1,7 @@
 utringbuffer: dynamic ring-buffer macros for C 
 ==============================================
 Arthur O'Dwyer <arthur.j.odwyer@gmail.com>
-v0.1, June 2015
+v2.0.1, July 2016
 
 Here's a link back to the https://github.com/troydhanson/uthash[GitHub project page].
 

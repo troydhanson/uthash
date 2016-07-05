@@ -25,6 +25,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #ifndef UTRINGBUFFER_H
 #define UTRINGBUFFER_H
+
+#define UTRINGBUFFER_VERSION 2.0.1
  
 #include <stdlib.h>
 #include <string.h>

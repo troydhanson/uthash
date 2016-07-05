@@ -24,6 +24,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTHASH_H
 #define UTHASH_H
 
+#define UTHASH_VERSION 2.0.1
+
 #include <string.h>   /* memcmp,strlen */
 #include <stddef.h>   /* ptrdiff_t */
 #include <stdlib.h>   /* exit() */
@@ -75,8 +77,6 @@ typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
 #endif
-
-#define UTHASH_VERSION 2.0.0
 
 #ifndef uthash_fatal
 #define uthash_fatal(msg) exit(-1)        /* fatal error (out of memory,etc) */
