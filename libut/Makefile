@@ -25,9 +25,13 @@ tests: libut.a
 
 install: libut.a libut.so.2.0.1
 	mkdir -p $(DESTDIR)$(LIBDIR)
+	mkdir -p $(DESTDIR)$(LIBDIR)/pkgconfig
 	mkdir -p $(DESTDIR)/usr/include
 	cp libut.a $(DESTDIR)$(LIBDIR)
 	cp libut.so.2.0.1 $(DESTDIR)$(LIBDIR)
 	ln -sf $(LIBDIR)/libut.so.2.0.1 $(DESTDIR)$(LIBDIR)/libut.so.2
 	ln -sf $(LIBDIR)/libut.so.2.0.1 $(DESTDIR)$(LIBDIR)/libut.so
 	cp ./include/*.h $(DESTDIR)/usr/include
+	sed -i -e "s|VERSION|2.0.1|" uthash.pc.in
+	sed -i -e "s|LIBDIR|$(LIBDIR)|" uthash.pc.in
+	cp uthash.pc.in $(DESTDIR)$(LIBDIR)/pkgconfig/uthash.pc

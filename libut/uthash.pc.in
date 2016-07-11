@@ -1,0 +1,9 @@
+prefix=/usr
+libdir=LIBDIR
+includedir=/usr/include
+
+Name: uthash
+Description: C macros for hash tables and more 
+Version: VERSION
+Libs: -L${libdir} -lut
+Cflags: -I${includedir}
