@@ -7,6 +7,7 @@ LIBDIR=/usr/lib
 CFLAGS+=-I$(INCDIR)
 CFLAGS+=-Wall -Wextra -Werror -fPIC
 CFLAGS+=-g
+CFLAGS+=$(OPTFLAGS)
 
 libut.a: $(OBJS)
 	ar r $@ $^

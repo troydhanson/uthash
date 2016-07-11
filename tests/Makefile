@@ -18,6 +18,7 @@ CFLAGS += -I$(HASHDIR)
 #CFLAGS += -DHASH_BLOOM=16
 #CFLAGS += -O2
 CFLAGS += -g
+CFLAGS += $(OPTFLAGS)
 #CFLAGS += -Wstrict-aliasing=2
 CFLAGS += -Wall 
 #CFLAGS += -Wextra 

@@ -4,7 +4,8 @@ OBJS=$(patsubst %,%.o,$(PROGS))
 
 CFLAGS += -I../include
 CFLAGS += -g
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -Werror -fPIC
+CFLAGS += $(OPTFLAGS)
 LDFLAGS += -L.. -lut
 
 TEST_TARGET=run_tests
