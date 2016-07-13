@@ -87,6 +87,12 @@ typedef unsigned char uint8_t;
 #ifndef uthash_free
 #define uthash_free(ptr,sz) free(ptr)     /* free fcn                        */
 #endif
+#ifndef uthash_strlen
+#define uthash_strlen(s) strlen(s)
+#endif
+#ifndef uthash_memcmp
+#define uthash_memcmp(a,b,n) memcmp(a,b,n)
+#endif
 
 #ifndef uthash_noexpand_fyi
 #define uthash_noexpand_fyi(tbl)          /* can be defined to log noexpand  */
@@ -366,11 +372,11 @@ do {                                                                            
 
 /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
 #define HASH_FIND_STR(head,findstr,out)                                          \
-    HASH_FIND(hh,head,findstr,(unsigned)strlen(findstr),out)
+    HASH_FIND(hh,head,findstr,(unsigned)uthash_strlen(findstr),out)
 #define HASH_ADD_STR(head,strfield,add)                                          \
-    HASH_ADD(hh,head,strfield[0],(unsigned int)strlen(add->strfield),add)
+    HASH_ADD(hh,head,strfield[0],(unsigned)uthash_strlen(add->strfield),add)
 #define HASH_REPLACE_STR(head,strfield,add,replaced)                             \
-    HASH_REPLACE(hh,head,strfield[0],(unsigned)strlen(add->strfield),add,replaced)
+    HASH_REPLACE(hh,head,strfield[0],(unsigned)uthash_strlen(add->strfield),add,replaced)
 #define HASH_FIND_INT(head,findint,out)                                          \
     HASH_FIND(hh,head,findint,sizeof(int),out)
 #define HASH_ADD_INT(head,intfield,add)                                          \
@@ -704,21 +710,24 @@ do {                                                                   \
 } while (0)
 #endif  /* HASH_USING_NO_STRICT_ALIASING */
 
-/* key comparison function; return 0 if keys equal */
-#define HASH_KEYCMP(a,b,len) memcmp(a,b,(unsigned long)(len))
-
 /* iterate over items in a known bucket to find desired item */
 #define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,hashval,out)               \
 do {                                                                             \
- if (head.hh_head != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head)); } \
- else { out=NULL; }                                                              \
- while (out != NULL) {                                                           \
+  if ((head).hh_head != NULL) {                                                  \
+    DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (head).hh_head));                     \
+  } else {                                                                       \
+    (out) = NULL;                                                                \
+  }                                                                              \
+  while ((out) != NULL) {                                                        \
     if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) {       \
-        if ((HASH_KEYCMP((out)->hh.key,keyptr,keylen_in)) == 0) { break; }         \
+      if (uthash_memcmp((out)->hh.key, keyptr, keylen_in) == 0) break;           \
     }                                                                            \
-    if ((out)->hh.hh_next != NULL) { DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,(out)->hh.hh_next)); } \
-    else { out = NULL; }                                                         \
- }                                                                               \
+    if ((out)->hh.hh_next) {                                                     \
+      DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (out)->hh.hh_next));                \
+    } else {                                                                     \
+      (out) = NULL;                                                              \
+    }                                                                            \
+  }                                                                              \
 } while (0)
 
 /* add an item to a bucket  */

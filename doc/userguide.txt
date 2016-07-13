@@ -1532,16 +1532,21 @@ performance.
 
 Hooks
 ~~~~~
-You don't need to use these hooks- they are only here if you want to modify
-the behavior of uthash.  Hooks can be used to change how uthash allocates 
-memory, and to run code in response to certain internal events. 
+You don't need to use these hooks -- they are only here if you want to modify
+the behavior of uthash.  Hooks can be used to replace standard library functions
+that might be unavailable on some platforms, to change how uthash allocates 
+memory, or to run code in response to certain internal events. 
 
-malloc/free
-^^^^^^^^^^^
+The `uthash.h` header will define these hooks to default values, unless they
+are already defined. It is safe either to `#undef` and redefine them
+after including `uthash.h`, or to define them before inclusion; for
+example, by passing `-Duthash_malloc=my_malloc` on the command line.
+
+Specifying alternate memory management functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 By default this hash implementation uses `malloc` and `free` to manage memory.
 If your application uses its own custom allocator, this hash can use them too.
 
-.Specifying alternate memory management functions
 ----------------------------------------------------------------------------
 #include "uthash.h"
 
@@ -1550,8 +1555,8 @@ If your application uses its own custom allocator, this hash can use them too.
 #undef uthash_free
 
 /* re-define, specifying alternate functions */
-#define uthash_malloc(sz) my_malloc(sz) 
-#define uthash_free(ptr,sz) my_free(ptr)    
+#define uthash_malloc(sz) my_malloc(sz)
+#define uthash_free(ptr,sz) my_free(ptr)
 
 ...
 ----------------------------------------------------------------------------
@@ -1559,14 +1564,31 @@ If your application uses its own custom allocator, this hash can use them too.
 Notice that `uthash_free` receives two parameters. The `sz` parameter is for
 convenience on embedded platforms that manage their own memory.
 
+Specifying alternate standard library functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Uthash also uses `strlen` (in the `HASH_FIND_STR` convenience macro, for
+example) and `memcmp` (as the method of comparing keys for equality). On
+platforms that do not provide these functions, you can substitute your own
+implementations.
+
+----------------------------------------------------------------------------
+#undef uthash_memcmp
+#define uthash_memcmp(a,b,len) my_memcmp(a,b,len)
+
+#undef uthash_strlen
+#define uthash_strlen(s) my_strlen(s)
+----------------------------------------------------------------------------
+
 Out of memory
 ^^^^^^^^^^^^^
 If memory allocation fails (i.e., the malloc function returned `NULL`), the
 default behavior is to terminate the process by calling `exit(-1)`. This can
 be modified by re-defining the `uthash_fatal` macro.
  
-    #undef uthash_fatal
-    #define uthash_fatal(msg) my_fatal_function(msg);
+----------------------------------------------------------------------------
+#undef uthash_fatal
+#define uthash_fatal(msg) my_fatal_function(msg)
+----------------------------------------------------------------------------
 
 The fatal function should terminate the process or `longjmp` back to a safe
 place. Uthash does not support "returning a failure" if memory cannot be
@@ -1585,14 +1607,9 @@ Expansion
 +++++++++
 There is a hook for the bucket expansion event.  
 
-.Bucket expansion hook
 ----------------------------------------------------------------------------
-#include "uthash.h"
-
 #undef uthash_expand_fyi 
 #define uthash_expand_fyi(tbl) printf("expanded to %d buckets\n", tbl->num_buckets)
-
-...
 ----------------------------------------------------------------------------
 
 Expansion-inhibition
@@ -1600,16 +1617,10 @@ Expansion-inhibition
 This hook can be defined to code to execute in the event that uthash decides to
 set the 'bucket expansion inhibited' flag. 
 
-.Bucket expansion inhibited hook
 ----------------------------------------------------------------------------
-#include "uthash.h"
-
 #undef uthash_noexpand_fyi
-#define uthash_noexpand_fyi printf("warning: bucket expansion inhibited\n");
-
-...
+#define uthash_noexpand_fyi printf("warning: bucket expansion inhibited\n")
 ----------------------------------------------------------------------------
-
 
 Debug mode
 ~~~~~~~~~~
