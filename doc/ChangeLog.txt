@@ -62,22 +62,22 @@ Version 1.9.5 (2011-11-16)
 * added `utarray_renew`
 * fixed memory leak in `uthash_clear` when using Bloom filter (thanks, Jan Hättig!)
 * utarray now copies the UT_icd on array creation rather than storing a pointer
-* add parentheses to `HASH_ADD` to fix preprocessing of certain arguments (thanks, Aaron Rosen!) 
+* add parentheses to `HASH_ADD` to fix preprocessing of certain arguments (thanks, Aaron Rosen!)
 * more parenthesizations for greater macro argument flexibility
 
 Version 1.9.4 (2011-06-05)
 --------------------------
-* uthash now supports MurmurHash v3 
+* uthash now supports MurmurHash v3
 * utlist now includes concatenation macros (`LL_CONCAT` and `DL_CONCAT`)
 * utarray now supports binary search (`utarray_find`)
 * utstring now supports a new-or-clear-existing macro (`utstring_renew`)
-* documented technique for a multi-level hash table 
+* documented technique for a multi-level hash table
 * clarified scope requirements for `UT_icd` in the utarray documentation
-* fixed termination when `utstring_clear` is followed by `utstring_body` 
+* fixed termination when `utstring_clear` is followed by `utstring_body`
 * fixed utarray_inserta macro when used with complex arguments
-* on Visual Studio define missing type `uint8_t` 
-* Debian/Ubuntu include uthash in the package `uthash-dev`. 
-* uthash has been downloaded 16,211 times. 
+* on Visual Studio define missing type `uint8_t`
+* Debian/Ubuntu include uthash in the package `uthash-dev`.
+* uthash has been downloaded 16,211 times.
 
 Thanks to Yu Feng, Richard Cook, Dino Ciuffetti, Chris Groer, and Arun Cherian
 for feedback and fixes in this release!
@@ -104,8 +104,8 @@ Version 1.9.1 (2010-05-15)
 Version 1.9 (2010-03-31)
 --------------------------
 * uthash now supports Visual Studio 2008 and 2010 in C or C++ code!
-* new headers link:utarray.html[utarray.h] and link:utstring.html[utstring.h] 
-	are now included. These implement dynamic arrays and strings using macros
+* new headers link:utarray.html[utarray.h] and link:utstring.html[utstring.h]
+        are now included. These implement dynamic arrays and strings using macros
 * link:utlist.html[utlist.h] now has deletion-safe iterators and search macros
 * the test suite now runs under Visual Studio (thanks again degski!)
 * special thanks for suggesting utarray and utlist features to Charalampos P.!
@@ -113,18 +113,18 @@ Version 1.9 (2010-03-31)
 
 Version 1.8 (2009-09-08)
 --------------------------
-* Added the `hashscan` utility that can report on the size and quality of 
+* Added the `hashscan` utility that can report on the size and quality of
   hash tables in a running process (Linux-only)
-* Added Bloom filter support. This has the potential to speed up certain 
+* Added Bloom filter support. This has the potential to speed up certain
   types of programs that look up non-existant keys in sufficient numbers.
-* Restored the MurmurHash, which can once again be used, if an additional 
+* Restored the MurmurHash, which can once again be used, if an additional
   symbol is defined. This is a "safety" by which the user declares they
-  understand that `-fno-strict-aliasing` flag must be used if they are 
+  understand that `-fno-strict-aliasing` flag must be used if they are
   using MurmurHash under gcc with optimization.
 * Unified the bucket/table malloc hooks; now there is only one malloc hook
-* Re-organized the manual into a main section and advanced topics section 
-* Fixed a bug in `utlist.h` where sorting a singly-linked list threw a 
-  compile-time error. 
+* Re-organized the manual into a main section and advanced topics section
+* Fixed a bug in `utlist.h` where sorting a singly-linked list threw a
+  compile-time error.
 * Fixed a bug in `utlist.h` where a doubly-linked list that is sorted
   did not maintain the special `head->prev` pointer back to the list tail.
 
@@ -145,22 +145,22 @@ Version 1.6 (2009-05-08)
 Special thanks to Alfred Heisner for contributing several enhancements:
 
 * Support for two new hash functions:
-  - the Paul Hsieh hash function (`HASH_SFH`) 
-  - Austin Appleby's MurmurHash function (`HASH_MUR`) 
+  - the Paul Hsieh hash function (`HASH_SFH`)
+  - Austin Appleby's MurmurHash function (`HASH_MUR`)
 * Because of its excellent performance, MurmurHash is now the default hash function.
 * `keystats` now has much better elapsed time accuracy under Cygwin and MinGW
-* fixed casting in `HASH_FNV`, `HASH_SAX` and `HASH_OAT` for non-char keys 
+* fixed casting in `HASH_FNV`, `HASH_SAX` and `HASH_OAT` for non-char keys
 
 This release also includes:
 
-* a new `HASH_CLEAR` operation clears a hash table in one step. 
+* a new `HASH_CLEAR` operation clears a hash table in one step.
 * a new `HASH_SELECT` operation inserts those elements from one hash that
   satisfy a given condition into another hash. The selected items have
   dual presence in both hash tables. For example a game could select the
   visible polygons from a hash of all polygons.
-* fixed a compile-time error which occurred if the final argument to 
+* fixed a compile-time error which occurred if the final argument to
   `HASH_ADD_KEYPTR` was a pointer to an array member like `&a[i]`
-* added another test script `tests/all_funcs` which executes the test suite 
+* added another test script `tests/all_funcs` which executes the test suite
   using every supported hash function
 
 And lastly,
@@ -175,7 +175,7 @@ Version 1.5 (2009-02-19)
 * use scratch variables on stack rather than in table (thanks, Petter Arvidsson!).
   This change made HASH_FIND about 13% faster and enabled reader concurrency.
 * made link:license.html[BSD license] terms even more permissive
-* added link:userguide.pdf[PDF version] of User Guide 
+* added link:userguide.pdf[PDF version] of User Guide
 * added http://troydhanson.wordpress.com/feed/[update news] image:rss.png[(RSS)]
 
 Version 1.4 (2008-09-23)
@@ -187,8 +187,8 @@ Version 1.4 (2008-09-23)
 * Eliminate `elmt` pointer from the UT_hash_handle. Calculate elmt
   from hash handle address by subtracting `hho` (hash handle offset).
 * Contributed by L.S.Chin:
-  Cast `void*` to char* before pointer arithmetic to suppress compiler 
-  warnings. We assume compilers abide to C standards which impose 
+  Cast `void*` to char* before pointer arithmetic to suppress compiler
+  warnings. We assume compilers abide to C standards which impose
   requirement that `sizeof(void*) == sizeof(char*)`.
 * Return meaningful exit status from do_tests per Tiago Cunha,
   so that package manager-based install can verify tests are successful
@@ -206,21 +206,21 @@ Version 1.3 (2008-07-27)
   bucket expansion algorithm. Deleting is marginally improved too.
 * fixed a minor bug in the calculation of the max ideal chain length;
   line 446 in v1.2 erroneously calculated a/b*2 instead of a/(b*2).
-  The effect of this bug was that bucket expansion could occur more 
+  The effect of this bug was that bucket expansion could occur more
   readily because the per-bucket 'max chain length multiplier factor'
-  (which delays bucket expansion when certain buckets are overused) 
+  (which delays bucket expansion when certain buckets are overused)
   was set to a lower, expansion-favoring value than intended.
 * improved source commenting and improved variable names in structures
 * remove `HASH_JSW`. Lengthy random number array made code less readable
-* add `HASH_SRT(hh,hash,cmp)` as a generalized `HASH_SORT(hash,cmp)`. 
+* add `HASH_SRT(hh,hash,cmp)` as a generalized `HASH_SORT(hash,cmp)`.
   It was an omission in uthash 1.2 that there was no sort macro for
   hash handles with names other than hh.
 * Corrected `HASH_FSCK` so it works with any name for the hash handle.
 * behave properly in pathological `HASH_DEL(a,a)` case where the same
-  variable references the head and the deletee (advancing the head 
-  then loses the correct reference to the deletee); fix by using 
+  variable references the head and the deletee (advancing the head
+  then loses the correct reference to the deletee); fix by using
   scratch area in the hash table to store deletee hash handle.
-* made tests runnable on MinGW 
+* made tests runnable on MinGW
 * 3000+ downloads since uthash-1.0
 
 

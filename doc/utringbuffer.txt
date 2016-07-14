@@ -1,4 +1,4 @@
-utringbuffer: dynamic ring-buffer macros for C 
+utringbuffer: dynamic ring-buffer macros for C
 ==============================================
 Arthur O'Dwyer <arthur.j.odwyer@gmail.com>
 v2.0.1, July 2016
@@ -31,25 +31,25 @@ is incremented. A ring-buffer, once full, can never become un-full.
 
 Download
 ~~~~~~~~
-To download the `utringbuffer.h` header file, 
-follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file, 
+To download the `utringbuffer.h` header file,
+follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file,
 then look in the src/ sub-directory.
 
 BSD licensed
 ~~~~~~~~~~~~
-This software is made available under the 
-link:license.html[revised BSD license]. 
-It is free and open source. 
+This software is made available under the
+link:license.html[revised BSD license].
+It is free and open source.
 
 Platforms
 ~~~~~~~~~
 The 'utringbuffer' macros have been tested on:
 
- * Linux, 
- * Mac OS X, 
+ * Linux,
+ * Mac OS X,
  * Windows, using Visual Studio 2008 and Visual Studio 2010
 
-Usage 
+Usage
 -----
 
 Declaration
@@ -63,7 +63,7 @@ elements to be stored in it. It is declared like,
 New and free
 ~~~~~~~~~~~~
 The next step is to create the ring-buffer using `utringbuffer_new`. Later when you're
-done with the ring-buffer, `utringbuffer_free` will free it and all its elements. 
+done with the ring-buffer, `utringbuffer_free` will free it and all its elements.
 
 Push, etc
 ~~~~~~~~~
@@ -71,7 +71,7 @@ The central features of the ring-buffer involve putting elements into it
 and iterating over them. There are several <<operations,operations>>
 that deal with either single elements or ranges of elements at a
 time. In the examples below we will use only the push operation to insert
-elements. 
+elements.
 
 Elements
 --------
@@ -259,7 +259,7 @@ int main() {
 
 The real utility of `UT_icd` is apparent when the elements stored in the
 ring-buffer are structures that require special work to initialize, copy or
-destruct. 
+destruct.
 
 For example, when a structure contains pointers to related memory areas that
 need to be copied when the structure is copied (and freed when the structure is
@@ -328,7 +328,7 @@ Operations
 
 [width="100%",cols="50<m,40<",grid="none",options="none"]
 |===============================================================================
-| utringbuffer_new(UT_ringbuffer *a, int n, UT_icd *icd)  | allocate a new ringbuffer 
+| utringbuffer_new(UT_ringbuffer *a, int n, UT_icd *icd)  | allocate a new ringbuffer
 | utringbuffer_free(UT_ringbuffer *a)                     | free an allocated ringbuffer
 | utringbuffer_init(UT_ringbuffer *a, int n, UT_icd *icd) | init a ringbuffer (non-alloc)
 | utringbuffer_done(UT_ringbuffer *a)                     | dispose of a ringbuffer (non-alloc)
@@ -337,7 +337,7 @@ Operations
 | utringbuffer_len(UT_ringbuffer *a)                      | get length of a
 | utringbuffer_empty(UT_ringbuffer *a)                    | get whether a is empty
 | utringbuffer_full(UT_ringbuffer *a)                     | get whether a is full
-| utringbuffer_eltptr(UT_ringbuffer *a, int j)            | get pointer of element from index 
+| utringbuffer_eltptr(UT_ringbuffer *a, int j)            | get pointer of element from index
 | utringbuffer_eltidx(UT_ringbuffer *a, element *e)       | get index of element from pointer
 | utringbuffer_front(UT_ringbuffer *a)                    | get oldest element of a
 | utringbuffer_next(UT_ringbuffer *a, element *e)         | get element of a following e (front if e is NULL)
@@ -371,4 +371,4 @@ Notes
    oldest to newest; i.e., `(element *)utringbuffer_front(a) + utringbuffer_len(a)-1` is
    not generally equal to `(element *)utringbuffer_back(a)`.
 
-// vim: set nowrap syntax=asciidoc: 
+// vim: set nowrap syntax=asciidoc:

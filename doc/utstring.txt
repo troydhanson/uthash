@@ -1,4 +1,4 @@
-utstring: dynamic string macros for C 
+utstring: dynamic string macros for C
 =====================================
 Troy D. Hanson <tdh@tkhanson.net>
 v2.0.1, July 2016
@@ -22,24 +22,24 @@ Some utstring operations are implemented as functions rather than macros.
 
 Download
 ~~~~~~~~
-To download the `utstring.h` header file, 
-follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file, 
+To download the `utstring.h` header file,
+follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file,
 then look in the src/ sub-directory.
 
 BSD licensed
 ~~~~~~~~~~~~
-This software is made available under the 
-link:license.html[revised BSD license]. 
-It is free and open source. 
+This software is made available under the
+link:license.html[revised BSD license].
+It is free and open source.
 
 Platforms
 ~~~~~~~~~
 The 'utstring' macros have been tested on:
 
- * Linux, 
+ * Linux,
  * Windows, using Visual Studio 2008 and Visual Studio 2010
 
-Usage 
+Usage
 -----
 
 Declaration
@@ -52,14 +52,14 @@ The dynamic string itself has the data type `UT_string`.  It is declared like,
 New and free
 ~~~~~~~~~~~~
 The next step is to create the string using `utstring_new`. Later when you're
-done with it, `utstring_free` will free it and all its content. 
+done with it, `utstring_free` will free it and all its content.
 
 Manipulation
 ~~~~~~~~~~~~
 The `utstring_printf` or `utstring_bincpy` operations insert (copy) data into
 the string. To concatenate one utstring to another, use `utstring_concat`.  To
 clear the content of the string, use `utstring_clear`. The length of the string
-is available from `utstring_len`, and its content from `utstring_body`. This 
+is available from `utstring_len`, and its content from `utstring_body`. This
 evaluates to a `char*`.  The buffer it points to is always null-terminated.
 So, it can be used directly with external functions that expect a string.
 This automatic null terminator is not counted in the length of the string.
@@ -144,7 +144,7 @@ int main() {
 [[operations]]
 Reference
 ---------
-These are the utstring operations. 
+These are the utstring operations.
 
 Operations
 ~~~~~~~~~~
@@ -172,17 +172,17 @@ Use `utstring_new` and `utstring_free` to allocate a new string or free it.  If
 the UT_string is statically allocated, use `utstring_init` and `utstring_done`
 to initialize or free its internal memory.
 
-Substring search 
+Substring search
 ~~~~~~~~~~~~~~~~
 Use `utstring_find` and `utstring_findR` to search for a substring in a utstring.
-It comes in forward and reverse varieties. The reverse search scans from the end of 
-the string backward. These take a position to start searching from, measured from 0 
+It comes in forward and reverse varieties. The reverse search scans from the end of
+the string backward. These take a position to start searching from, measured from 0
 (the start of the utstring).  A negative position is counted from the end of
 the string, so, -1 is the last position.  Note that in the reverse search, the
 initial position anchors to the 'end' of the substring being searched for-
 e.g., the 't' in 'cat'. The return value always refers to the offset where the
 substring 'starts' in the utstring.  When no substring match is found, -1 is
-returned.  
+returned.
 
 For example if a utstring called `s` contains:
 
@@ -196,7 +196,7 @@ Then these forward and reverse substring searches for `ABC` produce these result
   utstring_findR( s, -9, "ABC", 3 ) = 11
   utstring_findR( s, 12, "ABC", 3 ) =  4
   utstring_findR( s,  2, "ABC", 3 ) =  0
-  
+
 "Multiple use" substring search
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The preceding examples show "single use" versions of substring matching, where
@@ -220,10 +220,10 @@ then using it in a search:
  _utstring_BuildTable("ABC", 3, KPM_TABLE);
  offset = _utstring_find(utstring_body(s), utstring_len(s), "ABC", 3, KPM_TABLE );
  free(KPM_TABLE);
- 
+
 Note that the internal `_utstring_find` has the length of the UT_string as its
-second argument, rather than the start position. You can emulate the position 
+second argument, rather than the start position. You can emulate the position
 parameter by adding to the string start address and subtracting from its length.
 
-// vim: set nowrap syntax=asciidoc: 
+// vim: set nowrap syntax=asciidoc:
 

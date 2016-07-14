@@ -1,4 +1,4 @@
-utarray: dynamic array macros for C 
+utarray: dynamic array macros for C
 ===================================
 Troy D. Hanson <tdh@tkhanson.net>
 v2.0.1, July 2016
@@ -23,25 +23,25 @@ accommodate all the data that is pushed into it.
 
 Download
 ~~~~~~~~
-To download the `utarray.h` header file, 
-follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file, 
+To download the `utarray.h` header file,
+follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file,
 then look in the src/ sub-directory.
 
 BSD licensed
 ~~~~~~~~~~~~
-This software is made available under the 
-link:license.html[revised BSD license]. 
-It is free and open source. 
+This software is made available under the
+link:license.html[revised BSD license].
+It is free and open source.
 
 Platforms
 ~~~~~~~~~
 The 'utarray' macros have been tested on:
 
- * Linux, 
- * Mac OS X, 
+ * Linux,
+ * Mac OS X,
  * Windows, using Visual Studio 2008 and Visual Studio 2010
 
-Usage 
+Usage
 -----
 
 Declaration
@@ -55,7 +55,7 @@ elements to be stored in it. It is declared like,
 New and free
 ~~~~~~~~~~~~
 The next step is to create the array using `utarray_new`. Later when you're
-done with the array, `utarray_free` will free it and all its elements. 
+done with the array, `utarray_free` will free it and all its elements.
 
 Push, pop, etc
 ~~~~~~~~~~~~~~
@@ -63,7 +63,7 @@ The central features of the utarray involve putting elements into it, taking
 them out, and iterating over them. There are several <<operations,operations>>
 to pick from that deal with either single elements or ranges of elements at a
 time. In the examples below we will use only the push operation to insert
-elements. 
+elements.
 
 Elements
 --------
@@ -85,11 +85,11 @@ int main() {
   UT_array *nums;
   int i, *p;
 
-  utarray_new(nums,&ut_int_icd);  
+  utarray_new(nums,&ut_int_icd);
   for(i=0; i < 10; i++) utarray_push_back(nums,&i);
 
-  for(p=(int*)utarray_front(nums); 
-      p!=NULL; 
+  for(p=(int*)utarray_front(nums);
+      p!=NULL;
       p=(int*)utarray_next(nums,p)) {
     printf("%d\n",*p);
   }
@@ -246,7 +246,7 @@ int main() {
 -------------------------------------------------------------------------------
 
 The real utility of `UT_icd` is apparent when the elements of the utarray are
-structures that require special work to initialize, copy or destruct. 
+structures that require special work to initialize, copy or destruct.
 
 For example, when a structure contains pointers to related memory areas that
 need to be copied when the structure is copied (and freed when the structure is
@@ -313,7 +313,7 @@ Operations
 
 [width="100%",cols="50<m,40<",grid="none",options="none"]
 |===============================================================================
-| utarray_new(UT_array *a, UT_icd *icd)| allocate a new array 
+| utarray_new(UT_array *a, UT_icd *icd)| allocate a new array
 | utarray_free(UT_array *a)            | free an allocated array
 | utarray_init(UT_array *a,UT_icd *icd)| init an array (non-alloc)
 | utarray_done(UT_array *a)            | dispose of an array (non-allocd)
@@ -321,8 +321,8 @@ Operations
 | utarray_push_back(UT_array *a,void *p) | push element p onto a
 | utarray_pop_back(UT_array *a)        | pop last element from a
 | utarray_extend_back(UT_array *a)     | push empty element onto a
-| utarray_len(UT_array *a)             | get length of a 
-| utarray_eltptr(UT_array *a,int j)    | get pointer of element from index 
+| utarray_len(UT_array *a)             | get length of a
+| utarray_eltptr(UT_array *a,int j)    | get pointer of element from index
 | utarray_eltidx(UT_array *a,void *e)  | get index of element from pointer
 | utarray_insert(UT_array *a,void *p, int j) | insert element p to index j
 | utarray_inserta(UT_array *a,UT_array *w, int j) | insert array w into array a at index j
@@ -330,7 +330,7 @@ Operations
 | utarray_concat(UT_array *dst,UT_array *src) | copy src to end of dst array
 | utarray_erase(UT_array *a,int pos,int len) | remove len elements from a[pos]..a[pos+len-1]
 | utarray_clear(UT_array *a) | clear all elements from a, setting its length to zero
-| utarray_sort(UT_array *a,cmpfcn *cmp) | sort elements of a using comparison function 
+| utarray_sort(UT_array *a,cmpfcn *cmp) | sort elements of a using comparison function
 | utarray_find(UT_array *a,void *v, cmpfcn *cmp) | find element v in utarray (must be sorted)
 | utarray_front(UT_array *a) | get first element of a
 | utarray_next(UT_array *a,void *e) | get element of a following e (front if e is NULL)
@@ -345,10 +345,10 @@ Notes
    while `utarray_init` and `utarray_done` can be used if the UT_array is already
    allocated and just needs to be initialized or have its internal resources
    freed.
-2. `utarray_reserve` takes the "delta" of elements to reserve (not the total 
+2. `utarray_reserve` takes the "delta" of elements to reserve (not the total
    desired capacity of the array-- this differs from the C++ STL "reserve" notion)
 3. `utarray_sort` expects a comparison function having the usual `strcmp` -like
-   convention where it accepts two elements (a and b) and returns a negative 
+   convention where it accepts two elements (a and b) and returns a negative
    value if a precedes b, 0 if a and b sort equally, and positive if b precedes a.
    This is an example of a comparison function:
 
@@ -370,5 +370,5 @@ Notes
    For this reason, it's usually better to refer to an element by its integer
    'index' in code whose duration may include element insertion.
 
-// vim: set nowrap syntax=asciidoc: 
+// vim: set nowrap syntax=asciidoc:
 

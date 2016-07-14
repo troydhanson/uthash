@@ -18,22 +18,22 @@ elements, sorting them and iterating over them.
 
 Download
 ~~~~~~~~
-To download the `utlist.h` header file, 
-follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file, 
+To download the `utlist.h` header file,
+follow the links on https://github.com/troydhanson/uthash to clone uthash or get a zip file,
 then look in the src/ sub-directory.
 
 BSD licensed
 ~~~~~~~~~~~~
-This software is made available under the 
-link:license.html[revised BSD license]. 
-It is free and open source. 
+This software is made available under the
+link:license.html[revised BSD license].
+It is free and open source.
 
 Platforms
 ~~~~~~~~~
 The 'utlist' macros have been tested on:
 
- * Linux, 
- * Mac OS X, and 
+ * Linux,
+ * Mac OS X, and
  * Windows, using Visual Studio 2008, Visual Studio 2010, or Cygwin/MinGW.
 
 Using utlist
@@ -52,20 +52,20 @@ Efficiency
 Prepending elements::
  Constant-time on all list types.
 Appending::
- 'O(n)' on singly-linked lists; constant-time on doubly-linked list. 
- (The utlist implementation of the doubly-linked list keeps a tail pointer in 
+ 'O(n)' on singly-linked lists; constant-time on doubly-linked list.
+ (The utlist implementation of the doubly-linked list keeps a tail pointer in
  `head->prev` so that append can be done in constant time).
 Deleting elements::
- 'O(n)' on singly-linked lists; constant-time on doubly-linked list. 
-Sorting:: 
+ 'O(n)' on singly-linked lists; constant-time on doubly-linked list.
+Sorting::
  'O(n log(n))' for all list types.
-Iteration, counting and searching:: 
+Iteration, counting and searching::
  'O(n)' for all list types.
 
 List elements
 ~~~~~~~~~~~~~
-You can use any structure with these macros, as long as the structure 
-contains a `next` pointer. If you want to make a doubly-linked list, 
+You can use any structure with these macros, as long as the structure
+contains a `next` pointer. If you want to make a doubly-linked list,
 the element also needs to have a `prev` pointer.
 
   typedef struct element {
@@ -75,7 +75,7 @@ the element also needs to have a `prev` pointer.
   } element;
 
 You can name your structure anything. In the example above it is called `element`.
-Within a particular list, all elements must be of the same type. 
+Within a particular list, all elements must be of the same type.
 
 Flexible prev/next naming
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -92,18 +92,18 @@ anything. *It must be initialized to `NULL`*.
 
 List operations
 ~~~~~~~~~~~~~~~
-The lists support inserting or deleting elements, sorting the elements and 
+The lists support inserting or deleting elements, sorting the elements and
 iterating over them.
 
 [width="100%",cols="10<m,10<m,10<m",grid="cols",options="header"]
 |===============================================================================
 |Singly-linked             | Doubly-linked              | Circular, doubly-linked
 |LL_PREPEND(head,add);     | DL_PREPEND(head,add);      | CDL_PREPEND(head,add);
-|LL_PREPEND_ELEM(head,ref,add); | DL_PREPEND_ELEM(head,ref,add); | CDL_PREPEND_ELEM(head,ref,add); 
-|LL_APPEND_ELEM(head,ref,add); | DL_APPEND_ELEM(head,ref,add); | CDL_APPEND_ELEM(head,ref,add); 
-|LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add); 
+|LL_PREPEND_ELEM(head,ref,add); | DL_PREPEND_ELEM(head,ref,add); | CDL_PREPEND_ELEM(head,ref,add);
+|LL_APPEND_ELEM(head,ref,add); | DL_APPEND_ELEM(head,ref,add); | CDL_APPEND_ELEM(head,ref,add);
+|LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add);
 |LL_APPEND(head,add);      | DL_APPEND(head,add);       | CDL_APPEND(head,add);
-|LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    | 
+|LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    |
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
 |LL_FOREACH(head,elt) {...}| DL_FOREACH(head,elt) {...} | CDL_FOREACH(head,elt) {...}
@@ -133,7 +133,7 @@ The 'foreach' operation is for easy iteration over the list from the head to the
 tail. A usage example is shown below. You can of course just use the `prev` and
 `next` pointers directly instead of using the 'foreach' macros.
 The 'foreach_safe' operation should be used if you plan to delete any of the list
-elements while iterating. 
+elements while iterating.
 
 The 'search' operation is a shortcut for iteration in search of a particular
 element. It is not any faster than manually iterating and testing each element.
@@ -164,7 +164,7 @@ ref::
   `ref` must be the name of a pointer variable and cannot be literally NULL,
   use _PREPEND() and _APPEND() macro family instead.
 like::
-  An element pointer, having the same type as `elt`, for which the search macro 
+  An element pointer, having the same type as `elt`, for which the search macro
   seeks a match (if found, the match is stored in `elt`). A match is determined
   by the given `cmp` function.
 cmp::
@@ -219,7 +219,7 @@ int main(int argc, char *argv[]) {
     FILE *file;
 
     if ( (file = fopen( "test11.dat", "r" )) == NULL ) {
-        perror("can't open: "); 
+        perror("can't open: ");
         exit(-1);
     }
 
@@ -250,11 +250,11 @@ int main(int argc, char *argv[]) {
 --------------------------------------------------------------------------------
 
 [[flex_names]]
-Other names for prev and next 
+Other names for prev and next
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If the `prev` and `next` fields are named something else, a separate group of
 macros must be used. These work the same as the regular macros, but take the
-field names as extra parameters. 
+field names as extra parameters.
 
 These "flexible field name" macros are shown below. They all end with "2". Each
 operates the same as its counterpart without the 2, but they take the name of
@@ -299,5 +299,5 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  CDL_SEARCH2(head, out, elt, cmp, next);
  CDL_COUNT2(head, elt, count, next);
 
-// vim: set tw=80 wm=2 syntax=asciidoc: 
+// vim: set tw=80 wm=2 syntax=asciidoc:
 
