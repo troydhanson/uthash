@@ -2,39 +2,29 @@
 #include <stdlib.h>   /* malloc */
 #include <stdio.h>    /* printf */
 
-/* Set up macros for alternative malloc/free functions  */
-#undef uthash_malloc
-#undef uthash_free
+/* This is mostly a copy of test6.c. */
+
 #undef uthash_memcmp
 #undef uthash_strlen
-#define uthash_malloc(sz) alt_malloc(sz)
-#define uthash_free(ptr,sz) alt_free(ptr)
 #define uthash_memcmp(a,b,n) alt_memcmp(a,b,n)
-#define uthash_strlen(s) ..fail_to_compile..
+#define uthash_strlen(s) alt_strlen(s)
 
 typedef struct example_user_t {
-    int id;
+    char id[3];
     int cookie;
     UT_hash_handle hh;
 } example_user_t;
-
-static void *alt_malloc(size_t sz)
-{
-    if (sz == sizeof(UT_hash_table)) {
-        printf("%s\n", "alt malloc table");
-    }
-    return malloc(sz);
-}
-static void alt_free(void *ptr)
-{
-    /* printf("%s\n", "alt_free"); */
-    free(ptr);
-}
 
 static int alt_memcmp(void *a, void *b, size_t n)
 {
     puts("alt_memcmp");
     return memcmp(a,b,n);
+}
+
+static size_t alt_strlen(const char *s)
+{
+    puts("alt_strlen");
+    return strlen(s);
 }
 
 int main(int argc,char *argv[])
@@ -43,19 +33,21 @@ int main(int argc,char *argv[])
     example_user_t *user, *tmp, *users=NULL;
 
     /* create elements */
-    for(i=0; i<10; i++) {
+    for (i=0; i<10; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
         if (user == NULL) {
             exit(-1);
         }
-        user->id = i;
+        sprintf(user->id, "%d", i);
         user->cookie = i*i;
-        HASH_ADD_INT(users,id,user);
+        HASH_ADD_STR(users,id,user);
     }
 
     /* delete each ID */
-    for(i=0; i<10; i++) {
-        HASH_FIND_INT(users,&i,tmp);
+    for (i=0; i<10; i++) {
+        char buffer[3];
+        sprintf(buffer, "%d", i);
+        HASH_FIND_STR(users,buffer,tmp);
         if (tmp != NULL) {
             HASH_DEL(users,tmp);
             free(tmp);
@@ -65,8 +57,8 @@ int main(int argc,char *argv[])
     }
 
     /* show the hash */
-    for(user=users; user != NULL; user=(example_user_t*)(user->hh.next)) {
-        printf("user %d, cookie %d\n", user->id, user->cookie);
+    for (user=users; user != NULL; user=(example_user_t*)(user->hh.next)) {
+        printf("user %s, cookie %d\n", user->id, user->cookie);
     }
     return 0;
 }
