@@ -11,7 +11,7 @@
 #include "uthash.h"
 
 #undef uthash_noexpand_fyi
-#define uthash_noexpand_fyi fprintf(stderr,"warning: bucket expansion inhibited\n");
+#define uthash_noexpand_fyi(tbl) fprintf(stderr,"warning: bucket expansion inhibited\n")
 
 #define LOOPS 100000
 
@@ -77,19 +77,19 @@ int main() {
       exit(-1);
     }
 
-    if ( status = pthread_create( &thread_r1, NULL, thread_routine_r, NULL )) {
+    if (( status = pthread_create( &thread_r1, NULL, thread_routine_r, NULL) )) {
         printf("failure: status %d\n", status);
         exit(-1);
     }
-    if ( status = pthread_create( &thread_r2, NULL, thread_routine_r, NULL )) {
+    if (( status = pthread_create( &thread_r2, NULL, thread_routine_r, NULL) )) {
         printf("failure: status %d\n", status);
         exit(-1);
     }
-    if ( status = pthread_create( &thread_w1, NULL, thread_routine_w, NULL )) {
+    if (( status = pthread_create( &thread_w1, NULL, thread_routine_w, NULL) )) {
         printf("failure: status %d\n", status);
         exit(-1);
     }
-    if ( status = pthread_create( &thread_w2, NULL, thread_routine_w, NULL )) {
+    if (( status = pthread_create( &thread_w2, NULL, thread_routine_w, NULL) )) {
         printf("failure: status %d\n", status);
         exit(-1);
     }
