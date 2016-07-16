@@ -7,7 +7,7 @@ test2:  make 10-item hash, lookup items with even keys, print
 test3:  make 10-item hash, delete items with even keys, print others 
 test4:  10 structs have dual hash handles, separate keys
 test5:  10 structs have dual hash handles, lookup evens by alt key
-test6:  test alt malloc macros
+test6:  test alt malloc macros (and alt memcmp macro)
 test7:  test alt malloc macros with 1000 structs so bucket expansion occurs
 test8:  test num_items counter in UT_hash_handle
 test9:  test "find" after bucket expansion
@@ -89,6 +89,7 @@ test84: test HASH_REPLACE_STR with char* key
 test85: test HASH_OVERHEAD on null and non null hash
 test86: test *_APPEND_ELEM / *_PREPEND_ELEM (Thilo Schulz)
 test87: test HASH_ADD_INORDER() macro (Thilo Schulz)
+test88: test alt memcmp and strlen macros
 
 Other Make targets
 ================================================================================
