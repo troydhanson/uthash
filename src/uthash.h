@@ -721,7 +721,7 @@ do {                                                                            
     (out) = NULL;                                                                \
   }                                                                              \
   while ((out) != NULL) {                                                        \
-    if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) {       \
+    if (((out)->hh.hashv == (hashval)) && ((out)->hh.keylen == (keylen_in))) {   \
       if (uthash_memcmp((out)->hh.key, keyptr, keylen_in) == 0) {                \
         break;                                                                   \
       }                                                                          \
