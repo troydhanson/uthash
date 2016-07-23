@@ -245,8 +245,9 @@ do {                                                                            
     struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     do {                                                                         \
-      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
+      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) { \
         break;                                                                   \
+      }                                                                          \
     } while ((_hs_iter = _hs_iter->next) != NULL);                               \
     if (_hs_iter != NULL) {                                                      \
       (add)->hh.next = _hs_iter;                                                 \
