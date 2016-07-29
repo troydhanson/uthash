@@ -68,11 +68,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define LDECLTYPE(x) decltype(x)
 #else                     /* VS2008 or older (or VS2010 in C mode) */
 #define NO_DECLTYPE
-#define LDECLTYPE(x) char*
 #endif
 #elif defined(__ICCARM__)
 #define NO_DECLTYPE
-#define LDECLTYPE(x) char*
 #else                      /* GNU, Sun and other compilers */
 #define LDECLTYPE(x) __typeof(x)
 #endif
@@ -81,6 +79,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * namely, we always reassign our tmp variable to the list head if we need
  * to dereference its prev/next pointers, and save/restore the real head.*/
 #ifdef NO_DECLTYPE
+#define IF_NO_DECLTYPE(x) x
+#define LDECLTYPE(x) char*
 #define _SV(elt,list) _tmp = (char*)(list); {char **_alias = (char**)&(list); *_alias = (elt); }
 #define _NEXT(elt,list,next) ((char*)((list)->next))
 #define _NEXTASGN(elt,list,to,next) { char **_alias = (char**)&((list)->next); *_alias=(char*)(to); }
@@ -89,6 +89,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _RS(list) { char **_alias = (char**)&(list); *_alias=_tmp; }
 #define _CASTASGN(a,b) { char **_alias = (char**)&(a); *_alias=(char*)(b); }
 #else
+#define IF_NO_DECLTYPE(x)
 #define _SV(elt,list)
 #define _NEXT(elt,list,next) ((elt)->next)
 #define _NEXTASGN(elt,list,to,next) ((elt)->next)=(to)
@@ -111,6 +112,7 @@ do {                                                                            
   LDECLTYPE(list) _ls_q;                                                                       \
   LDECLTYPE(list) _ls_e;                                                                       \
   LDECLTYPE(list) _ls_tail;                                                                    \
+  IF_NO_DECLTYPE(LDECLTYPE(list) _tmp;)                                                        \
   int _ls_insize, _ls_nmerges, _ls_psize, _ls_qsize, _ls_i, _ls_looping;                       \
   if (list) {                                                                                  \
     _ls_insize = 1;                                                                            \
@@ -174,6 +176,7 @@ do {                                                                            
   LDECLTYPE(list) _ls_q;                                                                       \
   LDECLTYPE(list) _ls_e;                                                                       \
   LDECLTYPE(list) _ls_tail;                                                                    \
+  IF_NO_DECLTYPE(LDECLTYPE(list) _tmp;)                                                        \
   int _ls_insize, _ls_nmerges, _ls_psize, _ls_qsize, _ls_i, _ls_looping;                       \
   if (list) {                                                                                  \
     _ls_insize = 1;                                                                            \
@@ -365,57 +368,6 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
-/* Here are VS2008 replacements for LL_APPEND and LL_DELETE */
-#define LL_APPEND_VS2008(head,add)                                                             \
-    LL_APPEND2_VS2008(head,add,next)
-
-#define LL_APPEND2_VS2008(head,add,next)                                                       \
-do {                                                                                           \
-  if (head) {                                                                                  \
-    (add)->next = head;     /* use add->next as a temp variable */                             \
-    while ((add)->next->next) { (add)->next = (add)->next->next; }                             \
-    (add)->next->next=(add);                                                                   \
-  } else {                                                                                     \
-    (head)=(add);                                                                              \
-  }                                                                                            \
-  (add)->next=NULL;                                                                            \
-} while (0)
-
-#define LL_DELETE_VS2008(head,del)                                                             \
-    LL_DELETE2_VS2008(head,del,next)
-
-#define LL_DELETE2_VS2008(head,del,next)                                                       \
-do {                                                                                           \
-  if ((head) == (del)) {                                                                       \
-    (head)=(head)->next;                                                                       \
-  } else {                                                                                     \
-    char *_tmp = (char*)(head);                                                                \
-    while ((head)->next && ((head)->next != (del))) {                                          \
-      head = (head)->next;                                                                     \
-    }                                                                                          \
-    if ((head)->next) {                                                                        \
-      (head)->next = ((del)->next);                                                            \
-    }                                                                                          \
-    {                                                                                          \
-      char **_head_alias = (char**)&(head);                                                    \
-      *_head_alias = _tmp;                                                                     \
-    }                                                                                          \
-  }                                                                                            \
-} while (0)
-#ifdef NO_DECLTYPE
-#undef LL_APPEND
-#define LL_APPEND LL_APPEND_VS2008
-#undef LL_DELETE
-#define LL_DELETE LL_DELETE_VS2008
-#undef LL_DELETE2
-#define LL_DELETE2 LL_DELETE2_VS2008
-#undef LL_APPEND2
-#define LL_APPEND2 LL_APPEND2_VS2008
-#undef LL_CONCAT /* no LL_CONCAT_VS2008 */
-#undef DL_CONCAT /* no DL_CONCAT_VS2008 */
-#endif
-/* end VS2008 replacements */
-
 #define LL_COUNT(head,el,counter)                                                              \
     LL_COUNT2(head,el,counter,next)                                                            \
 
@@ -521,6 +473,98 @@ do {                                                                            
 #define LL_APPEND_ELEM(head, el, add)                                                          \
     LL_APPEND_ELEM2(head, el, add, next)
 
+#ifdef NO_DECLTYPE
+/* Here are VS2008 / NO_DECLTYPE replacements for a few functions */
+
+#undef LL_CONCAT2
+#define LL_CONCAT2(head1,head2,next)                                                           \
+do {                                                                                           \
+  char *_tmp;                                                                                  \
+  if (head1) {                                                                                 \
+    _tmp = (char*)(head1);                                                                     \
+    while (head1->next) { head1 = head1->next; }                                               \
+    head1->next=(head2);                                                                       \
+    _RS(head1);                                                                                \
+  } else {                                                                                     \
+    (head1)=(head2);                                                                           \
+  }                                                                                            \
+} while (0)
+
+#undef LL_APPEND2
+#define LL_APPEND2(head,add,next)                                                              \
+do {                                                                                           \
+  if (head) {                                                                                  \
+    (add)->next = head;     /* use add->next as a temp variable */                             \
+    while ((add)->next->next) { (add)->next = (add)->next->next; }                             \
+    (add)->next->next=(add);                                                                   \
+  } else {                                                                                     \
+    (head)=(add);                                                                              \
+  }                                                                                            \
+  (add)->next=NULL;                                                                            \
+} while (0)
+
+#undef LL_DELETE2
+#define LL_DELETE2(head,del,next)                                                              \
+do {                                                                                           \
+  if ((head) == (del)) {                                                                       \
+    (head)=(head)->next;                                                                       \
+  } else {                                                                                     \
+    char *_tmp = (char*)(head);                                                                \
+    while ((head)->next && ((head)->next != (del))) {                                          \
+      head = (head)->next;                                                                     \
+    }                                                                                          \
+    if ((head)->next) {                                                                        \
+      (head)->next = ((del)->next);                                                            \
+    }                                                                                          \
+    _RS(head);                                                                                 \
+  }                                                                                            \
+} while (0)
+
+#undef LL_REPLACE_ELEM2
+#define LL_REPLACE_ELEM2(head, el, add, next)                                                  \
+do {                                                                                           \
+  assert(head != NULL);                                                                        \
+  assert(el != NULL);                                                                          \
+  assert(add != NULL);                                                                         \
+  if ((head) == (el)) {                                                                        \
+    (head) = (add);                                                                            \
+  } else {                                                                                     \
+    (add)->next = head;                                                                        \
+    while ((add)->next->next && ((add)->next->next != (el))) {                                 \
+      (add)->next = (add)->next->next;                                                         \
+    }                                                                                          \
+    if ((add)->next->next) {                                                                   \
+      (add)->next->next = (add);                                                               \
+    }                                                                                          \
+  }                                                                                            \
+  (add)->next = (el)->next;                                                                    \
+} while (0)
+
+#undef LL_PREPEND_ELEM2
+#define LL_PREPEND_ELEM2(head, el, add, next)                                                  \
+do {                                                                                           \
+  if (el) {                                                                                    \
+    assert(head != NULL);                                                                      \
+    assert(add != NULL);                                                                       \
+    if ((head) == (el)) {                                                                      \
+      (head) = (add);                                                                          \
+    } else {                                                                                   \
+      (add)->next = head;                                                                      \
+      while ((add)->next->next && ((add)->next->next != (el))) {                               \
+        (add)->next = (add)->next->next;                                                       \
+      }                                                                                        \
+      if ((add)->next->next) {                                                                 \
+        (add)->next->next = (add);                                                             \
+      }                                                                                        \
+    }                                                                                          \
+    (add)->next = (el);                                                                        \
+  } else {                                                                                     \
+    LL_APPEND2(head, add, next);                                                               \
+  }                                                                                            \
+} while (0)                                                                                    \
+
+#endif /* NO_DECLTYPE */
+
 /******************************************************************************
  * doubly linked list macros (non-circular)                                   *
  *****************************************************************************/
@@ -564,10 +608,10 @@ do {                                                                            
   LDECLTYPE(head1) _tmp;                                                                       \
   if (head2) {                                                                                 \
     if (head1) {                                                                               \
-        _tmp = (head2)->prev;                                                                  \
+        _CASTASGN(_tmp, (head2)->prev);                                                        \
         (head2)->prev = (head1)->prev;                                                         \
         (head1)->prev->next = (head2);                                                         \
-        (head1)->prev = _tmp;                                                                  \
+        _CASTASGN((head1)->prev, _tmp);                                                        \
     } else {                                                                                   \
         (head1)=(head2);                                                                       \
     }                                                                                          \
@@ -850,4 +894,3 @@ do {                                                                            
     CDL_APPEND_ELEM2(head, el, add, prev, next)
 
 #endif /* UTLIST_H */
-
