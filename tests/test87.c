@@ -86,6 +86,17 @@ int main()
 
     printtable(hTable);
 
+    // remove "8: muh2"...
+    HASH_DELETE(hh, hTable, &tst[1]);
+
+    printtable(hTable);
+
+    // ...and then reinsert "8: muh2"
+    HASH_VALUE(tst[1].name, strlen(tst[1].name), hashvalue);
+    HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, hTable, tst[1].name, strlen(tst[1].name), hashvalue, &tst[1], CMPFUNC);
+
+    printtable(hTable);
+
     delitem(&hTable, "muh1");
     delitem(&hTable, "muh7");
     delitem(&hTable, "muh3");
