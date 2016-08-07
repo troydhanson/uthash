@@ -158,14 +158,14 @@ typedef struct {
   if ((dst)->i > (unsigned)(num)) {                                           \
     if ((dst)->icd.dtor) {                                                    \
       for (_ut_i = (num); _ut_i < (dst)->i; ++_ut_i) {                        \
-        (dst)->icd.dtor(utarray_eltptr(dst,_ut_i));                           \
+        (dst)->icd.dtor(_utarray_eltptr(dst, _ut_i));                         \
       }                                                                       \
     }                                                                         \
   } else if ((dst)->i < (unsigned)(num)) {                                    \
     utarray_reserve(dst, (num) - (dst)->i);                                   \
     if ((dst)->icd.init) {                                                    \
       for (_ut_i = (dst)->i; _ut_i < (unsigned)(num); ++_ut_i) {              \
-        (dst)->icd.init(utarray_eltptr(dst,_ut_i));                           \
+        (dst)->icd.init(_utarray_eltptr(dst, _ut_i));                         \
       }                                                                       \
     } else {                                                                  \
       memset(_utarray_eltptr(dst, (dst)->i), 0, (dst)->icd.sz*((num) - (dst)->i)); \
@@ -202,7 +202,7 @@ typedef struct {
     if ((a)->icd.dtor) {                                                      \
       unsigned _ut_i;                                                         \
       for(_ut_i=0; _ut_i < (a)->i; _ut_i++) {                                 \
-        (a)->icd.dtor(utarray_eltptr(a,_ut_i));                               \
+        (a)->icd.dtor(_utarray_eltptr(a, _ut_i));                             \
       }                                                                       \
     }                                                                         \
     (a)->i = 0;                                                               \
