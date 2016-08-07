@@ -352,10 +352,10 @@ Notes
    value if a precedes b, 0 if a and b sort equally, and positive if b precedes a.
    This is an example of a comparison function:
 
-  int intsort(const void *a,const void*b) {
-      int _a = *(int*)a;
-      int _b = *(int*)b;
-      return _a - _b;
+  int intsort(const void *a, const void *b) {
+      int _a = *(const int *)a;
+      int _b = *(const int *)b;
+      return (_a < _b) ? -1 : (_a > _b);
   }
 
 4. `utarray_find` uses a binary search to locate an element having a certain value
