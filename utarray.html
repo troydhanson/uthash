@@ -1226,10 +1226,10 @@ cellspacing="0" cellpadding="4">
 </p>
 <div class="literalblock">
 <div class="content">
-<pre><code>int intsort(const void *a,const void*b) {
-    int _a = *(int*)a;
-    int _b = *(int*)b;
-    return _a - _b;
+<pre><code>int intsort(const void *a, const void *b) {
+    int _a = *(const int *)a;
+    int _b = *(const int *)b;
+    return (_a &lt; _b) ? -1 : (_a &gt; _b);
 }</code></pre>
 </div></div>
 </li>
@@ -1260,7 +1260,7 @@ A <em>pointer</em> to a particular element (obtained using <code>utarray_eltptr<
 <div id="footer">
 <div id="footer-text">
 Version 2.0.1<br />
-Last updated 2016-07-14 16:19:49 PDT
+Last updated 2016-08-06 23:23:21 PDT
 </div>
 </div>
 </body>
