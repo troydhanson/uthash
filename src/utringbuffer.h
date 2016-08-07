@@ -50,11 +50,13 @@ typedef struct {
 #define utringbuffer_clear(a) do {                                        \
   if ((a)->icd.dtor) {                                                    \
     if ((a)->f) {                                                         \
-      for (unsigned _ut_i=0; _ut_i < (a)->n; _ut_i++) {                   \
+      unsigned _ut_i;                                                     \
+      for (_ut_i = 0; _ut_i < (a)->n; ++_ut_i) {                          \
         (a)->icd.dtor(utringbuffer_eltptr(a, _ut_i));                     \
       }                                                                   \
     } else {                                                              \
-      for (unsigned _ut_i=0; _ut_i < (a)->i; _ut_i++) {                   \
+      unsigned _ut_i;                                                     \
+      for (_ut_i = 0; _ut_i < (a)->i; ++_ut_i) {                          \
         (a)->icd.dtor(utringbuffer_eltptr(a, _ut_i));                     \
       }                                                                   \
     }                                                                     \
