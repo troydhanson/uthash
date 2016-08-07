@@ -44,7 +44,7 @@ typedef struct {
   memset(a, 0, sizeof(UT_ringbuffer));                                    \
   (a)->icd = *(_icd);                                                     \
   (a)->n = (_n);                                                          \
-  if ((a)->n) { (a)->d = malloc((a)->n * (_icd)->sz); }                   \
+  if ((a)->n) { (a)->d = (char*)malloc((a)->n * (_icd)->sz); }            \
 } while(0)
  
 #define utringbuffer_clear(a) do {                                        \
