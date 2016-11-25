@@ -121,6 +121,15 @@ do {                                                             \
 
 #define utstring_body(s) ((s)->d)
 
+static char* utstring_release(UT_string *s) {
+  char* ret = NULL;
+  if (s != NULL) {
+    ret = s->d;
+    free(s);
+  }
+  return ret;
+}
+
 _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list ap) {
    int n;
    va_list cp;
