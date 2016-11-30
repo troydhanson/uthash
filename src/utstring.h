@@ -121,14 +121,23 @@ do {                                                             \
 
 #define utstring_body(s) ((s)->d)
 
-static char* utstring_release(UT_string *s) {
-  char* ret = NULL;
-  if (s != NULL) {
-    ret = s->d;
-    free(s);
-  }
-  return ret;
-}
+#define utstring_adopt(s,b,l)                              \
+do {                                                       \
+  if (s) {                                                 \
+    (s)->d = (b);                                          \
+    (s)->n = (l);                                          \
+    (s)->i = (l);                                          \
+  }                                                        \
+} while(0)
+
+#define utstring_disown(s,b)                               \
+do {                                                       \
+  if (s) {                                                 \
+    (b) = (s)->d;                                          \
+    utstring_clear(s);                                     \
+    (s)->n = 0;                                            \
+  }                                                        \
+} while(0)
 
 _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list ap) {
    int n;

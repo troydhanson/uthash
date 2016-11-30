@@ -154,16 +154,18 @@ Operations
 | utstring_new(s) | allocate a new utstring
 | utstring_renew(s) | allocate a new utstring (if s is `NULL`) otherwise clears it
 | utstring_free(s) | free an allocated utstring
-| utstring_init(s)  |  init a utstring (non-alloc)
-| utstring_done(s) |  dispose of a utstring (non-allocd)
+| utstring_init(s)  | init a utstring (non-alloc)
+| utstring_done(s) | dispose of a utstring (non-alloc)
 | utstring_printf(s,fmt,...) | printf into a utstring (appends)
 | utstring_bincpy(s,bin,len) | insert binary data of length len (appends)
 | utstring_concat(dst,src) | concatenate src utstring to end of dst utstring
 | utstring_clear(s) | clear the content of s (setting its length to 0)
 | utstring_len(s) | obtain the length of s as an unsigned integer
 | utstring_body(s) | get `char*` to body of s (buffer is always null-terminated)
+| utstring_adopt(s,bin,len) | init a utstring with binary data of length len (shallow copy)
+| utstring_disown(s,bin) | get `char*` to body of s and clear the content of s
 | utstring_find(s,pos,str,len) | forward search from pos for a substring
-| utstring_findR(s,pos,str,len) | reverse search from pos a substring
+| utstring_findR(s,pos,str,len) | reverse search from pos for a substring
 |===============================================================================
 
 New/free vs. init/done
