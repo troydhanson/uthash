@@ -154,8 +154,8 @@ Operations
 | utstring_new(s) | allocate a new utstring
 | utstring_renew(s) | allocate a new utstring (if s is `NULL`) otherwise clears it
 | utstring_free(s) | free an allocated utstring
-| utstring_init(s)  |  init a utstring (non-alloc)
-| utstring_done(s) |  dispose of a utstring (non-allocd)
+| utstring_init(s)  | init a utstring (non-alloc)
+| utstring_done(s) | dispose of a utstring (non-alloc)
 | utstring_printf(s,fmt,...) | printf into a utstring (appends)
 | utstring_bincpy(s,bin,len) | insert binary data of length len (appends)
 | utstring_concat(dst,src) | concatenate src utstring to end of dst utstring
@@ -163,7 +163,7 @@ Operations
 | utstring_len(s) | obtain the length of s as an unsigned integer
 | utstring_body(s) | get `char*` to body of s (buffer is always null-terminated)
 | utstring_find(s,pos,str,len) | forward search from pos for a substring
-| utstring_findR(s,pos,str,len) | reverse search from pos a substring
+| utstring_findR(s,pos,str,len) | reverse search from pos for a substring
 |===============================================================================
 
 New/free vs. init/done
@@ -179,7 +179,7 @@ It comes in forward and reverse varieties. The reverse search scans from the end
 the string backward. These take a position to start searching from, measured from 0
 (the start of the utstring).  A negative position is counted from the end of
 the string, so, -1 is the last position.  Note that in the reverse search, the
-initial position anchors to the 'end' of the substring being searched for-
+initial position anchors to the 'end' of the substring being searched for;
 e.g., the 't' in 'cat'. The return value always refers to the offset where the
 substring 'starts' in the utstring.  When no substring match is found, -1 is
 returned.
