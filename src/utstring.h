@@ -134,7 +134,8 @@ do {                                                       \
 do {                                                       \
   if (s) {                                                 \
     (b) = (s)->d;                                          \
-    utstring_clear(s);                                     \
+    (s)->d = NULL;                                         \
+    (s)->i = 0;                                            \
     (s)->n = 0;                                            \
   }                                                        \
 } while(0)
