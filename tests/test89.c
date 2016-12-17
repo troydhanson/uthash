@@ -46,7 +46,7 @@ int netq_insert_node(netq_t **queue, netq_t *node)
 int main()
 {
     struct netq_t *nq = NULL;
-    int i;
+    size_t i;
 
     clock_time_t timestamps[] = { 300, 100, 200, 400, 500 };
 
