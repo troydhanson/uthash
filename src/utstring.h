@@ -117,7 +117,7 @@ do {                                                             \
   (dst)->d[(dst)->i]='\0';                                       \
 } while(0)
 
-#define utstring_len(s) ((unsigned)((s)->i))
+#define utstring_len(s) ((size_t)((s)->i))
 
 #define utstring_body(s) ((s)->d)
 
