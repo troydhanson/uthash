@@ -14,9 +14,9 @@ int main()
     utstring_new(t);
 
     utstring_bincpy(s, V_TestStr, sizeof(V_TestStr)-1);
-    printf("\"%s\" len=%u\n", utstring_body(s), utstring_len(s));
+    printf("\"%s\" len=%u\n", utstring_body(s), (unsigned)utstring_len(s));
     utstring_bincpy(t, V_NeedleStr, sizeof(V_NeedleStr)-1);
-    printf("\"%s\" len=%u\n", utstring_body(t), utstring_len(t));
+    printf("\"%s\" len=%u\n", utstring_body(t), (unsigned)utstring_len(t));
 
     V_FindCnt = 0;
     V_FindPos = 0;

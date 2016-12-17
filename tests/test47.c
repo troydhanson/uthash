@@ -17,11 +17,11 @@ int main()
     utstring_concat(s,t);
     printf("%s\n", utstring_body(s));
     utstring_clear(t);
-    printf("cleared, length t now: %u\n", utstring_len(t));
-    printf("length s now: %u\n", utstring_len(s));
+    printf("cleared, length t now: %u\n", (unsigned)utstring_len(t));
+    printf("length s now: %u\n", (unsigned)utstring_len(s));
     utstring_printf(t,"one %d two %u three %s", 1, 2, "(3)");
     printf("%s\n", utstring_body(t));
-    printf("length t now: %u\n", utstring_len(t));
+    printf("length t now: %u\n", (unsigned)utstring_len(t));
 
     utstring_free(t);
     utstring_free(s);
