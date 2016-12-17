@@ -119,7 +119,7 @@ do {                                                                            
 #define HASH_FIND_BYHASHVALUE(hh,head,keyptr,keylen,hashval,out)                 \
 do {                                                                             \
   (out) = NULL;                                                                  \
-  if (head) {                                                                    \
+  if (head != NULL) {                                                            \
     unsigned _hf_bkt;                                                            \
     HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                  \
     if (HASH_BLOOM_TEST((head)->hh.tbl, hashval) != 0) {                         \
@@ -245,12 +245,14 @@ do {                                                                            
     struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     do {                                                                         \
-      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
+      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) { \
         break;                                                                   \
-    } while ((_hs_iter = _hs_iter->next));                                       \
-    if (_hs_iter) {                                                              \
+      }                                                                          \
+    } while ((_hs_iter = _hs_iter->next) != NULL);                               \
+    if (_hs_iter != NULL) {                                                      \
       (add)->hh.next = _hs_iter;                                                 \
-      if (((add)->hh.prev = _hs_iter->prev)) {                                   \
+      (add)->hh.prev = _hs_iter->prev;                                           \
+      if ((add)->hh.prev != NULL) {                                              \
         HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = (add);              \
       } else {                                                                   \
         (head) = (add);                                                          \
@@ -719,7 +721,7 @@ do {                                                                            
     (out) = NULL;                                                                \
   }                                                                              \
   while ((out) != NULL) {                                                        \
-    if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) {       \
+    if (((out)->hh.hashv == (hashval)) && ((out)->hh.keylen == (keylen_in))) {   \
       if (uthash_memcmp((out)->hh.key, keyptr, keylen_in) == 0) {                \
         break;                                                                   \
       }                                                                          \
