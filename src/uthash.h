@@ -242,20 +242,20 @@ do {                                                                            
     (head) = (add);                                                              \
     HASH_MAKE_TABLE(hh, head);                                                   \
   } else {                                                                       \
-    struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
+    void *_hs_iter = (head);                                                     \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     do {                                                                         \
-      if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
+      if (cmpfcn(DECLTYPE(head)(_hs_iter), add) > 0)                             \
         break;                                                                   \
-    } while ((_hs_iter = _hs_iter->next));                                       \
+    } while ((_hs_iter = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->next));         \
     if (_hs_iter) {                                                              \
       (add)->hh.next = _hs_iter;                                                 \
-      if (((add)->hh.prev = _hs_iter->prev)) {                                   \
-        HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = (add);              \
+      if (((add)->hh.prev = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->prev)) {     \
+        HH_FROM_ELMT((head)->hh.tbl, (add)->hh.prev)->next = (add);              \
       } else {                                                                   \
         (head) = (add);                                                          \
       }                                                                          \
-      _hs_iter->prev = (add);                                                    \
+      HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->prev = (add);                      \
     } else {                                                                     \
       HASH_APPEND_LIST(hh, head, add);                                           \
     }                                                                            \
