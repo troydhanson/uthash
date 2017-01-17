@@ -349,6 +349,26 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define LL_INSERT_INORDER(head,add,cmp)                                                        \
+  do {                                                                                         \
+    LDECLTYPE(head) _pos;                                                                      \
+    _CASTASGN(_pos, head);                                                                     \
+    LL_FIND_POS(_pos,add,cmp);                                                                 \
+    LL_APPEND_ELEM(head,_pos,add);                                                             \
+  } while (0)
+
+#define LL_FIND_POS(head,node,cmp)                                                             \
+  LL_FIND_POS2(head,node,cmp,next)                                                             \
+
+#define LL_FIND_POS2(head,node,cmp,next)                                                       \
+  do {                                                                                         \
+    for (; (head)->next != NULL; (head) = (head)->next ) {                                     \
+      if (cmp((head)->next, (node)) > 0) {                                                     \
+        break;                                                                                 \
+      }                                                                                        \
+    }                                                                                          \
+  } while (0)
+
 #define LL_DELETE(head,del)                                                                    \
     LL_DELETE2(head,del,next)
 
@@ -600,6 +620,31 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define DL_INSERT_INORDER(head,add,cmp)                                                        \
+  do {                                                                                         \
+    LDECLTYPE(head) _pos;                                                                      \
+    _CASTASGN(_pos, head);                                                                     \
+    DL_FIND_POS(_pos,add,cmp);                                                                 \
+    DL_APPEND_ELEM(head,_pos,add);                                                             \
+  } while (0)
+
+
+#define DL_FIND_POS(head,node,cmp)                                                             \
+  DL_FIND_POS2(head,node,cmp,prev,next)                                                        \
+
+#define DL_FIND_POS2(head,node,cmp,prev,next)                                                  \
+  do {                                                                                         \
+    if (cmp((head), (node)) > 0) {                                                             \
+      (head) = NULL;                                                                           \
+    } else {                                                                                   \
+      for (; (head)->next != NULL; head = (head)->next ) {                                     \
+        if ((head)->next == (node)) break;                                                     \
+        if (cmp((head)->next, (node)) > 0) {                                                   \
+          break;                                                                               \
+        }                                                                                      \
+      }                                                                                        \
+    }                                                                                          \
+  } while (0)
 #define DL_CONCAT(head1,head2)                                                                 \
     DL_CONCAT2(head1,head2,prev,next)
 
@@ -775,6 +820,31 @@ do {                                                                            
  (head) = (add);                                                                               \
 } while (0)
 
+#define CDL_INSERT_INORDER(head,add,cmp)                                                       \
+  do {                                                                                         \
+    LDECLTYPE(head) _pos;                                                                      \
+    _CASTASGN(_pos, head);                                                                     \
+    CDL_FIND_POS(_pos,add,cmp);                                                                \
+    CDL_APPEND_ELEM(head,_pos,add);                                                            \
+  } while (0)
+
+#define CDL_FIND_POS(head,node,cmp)                                                            \
+  CDL_FIND_POS2(head,node,cmp,prev,next)                                                       \
+
+#define CDL_FIND_POS2(head,node,cmp,prev,next)                                                 \
+  do {                                                                                         \
+    LDECLTYPE(head) _tmp;                                                                      \
+    _CASTASGN(_tmp, (head));                                                                   \
+    if (cmp((head), (node)) > 0) {                                                             \
+      (head) = NULL;                                                                           \
+    } else {                                                                                   \
+      for (; (head)->next != _tmp; head = (head)->next ) {                                     \
+        if (cmp((head)->next, (node)) > 0) {                                                   \
+          break;                                                                               \
+        }                                                                                      \
+      }                                                                                        \
+    }                                                                                          \
+  } while(0)
 #define CDL_DELETE(head,del)                                                                   \
     CDL_DELETE2(head,del,prev,next)
 
