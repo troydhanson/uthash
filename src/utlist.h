@@ -353,18 +353,27 @@ do {                                                                            
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
-    LL_FIND_POS(_pos,add,cmp);                                                                 \
-    LL_APPEND_ELEM(head,_pos,add);                                                             \
+    if(head) {                                                                                 \
+      LL_LOWER_BOUND(_pos,add,cmp);                                                            \
+      LL_APPEND_ELEM(head,_pos,add);                                                           \
+    } else {                                                                                   \
+      (head) = (add);                                                                          \
+      (head)->next = NULL;                                                                     \
+    }                                                                                          \
   } while (0)
 
-#define LL_FIND_POS(head,node,cmp)                                                             \
-  LL_FIND_POS2(head,node,cmp,next)                                                             \
+#define LL_LOWER_BOUND(head,node,cmp)                                                          \
+  LL_LOWER_BOUND2(head,node,cmp,next)
 
-#define LL_FIND_POS2(head,node,cmp,next)                                                       \
+#define LL_LOWER_BOUND2(head,node,cmp,next)                                                    \
   do {                                                                                         \
-    for (; (head)->next != NULL; (head) = (head)->next ) {                                     \
-      if (cmp((head)->next, (node)) > 0) {                                                     \
-        break;                                                                                 \
+    if (cmp(head, node) > 0) {                                                                 \
+      (head) = NULL;                                                                           \
+    } else {                                                                                   \
+      for (; (head)->next != NULL; (head) = (head)->next ) {                                   \
+        if (cmp((head)->next, node) > 0) {                                                     \
+          break;                                                                               \
+        }                                                                                      \
       }                                                                                        \
     }                                                                                          \
   } while (0)
@@ -624,22 +633,29 @@ do {                                                                            
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
-    DL_FIND_POS(_pos,add,cmp);                                                                 \
-    DL_APPEND_ELEM(head,_pos,add);                                                             \
+    if (head) {                                                                                \
+      DL_LOWER_BOUND(_pos,add,cmp);                                                            \
+      DL_APPEND_ELEM(head,_pos,add);                                                           \
+    }                                                                                          \
+    else {                                                                                     \
+      (head) = add;                                                                            \
+      (head)->next = NULL;                                                                     \
+      (head)->prev = NULL;                                                                     \
+    }                                                                                          \
   } while (0)
 
 
-#define DL_FIND_POS(head,node,cmp)                                                             \
-  DL_FIND_POS2(head,node,cmp,prev,next)                                                        \
+#define DL_LOWER_BOUND(head,node,cmp)                                                          \
+  DL_LOWER_BOUND2(head,node,cmp,prev,next)                                                     \
 
-#define DL_FIND_POS2(head,node,cmp,prev,next)                                                  \
+#define DL_LOWER_BOUND2(head,node,cmp,prev,next)                                               \
   do {                                                                                         \
-    if (cmp((head), (node)) > 0) {                                                             \
+    if (cmp(head, node) > 0) {                                                                 \
       (head) = NULL;                                                                           \
     } else {                                                                                   \
-      for (; (head)->next != NULL; head = (head)->next ) {                                     \
+      for (; (head)->next != NULL; (head) = (head)->next ) {                                   \
         if ((head)->next == (node)) break;                                                     \
-        if (cmp((head)->next, (node)) > 0) {                                                   \
+        if (cmp((head)->next, node) > 0) {                                                     \
           break;                                                                               \
         }                                                                                      \
       }                                                                                        \
@@ -824,22 +840,28 @@ do {                                                                            
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
-    CDL_FIND_POS(_pos,add,cmp);                                                                \
-    CDL_APPEND_ELEM(head,_pos,add);                                                            \
+    if (head) {                                                                                \
+      CDL_LOWER_BOUND(_pos,add,cmp);                                                           \
+      CDL_APPEND_ELEM(head,_pos,add);                                                          \
+    } else {                                                                                   \
+      (head) = add;                                                                            \
+      (head)->next = (head);                                                                   \
+      (head)->prev = (head);                                                                   \
+    }                                                                                          \
   } while (0)
 
-#define CDL_FIND_POS(head,node,cmp)                                                            \
-  CDL_FIND_POS2(head,node,cmp,prev,next)                                                       \
+#define CDL_LOWER_BOUND(head,node,cmp)                                                         \
+  CDL_LOWER_BOUND2(head,node,cmp,prev,next)                                                    \
 
-#define CDL_FIND_POS2(head,node,cmp,prev,next)                                                 \
+#define CDL_LOWER_BOUND2(head,node,cmp,prev,next)                                              \
   do {                                                                                         \
     LDECLTYPE(head) _tmp;                                                                      \
     _CASTASGN(_tmp, (head));                                                                   \
-    if (cmp((head), (node)) > 0) {                                                             \
+    if (cmp(head, node) > 0) {                                                             \
       (head) = NULL;                                                                           \
     } else {                                                                                   \
       for (; (head)->next != _tmp; head = (head)->next ) {                                     \
-        if (cmp((head)->next, (node)) > 0) {                                                   \
+        if (cmp((head)->next, node) > 0) {                                                   \
           break;                                                                               \
         }                                                                                      \
       }                                                                                        \

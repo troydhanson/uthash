@@ -91,6 +91,9 @@ test86: test *_APPEND_ELEM / *_PREPEND_ELEM (Thilo Schulz)
 test87: test HASH_ADD_INORDER() macro (Thilo Schulz)
 test88: test alt memcmp and strlen macros
 test89: test code from the tinydtls project
+test90: test LL_INSERT_INORDER
+test91: test DL_INSERT_INORDER
+test92: test CDL_INSERT_INORDER
 
 Other Make targets
 ================================================================================
