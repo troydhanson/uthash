@@ -17,7 +17,7 @@ int main(int argc, char *argvp[])
     item_t *items=NULL;
 
     /* make initial element */
-    item_t *i = malloc(sizeof(*i));
+    item_t *i = (item_t *)malloc(sizeof(*i));
     if (i == NULL) {
         exit(-1);
     }
@@ -27,7 +27,7 @@ int main(int argc, char *argvp[])
     HASH_ADD_STR(items, name, i);
 
     /* add a sub hash table off this element */
-    item_t *s = malloc(sizeof(*s));
+    item_t *s = (item_t *)malloc(sizeof(*s));
     if (s == NULL) {
         exit(-1);
     }

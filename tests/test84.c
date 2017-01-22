@@ -22,7 +22,7 @@ int main(int argc, char*argv[])
         if (person == NULL) {
             exit(-1);
         }
-        person->first_name = malloc(10UL);
+        person->first_name = (char*)malloc(10UL);
         if (person->first_name == NULL) {
             exit(-1);
         }
@@ -39,11 +39,11 @@ int main(int argc, char*argv[])
         HASH_FIND_STR(people,*name,*p);
         if (person != NULL) {
             printf("found %s (id %d)\n", person->first_name, person->id);
-            new_person  = malloc(sizeof(person_t));
+            new_person = (person_t*)malloc(sizeof(person_t));
             if (new_person == NULL) {
                 exit(-1);
             }
-            new_person->first_name = malloc(10UL);
+            new_person->first_name = (char*)malloc(10UL);
             if (new_person->first_name == NULL) {
                 exit(-1);
             }

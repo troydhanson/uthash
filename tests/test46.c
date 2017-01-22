@@ -20,24 +20,24 @@ int main()
     UT_array *strs,*strs2;
     char *s, **p=NULL;
     utarray_new(strs, &ut_str_icd);
-    s="hello";
+    s=(char*)"hello";
     utarray_push_back(strs, &s);
-    s="world";
+    s=(char*)"world";
     utarray_push_back(strs, &s);
     while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
         printf("%s ",*p);
     }
     printf("\n");
-    s="begin";
+    s=(char*)"begin";
     utarray_insert(strs,&s,0);
     while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
         printf("%s ",*p);
     }
     printf("\n");
     utarray_new(strs2, &ut_str_icd);
-    s="alt";
+    s=(char*)"alt";
     utarray_push_back(strs2, &s);
-    s="oth";
+    s=(char*)"oth";
     utarray_push_back(strs2, &s);
     utarray_inserta(strs2, strs, 1);
     while ( (p=(char**)utarray_next(strs2,p)) != NULL ) {

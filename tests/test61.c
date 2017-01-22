@@ -3,15 +3,15 @@
 
 static int strsort(const void *_a, const void *_b)
 {
-    char *a = *(char**)_a;
-    char *b = *(char**)_b;
+    const char *a = *(const char**)_a;
+    const char *b = *(const char**)_b;
     return strcmp(a,b);
 }
 
 int main()
 {
     UT_array *strs;
-    char *s, **p;
+    const char *s, **p;
 
     utarray_new(strs,&ut_str_icd);
 
@@ -27,7 +27,7 @@ int main()
     utarray_push_back(strs, &s);
 
     p = NULL;
-    while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
+    while ( (p=(const char**)utarray_next(strs,p)) != NULL ) {
         s = *p;
         printf("%s\n",s);
     }
@@ -36,10 +36,14 @@ int main()
     utarray_sort(strs,strsort);
 
     p = NULL;
-    while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
+    while ( (p=(const char**)utarray_next(strs,p)) != NULL ) {
         s = *p;
         printf("finding %s\n",s);
+#ifdef __cplusplus
+        p = (const char**)utarray_find(strs,&s,strsort);
+#else
         p = utarray_find(strs,&s,strsort);
+#endif
         printf(" %s\n", (p != NULL) ? (*p) : "failed");
     }
 

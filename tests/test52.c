@@ -30,10 +30,10 @@ int main()
     utarray_new(intchars, &intchar_icd);
 
     ic.a=1;
-    ic.s="hello";
+    ic.s=(char*)"hello";
     utarray_push_back(intchars, &ic);
     ic.a=2;
-    ic.s="world";
+    ic.s=(char*)"world";
     utarray_push_back(intchars, &ic);
 
     p=NULL;

@@ -29,10 +29,10 @@ int main()
 
     /* fill in the sorted list */
     for(i=0; i<100; i++) {
-        p = malloc(sizeof *p);
+        p = (struct item *)malloc(sizeof *p);
 
         p->sort_field_len = sizeof(int);
-        p->sort_field = malloc(p->sort_field_len);
+        p->sort_field = (unsigned char *)malloc(p->sort_field_len);
         *(int*)p->sort_field = counter++;
 
         HASH_ADD_KEYPTR_INORDER(hh, list, p->sort_field, p->sort_field_len, p, sort_func);

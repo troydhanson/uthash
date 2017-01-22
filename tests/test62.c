@@ -12,7 +12,7 @@
 int main(int argc,char*argv[])
 {
     unsigned rc;
-    char *c = malloc(8UL);
+    char *c = (char *)malloc(8UL);
     if (c == NULL) {
         exit(-1);
     }

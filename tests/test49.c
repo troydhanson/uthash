@@ -4,7 +4,7 @@
 int main()
 {
     UT_array *strs;
-    char *s, **p;
+    const char *s, **p;
 
     utarray_new(strs,&ut_str_icd);
 
@@ -13,7 +13,7 @@ int main()
     s = "world";
     utarray_push_back(strs, &s);
     p = NULL;
-    while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
+    while ( (p=(const char**)utarray_next(strs,p)) != NULL ) {
         printf("%s\n",*p);
     }
 
