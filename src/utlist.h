@@ -350,6 +350,9 @@ do {                                                                            
 } while (0)
 
 #define LL_INSERT_INORDER(head,add,cmp)                                                        \
+  LL_INSERT_INORDER2(head,add,cmp,next)
+
+#define LL_INSERT_INORDER2(head,add,cmp,next)                                                        \
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
@@ -630,6 +633,9 @@ do {                                                                            
 } while (0)
 
 #define DL_INSERT_INORDER(head,add,cmp)                                                        \
+  DL_INSERT_INORDER2(head,add,cmp,prev,next)
+
+#define DL_INSERT_INORDER2(head,add,cmp,prev,next)                                                        \
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
@@ -837,6 +843,9 @@ do {                                                                            
 } while (0)
 
 #define CDL_INSERT_INORDER(head,add,cmp)                                                       \
+  CDL_INSERT_INORDER2(head,add,cmp,prev,next)
+
+#define CDL_INSERT_INORDER2(head,add,cmp,prev,next)                                                       \
   do {                                                                                         \
     LDECLTYPE(head) _pos;                                                                      \
     _CASTASGN(_pos, head);                                                                     \
