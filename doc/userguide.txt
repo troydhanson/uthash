@@ -1,6 +1,6 @@
 uthash User Guide
 =================
-Troy D. Hanson, Arthur O'Dwyer
+:Author: Troy_D._Hanson_and_Arthur_O'Dwyer
 v2.0.1, July 2016
 
 To download uthash, follow this link back to the
