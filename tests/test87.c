@@ -3,9 +3,9 @@
 #include "uthash.h"
 
 typedef struct {
-    UT_hash_handle hh;
     char name[32];
     int weight;
+    UT_hash_handle hh;
 } hstruct_t;
 
 static int cmpfunc(const hstruct_t *s1, const hstruct_t *s2)
@@ -39,19 +39,19 @@ int main()
     unsigned hashvalue;
 
     hstruct_t tst[] = {
-        {{0}, "muh1", 2},
-        {{0}, "muh2", 8},
-        {{0}, "muh3", 1},
-        {{0}, "muh4", 8},
-        {{0}, "muh5", 3},
-        {{0}, "muh6", 5},
-        {{0}, "muh7", 6},
-        {{0}, "muh8", 15},
-        {{0}, "muh9", 6},
-        {{0}, "muh10", 9},
-        {{0}, "muh11", 10},
-        {{0}, "muh12", 43},
-        {{0}, "muh12", 7}
+        {"muh1", 2,   {0}},
+        {"muh2", 8,   {0}},
+        {"muh3", 1,   {0}},
+        {"muh4", 8,   {0}},
+        {"muh5", 3,   {0}},
+        {"muh6", 5,   {0}},
+        {"muh7", 6,   {0}},
+        {"muh8", 15,  {0}},
+        {"muh9", 6,   {0}},
+        {"muh10", 9,  {0}},
+        {"muh11", 10, {0}},
+        {"muh12", 43, {0}},
+        {"muh12", 7,  {0}}
     };
 
     int index;

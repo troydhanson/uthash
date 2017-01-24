@@ -19,7 +19,7 @@ struct CacheEntry *cache = NULL;
 static void add_to_cache(const char *key, const char *value)
 {
     struct CacheEntry *entry, *tmp_entry;
-    entry = malloc(sizeof(struct CacheEntry));
+    entry = (struct CacheEntry *)malloc(sizeof(struct CacheEntry));
     if (entry == NULL) {
         exit(-1);
     }
