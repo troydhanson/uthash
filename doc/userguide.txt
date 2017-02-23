@@ -55,6 +55,7 @@ This software can be used in C and C++ programs.  It has been tested on:
  * Solaris
  * OpenBSD
  * FreeBSD
+ * Android
 
 Test suite
 ^^^^^^^^^^
