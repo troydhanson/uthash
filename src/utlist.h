@@ -354,27 +354,26 @@ do {                                                                            
 
 #define LL_INSERT_INORDER2(head,add,cmp,next)                                                  \
 do {                                                                                           \
-  LDECLTYPE(head) _pos;                                                                        \
-  _CASTASGN(_pos, head);                                                                       \
+  LDECLTYPE(head) _tmp;                                                                        \
   if(head) {                                                                                   \
-    LL_LOWER_BOUND(_pos,add,cmp);                                                              \
-    LL_APPEND_ELEM(head,_pos,add);                                                             \
+    LL_LOWER_BOUND(head,_tmp,add,cmp);                                                         \
+    LL_APPEND_ELEM(head,_tmp,add);                                                             \
   } else {                                                                                     \
     (head) = (add);                                                                            \
     (head)->next = NULL;                                                                       \
   }                                                                                            \
 } while (0)
 
-#define LL_LOWER_BOUND(head,node,cmp)                                                          \
-  LL_LOWER_BOUND2(head,node,cmp,next)
+#define LL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+  LL_LOWER_BOUND2(head,elt,like,cmp,next)
 
-#define LL_LOWER_BOUND2(head,node,cmp,next)                                                    \
+#define LL_LOWER_BOUND2(head,elt,like,cmp,next)                                                \
   do {                                                                                         \
-    if (cmp(head, node) >= 0) {                                                                \
-      (head) = NULL;                                                                           \
+    if (cmp(head, like) >= 0) {                                                                \
+      (elt) = NULL;                                                                            \
     } else {                                                                                   \
-      for (; (head)->next != NULL; (head) = (head)->next ) {                                   \
-        if (cmp((head)->next, node) >= 0) {                                                    \
+      for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next ) {                        \
+        if (cmp((elt)->next, like) >= 0) {                                                     \
           break;                                                                               \
         }                                                                                      \
       }                                                                                        \
@@ -637,11 +636,10 @@ do {                                                                            
 
 #define DL_INSERT_INORDER2(head,add,cmp,prev,next)                                             \
 do {                                                                                           \
-  LDECLTYPE(head) _pos;                                                                        \
-  _CASTASGN(_pos, head);                                                                       \
+  LDECLTYPE(head) _tmp;                                                                        \
   if (head) {                                                                                  \
-    DL_LOWER_BOUND(_pos,add,cmp);                                                              \
-    DL_APPEND_ELEM(head,_pos,add);                                                             \
+    DL_LOWER_BOUND(head,_tmp,add,cmp);                                                              \
+    DL_APPEND_ELEM(head,_tmp,add);                                                             \
   } else {                                                                                     \
     (head) = (add);                                                                            \
     (head)->next = NULL;                                                                       \
@@ -650,16 +648,16 @@ do {                                                                            
 } while (0)
 
 
-#define DL_LOWER_BOUND(head,node,cmp)                                                          \
-    DL_LOWER_BOUND2(head,node,cmp,prev,next)                                                   \
+#define DL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+    DL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                               \
 
-#define DL_LOWER_BOUND2(head,node,cmp,prev,next)                                               \
+#define DL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                           \
 do {                                                                                           \
-  if (cmp(head, node) >= 0) {                                                                  \
-    (head) = NULL;                                                                             \
+  if (cmp(head, like) >= 0) {                                                                  \
+    (elt) = NULL;                                                                              \
   } else {                                                                                     \
-    for (; (head)->next != NULL; (head) = (head)->next) {                                      \
-      if (cmp((head)->next, node) >= 0) {                                                      \
+    for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next) {                           \
+      if (cmp((elt)->next, like) >= 0) {                                                       \
         break;                                                                                 \
       }                                                                                        \
     }                                                                                          \
@@ -846,11 +844,10 @@ do {                                                                            
 
 #define CDL_INSERT_INORDER2(head,add,cmp,prev,next)                                            \
 do {                                                                                           \
-  LDECLTYPE(head) _pos;                                                                        \
-  _CASTASGN(_pos, head);                                                                       \
+  LDECLTYPE(head) _tmp;                                                                        \
   if (head) {                                                                                  \
-    CDL_LOWER_BOUND(_pos,add,cmp);                                                             \
-    CDL_APPEND_ELEM(head,_pos,add);                                                            \
+    CDL_LOWER_BOUND(head,_tmp,add,cmp);                                                        \
+    CDL_APPEND_ELEM(head,_tmp,add);                                                            \
   } else {                                                                                     \
     (head) = (add);                                                                            \
     (head)->next = (head);                                                                     \
@@ -858,18 +855,16 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
-#define CDL_LOWER_BOUND(head,node,cmp)                                                         \
-    CDL_LOWER_BOUND2(head,node,cmp,prev,next)                                                  \
+#define CDL_LOWER_BOUND(head,elt,like,cmp)                                                     \
+    CDL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                              \
 
-#define CDL_LOWER_BOUND2(head,node,cmp,prev,next)                                              \
+#define CDL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                          \
 do {                                                                                           \
-  LDECLTYPE(head) _tmp;                                                                        \
-  _CASTASGN(_tmp, (head));                                                                     \
-  if (cmp(head, node) >= 0) {                                                                  \
-    (head) = NULL;                                                                             \
+  if (cmp(head, like) >= 0) {                                                                  \
+    (elt) = NULL;                                                                              \
   } else {                                                                                     \
-    for (; (head)->next != _tmp; head = (head)->next) {                                        \
-      if (cmp((head)->next, node) >= 0) {                                                      \
+    for ((elt) = (head); (elt)->next != (head); (elt) = (elt)->next) {                         \
+      if (cmp((elt)->next, like) >= 0) {                                                       \
         break;                                                                                 \
       }                                                                                        \
     }                                                                                          \
