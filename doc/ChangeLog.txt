@@ -5,6 +5,13 @@ Click to return to the link:index.html[uthash home page].
 
 NOTE: This ChangeLog may be incomplete and/or incorrect. See the git commit log.
 
+Version 2.0.2 (2017-03-02)
+--------------------------
+* fix segfault in HASH_ADD_INORDER etc (thanks, Yana Kireyonok!)
+* remove spurious cast to unsigned in utstring_len (thanks, Michal Sestrienka!)
+* add uthash_memcmp and uthash_strlen for platforms without <stdlib.h> (thanks, Pawel Veselov!)
+* fix a C++ incompatibility in utringbuffer
+
 Version 2.0.1 (2016-07-05)
 --------------------------
 * in-order insertion macros HASH_ADD_INORDER etc (thanks, Thilo Schulz!)
