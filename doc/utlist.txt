@@ -59,6 +59,8 @@ Deleting elements::
  'O(n)' on singly-linked lists; constant-time on doubly-linked list.
 Sorting::
  'O(n log(n))' for all list types.
+Insertion in order (for sorted lists)::
+ 'O(n)' for all list types.
 Iteration, counting and searching::
  'O(n)' for all list types.
 
@@ -103,6 +105,7 @@ iterating over them.
 |LL_APPEND_ELEM(head,ref,add); | DL_APPEND_ELEM(head,ref,add); | CDL_APPEND_ELEM(head,ref,add);
 |LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add);
 |LL_APPEND(head,add);      | DL_APPEND(head,add);       | CDL_APPEND(head,add);
+|LL_INSERT_INORDER(head,add,cmp); | DL_INSERT_INORDER(head,add,cmp); | CDL_INSERT_INORDER(head,add,cmp);
 |LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    |
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
@@ -110,6 +113,7 @@ iterating over them.
 |LL_FOREACH_SAFE(head,elt,tmp) {...}| DL_FOREACH_SAFE(head,elt,tmp) {...} | CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {...}
 |LL_SEARCH_SCALAR(head,elt,mbr,val);| DL_SEARCH_SCALAR(head,elt,mbr,val); | CDL_SEARCH_SCALAR(head,elt,mbr,val);
 |LL_SEARCH(head,elt,like,cmp);| DL_SEARCH(head,elt,like,cmp); | CDL_SEARCH(head,elt,like,cmp);
+|LL_LOWER_BOUND(head,elt,like,cmp); | DL_LOWER_BOUND(head,elt,like,cmp); | CDL_LOWER_BOUND(head,elt,like,cmp);
 |LL_COUNT(head,elt,count); | DL_COUNT(head,elt,count);  | CDL_COUNT(head,elt,count);
 |===============================================================================
 
@@ -140,6 +144,12 @@ element. It is not any faster than manually iterating and testing each element.
 There are two forms: the "scalar" version searches for an element using a
 simple equality test on a given structure member, while the general version takes an
 element to which all others in the list will be compared using a `cmp` function.
+
+The 'lower_bound' operation finds the first element of the list which is no greater
+than the provided `like` element, according to the provided `cmp` function.
+The 'lower_bound' operation sets `elt` to a suitable value for passing to
+`LL_APPEND_ELEM`; i.e., `elt=NULL` if the proper insertion point is at the front of
+the list, and `elt=p` if the proper insertion point is between `p` and `p->next`.
 
 The 'count' operation iterates over the list and increments a supplied counter.
 
@@ -273,8 +283,9 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  LL_DELETE2(head, del, next);
  LL_FOREACH2(head, elt, next) {...}
  LL_FOREACH_SAFE2(head, elt, tmp, next) {...}
- LL_SEARCH_SCALAR2(head, out, field, val, next);
- LL_SEARCH2(head, out, elt, cmp, next);
+ LL_SEARCH_SCALAR2(head, elt, mbr, val, next);
+ LL_SEARCH2(head, elt, like, cmp, next);
+ LL_LOWER_BOUND2(head, elt, like, cmp, next);
  LL_COUNT2(head, elt, count, next);
  DL_PREPEND2(head, add, prev, next);
  DL_PREPEND_ELEM2(head, ref, add, prev, next);
@@ -285,7 +296,9 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  DL_DELETE2(head, del, prev, next);
  DL_FOREACH2(head, elt, next) {...}
  DL_FOREACH_SAFE2(head, elt, tmp, next) {...}
- DL_SEARCH_SCALAR2(head, out, field, val, next);
+ DL_SEARCH_SCALAR2(head, elt, mbr, val, next);
+ DL_SEARCH2(head, elt, like, cmp, next);
+ DL_LOWER_BOUND2(head, elt, like, cmp, next);
  DL_COUNT2(head, elt, count, next);
  CDL_PREPEND2(head, add, prev, next);
  CDL_PREPEND_ELEM2(head, ref, add, prev, next);
@@ -295,8 +308,9 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  CDL_DELETE2(head, del, prev, next);
  CDL_FOREACH2(head, elt, next) {...}
  CDL_FOREACH_SAFE2(head, elt, tmp1, tmp2, prev, next) {...}
- CDL_SEARCH_SCALAR2(head, out, field, val, next);
- CDL_SEARCH2(head, out, elt, cmp, next);
+ CDL_SEARCH_SCALAR2(head, elt, mbr, val, next);
+ CDL_SEARCH2(head, elt, like, cmp, next);
+ CDL_LOWER_BOUND2(head, elt, like, cmp, next);
  CDL_COUNT2(head, elt, count, next);
 
 // vim: set tw=80 wm=2 syntax=asciidoc:

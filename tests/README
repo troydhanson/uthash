@@ -92,6 +92,7 @@ test87: test HASH_ADD_INORDER() macro (Thilo Schulz)
 test88: test alt memcmp and strlen macros
 test89: test code from the tinydtls project
 test90: regression-test HASH_ADD_KEYPTR_INORDER (IronBug)
+test91: test LL_INSERT_INORDER etc.
 
 Other Make targets
 ================================================================================

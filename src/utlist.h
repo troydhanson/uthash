@@ -349,6 +349,37 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define LL_INSERT_INORDER(head,add,cmp)                                                        \
+    LL_INSERT_INORDER2(head,add,cmp,next)
+
+#define LL_INSERT_INORDER2(head,add,cmp,next)                                                  \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if (head) {                                                                                  \
+    LL_LOWER_BOUND(head, _tmp, add, cmp);                                                      \
+    LL_APPEND_ELEM(head, _tmp, add);                                                           \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->next = NULL;                                                                       \
+  }                                                                                            \
+} while (0)
+
+#define LL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+    LL_LOWER_BOUND2(head,elt,like,cmp,next)
+
+#define LL_LOWER_BOUND2(head,elt,like,cmp,next)                                                \
+  do {                                                                                         \
+    if ((head) == NULL || (cmp(head, like)) >= 0) {                                            \
+      (elt) = NULL;                                                                            \
+    } else {                                                                                   \
+      for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next) {                         \
+        if (cmp((elt)->next, like) >= 0) {                                                     \
+          break;                                                                               \
+        }                                                                                      \
+      }                                                                                        \
+    }                                                                                          \
+  } while (0)
+
 #define LL_DELETE(head,del)                                                                    \
     LL_DELETE2(head,del,next)
 
@@ -503,6 +534,23 @@ do {                                                                            
   (add)->next=NULL;                                                                            \
 } while (0)
 
+#undef LL_INSERT_INORDER2
+#define LL_INSERT_INORDER2(head,add,cmp,next)                                                  \
+do {                                                                                           \
+  if ((head) == NULL || (cmp(head, add)) >= 0) {                                               \
+    (add)->next = (head);                                                                      \
+    (head) = (add);                                                                            \
+  } else {                                                                                     \
+    char *_tmp = (char*)(head);                                                                \
+    while ((head)->next != NULL && (cmp((head)->next, add)) < 0) {                             \
+      (head) = (head)->next;                                                                   \
+    }                                                                                          \
+    (add)->next = (head)->next;                                                                \
+    (head)->next = (add);                                                                      \
+    _RS(head);                                                                                 \
+  }                                                                                            \
+} while (0)
+
 #undef LL_DELETE2
 #define LL_DELETE2(head,del,next)                                                              \
 do {                                                                                           \
@@ -597,6 +645,38 @@ do {                                                                            
       (head)=(add);                                                                            \
       (head)->prev = (head);                                                                   \
       (head)->next = NULL;                                                                     \
+  }                                                                                            \
+} while (0)
+
+#define DL_INSERT_INORDER(head,add,cmp)                                                        \
+    DL_INSERT_INORDER2(head,add,cmp,next)
+
+#define DL_INSERT_INORDER2(head,add,cmp,next)                                                  \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if (head) {                                                                                  \
+    DL_LOWER_BOUND(head, _tmp, add, cmp);                                                      \
+    DL_APPEND_ELEM(head, _tmp, add);                                                           \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->prev = (head);                                                                     \
+    (head)->next = NULL;                                                                       \
+  }                                                                                            \
+} while (0)
+
+#define DL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+    DL_LOWER_BOUND2(head,elt,like,cmp,next)
+
+#define DL_LOWER_BOUND2(head,elt,like,cmp,next)                                                \
+do {                                                                                           \
+  if ((head) == NULL || (cmp(head, like)) >= 0) {                                              \
+    (elt) = NULL;                                                                              \
+  } else {                                                                                     \
+    for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next) {                           \
+      if ((cmp((elt)->next, like)) >= 0) {                                                     \
+        break;                                                                                 \
+      }                                                                                        \
+    }                                                                                          \
   }                                                                                            \
 } while (0)
 
@@ -739,6 +819,39 @@ do {                                                                            
 #define DL_APPEND_ELEM(head, el, add)                                                          \
    DL_APPEND_ELEM2(head, el, add, prev, next)
 
+#ifdef NO_DECLTYPE
+/* Here are VS2008 / NO_DECLTYPE replacements for a few functions */
+
+#undef DL_INSERT_INORDER2
+#define DL_INSERT_INORDER2(head,add,cmp,next)                                                  \
+do {                                                                                           \
+  if ((head) == NULL) {                                                                        \
+    (add)->prev = (add);                                                                       \
+    (add)->next = NULL;                                                                        \
+    (head) = (add);                                                                            \
+  } else if ((cmp(head, add)) >= 0) {                                                          \
+    (add)->prev = (head)->prev;                                                                \
+    (add)->next = (head);                                                                      \
+    (head)->prev = (add);                                                                      \
+    (head) = (add);                                                                            \
+  } else {                                                                                     \
+    char *_tmp = (char*)(head);                                                                \
+    while ((char*)(head)->next != _tmp && (cmp((head)->next, add)) < 0) {                      \
+      (head) = (head)->next;                                                                   \
+    }                                                                                          \
+    (add)->prev = (head);                                                                      \
+    (add)->next = (head)->next;                                                                \
+    (head)->next = (add);                                                                      \
+    _RS(head);                                                                                 \
+    if ((add)->next) {                                                                         \
+      (add)->next->prev = (add);                                                               \
+    } else {                                                                                   \
+      (head)->prev = (add);                                                                    \
+    }                                                                                          \
+  }                                                                                            \
+} while (0)
+#endif /* NO_DECLTYPE */
+
 /******************************************************************************
  * circular doubly linked list macros                                         *
  *****************************************************************************/
@@ -774,6 +887,38 @@ do {                                                                            
    (add)->next = (add);                                                                        \
  }                                                                                             \
  (head) = (add);                                                                               \
+} while (0)
+
+#define CDL_INSERT_INORDER(head,add,cmp)                                                       \
+    CDL_INSERT_INORDER2(head,add,cmp,next)
+
+#define CDL_INSERT_INORDER2(head,add,cmp,next)                                                 \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if (head) {                                                                                  \
+    CDL_LOWER_BOUND(head, _tmp, add, cmp);                                                     \
+    CDL_APPEND_ELEM(head, _tmp, add);                                                          \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->next = (head);                                                                     \
+    (head)->prev = (head);                                                                     \
+  }                                                                                            \
+} while (0)
+
+#define CDL_LOWER_BOUND(head,elt,like,cmp)                                                     \
+    CDL_LOWER_BOUND2(head,elt,like,cmp,next)
+
+#define CDL_LOWER_BOUND2(head,elt,like,cmp,next)                                               \
+do {                                                                                           \
+  if ((head) == NULL || (cmp(head, like)) >= 0) {                                              \
+    (elt) = NULL;                                                                              \
+  } else {                                                                                     \
+    for ((elt) = (head); (elt)->next != (head); (elt) = (elt)->next) {                         \
+      if ((cmp((elt)->next, like)) >= 0) {                                                     \
+        break;                                                                                 \
+      }                                                                                        \
+    }                                                                                          \
+  }                                                                                            \
 } while (0)
 
 #define CDL_DELETE(head,del)                                                                   \
@@ -892,5 +1037,35 @@ do {                                                                            
 
 #define CDL_APPEND_ELEM(head, el, add)                                                         \
     CDL_APPEND_ELEM2(head, el, add, prev, next)
+
+#ifdef NO_DECLTYPE
+/* Here are VS2008 / NO_DECLTYPE replacements for a few functions */
+
+#undef CDL_INSERT_INORDER2
+#define CDL_INSERT_INORDER2(head,add,cmp,next)                                                 \
+do {                                                                                           \
+  if ((head) == NULL) {                                                                        \
+    (add)->prev = (add);                                                                       \
+    (add)->next = (add);                                                                       \
+    (head) = (add);                                                                            \
+  } else if ((cmp(head, add)) >= 0) {                                                          \
+    (add)->prev = (head)->prev;                                                                \
+    (add)->next = (head);                                                                      \
+    (add)->prev->next = (add);                                                                 \
+    (head)->prev = (add);                                                                      \
+    (head) = (add);                                                                            \
+  } else {                                                                                     \
+    char *_tmp = (char*)(head);                                                                \
+    while ((char*)(head)->next != _tmp && (cmp((head)->next, add)) < 0) {                      \
+      (head) = (head)->next;                                                                   \
+    }                                                                                          \
+    (add)->prev = (head);                                                                      \
+    (add)->next = (head)->next;                                                                \
+    (add)->next->prev = (add);                                                                 \
+    (head)->next = (add);                                                                      \
+    _RS(head);                                                                                 \
+  }                                                                                            \
+} while (0)
+#endif /* NO_DECLTYPE */
 
 #endif /* UTLIST_H */
