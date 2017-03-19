@@ -349,6 +349,37 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define LL_INSERT_INORDER(head,add,cmp)                                                        \
+    LL_INSERT_INORDER2(head,add,cmp,next)
+
+#define LL_INSERT_INORDER2(head,add,cmp,next)                                                  \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if(head) {                                                                                   \
+    LL_LOWER_BOUND(head,_tmp,add,cmp);                                                         \
+    LL_APPEND_ELEM(head,_tmp,add);                                                             \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->next = NULL;                                                                       \
+  }                                                                                            \
+} while (0)
+
+#define LL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+  LL_LOWER_BOUND2(head,elt,like,cmp,next)
+
+#define LL_LOWER_BOUND2(head,elt,like,cmp,next)                                                \
+  do {                                                                                         \
+    if (cmp(head, like) >= 0) {                                                                \
+      (elt) = NULL;                                                                            \
+    } else {                                                                                   \
+      for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next ) {                        \
+        if (cmp((elt)->next, like) >= 0) {                                                     \
+          break;                                                                               \
+        }                                                                                      \
+      }                                                                                        \
+    }                                                                                          \
+  } while (0)
+
 #define LL_DELETE(head,del)                                                                    \
     LL_DELETE2(head,del,next)
 
@@ -600,6 +631,39 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define DL_INSERT_INORDER(head,add,cmp)                                                        \
+    DL_INSERT_INORDER2(head,add,cmp,prev,next)
+
+#define DL_INSERT_INORDER2(head,add,cmp,prev,next)                                             \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if (head) {                                                                                  \
+    DL_LOWER_BOUND(head,_tmp,add,cmp);                                                              \
+    DL_APPEND_ELEM(head,_tmp,add);                                                             \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->next = NULL;                                                                       \
+    (head)->prev = NULL;                                                                       \
+  }                                                                                            \
+} while (0)
+
+
+#define DL_LOWER_BOUND(head,elt,like,cmp)                                                      \
+    DL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                               \
+
+#define DL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                           \
+do {                                                                                           \
+  if (cmp(head, like) >= 0) {                                                                  \
+    (elt) = NULL;                                                                              \
+  } else {                                                                                     \
+    for ((elt) = (head); (elt)->next != NULL; (elt) = (elt)->next) {                           \
+      if (cmp((elt)->next, like) >= 0) {                                                       \
+        break;                                                                                 \
+      }                                                                                        \
+    }                                                                                          \
+  }                                                                                            \
+} while (0)
+
 #define DL_CONCAT(head1,head2)                                                                 \
     DL_CONCAT2(head1,head2,prev,next)
 
@@ -774,6 +838,38 @@ do {                                                                            
    (add)->next = (add);                                                                        \
  }                                                                                             \
  (head) = (add);                                                                               \
+} while (0)
+
+#define CDL_INSERT_INORDER(head,add,cmp)                                                       \
+    CDL_INSERT_INORDER2(head,add,cmp,prev,next)
+
+#define CDL_INSERT_INORDER2(head,add,cmp,prev,next)                                            \
+do {                                                                                           \
+  LDECLTYPE(head) _tmp;                                                                        \
+  if (head) {                                                                                  \
+    CDL_LOWER_BOUND(head,_tmp,add,cmp);                                                        \
+    CDL_APPEND_ELEM(head,_tmp,add);                                                            \
+  } else {                                                                                     \
+    (head) = (add);                                                                            \
+    (head)->next = (head);                                                                     \
+    (head)->prev = (head);                                                                     \
+  }                                                                                            \
+} while (0)
+
+#define CDL_LOWER_BOUND(head,elt,like,cmp)                                                     \
+    CDL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                              \
+
+#define CDL_LOWER_BOUND2(head,elt,like,cmp,prev,next)                                          \
+do {                                                                                           \
+  if (cmp(head, like) >= 0) {                                                                  \
+    (elt) = NULL;                                                                              \
+  } else {                                                                                     \
+    for ((elt) = (head); (elt)->next != (head); (elt) = (elt)->next) {                         \
+      if (cmp((elt)->next, like) >= 0) {                                                       \
+        break;                                                                                 \
+      }                                                                                        \
+    }                                                                                          \
+  }                                                                                            \
 } while (0)
 
 #define CDL_DELETE(head,del)                                                                   \

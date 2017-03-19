@@ -59,6 +59,8 @@ Deleting elements::
  'O(n)' on singly-linked lists; constant-time on doubly-linked list.
 Sorting::
  'O(n log(n))' for all list types.
+Insertion in order (for sorted lists)::
+ 'O(n)' for all list types.
 Iteration, counting and searching::
  'O(n)' for all list types.
 
@@ -103,6 +105,8 @@ iterating over them.
 |LL_APPEND_ELEM(head,ref,add); | DL_APPEND_ELEM(head,ref,add); | CDL_APPEND_ELEM(head,ref,add);
 |LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add);
 |LL_APPEND(head,add);      | DL_APPEND(head,add);       | CDL_APPEND(head,add);
+|LL_INSERT_INORDER(head,add,cmp);  | CDL_INSERT_INORDER(head,add,cmp);  |CDL_INSERT_INORDER(head,add,cmp);
+|LL_LOWER_BOUND(head,elt,like,cmp); | DL_LOWER_BOUND(head,elt,like,cmp); | CDL_LOWER_BOUND(head,elt,like,cmp);
 |LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    |
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
@@ -142,6 +146,16 @@ simple equality test on a given structure member, while the general version take
 element to which all others in the list will be compared using a `cmp` function.
 
 The 'count' operation iterates over the list and increments a supplied counter.
+
+The 'insert_inorder' operation is used to add an element into an array that is
+already sorted by your chosen comparator function. It is not faster than sorting a
+linked list once, but is valuable if sort order needs to be maintained for operations
+taking place before completely populating the list.
+
+The 'lower_bound' operation finds the first element of the list which is no greater
+than the provided element. We set `like` to a suitable value for passing to
+LL_APPEND_ELEM; i.e., out=NULL if the proper insertion point is at the front of the
+list, and out=p if the proper insertion point is between p and p->next.
 
 The parameters shown in the table above are explained here:
 
