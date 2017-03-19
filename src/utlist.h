@@ -61,18 +61,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* These macros use decltype or the earlier __typeof GNU extension.
    As decltype is only available in newer compilers (VS2010 or gcc 4.3+
-   when compiling c++ code), this code uses whatever method is needed
+   when compiling c++ source) this code uses whatever method is needed
    or, for VS2008 where neither is available, uses casting workarounds. */
-#ifdef _MSC_VER            /* MS compiler */
+#if !defined(LDECLTYPE) && !defined(NO_DECLTYPE)
+#if defined(_MSC_VER)   /* MS compiler */
 #if _MSC_VER >= 1600 && defined(__cplusplus)  /* VS2010 or newer in C++ mode */
 #define LDECLTYPE(x) decltype(x)
-#else                     /* VS2008 or older (or VS2010 in C mode) */
+#else                   /* VS2008 or older (or VS2010 in C mode) */
 #define NO_DECLTYPE
 #endif
-#elif defined(__ICCARM__)
+#elif defined(__BORLANDC__) || defined(__ICCARM__) || defined(__LCC__) || defined(__WATCOMC__)
 #define NO_DECLTYPE
-#else                      /* GNU, Sun and other compilers */
+#else                   /* GNU, Sun and other compilers */
 #define LDECLTYPE(x) __typeof(x)
+#endif
 #endif
 
 /* for VS2008 we use some workarounds to get around the lack of decltype,

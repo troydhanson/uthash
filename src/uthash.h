@@ -34,21 +34,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    As decltype is only available in newer compilers (VS2010 or gcc 4.3+
    when compiling c++ source) this code uses whatever method is needed
    or, for VS2008 where neither is available, uses casting workarounds. */
+#if !defined(DECLTYPE) && !defined(NO_DECLTYPE)
 #if defined(_MSC_VER)   /* MS compiler */
 #if _MSC_VER >= 1600 && defined(__cplusplus)  /* VS2010 or newer in C++ mode */
 #define DECLTYPE(x) (decltype(x))
 #else                   /* VS2008 or older (or VS2010 in C mode) */
 #define NO_DECLTYPE
-#define DECLTYPE(x)
 #endif
-#elif defined(__BORLANDC__) || defined(__LCC__) || defined(__WATCOMC__)
+#elif defined(__BORLANDC__) || defined(__ICCARM__) || defined(__LCC__) || defined(__WATCOMC__)
 #define NO_DECLTYPE
-#define DECLTYPE(x)
 #else                   /* GNU, Sun and other compilers */
 #define DECLTYPE(x) (__typeof(x))
 #endif
+#endif
 
 #ifdef NO_DECLTYPE
+#define DECLTYPE(x)
 #define DECLTYPE_ASSIGN(dst,src)                                                 \
 do {                                                                             \
   char **_da_dst = (char**)(&(dst));                                             \
@@ -230,6 +231,30 @@ do {                                                                            
   (head)->hh.tbl->tail = &((add)->hh);                                           \
 } while (0)
 
+#define HASH_AKBI_INNER_LOOP(hh,head,add,cmpfcn)                                 \
+do {                                                                             \
+  do {                                                                           \
+    if (cmpfcn(DECLTYPE(head)(_hs_iter), add) > 0)                               \
+      break;                                                                     \
+  } while ((_hs_iter = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->next));           \
+} while (0)
+
+#ifdef NO_DECLTYPE
+#undef HASH_AKBI_INNER_LOOP
+#define HASH_AKBI_INNER_LOOP(hh,head,add,cmpfcn)                                 \
+do {                                                                             \
+  char *_hs_saved_head = (char*)(head);                                          \
+  do {                                                                           \
+    DECLTYPE_ASSIGN(head, _hs_iter);                                             \
+    if (cmpfcn(head, add) > 0) {                                                 \
+      DECLTYPE_ASSIGN(head, _hs_saved_head);                                     \
+      break;                                                                     \
+    }                                                                            \
+    DECLTYPE_ASSIGN(head, _hs_saved_head);                                       \
+  } while ((_hs_iter = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->next));           \
+} while (0)
+#endif
+
 #define HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh,head,keyptr,keylen_in,hashval,add,cmpfcn) \
 do {                                                                             \
   unsigned _ha_bkt;                                                              \
@@ -244,10 +269,7 @@ do {                                                                            
   } else {                                                                       \
     void *_hs_iter = (head);                                                     \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
-    do {                                                                         \
-      if (cmpfcn(DECLTYPE(head)(_hs_iter), add) > 0)                             \
-        break;                                                                   \
-    } while ((_hs_iter = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->next));         \
+    HASH_AKBI_INNER_LOOP(hh, head, add, cmpfcn);                                 \
     if (_hs_iter) {                                                              \
       (add)->hh.next = _hs_iter;                                                 \
       if (((add)->hh.prev = HH_FROM_ELMT((head)->hh.tbl, _hs_iter)->prev)) {     \
