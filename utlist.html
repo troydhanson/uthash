@@ -891,6 +891,14 @@ Sorting
 </p>
 </dd>
 <dt class="hdlist1">
+Insertion in order (for sorted lists)
+</dt>
+<dd>
+<p>
+ <em>O(n)</em> for all list types.
+</p>
+</dd>
+<dt class="hdlist1">
 Iteration, counting and searching
 </dt>
 <dd>
@@ -978,6 +986,11 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>CDL_APPEND(head,add);</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>LL_INSERT_INORDER(head,add,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_INSERT_INORDER(head,add,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_INSERT_INORDER(head,add,cmp);</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>LL_CONCAT(head1,head2);</code></p></td>
 <td align="left" valign="top"><p class="table"><code>DL_CONCAT(head1,head2);</code></p></td>
 <td align="left" valign="top"><p class="table"><code></code></p></td>
@@ -1013,6 +1026,11 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"><code>CDL_SEARCH(head,elt,like,cmp);</code></p></td>
 </tr>
 <tr>
+<td align="left" valign="top"><p class="table"><code>LL_LOWER_BOUND(head,elt,like,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_LOWER_BOUND(head,elt,like,cmp);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_LOWER_BOUND(head,elt,like,cmp);</code></p></td>
+</tr>
+<tr>
 <td align="left" valign="top"><p class="table"><code>LL_COUNT(head,elt,count);</code></p></td>
 <td align="left" valign="top"><p class="table"><code>DL_COUNT(head,elt,count);</code></p></td>
 <td align="left" valign="top"><p class="table"><code>CDL_COUNT(head,elt,count);</code></p></td>
@@ -1044,6 +1062,11 @@ element. It is not any faster than manually iterating and testing each element.
 There are two forms: the "scalar" version searches for an element using a
 simple equality test on a given structure member, while the general version takes an
 element to which all others in the list will be compared using a <code>cmp</code> function.</p></div>
+<div class="paragraph"><p>The <em>lower_bound</em> operation finds the first element of the list which is no greater
+than the provided <code>like</code> element, according to the provided <code>cmp</code> function.
+The <em>lower_bound</em> operation sets <code>elt</code> to a suitable value for passing to
+<code>LL_APPEND_ELEM</code>; i.e., <code>elt=NULL</code> if the proper insertion point is at the front of
+the list, and <code>elt=p</code> if the proper insertion point is between <code>p</code> and <code>p-&gt;next</code>.</p></div>
 <div class="paragraph"><p>The <em>count</em> operation iterates over the list and increments a supplied counter.</p></div>
 <div class="paragraph"><p>The parameters shown in the table above are explained here:</p></div>
 <div class="dlist"><dl>
@@ -1241,8 +1264,9 @@ LL_APPEND2(head, add, next);
 LL_DELETE2(head, del, next);
 LL_FOREACH2(head, elt, next) {...}
 LL_FOREACH_SAFE2(head, elt, tmp, next) {...}
-LL_SEARCH_SCALAR2(head, out, field, val, next);
-LL_SEARCH2(head, out, elt, cmp, next);
+LL_SEARCH_SCALAR2(head, elt, mbr, val, next);
+LL_SEARCH2(head, elt, like, cmp, next);
+LL_LOWER_BOUND2(head, elt, like, cmp, next);
 LL_COUNT2(head, elt, count, next);
 DL_PREPEND2(head, add, prev, next);
 DL_PREPEND_ELEM2(head, ref, add, prev, next);
@@ -1254,6 +1278,8 @@ DL_DELETE2(head, del, prev, next);
 DL_FOREACH2(head, elt, next) {...}
 DL_FOREACH_SAFE2(head, elt, tmp, next) {...}
 DL_SEARCH_SCALAR2(head, out, field, val, next);
+DL_SEARCH2(head, elt, like, cmp, next);
+DL_LOWER_BOUND2(head, elt, like, cmp, next);
 DL_COUNT2(head, elt, count, next);
 CDL_PREPEND2(head, add, prev, next);
 CDL_PREPEND_ELEM2(head, ref, add, prev, next);
@@ -1265,6 +1291,7 @@ CDL_FOREACH2(head, elt, next) {...}
 CDL_FOREACH_SAFE2(head, elt, tmp1, tmp2, prev, next) {...}
 CDL_SEARCH_SCALAR2(head, out, field, val, next);
 CDL_SEARCH2(head, out, elt, cmp, next);
+CDL_LOWER_BOUND2(head, elt, like, cmp, next);
 CDL_COUNT2(head, elt, count, next);</code></pre>
 </div></div>
 </div>
@@ -1275,7 +1302,7 @@ CDL_COUNT2(head, elt, count, next);</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 2.0.2<br />
-Last updated 2017-03-02 11:35:31 PST
+Last updated 2017-03-18 22:44:34 PDT
 </div>
 </div>
 </body>
