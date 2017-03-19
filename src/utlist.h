@@ -623,6 +623,7 @@ do {                                                                            
 
 #define DL_DELETE2(head,del,prev,next)                                                         \
 do {                                                                                           \
+  assert((head) != NULL);                                                                      \
   assert((del)->prev != NULL);                                                                 \
   if ((del)->prev == (del)) {                                                                  \
       (head)=NULL;                                                                             \
