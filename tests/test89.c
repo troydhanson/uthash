@@ -61,4 +61,5 @@ int main()
     }
 
     dump_queue(nq);
+    return 0;
 }
