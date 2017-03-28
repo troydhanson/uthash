@@ -1,0 +1,10 @@
+language: cpp
+compiler:
+- clang
+- gcc
+script:
+- make -C tests
+- make -C tests pedantic
+- make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+- make -C tests cplusplus
+- make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
