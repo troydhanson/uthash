@@ -1,7 +1,5 @@
 #CC=clang
 HASHDIR = ../src
-FUNCS = BER SAX FNV OAT JEN SFH 
-SPECIAL_FUNCS = MUR
 UTILS = emit_keys
 PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test10 test11 test12 test13 test14 test15 test16 test17 \
@@ -36,13 +34,8 @@ endif
 TEST_TARGET=run_tests
 TESTS=./do_tests
 
+# These flags are required in order to build with -DHASH_FUNCTION=HASH_MUR.
 MUR_CFLAGS = -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing
-# On GNU we use -fno-strict-aliasing when using the Murmurhash
-ifneq ($(strip $(shell $(CC) -v 2>&1 |egrep "gcc")),)
-ifeq ($(HASH_FUNCTION),"HASH_MUR")
-  CFLAGS += $(MUR_CFLAGS)
-endif
-endif
 
 # detect Cygwin
 ifneq ($(strip $(shell $(CC) -v 2>&1 |grep "cygwin")),)
@@ -67,8 +60,7 @@ ifeq ($(strip $(shell uname -s)), FreeBSD)
   endif
 endif
 
-
-all: $(PROGS) $(UTILS) $(PLAT_UTILS) $(FUNCS) $(SPECIAL_FUNCS) $(TEST_TARGET) 
+all: $(PROGS) $(UTILS) $(PLAT_UTILS) keystat $(TEST_TARGET)
 
 tests_only: $(PROGS) $(TEST_TARGET)
 
@@ -99,13 +91,14 @@ sleep_test : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
-$(FUNCS) : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_$@ \
-		$(LDFLAGS) -o keystat.$@ keystat.c
-
-$(SPECIAL_FUNCS) : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) -DHASH_FUNCTION=HASH_$@ \
-		$(LDFLAGS) -o keystat.$@ keystat.c
+keystat : $(HASHDIR)/uthash.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_BER $(LDFLAGS) -o keystat.BER keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_FNV $(LDFLAGS) -o keystat.FNV keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_JEN $(LDFLAGS) -o keystat.JEN keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_OAT $(LDFLAGS) -o keystat.OAT keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SAX $(LDFLAGS) -o keystat.SAX keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SFH $(LDFLAGS) -o keystat.SFH keystat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) -DHASH_FUNCTION=HASH_MUR $(LDFLAGS) -o keystat.MUR keystat.c
 
 run_tests: $(PROGS)
 	perl $(TESTS)
