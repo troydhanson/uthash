@@ -718,6 +718,7 @@ do {                                                                   \
   _mur_tail = (const uint8_t*)(_mur_data + (_mur_nblocks*4));          \
   _mur_k1=0;                                                           \
   switch((keylen) & 3U) {                                              \
+    case 0: break;                                                     \
     case 3: _mur_k1 ^= (uint32_t)_mur_tail[2] << 16; /* FALLTHROUGH */ \
     case 2: _mur_k1 ^= (uint32_t)_mur_tail[1] << 8;  /* FALLTHROUGH */ \
     case 1: _mur_k1 ^= (uint32_t)_mur_tail[0];                         \
