@@ -6,9 +6,9 @@ function proceed {
 }
 
 make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_BER'; proceed
-make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SAX'; proceed
 make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_FNV'; proceed
-make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_OAT'; proceed
 make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_JEN'; proceed
-make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_MUR'; proceed
-make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SFH'; 
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_OAT'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SAX'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_SFH'; proceed
+make clean tests_only EXTRA_CFLAGS='-DHASH_FUNCTION=HASH_MUR -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing'
