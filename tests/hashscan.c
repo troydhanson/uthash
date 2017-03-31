@@ -631,15 +631,14 @@ die:
 #endif
 
 
-static void usage(const char *prog)
+static int usage(const char *prog)
 {
     fprintf(stderr,"usage: %s [-v] [-k] <pid>\n", prog);
-    exit(-1);
+    return -1;
 }
 
 int main(int argc, char *argv[])
 {
-    pid_t pid;
     int opt;
 
     while ( (opt = getopt(argc, argv, "kv")) != -1) {
@@ -651,16 +650,14 @@ int main(int argc, char *argv[])
                 getkeys++;
                 break;
             default:
-                usage(argv[0]);
-                break;
+                return usage(argv[0]);
         }
     }
 
     if (optind < argc) {
-        pid=atoi(argv[optind++]);
+        pid_t pid = atoi(argv[optind++]);
+        return scan(pid);
     } else {
-        usage(argv[0]);
+        return usage(argv[0]);
     }
-
-    return scan(pid);
 }
