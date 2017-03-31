@@ -121,6 +121,25 @@ do {                                                             \
 
 #define utstring_body(s) ((s)->d)
 
+#define utstring_adopt(s,b,l)                              \
+do {                                                       \
+  if (s) {                                                 \
+    (s)->d = (b);                                          \
+    (s)->n = (l);                                          \
+    (s)->i = (l);                                          \
+  }                                                        \
+} while(0)
+
+#define utstring_disown(s,b)                               \
+do {                                                       \
+  if (s) {                                                 \
+    (b) = (s)->d;                                          \
+    (s)->d = NULL;                                         \
+    (s)->i = 0;                                            \
+    (s)->n = 0;                                            \
+  }                                                        \
+} while(0)
+
 _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list ap) {
    int n;
    va_list cp;

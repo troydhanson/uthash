@@ -162,6 +162,8 @@ Operations
 | utstring_clear(s) | clear the content of s (setting its length to 0)
 | utstring_len(s) | obtain the length of s as an unsigned integer
 | utstring_body(s) | get `char*` to body of s (buffer is always null-terminated)
+| utstring_adopt(s,bin,len) | init a utstring with binary data of length len (shallow copy)
+| utstring_disown(s,bin) | get `char*` to body of s and clear the content of s
 | utstring_find(s,pos,str,len) | forward search from pos for a substring
 | utstring_findR(s,pos,str,len) | reverse search from pos for a substring
 |===============================================================================
