@@ -1,3 +1,7 @@
+#ifdef HASH_FUNCTION
+#undef HASH_FUNCTION  /* this test's output depends on the pattern of hash collisions */
+#endif
+
 #include "uthash.h"
 #include <stdlib.h>   /* malloc */
 #include <stdio.h>    /* printf */
