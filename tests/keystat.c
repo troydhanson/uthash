@@ -107,11 +107,11 @@ int main(int argc, char *argv[])
         percent = atoi(argv[2]);
         v = 3;
     }
-    if ((argc >= v) && (strcmp(argv[v],"-v") == 0)) {
+    if ((v < argc) && (strcmp(argv[v],"-v") == 0)) {
         verbose=1;
         v++;
     }
-    if (argc >= v) {
+    if (v < argc) {
         filename=argv[v];
     }
     fd=open(filename,MODE);
@@ -253,4 +253,3 @@ readmore2:
     }
     return 0;
 }
-
