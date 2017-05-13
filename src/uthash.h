@@ -26,9 +26,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define UTHASH_VERSION 2.0.2
 
-#include <string.h>   /* memcmp,strlen */
+#include <string.h>   /* memcmp, memset, strlen */
 #include <stddef.h>   /* ptrdiff_t */
-#include <stdlib.h>   /* exit() */
+#include <stdlib.h>   /* exit */
 
 /* These macros use decltype or the earlier __typeof GNU extension.
    As decltype is only available in newer compilers (VS2010 or gcc 4.3+
@@ -88,11 +88,14 @@ typedef unsigned char uint8_t;
 #ifndef uthash_free
 #define uthash_free(ptr,sz) free(ptr)     /* free fcn                        */
 #endif
-#ifndef uthash_strlen
-#define uthash_strlen(s) strlen(s)
+#ifndef uthash_bzero
+#define uthash_bzero(a,n) memset(a,'\0',n)
 #endif
 #ifndef uthash_memcmp
 #define uthash_memcmp(a,b,n) memcmp(a,b,n)
+#endif
+#ifndef uthash_strlen
+#define uthash_strlen(s) strlen(s)
 #endif
 
 #ifndef uthash_noexpand_fyi
@@ -144,7 +147,7 @@ do {                                                                            
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
   (tbl)->bloom_bv = (uint8_t*)uthash_malloc(HASH_BLOOM_BYTELEN);                 \
   if (!((tbl)->bloom_bv))  { uthash_fatal( "out of memory"); }                   \
-  memset((tbl)->bloom_bv, 0, HASH_BLOOM_BYTELEN);                                \
+  uthash_bzero((tbl)->bloom_bv, HASH_BLOOM_BYTELEN);                             \
   (tbl)->bloom_sig = HASH_BLOOM_SIGNATURE;                                       \
 } while (0)
 
@@ -175,7 +178,7 @@ do {                                                                            
   (head)->hh.tbl = (UT_hash_table*)uthash_malloc(                                \
                   sizeof(UT_hash_table));                                        \
   if (!((head)->hh.tbl))  { uthash_fatal( "out of memory"); }                    \
-  memset((head)->hh.tbl, 0, sizeof(UT_hash_table));                              \
+  uthash_bzero((head)->hh.tbl, sizeof(UT_hash_table));                           \
   (head)->hh.tbl->tail = &((head)->hh);                                          \
   (head)->hh.tbl->num_buckets = HASH_INITIAL_NUM_BUCKETS;                        \
   (head)->hh.tbl->log2_num_buckets = HASH_INITIAL_NUM_BUCKETS_LOG2;              \
@@ -183,7 +186,7 @@ do {                                                                            
   (head)->hh.tbl->buckets = (UT_hash_bucket*)uthash_malloc(                      \
           HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));               \
   if (! (head)->hh.tbl->buckets) { uthash_fatal( "out of memory"); }             \
-  memset((head)->hh.tbl->buckets, 0,                                             \
+  uthash_bzero((head)->hh.tbl->buckets,                                          \
           HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));               \
   HASH_BLOOM_MAKE((head)->hh.tbl);                                               \
   (head)->hh.tbl->signature = HASH_SIGNATURE;                                    \
@@ -820,7 +823,7 @@ do {                                                                            
     _he_new_buckets = (UT_hash_bucket*)uthash_malloc(                            \
              2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));            \
     if (!_he_new_buckets) { uthash_fatal( "out of memory"); }                    \
-    memset(_he_new_buckets, 0,                                                   \
+    uthash_bzero(_he_new_buckets,                                                \
             2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));             \
     tbl->ideal_chain_maxlen =                                                    \
        (tbl->num_items >> (tbl->log2_num_buckets+1U)) +                          \

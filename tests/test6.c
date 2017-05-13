@@ -1,16 +1,19 @@
 #include "uthash.h"
-#include <stdlib.h>   /* malloc */
-#include <stdio.h>    /* printf */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* Set up macros for alternative malloc/free functions  */
 #undef uthash_malloc
 #undef uthash_free
 #undef uthash_memcmp
 #undef uthash_strlen
+#undef uthash_bzero
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr)
 #define uthash_memcmp(a,b,n) alt_memcmp(a,b,n)
 #define uthash_strlen(s) ..fail_to_compile..
+#define uthash_bzero(a,n) alt_bzero(a,n)
 
 typedef struct example_user_t {
     int id;
@@ -35,6 +38,12 @@ static int alt_memcmp(void *a, void *b, size_t n)
 {
     puts("alt_memcmp");
     return memcmp(a,b,n);
+}
+
+static void alt_bzero(void *a, size_t n)
+{
+    puts("alt_bzero");
+    memset(a,0,n);
 }
 
 int main(int argc,char *argv[])

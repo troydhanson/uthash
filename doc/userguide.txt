@@ -1568,11 +1568,14 @@ convenience on embedded platforms that manage their own memory.
 Specifying alternate standard library functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Uthash also uses `strlen` (in the `HASH_FIND_STR` convenience macro, for
-example) and `memcmp` (as the method of comparing keys for equality). On
-platforms that do not provide these functions, you can substitute your own
-implementations.
+example), `memcmp` (as the method of comparing keys for equality), and `memset`
+(used only for zeroing memory). On platforms that do not provide these functions,
+you can substitute your own implementations.
 
 ----------------------------------------------------------------------------
+#undef uthash_bzero
+#define uthash_bzero(a,len) my_bzero(a,len)
+
 #undef uthash_memcmp
 #define uthash_memcmp(a,b,len) my_memcmp(a,b,len)
 
