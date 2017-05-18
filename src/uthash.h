@@ -296,7 +296,7 @@ do {                                                                            
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
   HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                       \
   HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
-  HASH_FSCK(hh, head);                                                           \
+  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE_INORDER");                    \
 } while (0)
 
 #define HASH_ADD_KEYPTR_INORDER(hh,head,keyptr,keylen_in,add,cmpfcn)             \
@@ -332,7 +332,7 @@ do {                                                                            
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], &(add)->hh);                 \
   HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                       \
   HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
-  HASH_FSCK(hh, head);                                                           \
+  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE");                            \
 } while (0)
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
@@ -392,7 +392,7 @@ do {                                                                            
     HASH_DEL_IN_BKT(hh, (head)->hh.tbl->buckets[_hd_bkt], _hd_hh_del);           \
     (head)->hh.tbl->num_items--;                                                 \
   }                                                                              \
-  HASH_FSCK(hh, head);                                                           \
+  HASH_FSCK(hh, head, "HASH_DELETE");                                            \
 } while (0)
 
 
@@ -423,7 +423,7 @@ do {                                                                            
  */
 #ifdef HASH_DEBUG
 #define HASH_OOPS(...) do { fprintf(stderr,__VA_ARGS__); exit(-1); } while (0)
-#define HASH_FSCK(hh,head)                                                       \
+#define HASH_FSCK(hh,head,where)                                                 \
 do {                                                                             \
   struct UT_hash_handle *_thh;                                                   \
   if (head) {                                                                    \
@@ -436,7 +436,8 @@ do {                                                                            
       _prev = NULL;                                                              \
       while (_thh) {                                                             \
         if (_prev != (char*)(_thh->hh_prev)) {                                   \
-          HASH_OOPS("invalid hh_prev %p, actual %p\n", _thh->hh_prev, _prev);    \
+          HASH_OOPS("%s: invalid hh_prev %p, actual %p\n",                       \
+              (where), (void*)_thh->hh_prev, (void*)_prev);                      \
         }                                                                        \
         _bkt_count++;                                                            \
         _prev = (char*)(_thh);                                                   \
@@ -444,13 +445,13 @@ do {                                                                            
       }                                                                          \
       _count += _bkt_count;                                                      \
       if ((head)->hh.tbl->buckets[_bkt_i].count !=  _bkt_count) {                \
-        HASH_OOPS("invalid bucket count %u, actual %u\n",                        \
-            (head)->hh.tbl->buckets[_bkt_i].count, _bkt_count);                  \
+        HASH_OOPS("%s: invalid bucket count %u, actual %u\n",                    \
+            (where), (head)->hh.tbl->buckets[_bkt_i].count, _bkt_count);         \
       }                                                                          \
     }                                                                            \
     if (_count != (head)->hh.tbl->num_items) {                                   \
-      HASH_OOPS("invalid hh item count %u, actual %u\n",                         \
-          (head)->hh.tbl->num_items, _count);                                    \
+      HASH_OOPS("%s: invalid hh item count %u, actual %u\n",                     \
+          (where), (head)->hh.tbl->num_items, _count);                           \
     }                                                                            \
     _count = 0;                                                                  \
     _prev = NULL;                                                                \
@@ -458,19 +459,20 @@ do {                                                                            
     while (_thh) {                                                               \
       _count++;                                                                  \
       if (_prev != (char*)_thh->prev) {                                          \
-        HASH_OOPS("invalid prev %p, actual %p\n", _thh->prev, _prev);            \
+        HASH_OOPS("%s: invalid prev %p, actual %p\n",                            \
+            (where), (void*)_thh->prev, (void*)_prev);                           \
       }                                                                          \
       _prev = (char*)ELMT_FROM_HH((head)->hh.tbl, _thh);                         \
       _thh = (_thh->next ? HH_FROM_ELMT((head)->hh.tbl, _thh->next) : NULL);     \
     }                                                                            \
     if (_count != (head)->hh.tbl->num_items) {                                   \
-      HASH_OOPS("invalid app item count %u, actual %u\n",                        \
-          (head)->hh.tbl->num_items, _count);                                    \
+      HASH_OOPS("%s: invalid app item count %u, actual %u\n",                    \
+          (where), (head)->hh.tbl->num_items, _count);                           \
     }                                                                            \
   }                                                                              \
 } while (0)
 #else
-#define HASH_FSCK(hh,head)
+#define HASH_FSCK(hh,head,where)
 #endif
 
 /* When compiled with -DHASH_EMIT_KEYS, length-prefixed keys are emitted to
@@ -948,7 +950,7 @@ do {                                                                            
       }                                                                          \
       _hs_insize *= 2U;                                                          \
     }                                                                            \
-    HASH_FSCK(hh, head);                                                         \
+    HASH_FSCK(hh, head, "HASH_SRT");                                             \
   }                                                                              \
 } while (0)
 
@@ -994,7 +996,7 @@ do {                                                                            
       }                                                                          \
     }                                                                            \
   }                                                                              \
-  HASH_FSCK(hh_dst, dst);                                                        \
+  HASH_FSCK(hh_dst, dst, "HASH_SELECT");                                         \
 } while (0)
 
 #define HASH_CLEAR(hh,head)                                                      \
