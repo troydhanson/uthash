@@ -117,6 +117,10 @@ typedef unsigned char uint8_t;
 #define GET_MEM_FAILED(hh) 0
 #endif
 
+#ifndef uthash_mem_failed
+#define uthash_mem_failed(elem) do{}while(0)
+#endif
+
 /* initial number of buckets */
 #define HASH_INITIAL_NUM_BUCKETS 32U     /* initial number of buckets        */
 #define HASH_INITIAL_NUM_BUCKETS_LOG2 5U /* lg2 of initial number of buckets */
@@ -154,13 +158,13 @@ do {                                                                            
 #ifdef HASH_BLOOM
 #define HASH_BLOOM_BITLEN (1UL << HASH_BLOOM)
 #define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8UL) + (((HASH_BLOOM_BITLEN%8UL)!=0UL) ? 1UL : 0UL)
-#define HASH_BLOOM_MAKE(tbl)                                                     \
+#define HASH_BLOOM_MAKE(tbl,mem_ok)                                              \
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
   (tbl)->bloom_bv = (uint8_t*)uthash_malloc(HASH_BLOOM_BYTELEN);                 \
   if (!((tbl)->bloom_bv))  {                                                     \
     if (HASH_NOMEM_OK) {                                                         \
-      _mem_ok = 0;                                                               \
+      (mem_ok) = 0;                                                              \
       break;                                                                     \
     }                                                                            \
     uthash_fatal( "out of memory");                                              \
@@ -184,7 +188,7 @@ do {                                                                            
   HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1U)))
 
 #else
-#define HASH_BLOOM_MAKE(tbl)
+#define HASH_BLOOM_MAKE(tbl,mem_ok)
 #define HASH_BLOOM_FREE(tbl)
 #define HASH_BLOOM_ADD(tbl,hashv)
 #define HASH_BLOOM_TEST(tbl,hashv) (1)
@@ -195,7 +199,7 @@ do {                                                                            
 do {                                                                             \
   int _mem_ok = 1;                                                               \
   (head)->hh.tbl = (UT_hash_table*)uthash_malloc(sizeof(UT_hash_table));         \
-  if (!((head)->hh.tbl)) {                                                       \
+  if (!(head)->hh.tbl) {                                                         \
     if (HASH_NOMEM_OK) {                                                         \
       break;                                                                     \
     }                                                                            \
@@ -218,7 +222,7 @@ do {                                                                            
     }                                                                            \
     uthash_bzero((head)->hh.tbl->buckets,                                        \
         HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));               \
-    HASH_BLOOM_MAKE((head)->hh.tbl);                                             \
+    HASH_BLOOM_MAKE((head)->hh.tbl,_mem_ok);                                     \
     if (HASH_NOMEM_OK && !_mem_ok) {                                             \
       break;                                                                     \
     }                                                                            \
@@ -314,6 +318,7 @@ do {                                                                            
     HASH_MAKE_TABLE(hh, head);                                                   \
     if (HASH_NOMEM_OK && !(head)->hh.tbl) {                                      \
       SET_MEM_FAILED(&(add)->hh, 1);                                             \
+      uthash_mem_failed(add);                                                    \
       (head) = 0;                                                                \
       break;                                                                     \
     }                                                                            \
@@ -338,6 +343,7 @@ do {                                                                            
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);             \
   if (HASH_NOMEM_OK && GET_MEM_FAILED(&(add)->hh)) {                             \
     HASH_DELETE_IFBUCKET(hh,head,add,0);                                         \
+    uthash_mem_failed(add);                                                      \
     break;                                                                       \
   }                                                                              \
   HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                       \
@@ -372,6 +378,7 @@ do {                                                                            
     if (HASH_NOMEM_OK && !(head)->hh.tbl) {                                      \
       (head) = 0;                                                                \
       SET_MEM_FAILED(&(add)->hh, 1);                                             \
+      uthash_mem_failed(add);                                                    \
       break;                                                                     \
     }                                                                            \
   } else {                                                                       \
@@ -383,6 +390,7 @@ do {                                                                            
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);             \
   if (HASH_NOMEM_OK && GET_MEM_FAILED(&(add)->hh)) {                             \
     HASH_DELETE_IFBUCKET(hh,head,add,0);                                         \
+    uthash_mem_failed(add);                                                      \
     break;                                                                       \
   }                                                                              \
   HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                       \
