@@ -342,7 +342,7 @@ do {                                                                            
   HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);             \
   if (HASH_NOMEM_OK && GET_MEM_FAILED(&(add)->hh)) {                             \
-    HASH_DELETE_IFBUCKET(hh,head,add,0);                                         \
+    HASH_DELETE_IFBUCKET(hh,head,&(add)->hh,0);                                  \
     uthash_mem_failed(add);                                                      \
     break;                                                                       \
   }                                                                              \
@@ -389,7 +389,7 @@ do {                                                                            
   HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                    \
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);             \
   if (HASH_NOMEM_OK && GET_MEM_FAILED(&(add)->hh)) {                             \
-    HASH_DELETE_IFBUCKET(hh,head,add,0);                                         \
+    HASH_DELETE_IFBUCKET(hh,head,&(add)->hh,0);                                  \
     uthash_mem_failed(add);                                                      \
     break;                                                                       \
   }                                                                              \
@@ -428,11 +428,12 @@ do {                                                                            
  * copy the deletee pointer, then the latter references are via that
  * scratch pointer rather than through the repointed (users) symbol.
  */
-#define HASH_DELETE(hh,head,delptr) HASH_DELETE_IFBUCKET(hh,head,delptr,1)
-#define HASH_DELETE_IFBUCKET(hh,head,delptr,from_bucket)                         \
+#define HASH_DELETE(hh,head,delptr) HASH_DELETE_IFBUCKET(hh,head,&(delptr)->hh,1)
+
+#define HASH_DELETE_IFBUCKET(hh,head,delhh,from_bucket)                          \
 do {                                                                             \
   struct UT_hash_handle *_hd_hh_del;                                             \
-  if (((delptr)->hh.prev == NULL) && ((delptr)->hh.next == NULL)) {              \
+  if (((delhh)->prev == NULL) && ((delhh)->next == NULL)) {                      \
     uthash_free((head)->hh.tbl->buckets,                                         \
                 (head)->hh.tbl->num_buckets * sizeof(struct UT_hash_bucket));    \
     HASH_BLOOM_FREE((head)->hh.tbl);                                             \
@@ -440,14 +441,14 @@ do {                                                                            
     (head) = NULL;                                                               \
   } else {                                                                       \
     unsigned _hd_bkt;                                                            \
-    _hd_hh_del = &((delptr)->hh);                                                \
-    if ((delptr) == ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail)) {        \
-      (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, (delptr)->hh.prev);    \
+    _hd_hh_del = delhh;                                                          \
+    if (_hd_hh_del == (head)->hh.tbl->tail) {                                    \
+      (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev);     \
     }                                                                            \
-    if ((delptr)->hh.prev != NULL) {                                             \
-      HH_FROM_ELMT((head)->hh.tbl, (delptr)->hh.prev)->next = (delptr)->hh.next; \
+    if (_hd_hh_del->prev != NULL) {                                              \
+      HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev)->next = _hd_hh_del->next;   \
     } else {                                                                     \
-      DECLTYPE_ASSIGN(head, (delptr)->hh.next);                                  \
+      DECLTYPE_ASSIGN(head, _hd_hh_del->next);                                   \
     }                                                                            \
     if (_hd_hh_del->next != NULL) {                                              \
       HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->next)->prev = _hd_hh_del->prev;   \
@@ -1062,14 +1063,24 @@ do {                                                                            
           if ((dst) == NULL) {                                                   \
             DECLTYPE_ASSIGN(dst, _elt);                                          \
             HASH_MAKE_TABLE(hh_dst, dst);                                        \
+            if (HASH_NOMEM_OK) {                                                 \
+              SET_MEM_FAILED(_dst_hh, _dst_hh->tbl == NULL);                     \
+            }                                                                    \
           } else {                                                               \
             _dst_hh->tbl = (dst)->hh_dst.tbl;                                    \
           }                                                                      \
-          HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);      \
-          HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh);     \
-          (dst)->hh_dst.tbl->num_items++;                                        \
-          _last_elt = _elt;                                                      \
-          _last_elt_hh = _dst_hh;                                                \
+          if (!HASH_NOMEM_OK || (_dst_hh->tbl != NULL)) {                        \
+            HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);    \
+            HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh);   \
+            (dst)->hh_dst.tbl->num_items++;                                      \
+            if (HASH_NOMEM_OK && GET_MEM_FAILED(_dst_hh)) {                      \
+              HASH_DELETE_IFBUCKET(hh_dst, dst, _dst_hh, 0);                     \
+              uthash_mem_failed(_elt);                                           \
+              continue;                                                          \
+            }                                                                    \
+            _last_elt = _elt;                                                    \
+            _last_elt_hh = _dst_hh;                                              \
+          }                                                                      \
         }                                                                        \
       }                                                                          \
     }                                                                            \
