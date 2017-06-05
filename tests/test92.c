@@ -8,7 +8,8 @@
 #undef uthash_mem_failed
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr)
-#define uthash_mem_failed(e) do{e->mem_failed=1;}while(0)
+#define uthash_mem_failed(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
+#define all_select(a) 1
 
 #include "uthash.h"
 
@@ -16,6 +17,7 @@ typedef struct example_user_t {
     int id;
     int cookie;
     UT_hash_handle hh;
+    UT_hash_handle hh2;
     int mem_failed;
 } example_user_t;
 
@@ -61,8 +63,8 @@ int main(int argc, char *argv[])
     } \
 } while (0)
 
-    example_user_t * users = 0, * user, * test;
-    int id = 0;
+    example_user_t * users = 0, * user, * test, * users2 = 0;
+    int id = 0, i, saved_cnt;
 
     malloc_cnt = 3; // bloom filter must fail
     user = malloc(sizeof(example_user_t));
@@ -99,7 +101,11 @@ int main(int argc, char *argv[])
     free_cnt = 0;
     while (1) {
         user = malloc(sizeof(example_user_t));
-        user->id = ++id;
+        if ((user->id = ++id) == 1000) {
+            // prevent infinite, or too long of a loop here
+            printf("too many allocs before memory request");
+            break;
+        }
         user->hh.mem_failed = 1; // to make sure it's reset to 0
         HASH_ADD_INT(users, id, user);
         if (malloc_failed) {
@@ -138,6 +144,68 @@ int main(int argc, char *argv[])
 
             break;
         }
+    }
+
+    // let's test HASH_SELECT.
+    // let's double the size of the table we've already built.
+    saved_cnt = id;
+
+    for (i=0; i<saved_cnt; i++) {
+        user = malloc(sizeof(example_user_t));
+        user->id = ++id;
+        malloc_cnt = 4;
+        HASH_ADD_INT(users, id, user);
+    }
+
+    HASH_ITER(hh, users, user, test) {
+        user->hh2.mem_failed = 0;
+    }
+
+    malloc_cnt = 0;
+    free_cnt = 0;
+    HASH_SELECT(hh2, users2, hh, users, all_select);
+    if (users2) {
+        printf("Nothing could have been copied into users2\n");
+    }
+    HASH_ITER(hh, users, user, test) {
+        if (!user->hh2.mem_failed) {
+            printf("User ID %d has mem_failed at %d\n", user->id, user->hh2.mem_failed);
+        }
+        user->hh2.mem_failed = 0;
+    }
+
+    malloc_cnt = 4;
+    HASH_SELECT(hh2, users2, hh, users, all_select);
+
+    // note about the above.
+    // we tried to stick up to 1,000 entries into users,
+    // and the malloc failed after saved_cnt. The bucket threshold must have
+    // been triggered. We then doubled the amount of entries in user,
+    // and just ran HASH_SELECT, trying to copy them into users2.
+    // because the order is different, and because we continue after
+    // failures, the bucket threshold may get triggered on arbitrary
+    // elements, depending on the hash function.
+
+    // printf("users2 size is %d, users is %d\n", HASH_CNT(hh2, users2), HASH_COUNT(users));
+    saved_cnt = 0;
+    HASH_ITER(hh, users, user, test) {
+        example_user_t * user2;
+        HASH_FIND(hh2, users2, &user->id, sizeof(int), user2);
+        if (user2) {
+            if (user->hh2.mem_failed) {
+                printf("User ID %d has mem_failed at %d, expected 0\n", user->id, user->hh2.mem_failed);
+            }
+        } else {
+            saved_cnt++;
+            if (!user->hh2.mem_failed) {
+                printf("User ID %d has mem_failed at %d, expected 1\n", user->id, user->hh2.mem_failed);
+            }
+        }
+    }
+
+    if (saved_cnt + HASH_CNT(hh2, users2) != HASH_COUNT(users)) {
+        printf("Selected elements : %d + %d != %d\n",
+                saved_cnt, HASH_CNT(hh2, users2), HASH_COUNT(users));
     }
 
     printf("OK\n");

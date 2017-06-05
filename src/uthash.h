@@ -1064,7 +1064,10 @@ do {                                                                            
             DECLTYPE_ASSIGN(dst, _elt);                                          \
             HASH_MAKE_TABLE(hh_dst, dst);                                        \
             if (HASH_NOMEM_OK) {                                                 \
-              SET_MEM_FAILED(_dst_hh, _dst_hh->tbl == NULL);                     \
+              if (_dst_hh->tbl == NULL) {                                        \
+                SET_MEM_FAILED(_dst_hh, 1);                                      \
+                dst = NULL;                                                      \
+              }                                                                  \
             }                                                                    \
           } else {                                                               \
             _dst_hh->tbl = (dst)->hh_dst.tbl;                                    \
@@ -1078,6 +1081,7 @@ do {                                                                            
               uthash_mem_failed(_elt);                                           \
               continue;                                                          \
             }                                                                    \
+            HASH_BLOOM_ADD(_dst_hh->tbl, _dst_hh->hashv);                        \
             _last_elt = _elt;                                                    \
             _last_elt_hh = _dst_hh;                                              \
           }                                                                      \
