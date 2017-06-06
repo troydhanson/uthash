@@ -1075,6 +1075,7 @@ do {                                                                            
           if (!HASH_NOMEM_OK || (_dst_hh->tbl != NULL)) {                        \
             HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);    \
             HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh);   \
+          HASH_BLOOM_ADD(_dst_hh->tbl, _dst_hh->hashv);                          \
             (dst)->hh_dst.tbl->num_items++;                                      \
             if (HASH_NOMEM_OK && GET_MEM_FAILED(_dst_hh)) {                      \
               HASH_DELETE_IFBUCKET(hh_dst, dst, _dst_hh, 0);                     \

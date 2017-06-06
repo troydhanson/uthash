@@ -45,8 +45,16 @@ int main(int argc,char *argv[])
     HASH_SELECT(ah,ausers,hh,users,evens);
     HASH_SRT(ah,ausers,idcmp);
 
+    for(user=users; user!=NULL; user=(example_user_t*)(user->hh.next)) {
+        example_user_t *found = NULL;
+        int should_find = !!evens(user);
+        HASH_FIND(ah, ausers, &user->id, sizeof(user->id), found);
+        printf("user %d, should_find=%d, found=%d\n", user->id, should_find, (int)(!!found));
+    }
+
     for(user=ausers; user!=NULL; user=(example_user_t*)(user->ah.next)) {
         printf("auser %d\n", user->id);
     }
+
     return 0;
 }
