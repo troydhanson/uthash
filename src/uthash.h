@@ -182,10 +182,10 @@ do {                                                                            
 #define HASH_BLOOM_BITTEST(bv,idx) (bv[(idx)/8U] & (1U << ((idx)%8U)))
 
 #define HASH_BLOOM_ADD(tbl,hashv)                                                \
-  HASH_BLOOM_BITSET((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1U)))
+  HASH_BLOOM_BITSET((tbl)->bloom_bv, (hashv & (uint32_t)((1UL << (tbl)->bloom_nbits) - 1U)))
 
 #define HASH_BLOOM_TEST(tbl,hashv)                                               \
-  HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1U)))
+  HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1UL << (tbl)->bloom_nbits) - 1U)))
 
 #else
 #define HASH_BLOOM_MAKE(tbl,mem_ok)
@@ -434,9 +434,9 @@ do {                                                                            
 do {                                                                             \
   struct UT_hash_handle *_hd_hh_del;                                             \
   if (((delhh)->prev == NULL) && ((delhh)->next == NULL)) {                      \
+    HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl->buckets,                                         \
                 (head)->hh.tbl->num_buckets * sizeof(struct UT_hash_bucket));    \
-    HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                          \
     (head) = NULL;                                                               \
   } else {                                                                       \
@@ -1096,9 +1096,9 @@ do {                                                                            
 #define HASH_CLEAR(hh,head)                                                      \
 do {                                                                             \
   if ((head) != NULL) {                                                          \
+    HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl->buckets,                                         \
                 (head)->hh.tbl->num_buckets*sizeof(struct UT_hash_bucket));      \
-    HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                          \
     (head) = NULL;                                                               \
   }                                                                              \

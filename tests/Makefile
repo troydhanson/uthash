@@ -76,6 +76,16 @@ pedantic:
 cplusplus:
 	CC=$(CXX) $(MAKE) all 
 
+thorough:
+	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic'
+	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
+	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
+	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing -DHASH_FUNCTION=HASH_MUR'
+	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic'
+	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
+	$(MAKE) clean && CC=$(CXX) $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
+	$(MAKE) clean && CC=$(CXX) $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing -DHASH_FUNCTION=HASH_MUR'
+
 example: example.c $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
