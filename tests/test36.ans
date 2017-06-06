@@ -8,6 +8,16 @@ user 6
 user 7
 user 8
 user 9
+user 0, should_find=1, found=1
+user 1, should_find=0, found=0
+user 2, should_find=1, found=1
+user 3, should_find=0, found=0
+user 4, should_find=1, found=1
+user 5, should_find=0, found=0
+user 6, should_find=1, found=1
+user 7, should_find=0, found=0
+user 8, should_find=1, found=1
+user 9, should_find=0, found=0
 auser 0
 auser 2
 auser 4

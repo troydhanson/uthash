@@ -989,6 +989,7 @@ do {                                                                            
           }                                                                      \
           HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);      \
           HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], _dst_hh);             \
+          HASH_BLOOM_ADD(_dst_hh->tbl, _dst_hh->hashv);                          \
           (dst)->hh_dst.tbl->num_items++;                                        \
           _last_elt = _elt;                                                      \
           _last_elt_hh = _dst_hh;                                                \
