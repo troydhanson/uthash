@@ -1028,6 +1028,34 @@ for(((el)=(head)), ((tmp)=DECLTYPE(el)((head!=NULL)?(head)->hh.next:NULL));     
   (el) != NULL; ((el)=(tmp)), ((tmp)=DECLTYPE(el)((tmp!=NULL)?(tmp)->hh.next:NULL)))
 #endif
 
+#ifdef NO_DECLTYPE
+#define HASH_TOP(hh,head,el,tmp)                                                 \
+do {                                                                             \
+  (el) = (head);                                                                 \
+  *(char**)(&(tmp)) = (char*)((head!=NULL)?(head)->hh.next:NULL);                \
+} while (0)
+#else
+#define HASH_TOP(hh,head,el,tmp)                                                 \
+do {                                                                             \
+  (el) = (head);                                                                 \
+  (tmp) = DECLTYPE(el)((head!=NULL)?(head)->hh.next:NULL);                       \
+} while (0)
+#endif
+
+#ifdef NO_DECLTYPE
+#define HASH_NEXT(hh,head,el,tmp)                                                \
+do {                                                                             \
+  (el) = (tmp);                                                                  \
+  *(char**)(&(tmp)) = (char*)((tmp!=NULL)?(tmp)->hh.next:NULL);                  \
+} while (0)
+#else
+#define HASH_NEXT(hh,head,el,tmp)                                                \
+do {                                                                             \
+  (el) = (tmp);                                                                  \
+  (tmp) = DECLTYPE(el)((tmp!=NULL)?(tmp)->hh.next:NULL);                         \
+} while (0)
+#endif
+
 /* obtain a count of items in the hash */
 #define HASH_COUNT(head) HASH_CNT(hh,head)
 #define HASH_CNT(hh,head) ((head != NULL)?((head)->hh.tbl->num_items):0U)
