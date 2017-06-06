@@ -1,4 +1,5 @@
 #include "uthash.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +11,7 @@
 #undef uthash_strlen
 #undef uthash_bzero
 #define uthash_malloc(sz) alt_malloc(sz)
-#define uthash_free(ptr,sz) alt_free(ptr)
+#define uthash_free(ptr,sz) alt_free(ptr,sz)
 #define uthash_memcmp(a,b,n) alt_memcmp(a,b,n)
 #define uthash_strlen(s) ..fail_to_compile..
 #define uthash_bzero(a,n) alt_bzero(a,n)
@@ -21,30 +22,61 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
+static size_t alt_malloc_sizes[10];
+static int alt_malloc_balance = 0;
 static void *alt_malloc(size_t sz)
 {
-    if (sz == sizeof(UT_hash_table)) {
-        printf("%s\n", "alt malloc table");
+    alt_malloc_sizes[alt_malloc_balance++] = sz;
+    if (alt_malloc_balance == 1) {
+        assert(sz == sizeof(UT_hash_table));
     }
     return malloc(sz);
 }
-static void alt_free(void *ptr)
+static void alt_free(void *ptr, size_t sz)
 {
-    /* printf("%s\n", "alt_free"); */
+    size_t expected = alt_malloc_sizes[--alt_malloc_balance];
+    if (sz != expected) {
+        printf("expected free of size %d, got %d\n", (int)expected, (int)sz);
+    }
     free(ptr);
 }
 
+static int alt_memcmp_count = 0;
 static int alt_memcmp(void *a, void *b, size_t n)
 {
-    puts("alt_memcmp");
+    ++alt_memcmp_count;
     return memcmp(a,b,n);
 }
 
+static int alt_bzero_count = 0;
 static void alt_bzero(void *a, size_t n)
 {
-    puts("alt_bzero");
+    ++alt_bzero_count;
     memset(a,0,n);
 }
+
+static void *real_malloc(size_t n)
+{
+    return malloc(n);
+}
+
+static void real_free(void *p)
+{
+    free(p);
+}
+
+#undef malloc
+#undef realloc
+#undef free
+#undef memset
+#undef memcmp
+#undef strlen
+#define malloc ..fail_to_compile..
+#define realloc ..fail_to_compile..
+#define free ..fail_to_compile..
+#define memset ..fail_to_compile..
+#define memcmp ..fail_to_compile..
+#define strlen ..fail_to_compile..
 
 int main(int argc,char *argv[])
 {
@@ -53,7 +85,7 @@ int main(int argc,char *argv[])
 
     /* create elements */
     for(i=0; i<10; i++) {
-        user = (example_user_t*)malloc(sizeof(example_user_t));
+        user = (example_user_t*)real_malloc(sizeof(example_user_t));
         if (user == NULL) {
             exit(-1);
         }
@@ -67,7 +99,7 @@ int main(int argc,char *argv[])
         HASH_FIND_INT(users,&i,tmp);
         if (tmp != NULL) {
             HASH_DEL(users,tmp);
-            free(tmp);
+            real_free(tmp);
         } else {
             printf("user id %d not found\n", i);
         }
@@ -77,5 +109,13 @@ int main(int argc,char *argv[])
     for(user=users; user != NULL; user=(example_user_t*)(user->hh.next)) {
         printf("user %d, cookie %d\n", user->id, user->cookie);
     }
+
+#ifdef HASH_BLOOM
+    assert(alt_bzero_count == 3);
+#else
+    assert(alt_bzero_count == 2);
+#endif
+    assert(alt_memcmp_count == 10);
+    assert(alt_malloc_balance == 0);
     return 0;
 }
