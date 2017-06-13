@@ -33,7 +33,7 @@ static void *alt_malloc(size_t sz)
     return malloc(sz);
 }
 
-static void alt_fatal(char * s) {
+static void alt_fatal(char const * s) {
     // printf("alt_fatal: %s\n", s);
     is_fatal = 1;
     longjmp(j_buf, 1);
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 #define init(a) do { \
     users = 0; \
-    user = malloc(sizeof(example_user_t)); \
+    user = (example_user_t*)malloc(sizeof(example_user_t)); \
     user->id = id; \
     is_fatal = 0; \
     malloc_cnt = a; \
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     users = 0;
     malloc_cnt = 4;
     while (1) {
-        user = malloc(sizeof(example_user_t));
+        user = (example_user_t*)malloc(sizeof(example_user_t));
         user->id = id;
         if (id++ == 1000) {
             printf("there is no way 1000 iterations didn't require realloc\n");

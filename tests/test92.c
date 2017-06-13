@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
     int id = 0, i, saved_cnt;
 
     malloc_cnt = 3; // bloom filter must fail
-    user = malloc(sizeof(example_user_t));
+    user = (example_user_t*)malloc(sizeof(example_user_t));
     user->id = id;
     user->mem_failed = 0;
-    user->hh.tbl = (void*)1;
+    user->hh.tbl = (UT_hash_table*)1;
     free_cnt = 0;
     HASH_ADD_INT(users, id, user);
     complain(1, 2);
@@ -75,14 +75,14 @@ int main(int argc, char *argv[])
     malloc_cnt = 2; // bucket creation must fail
     user->mem_failed = 0;
     free_cnt = 0;
-    user->hh.tbl = (void*)1;
+    user->hh.tbl = (UT_hash_table*)1;
     HASH_ADD_INT(users, id, user);
     complain(2, 1);
 
     malloc_cnt = 1; // table creation must fail
     user->mem_failed = 0;
     free_cnt = 0;
-    user->hh.tbl = (void*)1;
+    user->hh.tbl = (UT_hash_table*)1;
     HASH_ADD_INT(users, id, user);
     complain(3, 0);
 
@@ -100,13 +100,13 @@ int main(int argc, char *argv[])
     // let's add users until expansion fails.
     free_cnt = 0;
     while (1) {
-        user = malloc(sizeof(example_user_t));
+        user = (example_user_t*)malloc(sizeof(example_user_t));
         if ((user->id = ++id) == 1000) {
             // prevent infinite, or too long of a loop here
             printf("too many allocs before memory request");
             break;
         }
-        user->hh.tbl = (void*)1;
+        user->hh.tbl = (UT_hash_table*)1;
         HASH_ADD_INT(users, id, user);
         if (malloc_failed) {
 
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     saved_cnt = id;
 
     for (i=0; i<saved_cnt; i++) {
-        user = malloc(sizeof(example_user_t));
+        user = (example_user_t*)malloc(sizeof(example_user_t));
         user->id = ++id;
         malloc_cnt = 4;
         HASH_ADD_INT(users, id, user);
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     }
     HASH_ITER(hh, users, user, test) {
         if (user->hh2.tbl) {
-            printf("User ID %d has tbl at %p\n", user->id, user->hh2.tbl);
+            printf("User ID %d has tbl at %p\n", user->id, (void*)user->hh2.tbl);
         }
     }
 
@@ -188,12 +188,12 @@ int main(int argc, char *argv[])
         HASH_FIND(hh2, users2, &user->id, sizeof(int), user2);
         if (user2) {
             if (!user->hh2.tbl) {
-                printf("User ID %d has tbl at %p, expected !0\n", user->id, user->hh2.tbl);
+                printf("User ID %d has tbl at %p, expected !0\n", user->id, (void*)user->hh2.tbl);
             }
         } else {
             saved_cnt++;
             if (user->hh2.tbl) {
-                printf("User ID %d has tbl at %p, expected 0\n", user->id, user->hh2.tbl);
+                printf("User ID %d has tbl at %p, expected 0\n", user->id, (void*)user->hh2.tbl);
             }
         }
     }
