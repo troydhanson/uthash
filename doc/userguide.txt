@@ -1595,10 +1595,11 @@ be modified by re-defining the `uthash_fatal` macro.
 ----------------------------------------------------------------------------
 
 The fatal function should terminate the process or `longjmp` back to a safe
-place. 
+place. Note that an allocation failure may leave allocated memory that can not
+be recovered, and the entire hash table should be considered unusable.
 
 To enable supporting "returning a failure" if memory cannot be
-allocated, define HASH_NOMEM_OK to `1` before including the header `uthash.h`
+allocated, define HASH_NOMEM_OK to `1` before including the `uthash.h`
 header file. In this case, the `uthash_fatal` macro defaults to a no-op, any
 memory that is allocated incompletely is cleaned up.
 
@@ -1606,9 +1607,10 @@ The memory is only allocated when adding elements to the hash table (including
 `HASH_SELECT`). The caller can examine `hh.tbl` field of any element that was
 attempted to be added, and if its value is `NULL`, the element was not added
 because sufficient memory could not be allocated. The caller can also redefine
-`uthash_fatal` macro; it will be invoked with a single argument, containing the
-pointer to the element that has failed to be added. The caller should cast
-the argument to the necessary type if used from `HASH_SELECT`.
+`uthash_fatal` macro; it will be invoked in case of allocation failure, with a
+single argument, containing the pointer to the element that has failed to be
+added. The caller should cast the argument to the necessary type if used from
+`HASH_SELECT`. It is safe to `throw` or `longjmp` out of this handler.
 
 Internal events
 ^^^^^^^^^^^^^^^
