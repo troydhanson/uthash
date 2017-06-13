@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     int count;
     el els[10], *e;
     el *head = NULL;
-    el *nullptr = NULL;
+    el *zeroptr = NULL;
     for(i=0; i<10; i++) {
         els[i].id=(int)'a'+i;
     }
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     printf("count = %d\n", count);
 
     printf("Test CDL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    CDL_PREPEND_ELEM(head, nullptr, &els[3]);
+    CDL_PREPEND_ELEM(head, zeroptr, &els[3]);
     CDL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     printf("\n");
 
     printf("Test CDL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    CDL_APPEND_ELEM(head, nullptr, &els[5]);
+    CDL_APPEND_ELEM(head, zeroptr, &els[5]);
     CDL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     printf("count = %d\n", count);
 
     printf("Test DL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    DL_PREPEND_ELEM(head, nullptr, &els[3]);
+    DL_PREPEND_ELEM(head, zeroptr, &els[3]);
     DL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     printf("\n");
 
     printf("Test DL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    DL_APPEND_ELEM(head, nullptr, &els[5]);
+    DL_APPEND_ELEM(head, zeroptr, &els[5]);
     DL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     printf("count = %d\n", count);
 
     printf("Test LL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    LL_PREPEND_ELEM(head, nullptr, &els[3]);
+    LL_PREPEND_ELEM(head, zeroptr, &els[3]);
     LL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     printf("\n");
 
     printf("Test LL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    LL_APPEND_ELEM(head, nullptr, &els[5]);
+    LL_APPEND_ELEM(head, zeroptr, &els[5]);
     LL_FOREACH(head,e) {
         printf("%c ", e->id);
     }
