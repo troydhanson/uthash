@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define HASH_BLOOM 16
-#define HASH_NOMEM_OK
+#define HASH_NOMEM_OK 1
 
 #undef uthash_malloc
 #undef uthash_free
@@ -52,9 +52,6 @@ int main(int argc, char *argv[])
     if (user->hh.tbl) { \
         printf("%d hash table must be empty\n", a); \
     } \
-    if (!user->hh.mem_failed) { \
-        printf("%d mem_failed must be 1\n", a); \
-    } \
     if (free_cnt != c) { \
         printf("%d Expected %d frees, only had %d\n", a, c, free_cnt); \
     } \
@@ -69,27 +66,30 @@ int main(int argc, char *argv[])
     malloc_cnt = 3; // bloom filter must fail
     user = malloc(sizeof(example_user_t));
     user->id = id;
-    user->mem_failed = user->hh.mem_failed = 0;
+    user->mem_failed = 0;
+    user->hh.tbl = (void*)1;
     free_cnt = 0;
     HASH_ADD_INT(users, id, user);
     complain(1, 2);
 
     malloc_cnt = 2; // bucket creation must fail
-    user->mem_failed = user->hh.mem_failed = 0;
+    user->mem_failed = 0;
     free_cnt = 0;
+    user->hh.tbl = (void*)1;
     HASH_ADD_INT(users, id, user);
     complain(2, 1);
 
     malloc_cnt = 1; // table creation must fail
-    user->mem_failed = user->hh.mem_failed = 0;
+    user->mem_failed = 0;
     free_cnt = 0;
+    user->hh.tbl = (void*)1;
     HASH_ADD_INT(users, id, user);
     complain(3, 0);
 
     malloc_cnt = 4; // hash must create OK
     user->mem_failed = 0;
     HASH_ADD_INT(users, id, user);
-    if (user->mem_failed || user->hh.mem_failed) {
+    if (user->mem_failed) {
         printf("mem failed flags must be 0\n");
     }
     HASH_FIND_INT(users,&id,test);
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
             printf("too many allocs before memory request");
             break;
         }
-        user->hh.mem_failed = 1; // to make sure it's reset to 0
+        user->hh.tbl = (void*)1;
         HASH_ADD_INT(users, id, user);
         if (malloc_failed) {
 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
                 printf("there is no way your bucket size is <= 10\n");
             }
 
-            if (!user->hh.mem_failed || !user->mem_failed) {
+            if (user->hh.tbl || !user->mem_failed) {
                 printf("mem_failed must be 1 after extension failed\n");
             }
 
@@ -131,14 +131,14 @@ int main(int argc, char *argv[])
             }
 
             // let's try to add again, but with mem_failed set to 0
-            user->hh.mem_failed = 0;
+            user->hh.tbl = 0;
             user->mem_failed = 0;
             malloc_failed = 0;
             HASH_ADD_INT(users, id, user);
             if (!malloc_failed) {
                 printf("malloc not attempted\n");
             }
-            if (!user->mem_failed || !user->hh.mem_failed) {
+            if (!user->mem_failed || user->hh.tbl) {
                 printf("mem_failed must be 1 after extension failed second time\n");
             }
 
@@ -157,10 +157,6 @@ int main(int argc, char *argv[])
         HASH_ADD_INT(users, id, user);
     }
 
-    HASH_ITER(hh, users, user, test) {
-        user->hh2.mem_failed = 0;
-    }
-
     malloc_cnt = 0;
     free_cnt = 0;
     HASH_SELECT(hh2, users2, hh, users, all_select);
@@ -168,10 +164,9 @@ int main(int argc, char *argv[])
         printf("Nothing could have been copied into users2\n");
     }
     HASH_ITER(hh, users, user, test) {
-        if (!user->hh2.mem_failed) {
-            printf("User ID %d has mem_failed at %d\n", user->id, user->hh2.mem_failed);
+        if (user->hh2.tbl) {
+            printf("User ID %d has tbl at %p\n", user->id, user->hh2.tbl);
         }
-        user->hh2.mem_failed = 0;
     }
 
     malloc_cnt = 4;
@@ -192,13 +187,13 @@ int main(int argc, char *argv[])
         example_user_t * user2;
         HASH_FIND(hh2, users2, &user->id, sizeof(int), user2);
         if (user2) {
-            if (user->hh2.mem_failed) {
-                printf("User ID %d has mem_failed at %d, expected 0\n", user->id, user->hh2.mem_failed);
+            if (!user->hh2.tbl) {
+                printf("User ID %d has tbl at %p, expected !0\n", user->id, user->hh2.tbl);
             }
         } else {
             saved_cnt++;
-            if (!user->hh2.mem_failed) {
-                printf("User ID %d has mem_failed at %d, expected 1\n", user->id, user->hh2.mem_failed);
+            if (user->hh2.tbl) {
+                printf("User ID %d has tbl at %p, expected 0\n", user->id, user->hh2.tbl);
             }
         }
     }
@@ -208,7 +203,7 @@ int main(int argc, char *argv[])
                 saved_cnt, HASH_CNT(hh2, users2), HASH_COUNT(users));
     }
 
-    printf("OK\n");
+    printf("END\n");
 
     return 0;
 
