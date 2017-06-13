@@ -216,7 +216,7 @@ do {                                                                            
     } else {                                                                     \
       uthash_bzero((head)->hh.tbl->buckets,                                      \
           HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));             \
-      HASH_BLOOM_MAKE((head)->hh.tbl,mem_ok);                                    \
+      HASH_BLOOM_MAKE((head)->hh.tbl, mem_ok);                                   \
       if (HASH_NOMEM_OK && !(mem_ok)) {                                          \
         uthash_free((head)->hh.tbl->buckets,                                     \
             HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));             \
@@ -344,10 +344,9 @@ do {                                                                            
   if (!(head)) {                                                                 \
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
-    (head) = (add);                                                              \
-    HASH_MAKE_TABLE(hh, head, _mem_ok);                                          \
-    if (HASH_NOMEM_OK && !_mem_ok) {                                             \
-      (head) = NULL;                                                             \
+    HASH_MAKE_TABLE(hh, add, _mem_ok);                                           \
+    if (!HASH_NOMEM_OK || _mem_ok) {                                             \
+      (head) = (add);                                                            \
     }                                                                            \
   } else {                                                                       \
     void *_hs_iter = (head);                                                     \
@@ -391,10 +390,9 @@ do {                                                                            
   if (!(head)) {                                                                 \
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
-    (head) = (add);                                                              \
-    HASH_MAKE_TABLE(hh, head, _mem_ok);                                          \
-    if (HASH_NOMEM_OK && !_mem_ok) {                                             \
-      (head) = NULL;                                                             \
+    HASH_MAKE_TABLE(hh, add, _mem_ok);                                           \
+    if (!HASH_NOMEM_OK || _mem_ok) {                                             \
+      (head) = (add);                                                            \
     }                                                                            \
   } else {                                                                       \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
