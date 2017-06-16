@@ -307,14 +307,14 @@ do {                                                                            
     if (!mem_ok) {                                                               \
       HASH_DELETE_IFBUCKET(hh,head,&(add)->hh,0);                                \
       (add)->hh.tbl = NULL;                                                      \
-      uthash_mem_failed(add);                                                    \
+      uthash_fatal(add);                                                         \
     } else {                                                                     \
       HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                   \
       HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                \
     }                                                                            \
   } else {                                                                       \
     (add)->hh.tbl = NULL;                                                        \
-    uthash_mem_failed(add);                                                      \
+    uthash_fatal(add);                                                           \
   }                                                                              \
   HASH_FSCK(hh, head, op);                                                       \
 } while(0)

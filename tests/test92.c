@@ -5,10 +5,10 @@
 
 #undef uthash_malloc
 #undef uthash_free
-#undef uthash_mem_failed
+#undef uthash_fatal
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr)
-#define uthash_mem_failed(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
+#define uthash_fatal(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
 #define all_select(a) 1
 
 #include "uthash.h"
@@ -157,6 +157,10 @@ int main(int argc, char *argv[])
         HASH_ADD_INT(users, id, user);
     }
 
+    HASH_ITER(hh, users, user, test) {
+        users->mem_failed = 0;
+    }
+
     malloc_cnt = 0;
     free_cnt = 0;
     HASH_SELECT(hh2, users2, hh, users, all_select);
@@ -167,6 +171,10 @@ int main(int argc, char *argv[])
         if (user->hh2.tbl) {
             printf("User ID %d has tbl at %p\n", user->id, (void*)user->hh2.tbl);
         }
+        if (!user->mem_failed) {
+            printf("User ID %d has clear mem_failed, should be 1\n", user->id);
+        }
+        user->mem_failed = 0;
     }
 
     malloc_cnt = 4;
@@ -190,10 +198,16 @@ int main(int argc, char *argv[])
             if (!user->hh2.tbl) {
                 printf("User ID %d has tbl at %p, expected !0\n", user->id, (void*)user->hh2.tbl);
             }
+            if (user->mem_failed) {
+                printf("User ID %d has !0 mem_failed, expected is 0\n", user->id);
+            }
         } else {
             saved_cnt++;
             if (user->hh2.tbl) {
                 printf("User ID %d has tbl at %p, expected 0\n", user->id, (void*)user->hh2.tbl);
+            }
+            if (!user->mem_failed) {
+                printf("User ID %d has 0 mem_failed, expected is 1\n", user->id);
             }
         }
     }
