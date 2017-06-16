@@ -73,7 +73,7 @@ int getkeys=0;
 #define OAT 6
 #define MUR 7
 #define NUM_HASH_FUNCS 8 /* includes id 0, the non-function */
-char *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT","MUR"};
+char const *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT","MUR"};
 
 /* given a peer key/len/hashv, reverse engineer its hash function */
 static int infer_hash_function(char *key, size_t keylen, uint32_t hashv)
@@ -172,8 +172,8 @@ static void found(int fd, char* peer_sig, pid_t pid)
     UT_hash_handle hh;
     size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
     char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
-         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL,
-                                                          *hash_fcn=NULL, sat[10];
+         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL, sat[10];
+    char const * hash_fcn;
     unsigned char *bloombv=NULL;
     static int fileno=0;
     char keyfile[50];
