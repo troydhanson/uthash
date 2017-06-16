@@ -896,7 +896,7 @@ do {                                                                            
   struct UT_hash_handle *_he_thh, *_he_hh_nxt;                                   \
   UT_hash_bucket *_he_new_buckets, *_he_newbkt;                                  \
   _he_new_buckets = (UT_hash_bucket*)uthash_malloc(                              \
-           2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));              \
+           2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));            \
   if (!_he_new_buckets) {                                                        \
     HASH_MEM_FAILED(mem_ok);                                                     \
   } else {                                                                       \
