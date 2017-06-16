@@ -901,20 +901,20 @@ do {                                                                            
     HASH_MEM_FAILED(mem_ok);                                                     \
   } else {                                                                       \
     uthash_bzero(_he_new_buckets,                                                \
-        2UL * tbl->num_buckets * sizeof(struct UT_hash_bucket));                 \
-    tbl->ideal_chain_maxlen =                                                    \
-       (tbl->num_items >> (tbl->log2_num_buckets+1U)) +                          \
-       (((tbl->num_items & ((tbl->num_buckets*2U)-1U)) != 0U) ? 1U : 0U);        \
-    tbl->nonideal_items = 0;                                                     \
-    for (_he_bkt_i = 0; _he_bkt_i < tbl->num_buckets; _he_bkt_i++) {             \
-      _he_thh = tbl->buckets[ _he_bkt_i ].hh_head;                               \
+        2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));               \
+    (tbl)->ideal_chain_maxlen =                                                  \
+       ((tbl)->num_items >> ((tbl)->log2_num_buckets+1U)) +                      \
+       ((((tbl)->num_items & (((tbl)->num_buckets*2U)-1U)) != 0U) ? 1U : 0U);    \
+    (tbl)->nonideal_items = 0;                                                   \
+    for (_he_bkt_i = 0; _he_bkt_i < (tbl)->num_buckets; _he_bkt_i++) {           \
+      _he_thh = (tbl)->buckets[ _he_bkt_i ].hh_head;                             \
       while (_he_thh != NULL) {                                                  \
         _he_hh_nxt = _he_thh->hh_next;                                           \
-        HASH_TO_BKT(_he_thh->hashv, tbl->num_buckets * 2U, _he_bkt);             \
+        HASH_TO_BKT(_he_thh->hashv, (tbl)->num_buckets * 2U, _he_bkt);           \
         _he_newbkt = &(_he_new_buckets[_he_bkt]);                                \
-        if (++(_he_newbkt->count) > tbl->ideal_chain_maxlen) {                   \
-          tbl->nonideal_items++;                                                 \
-          _he_newbkt->expand_mult = _he_newbkt->count / tbl->ideal_chain_maxlen; \
+        if (++(_he_newbkt->count) > (tbl)->ideal_chain_maxlen) {                 \
+          (tbl)->nonideal_items++;                                               \
+          _he_newbkt->expand_mult = _he_newbkt->count / (tbl)->ideal_chain_maxlen; \
         }                                                                        \
         _he_thh->hh_prev = NULL;                                                 \
         _he_thh->hh_next = _he_newbkt->hh_head;                                  \
@@ -925,14 +925,14 @@ do {                                                                            
         _he_thh = _he_hh_nxt;                                                    \
       }                                                                          \
     }                                                                            \
-    uthash_free(tbl->buckets, tbl->num_buckets * sizeof(struct UT_hash_bucket)); \
-    tbl->num_buckets *= 2U;                                                      \
-    tbl->log2_num_buckets++;                                                     \
-    tbl->buckets = _he_new_buckets;                                              \
-    tbl->ineff_expands = (tbl->nonideal_items > (tbl->num_items >> 1)) ?         \
-        (tbl->ineff_expands+1U) : 0U;                                            \
-    if (tbl->ineff_expands > 1U) {                                               \
-      tbl->noexpand = 1;                                                         \
+    uthash_free((tbl)->buckets, (tbl)->num_buckets * sizeof(struct UT_hash_bucket)); \
+    (tbl)->num_buckets *= 2U;                                                    \
+    (tbl)->log2_num_buckets++;                                                   \
+    (tbl)->buckets = _he_new_buckets;                                            \
+    (tbl)->ineff_expands = ((tbl)->nonideal_items > ((tbl)->num_items >> 1)) ?   \
+        ((tbl)->ineff_expands+1U) : 0U;                                          \
+    if ((tbl)->ineff_expands > 1U) {                                             \
+      (tbl)->noexpand = 1;                                                       \
       uthash_noexpand_fyi(tbl);                                                  \
     }                                                                            \
     uthash_expand_fyi(tbl);                                                      \
