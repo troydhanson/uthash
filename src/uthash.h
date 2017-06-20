@@ -114,6 +114,7 @@ typedef unsigned char uint8_t;
 #endif
 
 #define HASH_MEM_FAILED(mem_ok) do { (mem_ok) = 0; } while(0)
+#define IF_HASH_NOMEM_OK(x) x
 
 #else
 /* malloc failures result in lost memory, hash tables are unusable */
@@ -123,6 +124,7 @@ typedef unsigned char uint8_t;
 #endif
 
 #define HASH_MEM_FAILED(mem_ok) uthash_fatal("out of memory")
+#define IF_HASH_NOMEM_OK(x)
 
 #endif
 
@@ -297,7 +299,7 @@ do {                                                                            
 
 #if HASH_NOMEM_OK
 
-#define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,op,mem_ok)        \
+#define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,mem_ok)           \
 do {                                                                             \
   if ((mem_ok)) {                                                                \
     unsigned _ha_bkt;                                                            \
@@ -316,12 +318,11 @@ do {                                                                            
     (add)->hh.tbl = NULL;                                                        \
     uthash_fatal(add);                                                           \
   }                                                                              \
-  HASH_FSCK(hh, head, op);                                                       \
 } while(0)
 
 #else
 
-#define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,op,mem_ok)        \
+#define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,mem_ok)           \
 do {                                                                             \
   unsigned _ha_bkt;                                                              \
   (head)->hh.tbl->num_items++;                                                   \
@@ -329,7 +330,6 @@ do {                                                                            
   HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh, mem_ok);     \
   HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                       \
   HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                    \
-  HASH_FSCK(hh, head, op);                                                       \
 } while(0)
 
 #endif
@@ -364,8 +364,8 @@ do {                                                                            
       HASH_APPEND_LIST(hh, head, add);                                           \
     }                                                                            \
   }                                                                              \
-  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add,                   \
-      "HASH_ADD_KEYPTR_BYHASHVALUE_INORDER", _mem_ok);                           \
+  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add, _mem_ok);         \
+  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE_INORDER");                    \
 } while (0)
 
 #define HASH_ADD_KEYPTR_INORDER(hh,head,keyptr,keylen_in,add,cmpfcn)             \
@@ -398,8 +398,8 @@ do {                                                                            
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_APPEND_LIST(hh, head, add);                                             \
   }                                                                              \
-  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add,                   \
-      "HASH_ADD_KEYPTR_BYHASHVALUE", _mem_ok);                                   \
+  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add, _mem_ok);         \
+  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE");                            \
 } while (0)
 
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
@@ -445,7 +445,7 @@ do {                                                                            
     (head) = NULL;                                                               \
   } else {                                                                       \
     unsigned _hd_bkt;                                                            \
-    _hd_hh_del = delhh;                                                          \
+    _hd_hh_del = (delhh);                                                          \
     if (_hd_hh_del == (head)->hh.tbl->tail) {                                    \
       (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev);     \
     }                                                                            \
@@ -839,9 +839,11 @@ do {                                                                            
   if ((head.count >= ((head.expand_mult+1U) * HASH_BKT_CAPACITY_THRESH))         \
       && ((addhh)->tbl->noexpand != 1U)) {                                       \
     HASH_EXPAND_BUCKETS(addhh,(addhh)->tbl, mem_ok);                             \
-    if (HASH_NOMEM_OK && !(mem_ok)) {                                            \
-      HASH_DEL_IN_BKT(hh,head,addhh);                                            \
-    }                                                                            \
+    IF_HASH_NOMEM_OK(                                                            \
+      if (!(mem_ok)) {                                                           \
+        HASH_DEL_IN_BKT(hh,head,addhh);                                          \
+      }                                                                          \
+    )                                                                            \
   }                                                                              \
 } while (0)
 
@@ -1059,24 +1061,27 @@ do {                                                                            
           if ((dst) == NULL) {                                                   \
             DECLTYPE_ASSIGN(dst, _elt);                                          \
             HASH_MAKE_TABLE(hh_dst, dst, _mem_ok);                               \
-            if (HASH_NOMEM_OK && !_mem_ok) {                                     \
-              uthash_fatal(_elt);                                                \
-              dst = NULL;                                                        \
-              continue;                                                          \
-            }                                                                    \
+            IF_HASH_NOMEM_OK(                                                    \
+              if (!_mem_ok) {                                                    \
+                uthash_fatal(_elt);                                              \
+                dst = NULL;                                                      \
+                continue;                                                        \
+              }                                                                  \
+            )                                                                    \
           } else {                                                               \
             _dst_hh->tbl = (dst)->hh_dst.tbl;                                    \
           }                                                                      \
           HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);      \
-          HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh,      \
-              _mem_ok);                                                          \
+          HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh,  _mem_ok); \
           (dst)->hh_dst.tbl->num_items++;                                        \
-          if (HASH_NOMEM_OK && !_mem_ok) {                                       \
-            HASH_DELETE_IFBUCKET(hh_dst, dst, _dst_hh, 0);                       \
-            _dst_hh->tbl = 0;                                                    \
-            uthash_fatal(_elt);                                                  \
-            continue;                                                            \
-          }                                                                      \
+          IF_HASH_NOMEM_OK(                                                      \
+            if (!_mem_ok) {                                                      \
+              HASH_DELETE_IFBUCKET(hh_dst, dst, _dst_hh, 0);                     \
+              _dst_hh->tbl = 0;                                                  \
+              uthash_fatal(_elt);                                                \
+              continue;                                                          \
+            }                                                                    \
+          )                                                                      \
           HASH_BLOOM_ADD(_dst_hh->tbl, _dst_hh->hashv);                          \
           _last_elt = _elt;                                                      \
           _last_elt_hh = _dst_hh;                                                \
