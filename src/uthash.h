@@ -366,9 +366,12 @@ do {                                                                            
  * scratch pointer rather than through the repointed (users) symbol.
  */
 #define HASH_DELETE(hh,head,delptr)                                              \
+    HASH_DELETE_HH(hh, head, &(delptr)->hh)
+
+#define HASH_DELETE_HH(hh,head,delptrhh)                                         \
 do {                                                                             \
-  struct UT_hash_handle *_hd_hh_del;                                             \
-  if (((delptr)->hh.prev == NULL) && ((delptr)->hh.next == NULL)) {              \
+  struct UT_hash_handle *_hd_hh_del = (delptrhh);                                \
+  if ((_hd_hh_del->prev == NULL) && (_hd_hh_del->next == NULL)) {                \
     HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl->buckets,                                         \
                 (head)->hh.tbl->num_buckets * sizeof(struct UT_hash_bucket));    \
@@ -376,20 +379,19 @@ do {                                                                            
     (head) = NULL;                                                               \
   } else {                                                                       \
     unsigned _hd_bkt;                                                            \
-    _hd_hh_del = &((delptr)->hh);                                                \
-    if ((delptr) == ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail)) {        \
-      (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, (delptr)->hh.prev);    \
+    if (_hd_hh_del == (head)->hh.tbl->tail) {                                    \
+      (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev);     \
     }                                                                            \
-    if ((delptr)->hh.prev != NULL) {                                             \
-      HH_FROM_ELMT((head)->hh.tbl, (delptr)->hh.prev)->next = (delptr)->hh.next; \
+    if (_hd_hh_del->prev != NULL) {                                              \
+      HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev)->next = _hd_hh_del->next;   \
     } else {                                                                     \
-      DECLTYPE_ASSIGN(head, (delptr)->hh.next);                                  \
+      DECLTYPE_ASSIGN(head, _hd_hh_del->next);                                   \
     }                                                                            \
     if (_hd_hh_del->next != NULL) {                                              \
       HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->next)->prev = _hd_hh_del->prev;   \
     }                                                                            \
     HASH_TO_BKT(_hd_hh_del->hashv, (head)->hh.tbl->num_buckets, _hd_bkt);        \
-    HASH_DEL_IN_BKT(hh, (head)->hh.tbl->buckets[_hd_bkt], _hd_hh_del);           \
+    HASH_DEL_IN_BKT((head)->hh.tbl->buckets[_hd_bkt], _hd_hh_del);               \
     (head)->hh.tbl->num_items--;                                                 \
   }                                                                              \
   HASH_FSCK(hh, head, "HASH_DELETE");                                            \
@@ -759,31 +761,33 @@ do {                                                                            
 /* add an item to a bucket  */
 #define HASH_ADD_TO_BKT(head,addhh)                                              \
 do {                                                                             \
-  head.count++;                                                                  \
-  (addhh)->hh_next = head.hh_head;                                               \
+  UT_hash_bucket *_ha_head = &(head);                                            \
+  _ha_head->count++;                                                             \
+  (addhh)->hh_next = _ha_head->hh_head;                                          \
   (addhh)->hh_prev = NULL;                                                       \
-  if ((head).hh_head != NULL) {                                                  \
-    (head).hh_head->hh_prev = (addhh);                                           \
+  if (_ha_head->hh_head != NULL) {                                               \
+    _ha_head->hh_head->hh_prev = (addhh);                                        \
   }                                                                              \
-  (head).hh_head=addhh;                                                          \
-  if ((head.count >= ((head.expand_mult+1U) * HASH_BKT_CAPACITY_THRESH))         \
-      && ((addhh)->tbl->noexpand != 1U)) {                                       \
+  _ha_head->hh_head = (addhh);                                                   \
+  if ((_ha_head->count >= ((_ha_head->expand_mult + 1U) * HASH_BKT_CAPACITY_THRESH)) \
+      && !(addhh)->tbl->noexpand) {                                              \
     HASH_EXPAND_BUCKETS((addhh)->tbl);                                           \
   }                                                                              \
 } while (0)
 
 /* remove an item from a given bucket */
-#define HASH_DEL_IN_BKT(hh,head,hh_del)                                          \
+#define HASH_DEL_IN_BKT(head,delhh)                                              \
 do {                                                                             \
-  (head).count--;                                                                \
-  if ((head).hh_head == (hh_del)) {                                              \
-    (head).hh_head = (hh_del)->hh_next;                                          \
+  UT_hash_bucket *_hd_head = &(head);                                            \
+  _hd_head->count--;                                                             \
+  if (_hd_head->hh_head == (delhh)) {                                            \
+    _hd_head->hh_head = (delhh)->hh_next;                                        \
   }                                                                              \
-  if ((hh_del)->hh_prev) {                                                       \
-    (hh_del)->hh_prev->hh_next = (hh_del)->hh_next;                              \
+  if ((delhh)->hh_prev) {                                                        \
+    (delhh)->hh_prev->hh_next = (delhh)->hh_next;                                \
   }                                                                              \
-  if ((hh_del)->hh_next) {                                                       \
-    (hh_del)->hh_next->hh_prev = (hh_del)->hh_prev;                              \
+  if ((delhh)->hh_next) {                                                        \
+    (delhh)->hh_next->hh_prev = (delhh)->hh_prev;                                \
   }                                                                              \
 } while (0)
 
