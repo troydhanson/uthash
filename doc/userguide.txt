@@ -1601,7 +1601,8 @@ be recovered, and the entire hash table should be considered unusable.
 To enable supporting "returning a failure" if memory cannot be
 allocated, define HASH_NOMEM_OK to `1` before including the `uthash.h`
 header file. In this case, the `uthash_fatal` macro defaults to a no-op, any
-memory that is allocated incompletely is cleaned up.
+memory that is allocated incompletely is cleaned up before invoking the
+`uthash_fatal` macro.
 
 The memory is only allocated when adding elements to the hash table (including
 `HASH_SELECT`). The caller can examine `hh.tbl` field of any element that was

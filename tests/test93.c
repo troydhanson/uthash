@@ -20,6 +20,8 @@ static int malloc_cnt = 0;
 static int malloc_failed;
 static int is_fatal;
 static jmp_buf j_buf;
+static example_user_t * users;
+static int user_id = 0;
 
 static void *alt_malloc(size_t sz)
 {
@@ -39,47 +41,43 @@ static void alt_fatal(char const * s) {
     longjmp(j_buf, 1);
 }
 
+static example_user_t * init_user(int need_malloc_cnt) {
+    users = 0;
+    example_user_t * user = (example_user_t*)malloc(sizeof(example_user_t));
+    user->id = user_id;
+    is_fatal = 0;
+    malloc_cnt = need_malloc_cnt;
+    /* printf("adding to hash...\n"); */
+    if (!setjmp(j_buf)) {
+        HASH_ADD_INT(users, id, user);
+    }
+    return user;
+}
+
 int main(int argc, char *argv[])
 {
 
 #define init(a) do { \
-    users = 0; \
-    user = (example_user_t*)malloc(sizeof(example_user_t)); \
-    user->id = id; \
-    is_fatal = 0; \
-    malloc_cnt = a; \
-    /* printf("adding to hash...\n"); */ \
-    if (!setjmp(j_buf)) { \
-        HASH_ADD_INT(users, id, user); \
-    } \
 } while(0)
 
-    // $TODO: this test doesn't work because
-    // uthash_fatal can't successfully return - it
-    // makes uthash write into *0. This either needs to
-    // be broken up into small test files, or use threads,
-    // a thread can hard exit. But there are no threads 
-    // in other tests, which means compilation changes, etc.
+    example_user_t * user;
 
-    example_user_t * users, * user;
-    int id = 0;
-
-    init(3); // bloom filter must fail
+    user = init_user(3); // bloom filter must fail
     if (!is_fatal) {
         printf("fatal not called after bloom failure\n");
     }
 
-    init(2); // bucket creation must fail
+    user = init_user(2); // bucket creation must fail
     if (!is_fatal) {
         printf("fatal not called after bucket creation failure\n");
     }
 
-    init(1); // table creation must fail
+    user = init_user(1); // table creation must fail
     if (!is_fatal) {
         printf("fatal not called after table creation failure\n");
     }
 
-    init(4); // hash must create OK
+    user = init_user(4); // hash must create OK
     if (is_fatal) {
         printf("fatal error when creating hash normally\n");
         // bad idea to continue running
@@ -91,8 +89,8 @@ int main(int argc, char *argv[])
     malloc_cnt = 4;
     while (1) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
-        user->id = id;
-        if (id++ == 1000) {
+        user->id = user_id;
+        if (user_id++ == 1000) {
             printf("there is no way 1000 iterations didn't require realloc\n");
             break;
         }
@@ -105,7 +103,7 @@ int main(int argc, char *argv[])
             if (!is_fatal) {
                 printf("fatal not called after bucket not extended\n");
             }
-            if (id < 10) {
+            if (user_id < 10) {
                 printf("there is no way your bucket size is 10\n");
             }
 

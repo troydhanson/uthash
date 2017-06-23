@@ -138,6 +138,16 @@ typedef unsigned char uint8_t;
 /* calculate the hash handle from element address elp */
 #define HH_FROM_ELMT(tbl,elp) ((UT_hash_handle *)(((char*)(elp)) + ((tbl)->hho)))
 
+#define HASH_ROLLBACK_BKT(hh, head, itemptrhh)                                   \
+do {                                                                             \
+  struct UT_hash_handle *_hd_hh_item = (itemptrhh);                              \
+  unsigned _hd_bkt;                                                              \
+  HASH_TO_BKT(_hd_hh_item->hashv, (head)->hh.tbl->num_buckets, _hd_bkt);         \
+  (head)->hh.tbl->buckets[_hd_bkt].count++;                                      \
+  _hd_hh_item->hh_next = NULL; \
+  _hd_hh_item->hh_prev = NULL; \
+} while(0)
+
 #define HASH_VALUE(keyptr,keylen,hashv)                                          \
 do {                                                                             \
   HASH_FCN(keyptr, keylen, hashv);                                               \
@@ -169,7 +179,7 @@ do {                                                                            
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
   (tbl)->bloom_bv = (uint8_t*)uthash_malloc(HASH_BLOOM_BYTELEN);                 \
-  if (!((tbl)->bloom_bv))  {                                                     \
+  if (!(tbl)->bloom_bv) {                                                        \
     HASH_MEM_FAILED(mem_ok);                                                     \
   } else {                                                                       \
     uthash_bzero((tbl)->bloom_bv, HASH_BLOOM_BYTELEN);                           \
@@ -212,6 +222,7 @@ do {                                                                            
     (head)->hh.tbl->hho = (char*)(&(head)->hh) - (char*)(head);                  \
     (head)->hh.tbl->buckets = (UT_hash_bucket*)uthash_malloc(                    \
         HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));               \
+    (head)->hh.tbl->signature = HASH_SIGNATURE;                                  \
     if (!(head)->hh.tbl->buckets) {                                              \
       HASH_MEM_FAILED(mem_ok);                                                   \
       uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                        \
@@ -219,13 +230,13 @@ do {                                                                            
       uthash_bzero((head)->hh.tbl->buckets,                                      \
           HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));             \
       HASH_BLOOM_MAKE((head)->hh.tbl, mem_ok);                                   \
-      if (HASH_NOMEM_OK && !(mem_ok)) {                                          \
-        uthash_free((head)->hh.tbl->buckets,                                     \
-            HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));             \
-        uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                      \
-      } else {                                                                   \
-        (head)->hh.tbl->signature = HASH_SIGNATURE;                              \
-      }                                                                          \
+      IF_HASH_NOMEM_OK(                                                          \
+        if (!(mem_ok)) {                                                         \
+          uthash_free((head)->hh.tbl->buckets,                                   \
+              HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));           \
+          uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                    \
+        }                                                                        \
+      )                                                                          \
     }                                                                            \
   }                                                                              \
 } while (0)
@@ -301,13 +312,14 @@ do {                                                                            
 
 #define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,mem_ok)           \
 do {                                                                             \
-  if ((mem_ok)) {                                                                \
+  if (mem_ok) {                                                                  \
     unsigned _ha_bkt;                                                            \
     (head)->hh.tbl->num_items++;                                                 \
     HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);                  \
     HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh, mem_ok);   \
-    if (!mem_ok) {                                                               \
-      HASH_DELETE_IFBUCKET(hh,head,&(add)->hh,0);                                \
+    if (!(mem_ok)) {                                                             \
+      HASH_ROLLBACK_BKT(hh, head, &(add)->hh);                                   \
+      HASH_DELETE_HH(hh, head, &(add)->hh);                                      \
       (add)->hh.tbl = NULL;                                                      \
       uthash_fatal(add);                                                         \
     } else {                                                                     \
@@ -337,7 +349,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh,head,keyptr,keylen_in,hashval,add,cmpfcn) \
 do {                                                                             \
-  int _mem_ok = 1;                                                               \
+  IF_HASH_NOMEM_OK ( int _mem_ok = 1 );                                          \
   (add)->hh.hashv = (hashval);                                                   \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
@@ -345,9 +357,9 @@ do {                                                                            
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
     HASH_MAKE_TABLE(hh, add, _mem_ok);                                           \
-    if (!HASH_NOMEM_OK || _mem_ok) {                                             \
+    IF_HASH_NOMEM_OK( if (_mem_ok) { )                                           \
       (head) = (add);                                                            \
-    }                                                                            \
+    IF_HASH_NOMEM_OK( } )                                                        \
   } else {                                                                       \
     void *_hs_iter = (head);                                                     \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
@@ -383,7 +395,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add)        \
 do {                                                                             \
-  int _mem_ok = 1;                                                               \
+  IF_HASH_NOMEM_OK(int _mem_ok = 1);                                             \
   (add)->hh.hashv = (hashval);                                                   \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
@@ -391,9 +403,9 @@ do {                                                                            
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
     HASH_MAKE_TABLE(hh, add, _mem_ok);                                           \
-    if (!HASH_NOMEM_OK || _mem_ok) {                                             \
+    IF_HASH_NOMEM_OK( if (_mem_ok) { )                                           \
       (head) = (add);                                                            \
-    }                                                                            \
+    IF_HASH_NOMEM_OK( } )                                                        \
   } else {                                                                       \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_APPEND_LIST(hh, head, add);                                             \
@@ -432,7 +444,7 @@ do {                                                                            
  * copy the deletee pointer, then the latter references are via that
  * scratch pointer rather than through the repointed (users) symbol.
  */
-#define HASH_DELETE(hh,head,delptr) HASH_DELETE_IFBUCKET(hh,head,&(delptr)->hh,1)
+#define HASH_DELETE(hh,head,delptr)                                              \
     HASH_DELETE_HH(hh, head, &(delptr)->hh)
 
 #define HASH_DELETE_HH(hh,head,delptrhh)                                         \
@@ -457,13 +469,11 @@ do {                                                                            
     if (_hd_hh_del->next != NULL) {                                              \
       HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->next)->prev = _hd_hh_del->prev;   \
     }                                                                            \
-    if (from_bucket) {                                                           \
-      HASH_TO_BKT(_hd_hh_del->hashv, (head)->hh.tbl->num_buckets, _hd_bkt);      \
-      HASH_DEL_IN_BKT((head)->hh.tbl->buckets[_hd_bkt], _hd_hh_del);             \
-    }                                                                            \
+    HASH_TO_BKT(_hd_hh_del->hashv, (head)->hh.tbl->num_buckets, _hd_bkt);        \
+    HASH_DEL_IN_BKT((head)->hh.tbl->buckets[_hd_bkt], _hd_hh_del);               \
     (head)->hh.tbl->num_items--;                                                 \
   }                                                                              \
-  HASH_FSCK(hh, head, "HASH_DELETE_IFBUCKET");                                   \
+  HASH_FSCK(hh, head, "HASH_DELETE_HH");                                         \
 } while (0)
 
 /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
@@ -842,7 +852,7 @@ do {                                                                            
     HASH_EXPAND_BUCKETS(addhh,(addhh)->tbl, mem_ok);                             \
     IF_HASH_NOMEM_OK(                                                            \
       if (!(mem_ok)) {                                                           \
-        HASH_DEL_IN_BKT(hh,head,addhh);                                          \
+        HASH_DEL_IN_BKT(head,addhh);                                             \
       }                                                                          \
     )                                                                            \
   }                                                                              \
@@ -1050,7 +1060,7 @@ do {                                                                            
         _src_hh = _src_hh->hh_next) {                                            \
         _elt = ELMT_FROM_HH((src)->hh_src.tbl, _src_hh);                         \
         if (cond(_elt)) {                                                        \
-          int _mem_ok = 1;                                                       \
+          IF_HASH_NOMEM_OK(int _mem_ok = 1);                                     \
           _dst_hh = (UT_hash_handle*)(((char*)_elt) + _dst_hho);                 \
           _dst_hh->key = _src_hh->key;                                           \
           _dst_hh->keylen = _src_hh->keylen;                                     \
@@ -1066,7 +1076,7 @@ do {                                                                            
             IF_HASH_NOMEM_OK(                                                    \
               if (!_mem_ok) {                                                    \
                 uthash_fatal(_elt);                                              \
-                dst = NULL;                                                      \
+                (dst) = NULL;                                                    \
                 continue;                                                        \
               }                                                                  \
             )                                                                    \
@@ -1074,12 +1084,13 @@ do {                                                                            
             _dst_hh->tbl = (dst)->hh_dst.tbl;                                    \
           }                                                                      \
           HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);      \
-          HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh,  _mem_ok); \
+          HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh, _mem_ok); \
           (dst)->hh_dst.tbl->num_items++;                                        \
           IF_HASH_NOMEM_OK(                                                      \
             if (!_mem_ok) {                                                      \
-              HASH_DELETE_IFBUCKET(hh_dst, dst, _dst_hh, 0);                     \
-              _dst_hh->tbl = 0;                                                  \
+              HASH_ROLLBACK_BKT(hh_dst, dst, _dst_hh);                           \
+              HASH_DELETE_HH(hh_dst, dst, _dst_hh);                              \
+              _dst_hh->tbl = NULL;                                               \
               uthash_fatal(_elt);                                                \
               continue;                                                          \
             }                                                                    \

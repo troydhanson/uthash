@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
                 saved_cnt, HASH_CNT(hh2, users2), HASH_COUNT(users));
     }
 
-    printf("END\n");
+    printf("End\n");
 
     return 0;
 
