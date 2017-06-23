@@ -395,7 +395,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add)        \
 do {                                                                             \
-  IF_HASH_NOMEM_OK(int _mem_ok = 1);                                             \
+  IF_HASH_NOMEM_OK( int _mem_ok = 1 );                                           \
   (add)->hh.hashv = (hashval);                                                   \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
@@ -1060,7 +1060,7 @@ do {                                                                            
         _src_hh = _src_hh->hh_next) {                                            \
         _elt = ELMT_FROM_HH((src)->hh_src.tbl, _src_hh);                         \
         if (cond(_elt)) {                                                        \
-          IF_HASH_NOMEM_OK(int _mem_ok = 1);                                     \
+          IF_HASH_NOMEM_OK( int _mem_ok = 1 );                                   \
           _dst_hh = (UT_hash_handle*)(((char*)_elt) + _dst_hho);                 \
           _dst_hh->key = _src_hh->key;                                           \
           _dst_hh->keylen = _src_hh->keylen;                                     \
