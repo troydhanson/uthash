@@ -144,8 +144,8 @@ do {                                                                            
   unsigned _hd_bkt;                                                              \
   HASH_TO_BKT(_hd_hh_item->hashv, (head)->hh.tbl->num_buckets, _hd_bkt);         \
   (head)->hh.tbl->buckets[_hd_bkt].count++;                                      \
-  _hd_hh_item->hh_next = NULL; \
-  _hd_hh_item->hh_prev = NULL; \
+  _hd_hh_item->hh_next = NULL;                                                   \
+  _hd_hh_item->hh_prev = NULL;                                                   \
 } while(0)
 
 #define HASH_VALUE(keyptr,keylen,hashv)                                          \
