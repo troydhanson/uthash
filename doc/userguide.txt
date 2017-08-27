@@ -1585,9 +1585,9 @@ you can substitute your own implementations.
 
 Out of memory
 ^^^^^^^^^^^^^
-If memory allocation fails (i.e., the malloc function returned `NULL`), the
-default behavior is to terminate the process by calling `exit(-1)`. This can
-be modified by re-defining the `uthash_fatal` macro.
+If memory allocation fails (i.e., the `uthash_malloc` function returns `NULL`),
+the default behavior is to terminate the process by calling `exit(-1)`. This
+can be modified by re-defining the `uthash_fatal` macro.
 
 ----------------------------------------------------------------------------
 #undef uthash_fatal
@@ -1595,8 +1595,36 @@ be modified by re-defining the `uthash_fatal` macro.
 ----------------------------------------------------------------------------
 
 The fatal function should terminate the process or `longjmp` back to a safe
-place. Uthash does not support "returning a failure" if memory cannot be
-allocated.
+place. Note that an allocation failure may leave allocated memory that cannot
+be recovered. After `uthash_fatal`, the hash table object should be considered
+unusable; it might not be safe even to run `HASH_CLEAR` on the hash table
+when it is in this state.
+
+To enable "returning a failure" if memory cannot be allocated, define the
+macro `HASH_NONFATAL_OOM` before including the `uthash.h` header file. In this
+case, `uthash_fatal` is not used; instead, each allocation failure results in
+a single call to `uthash_nonfatal_oom(elt)` where `elt` is the address of the
+element whose insertion triggered the failure. The default behavior of
+`uthash_nonfatal_oom` is a no-op.
+
+----------------------------------------------------------------------------
+#undef uthash_nonfatal_oom
+#define uthash_nonfatal_oom(elt) perhaps_recover((element_t *) elt)
+----------------------------------------------------------------------------
+
+Before the call to `uthash_nonfatal_oom`, the hash table is rolled back
+to the state it was in prior to the problematic insertion; no memory is
+leaked. It is safe to `throw` or `longjmp` out of the `uthash_nonfatal_oom`
+handler.
+
+The `elt` argument will be of the correct pointer-to-element type, unless
+`uthash_nonfatal_oom` is invoked from `HASH_SELECT`, in which case it will
+be of `void*` type and must be cast before using. In any case, `elt->hh.tbl`
+will be `NULL`.
+
+Allocation failure is possible only when adding elements to the hash table
+(including the `ADD`, `REPLACE`, and `SELECT` operations).
+`uthash_free` never fails.
 
 Internal events
 ^^^^^^^^^^^^^^^
