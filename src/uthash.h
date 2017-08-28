@@ -113,7 +113,7 @@ typedef unsigned char uint8_t;
 #define uthash_oom(obj) do {} while (0)    /* non-fatal OOM error */
 #endif
 
-#define HASH_REPORT_OOM(oomed) do { (oomed) = 1; } while (0)
+#define HASH_RECORD_OOM(oomed) do { (oomed) = 1; } while (0)
 #define IF_HASH_OOM_OK(x) x
 
 #else
@@ -123,7 +123,7 @@ typedef unsigned char uint8_t;
 #define uthash_fatal(msg) exit(-1)        /* fatal OOM error */
 #endif
 
-#define HASH_REPORT_OOM(oomed) uthash_fatal("out of memory")
+#define HASH_RECORD_OOM(oomed) uthash_fatal("out of memory")
 #define IF_HASH_OOM_OK(x)
 
 #endif
@@ -180,7 +180,7 @@ do {                                                                            
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
   (tbl)->bloom_bv = (uint8_t*)uthash_malloc(HASH_BLOOM_BYTELEN);                 \
   if (!(tbl)->bloom_bv) {                                                        \
-    HASH_REPORT_OOM(oomed);                                                      \
+    HASH_RECORD_OOM(oomed);                                                      \
   } else {                                                                       \
     uthash_bzero((tbl)->bloom_bv, HASH_BLOOM_BYTELEN);                           \
     (tbl)->bloom_sig = HASH_BLOOM_SIGNATURE;                                     \
@@ -213,7 +213,7 @@ do {                                                                            
 do {                                                                             \
   (head)->hh.tbl = (UT_hash_table*)uthash_malloc(sizeof(UT_hash_table));         \
   if (!(head)->hh.tbl) {                                                         \
-    HASH_REPORT_OOM(oomed);                                                      \
+    HASH_RECORD_OOM(oomed);                                                      \
   } else {                                                                       \
     uthash_bzero((head)->hh.tbl, sizeof(UT_hash_table));                         \
     (head)->hh.tbl->tail = &((head)->hh);                                        \
@@ -224,7 +224,7 @@ do {                                                                            
         HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));               \
     (head)->hh.tbl->signature = HASH_SIGNATURE;                                  \
     if (!(head)->hh.tbl->buckets) {                                              \
-      HASH_REPORT_OOM(oomed);                                                    \
+      HASH_RECORD_OOM(oomed);                                                    \
       uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                        \
     } else {                                                                     \
       uthash_bzero((head)->hh.tbl->buckets,                                      \
@@ -912,7 +912,7 @@ do {                                                                            
   _he_new_buckets = (UT_hash_bucket*)uthash_malloc(                              \
            2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));            \
   if (!_he_new_buckets) {                                                        \
-    HASH_REPORT_OOM(oomed);                                                      \
+    HASH_RECORD_OOM(oomed);                                                      \
   } else {                                                                       \
     uthash_bzero(_he_new_buckets,                                                \
         2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));               \
