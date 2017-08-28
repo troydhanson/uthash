@@ -1,14 +1,14 @@
 #include <stdio.h>
 
 #define HASH_BLOOM 16
-#define HASH_NOMEM_OK 1
+#define HASH_OOM_OK 1
 
 #undef uthash_malloc
 #undef uthash_free
 #undef uthash_fatal
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr)
-#define uthash_fatal(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
+#define uthash_oom(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
 #define all_select(a) 1
 
 #include "uthash.h"
@@ -222,4 +222,3 @@ int main(int argc, char *argv[])
     return 0;
 
 }
-

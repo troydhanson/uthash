@@ -1585,9 +1585,9 @@ you can substitute your own implementations.
 
 Out of memory
 ^^^^^^^^^^^^^
-If memory allocation fails (i.e., the malloc function returned `NULL`), the
-default behavior is to terminate the process by calling `exit(-1)`. This can
-be modified by re-defining the `uthash_fatal` macro.
+If memory allocation fails (i.e., the `uthash_malloc` function returns `NULL`),
+the default behavior is to terminate the process by calling `exit(-1)`. This
+can be modified by re-defining the `uthash_fatal` macro.
 
 ----------------------------------------------------------------------------
 #undef uthash_fatal
@@ -1600,20 +1600,29 @@ be recovered. After `uthash_fatal`, the hash table object should be considered
 unusable; it might not be safe even to run `HASH_CLEAR` on the hash table
 when it is in this state.
 
-To enable "returning a failure" if memory cannot be
-allocated, define `HASH_NOMEM_OK` to `1` before including the `uthash.h`
-header file. In this case, the `uthash_fatal` macro defaults to a no-op, and
-any memory that is allocated incompletely is cleaned up before invoking the
-`uthash_fatal` macro.
+To enable "returning a failure" if memory cannot be allocated, define the
+macro `HASH_OOM_OK` before including the `uthash.h` header file. In this
+case, `uthash_fatal` is not used; instead, each allocation failure results in
+a single call to `uthash_oom(elt)` where `elt` is the address of the element
+whose insertion triggered the failure. The default behavior of `uthash_oom`
+is a no-op.
 
-The memory is only allocated when adding elements to the hash table (including
-`HASH_SELECT`). The caller can examine `hh.tbl` field of any element that was
-attempted to be added, and if its value is `NULL`, the element was not added
-because sufficient memory could not be allocated. The caller can also redefine
-the `uthash_fatal` macro; it will be invoked in case of allocation failure,
-with a single argument, containing the pointer to the element that has failed
-to be added. The caller should cast the argument to the necessary type if used
-from `HASH_SELECT`. It is safe to `throw` or `longjmp` out of this handler.
+----------------------------------------------------------------------------
+#undef uthash_oom
+#define uthash_oom(elt) perhaps_recover((element_t *) elt)
+----------------------------------------------------------------------------
+
+Before the call to `uthash_oom`, the hash table is rolled back to the state
+it was in prior to the problematic insertion; no memory is leaked.
+It is safe to `throw` or `longjmp` out of the `uthash_oom` handler.
+The `elt` argument will be of the correct pointer-to-element type, unless
+`uthash_oom` is invoked from `HASH_SELECT`, in which case it will be of
+`void*` type and must be cast before using. In any case, `elt->hh.tbl`
+will be `NULL`.
+
+Allocation failure is possible only when adding elements to the hash table
+(including the `ADD`, `REPLACE`, and `SELECT` operations).
+`uthash_free` never fails.
 
 Internal events
 ^^^^^^^^^^^^^^^
