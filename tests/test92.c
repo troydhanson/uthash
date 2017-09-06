@@ -1,15 +1,15 @@
 #include <stdio.h>
 
-#define HASH_OOM_OK 1
+#define HASH_NONFATAL_OOM 1
 
 #include "uthash.h"
 
 #undef uthash_malloc
 #undef uthash_free
-#undef uthash_oom
+#undef uthash_nonfatal_oom
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr)
-#define uthash_oom(e) do{(e)->mem_failed=1;}while(0)
+#define uthash_nonfatal_oom(e) do{(e)->mem_failed=1;}while(0)
 #define all_select(a) 1
 
 typedef struct example_user_t {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
             }
 
             // let's make sure all previous IDs are there.
-            for (int i=0; i<id; ++i) {
+            for (i=0; i<id; ++i) {
                 HASH_FIND_INT(users,&i,test);
                 if (test == NULL) {
                     printf("test user ID %d not found\n", i);
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     // let's double the size of the table we've already built.
     saved_cnt = id;
 
-    if (HASH_COUNT(users) != saved_cnt) {
+    if (HASH_COUNT(users) != (unsigned)saved_cnt) {
         printf("Got HASH_COUNT(users)=%d, should be %d\n", HASH_COUNT(users), saved_cnt);
     }
 
@@ -180,9 +180,9 @@ int main(int argc, char *argv[])
         user->mem_failed = 0;
     }
 
-// HASH_SELECT calls uthash_oom() with an argument of type (void*).
-#undef uthash_oom
-#define uthash_oom(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
+// HASH_SELECT calls uthash_nonfatal_oom() with an argument of type (void*).
+#undef uthash_nonfatal_oom
+#define uthash_nonfatal_oom(e) do{((example_user_t*)e)->mem_failed=1;}while(0)
 
     malloc_cnt = 0;
     free_cnt = 0;

@@ -102,19 +102,19 @@ typedef unsigned char uint8_t;
 #define uthash_expand_fyi(tbl)            /* can be defined to log expands   */
 #endif
 
-#ifndef HASH_OOM_OK
-#define HASH_OOM_OK 0
+#ifndef HASH_NONFATAL_OOM
+#define HASH_NONFATAL_OOM 0
 #endif
 
-#if HASH_OOM_OK
+#if HASH_NONFATAL_OOM
 /* malloc failures can be recovered from */
 
-#ifndef uthash_oom
-#define uthash_oom(obj) do {} while (0)    /* non-fatal OOM error */
+#ifndef uthash_nonfatal_oom
+#define uthash_nonfatal_oom(obj) do {} while (0)    /* non-fatal OOM error */
 #endif
 
 #define HASH_RECORD_OOM(oomed) do { (oomed) = 1; } while (0)
-#define IF_HASH_OOM_OK(x) x
+#define IF_HASH_NONFATAL_OOM(x) x
 
 #else
 /* malloc failures result in lost memory, hash tables are unusable */
@@ -124,7 +124,7 @@ typedef unsigned char uint8_t;
 #endif
 
 #define HASH_RECORD_OOM(oomed) uthash_fatal("out of memory")
-#define IF_HASH_OOM_OK(x)
+#define IF_HASH_NONFATAL_OOM(x)
 
 #endif
 
@@ -230,7 +230,7 @@ do {                                                                            
       uthash_bzero((head)->hh.tbl->buckets,                                      \
           HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));             \
       HASH_BLOOM_MAKE((head)->hh.tbl, oomed);                                    \
-      IF_HASH_OOM_OK(                                                            \
+      IF_HASH_NONFATAL_OOM(                                                      \
         if (oomed) {                                                             \
           uthash_free((head)->hh.tbl->buckets,                                   \
               HASH_INITIAL_NUM_BUCKETS*sizeof(struct UT_hash_bucket));           \
@@ -308,7 +308,7 @@ do {                                                                            
 } while (0)
 #endif
 
-#if HASH_OOM_OK
+#if HASH_NONFATAL_OOM
 
 #define HASH_ADD_TO_TABLE(hh,head,keyptr,keylen_in,hashval,add,oomed)            \
 do {                                                                             \
@@ -321,14 +321,14 @@ do {                                                                            
       HASH_ROLLBACK_BKT(hh, head, &(add)->hh);                                   \
       HASH_DELETE_HH(hh, head, &(add)->hh);                                      \
       (add)->hh.tbl = NULL;                                                      \
-      uthash_oom(add);                                                           \
+      uthash_nonfatal_oom(add);                                                  \
     } else {                                                                     \
       HASH_BLOOM_ADD((head)->hh.tbl, hashval);                                   \
       HASH_EMIT_KEY(hh, head, keyptr, keylen_in);                                \
     }                                                                            \
   } else {                                                                       \
     (add)->hh.tbl = NULL;                                                        \
-    uthash_oom(add);                                                             \
+    uthash_nonfatal_oom(add);                                                    \
   }                                                                              \
 } while (0)
 
@@ -349,7 +349,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh,head,keyptr,keylen_in,hashval,add,cmpfcn) \
 do {                                                                             \
-  IF_HASH_OOM_OK ( int _ha_oomed = 0; )                                          \
+  IF_HASH_NONFATAL_OOM( int _ha_oomed = 0; )                                     \
   (add)->hh.hashv = (hashval);                                                   \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
@@ -357,9 +357,9 @@ do {                                                                            
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
     HASH_MAKE_TABLE(hh, add, _ha_oomed);                                         \
-    IF_HASH_OOM_OK( if (!_ha_oomed) { )                                          \
+    IF_HASH_NONFATAL_OOM( if (!_ha_oomed) { )                                    \
       (head) = (add);                                                            \
-    IF_HASH_OOM_OK( } )                                                          \
+    IF_HASH_NONFATAL_OOM( } )                                                    \
   } else {                                                                       \
     void *_hs_iter = (head);                                                     \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
@@ -395,7 +395,7 @@ do {                                                                            
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add)        \
 do {                                                                             \
-  IF_HASH_OOM_OK( int _ha_oomed = 0; )                                           \
+  IF_HASH_NONFATAL_OOM( int _ha_oomed = 0; )                                     \
   (add)->hh.hashv = (hashval);                                                   \
   (add)->hh.key = (char*) (keyptr);                                              \
   (add)->hh.keylen = (unsigned) (keylen_in);                                     \
@@ -403,9 +403,9 @@ do {                                                                            
     (add)->hh.next = NULL;                                                       \
     (add)->hh.prev = NULL;                                                       \
     HASH_MAKE_TABLE(hh, add, _ha_oomed);                                         \
-    IF_HASH_OOM_OK( if (!_ha_oomed) { )                                          \
+    IF_HASH_NONFATAL_OOM( if (!_ha_oomed) { )                                    \
       (head) = (add);                                                            \
-    IF_HASH_OOM_OK( } )                                                          \
+    IF_HASH_NONFATAL_OOM( } )                                                    \
   } else {                                                                       \
     (add)->hh.tbl = (head)->hh.tbl;                                              \
     HASH_APPEND_LIST(hh, head, add);                                             \
@@ -850,7 +850,7 @@ do {                                                                            
   if ((_ha_head->count >= ((_ha_head->expand_mult + 1U) * HASH_BKT_CAPACITY_THRESH)) \
       && !(addhh)->tbl->noexpand) {                                              \
     HASH_EXPAND_BUCKETS(addhh,(addhh)->tbl, oomed);                              \
-    IF_HASH_OOM_OK(                                                              \
+    IF_HASH_NONFATAL_OOM(                                                        \
       if (oomed) {                                                               \
         HASH_DEL_IN_BKT(head,addhh);                                             \
       }                                                                          \
@@ -1060,7 +1060,7 @@ do {                                                                            
         _src_hh = _src_hh->hh_next) {                                            \
         _elt = ELMT_FROM_HH((src)->hh_src.tbl, _src_hh);                         \
         if (cond(_elt)) {                                                        \
-          IF_HASH_OOM_OK( int _hs_oomed = 0; )                                   \
+          IF_HASH_NONFATAL_OOM( int _hs_oomed = 0; )                             \
           _dst_hh = (UT_hash_handle*)(((char*)_elt) + _dst_hho);                 \
           _dst_hh->key = _src_hh->key;                                           \
           _dst_hh->keylen = _src_hh->keylen;                                     \
@@ -1073,9 +1073,9 @@ do {                                                                            
           if ((dst) == NULL) {                                                   \
             DECLTYPE_ASSIGN(dst, _elt);                                          \
             HASH_MAKE_TABLE(hh_dst, dst, _hs_oomed);                             \
-            IF_HASH_OOM_OK(                                                      \
+            IF_HASH_NONFATAL_OOM(                                                \
               if (_hs_oomed) {                                                   \
-                uthash_oom(_elt);                                                \
+                uthash_nonfatal_oom(_elt);                                       \
                 (dst) = NULL;                                                    \
                 continue;                                                        \
               }                                                                  \
@@ -1086,12 +1086,12 @@ do {                                                                            
           HASH_TO_BKT(_dst_hh->hashv, _dst_hh->tbl->num_buckets, _dst_bkt);      \
           HASH_ADD_TO_BKT(_dst_hh->tbl->buckets[_dst_bkt], hh_dst, _dst_hh, _hs_oomed); \
           (dst)->hh_dst.tbl->num_items++;                                        \
-          IF_HASH_OOM_OK(                                                        \
+          IF_HASH_NONFATAL_OOM(                                                  \
             if (_hs_oomed) {                                                     \
               HASH_ROLLBACK_BKT(hh_dst, dst, _dst_hh);                           \
               HASH_DELETE_HH(hh_dst, dst, _dst_hh);                              \
               _dst_hh->tbl = NULL;                                               \
-              uthash_oom(_elt);                                                  \
+              uthash_nonfatal_oom(_elt);                                         \
               continue;                                                          \
             }                                                                    \
           )                                                                      \

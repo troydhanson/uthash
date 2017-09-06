@@ -1601,23 +1601,25 @@ unusable; it might not be safe even to run `HASH_CLEAR` on the hash table
 when it is in this state.
 
 To enable "returning a failure" if memory cannot be allocated, define the
-macro `HASH_OOM_OK` before including the `uthash.h` header file. In this
+macro `HASH_NONFATAL_OOM` before including the `uthash.h` header file. In this
 case, `uthash_fatal` is not used; instead, each allocation failure results in
-a single call to `uthash_oom(elt)` where `elt` is the address of the element
-whose insertion triggered the failure. The default behavior of `uthash_oom`
-is a no-op.
+a single call to `uthash_nonfatal_oom(elt)` where `elt` is the address of the
+element whose insertion triggered the failure. The default behavior of
+`uthash_nonfatal_oom` is a no-op.
 
 ----------------------------------------------------------------------------
-#undef uthash_oom
-#define uthash_oom(elt) perhaps_recover((element_t *) elt)
+#undef uthash_nonfatal_oom
+#define uthash_nonfatal_oom(elt) perhaps_recover((element_t *) elt)
 ----------------------------------------------------------------------------
 
-Before the call to `uthash_oom`, the hash table is rolled back to the state
-it was in prior to the problematic insertion; no memory is leaked.
-It is safe to `throw` or `longjmp` out of the `uthash_oom` handler.
+Before the call to `uthash_nonfatal_oom`, the hash table is rolled back
+to the state it was in prior to the problematic insertion; no memory is
+leaked. It is safe to `throw` or `longjmp` out of the `uthash_nonfatal_oom`
+handler.
+
 The `elt` argument will be of the correct pointer-to-element type, unless
-`uthash_oom` is invoked from `HASH_SELECT`, in which case it will be of
-`void*` type and must be cast before using. In any case, `elt->hh.tbl`
+`uthash_nonfatal_oom` is invoked from `HASH_SELECT`, in which case it will
+be of `void*` type and must be cast before using. In any case, `elt->hh.tbl`
 will be `NULL`.
 
 Allocation failure is possible only when adding elements to the hash table

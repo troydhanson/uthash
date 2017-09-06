@@ -26,17 +26,14 @@ static int user_id = 0;
 static void *alt_malloc(size_t sz)
 {
     if (--malloc_cnt <= 0) {
-        // printf("fail malloc req for %ld\n", sz);
         malloc_failed = 1;
         return 0;
     }
-    // printf("OK malloc req for %ld\n", sz);
     malloc_failed = 0;
     return malloc(sz);
 }
 
 static void alt_fatal(char const * s) {
-    // printf("alt_fatal: %s\n", s);
     is_fatal = 1;
     longjmp(j_buf, 1);
 }
@@ -62,29 +59,29 @@ int main(int argc, char *argv[])
 
     example_user_t * user;
 
-    user = init_user(3); // bloom filter must fail
+    user = init_user(3); /* bloom filter must fail */
     if (!is_fatal) {
         printf("fatal not called after bloom failure\n");
     }
 
-    user = init_user(2); // bucket creation must fail
+    user = init_user(2); /* bucket creation must fail */
     if (!is_fatal) {
         printf("fatal not called after bucket creation failure\n");
     }
 
-    user = init_user(1); // table creation must fail
+    user = init_user(1); /* table creation must fail */
     if (!is_fatal) {
         printf("fatal not called after table creation failure\n");
     }
 
-    user = init_user(4); // hash must create OK
+    user = init_user(4); /* hash must create OK */
     if (is_fatal) {
         printf("fatal error when creating hash normally\n");
-        // bad idea to continue running
+        /* bad idea to continue running */
         return 1;
     }
 
-    // let's add users until expansion fails.
+    /* let's add users until expansion fails */
     users = 0;
     malloc_cnt = 4;
     while (1) {
@@ -107,8 +104,8 @@ int main(int argc, char *argv[])
                 printf("there is no way your bucket size is 10\n");
             }
 
-            // we can't really do anything, the hash is not in consistent
-            // state, so assume this is a success.
+            /* we can't really do anything, the hash is not in consistent
+             * state, so assume this is a success. */
             break;
 
         }
