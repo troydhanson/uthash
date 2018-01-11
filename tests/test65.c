@@ -42,11 +42,12 @@ static void add_to_cache(const char *key, const char *value)
 }
 
 /* main added by Troy D. Hanson */
-int main(int argc, char *argv[])
+int main()
 {
-    char linebuf[100], nbuf[10];
+    char linebuf[100];
+    char nbuf[11];
     FILE *file;
-    int i=0;
+    unsigned int i=0;
 
     file = fopen( "test65.dat", "r" );
     if (file == NULL) {
