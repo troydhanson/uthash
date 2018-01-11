@@ -172,7 +172,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
     UT_hash_handle hh;
     size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
     char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
-         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL, sat[10];
+         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL, sat[316];
     const char *hash_fcn = NULL;
     unsigned char *bloombv=NULL;
     static int fileno=0;
