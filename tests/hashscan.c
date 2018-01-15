@@ -172,7 +172,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
     UT_hash_handle hh;
     size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
     char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
-         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL, sat[10];
+         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL;
     const char *hash_fcn = NULL;
     unsigned char *bloombv=NULL;
     static int fileno=0;
@@ -182,8 +182,8 @@ static void found(int fd, char* peer_sig, pid_t pid)
         hash_fcn_hits[NUM_HASH_FUNCS], hash_fcn_winner;
     unsigned max_chain=0;
     uint32_t bloomsig;
-    double bloom_sat=0;
-    snprintf(sat,sizeof(sat),"         ");
+    int has_bloom_filter_fields = 0;
+
     for(i=0; i < NUM_HASH_FUNCS; i++) {
         hash_fcn_hits[i]=0;
     }
@@ -325,9 +325,8 @@ static void found(int fd, char* peer_sig, pid_t pid)
                         bloom_off_bits++;
                     }
                 }
+                has_bloom_filter_fields = 1;
                 vvv("there were %u on_bits among %u total bits\n", (unsigned)bloom_on_bits, (unsigned)bloom_bitlen);
-                bloom_sat = bloom_on_bits * 100.0 / bloom_bitlen;
-                snprintf(sat,sizeof(sat),"%2u %5.0f%%", bloom_nbits, bloom_sat);
             }
         }
     }
@@ -342,23 +341,38 @@ static void found(int fd, char* peer_sig, pid_t pid)
     hash_fcn = hash_fcns[hash_fcn_winner];
 
     /*
-    Address            items    ideal  buckets mxch/<10 fl bloom/sat fcn keys saved to
-    ------------------ -------- ----- -------- -------- -- --------- --- -------------
-    0x0123456789abcdef 10000000  98%  32000000 10  100% ok           BER /tmp/9110-0.key
-    0x0123456789abcdef 10000000 100%  32000000  9   90% NX 27/0.010% BER /tmp/9110-1.key
+    Address            ideal    items  buckets mc fl bloom   sat fcn keys saved to
+    ------------------ ----- -------- -------- -- -- ----- ----- --- -------------
+    0x10aa4090           98% 10000000 32000000 10 ok             BER /tmp/9110-0.key
+    0x10abcdef          100% 10000000 32000000  9 NX    27   12% BER /tmp/9110-1.key
     */
-    printf("Address            ideal    items  buckets mc fl bloom/sat fcn keys saved to\n");
-    printf("------------------ ----- -------- -------- -- -- --------- --- -------------\n");
-    printf("%-18p %4.0f%% %8u %8u %2u %s %s %s %s\n",
-           (void*)peer_tbl,
-           (tbl->num_items - tbl->nonideal_items) * 100.0 / tbl->num_items,
-           tbl->num_items,
-           tbl->num_buckets,
-           max_chain,
-           tbl->noexpand ? "NX" : "ok",
-           sat,
-           hash_fcn,
-           (getkeys ? keyfile : ""));
+    printf("Address            ideal    items  buckets mc fl bloom   sat fcn keys saved to\n");
+    printf("------------------ ----- -------- -------- -- -- ----- ----- --- -------------\n");
+    if (has_bloom_filter_fields) {
+        printf("%-18p %4.0f%% %8u %8u %2u %2s %5u %4.0f%c %3s %s\n",
+               (void*)peer_tbl,
+               (tbl->num_items - tbl->nonideal_items) * 100.0 / tbl->num_items,
+               tbl->num_items,
+               tbl->num_buckets,
+               max_chain,
+               tbl->noexpand ? "NX" : "ok",
+               bloom_nbits,
+               bloom_on_bits * 100.0 / bloom_bitlen, '%',
+               hash_fcn,
+               (getkeys ? keyfile : ""));
+    } else {
+        printf("%-18p %4.0f%% %8u %8u %2u %2s %5s %4s%c %3s %s\n",
+               (void*)peer_tbl,
+               (tbl->num_items - tbl->nonideal_items) * 100.0 / tbl->num_items,
+               tbl->num_items,
+               tbl->num_buckets,
+               max_chain,
+               tbl->noexpand ? "NX" : "ok",
+               "",
+               "", ' ',
+               hash_fcn,
+               (getkeys ? keyfile : ""));
+    }
 
 #if 0
     printf("read peer tbl:\n");
