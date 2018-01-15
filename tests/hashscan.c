@@ -196,9 +196,9 @@ static void found(int fd, char* peer_sig, pid_t pid)
         }
     }
 
-    vv("found signature at peer %p\n", peer_sig);
+    vv("found signature at peer %p\n", (void*)peer_sig);
     peer_tbl = tbl_from_sig_addr(peer_sig);
-    vvv("reading table at peer %p\n", peer_tbl);
+    vvv("reading table at peer %p\n", (void*)peer_tbl);
 
     if ( (tbl = (UT_hash_table*)malloc(sizeof(UT_hash_table))) == NULL) {
         fprintf(stderr, "out of memory\n");
@@ -215,7 +215,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
 
     /* got the table. how about the buckets */
     peer_bkts = (char*)tbl->buckets;
-    vvv("reading buckets at peer %p\n", peer_bkts);
+    vvv("reading buckets at peer %p\n", (void*)peer_bkts);
     bkts = (UT_hash_bucket*)malloc(sizeof(UT_hash_bucket)*tbl->num_buckets);
     if (bkts == NULL) {
         fprintf(stderr, "out of memory\n");
@@ -284,7 +284,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
     peer_bloom_sig =   peer_tbl + offsetof(UT_hash_table, bloom_sig);
     peer_bloombv_ptr = peer_tbl + offsetof(UT_hash_table, bloom_bv);
     peer_bloom_nbits = peer_tbl + offsetof(UT_hash_table, bloom_nbits);
-    vvv("looking for bloom signature at peer %p\n", peer_bloom_sig);
+    vvv("looking for bloom signature at peer %p\n", (void*)peer_bloom_sig);
 #ifdef __FreeBSD__
     if ((read_mem(&bloomsig, pid, (void *)peer_bloom_sig, sizeof(uint32_t)) == 0)  &&
             (bloomsig == HASH_BLOOM_SIGNATURE)) {
@@ -316,7 +316,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
                     (read_mem(bloombv, fd, (off_t)peer_bloombv, bloom_len) == 0)) {
 #endif
                 /* calculate saturation */
-                vvv("read peer bloom bitvector from %p (%u bytes)\n", peer_bloombv, (unsigned)bloom_len);
+                vvv("read peer bloom bitvector from %p (%u bytes)\n", (void*)peer_bloombv, (unsigned)bloom_len);
                 for(i=0; i < bloom_bitlen; i++) {
                     if (HS_BIT_TEST(bloombv,(unsigned)i)) {
                         /* vvv("bit %u set\n",(unsigned)i); */
