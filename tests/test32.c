@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         if (name == NULL) {
             exit(-1);
         }
-        strncpy(name->bname,linebuf,sizeof(name->bname));
+        strcpy(name->bname, linebuf);
         DL_PREPEND(head, name);
     }
     /* DL_SORT(head, namecmp); */

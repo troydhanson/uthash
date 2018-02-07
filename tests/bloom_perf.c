@@ -37,7 +37,7 @@ int main(int argc,char *argv[])
         if ( (name = (name_rec*)malloc(sizeof(name_rec))) == NULL) {
             exit(-1);
         }
-        strncpy(name->boy_name,linebuf,BUFLEN);
+        strcpy(name->boy_name, linebuf);
         HASH_ADD_STR(names,boy_name,name);
     }
 

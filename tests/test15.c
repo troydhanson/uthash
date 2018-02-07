@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         if (s == NULL) {
             exit(-1);
         }
-        strncpy(s->name, *n,10UL);
+        strcpy(s->name, *n);
         s->id = i++;
         HASH_ADD_STR( users, name, s );
     }

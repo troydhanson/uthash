@@ -36,7 +36,7 @@ int main(int argc,char *argv[])
         if (name == NULL) {
             exit(-1);
         }
-        strncpy(name->boy_name,linebuf,sizeof(name->boy_name));
+        strcpy(name->boy_name, linebuf);
         HASH_ADD_STR(names,boy_name,name);
         i++;
     }

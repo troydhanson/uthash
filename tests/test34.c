@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         if (name == NULL) {
             exit(-1);
         }
-        strncpy(name->bname,linebuf,sizeof(name->bname));
+        strcpy(name->bname, linebuf);
         CDL_PREPEND(head, name);
     }
     /* CDL_SORT(head, namecmp); */

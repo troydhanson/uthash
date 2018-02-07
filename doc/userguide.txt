@@ -257,7 +257,7 @@ Otherwise we just modify the structure that already exists.
 
       HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
       if (s==NULL) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        s = (struct my_struct *)malloc(sizeof *s);
         s->id = user_id;
         HASH_ADD_INT( users, id, s );  /* id: name of key field */
       }
@@ -534,7 +534,7 @@ void add_user(int user_id, char *name) {
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
     if (s==NULL) {
-      s = (struct my_struct*)malloc(sizeof(struct my_struct));
+      s = (struct my_struct *)malloc(sizeof *s);
       s->id = user_id;
       HASH_ADD_INT( users, id, s );  /* id: name of key field */
     }
@@ -713,14 +713,13 @@ struct my_struct {
 
 
 int main(int argc, char *argv[]) {
-    const char **n, *names[] = { "joe", "bob", "betty", NULL };
+    const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
-    int i=0;
 
-    for (n = names; *n != NULL; n++) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        strncpy(s->name, *n,10);
-        s->id = i++;
+    for (int i = 0; names[i]; ++i) {
+        s = (struct my_struct *)malloc(sizeof *s);
+        strcpy(s->name, names[i]);
+        s->id = i;
         HASH_ADD_STR( users, name, s );
     }
 
@@ -760,14 +759,13 @@ struct my_struct {
 
 
 int main(int argc, char *argv[]) {
-    const char **n, *names[] = { "joe", "bob", "betty", NULL };
+    const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
-    int i=0;
 
-    for (n = names; *n != NULL; n++) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        s->name = *n;
-        s->id = i++;
+    for (int i = 0; names[i]; ++i) {
+        s = (struct my_struct *)malloc(sizeof *s);
+        s->name = names[i];
+        s->id = i;
         HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );
     }
 
@@ -810,7 +808,7 @@ char *someaddr = NULL;
 
 int main() {
   el_t *d;
-  el_t *e = (el_t*)malloc(sizeof(el_t));
+  el_t *e = (el_t *)malloc(sizeof *e);
   if (!e) return -1;
   e->key = (void*)someaddr;
   e->i = 1;
@@ -861,8 +859,8 @@ typedef struct {
 int main(int argc, char *argv[]) {
     record_t l, *p, *r, *tmp, *records = NULL;
 
-    r = (record_t*)malloc( sizeof(record_t) );
-    memset(r, 0, sizeof(record_t));
+    r = (record_t *)malloc(sizeof *r);
+    memset(r, 0, sizeof *r);
     r->key.a = 'a';
     r->key.b = 1;
     HASH_ADD(hh, records, key, sizeof(record_key_t), r);
@@ -926,7 +924,7 @@ int main(int argc, char *argv[]) {
     int beijing[] = {0x5317, 0x4eac};   /* UTF-32LE for 北京 */
 
     /* allocate and initialize our structure */
-    msg = (msg_t*)malloc( sizeof(msg_t) + sizeof(beijing) );
+    msg = (msg_t *)malloc( sizeof(msg_t) + sizeof(beijing) );
     memset(msg, 0, sizeof(msg_t)+sizeof(beijing)); /* zero fill */
     msg->len = sizeof(beijing);
     msg->encoding = UTF32;
@@ -943,7 +941,7 @@ int main(int argc, char *argv[]) {
     /* look it up to prove that it worked :-) */
     msg=NULL;
 
-    lookup_key = (lookup_key_t*)malloc(sizeof(*lookup_key) + sizeof(beijing));
+    lookup_key = (lookup_key_t *)malloc(sizeof(*lookup_key) + sizeof(beijing));
     memset(lookup_key, 0, sizeof(*lookup_key) + sizeof(beijing));
     lookup_key->encoding = UTF32;
     memcpy(lookup_key->text, beijing, sizeof(beijing));

@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         if (name == NULL) {
             exit(-1);
         }
-        strncpy(name->bname,linebuf,sizeof(name->bname));
+        strcpy(name->bname, linebuf);
         LL_PREPEND(head, name);
     }
     LL_SORT(head, namecmp);

@@ -26,7 +26,7 @@ int main(int argc, char*argv[])
         if (person->first_name == NULL) {
             exit(-1);
         }
-        strncpy(person->first_name, *name,10UL);
+        strcpy(person->first_name, *name);
         person->id = id++;
         HASH_ADD_STR(people,first_name,person);
         printf("added %s (id %d)\n", person->first_name, person->id);
@@ -47,7 +47,7 @@ int main(int argc, char*argv[])
             if (new_person->first_name == NULL) {
                 exit(-1);
             }
-            strncpy(new_person->first_name, person->first_name,10UL);
+            strcpy(new_person->first_name, person->first_name);
             new_person->id = person->id*10;
             HASH_REPLACE_STR(people,first_name,new_person,tmp);
             printf("replaced (%c) with %s (id %d)\n", (tmp!=NULL)?'y':'n', new_person->first_name, new_person->id);
