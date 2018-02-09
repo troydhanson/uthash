@@ -81,7 +81,7 @@ do {                                                       \
 
 #define utstring_new(s)                                    \
 do {                                                       \
-   s = (UT_string*)calloc(sizeof(UT_string),1);            \
+   s = (UT_string*)malloc(sizeof(UT_string));              \
    if (!s) oom();                                          \
    utstring_init(s);                                       \
 } while(0)
