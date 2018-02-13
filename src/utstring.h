@@ -44,8 +44,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 typedef struct {
-    char *d;
-    size_t n; /* allocd size */
+    char *d; /* string buffer */
+    size_t n; /* allocated size */
     size_t i; /* index of first unused byte */
 } UT_string;
 
