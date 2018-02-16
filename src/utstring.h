@@ -43,6 +43,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define oom() exit(-1)
 #endif
 
+#ifndef UTSTRING_INITIAL_SIZE
+#define UTSTRING_INITIAL_SIZE 0x64
+#endif
+
 typedef struct {
     char *d;  /* pointer to allocated buffer */
     size_t n; /* allocated capacity */
@@ -63,7 +67,7 @@ do {                                                       \
 #define utstring_init(s)                                   \
 do {                                                       \
   (s)->n = 0; (s)->i = 0; (s)->d = NULL;                   \
-  utstring_reserve(s,100);                                 \
+  utstring_reserve(s,UTSTRING_INITIAL_SIZE);               \
   (s)->d[0] = '\0';                                        \
 } while(0)
 
