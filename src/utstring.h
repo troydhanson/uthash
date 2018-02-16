@@ -62,33 +62,33 @@ do {                                                       \
     (s)->d = utstring_tmp;                                 \
     (s)->n += (amt);                                       \
   }                                                        \
-} while(0)
+} while (0)
 
 #define utstring_init(s)                                   \
 do {                                                       \
   (s)->n = 0; (s)->i = 0; (s)->d = NULL;                   \
   utstring_reserve(s,UTSTRING_INITIAL_SIZE);               \
   (s)->d[0] = '\0';                                        \
-} while(0)
+} while (0)
 
 #define utstring_done(s)                                   \
 do {                                                       \
   if ((s)->d != NULL) free((s)->d);                        \
   (s)->n = 0;                                              \
-} while(0)
+} while (0)
 
 #define utstring_free(s)                                   \
 do {                                                       \
   utstring_done(s);                                        \
   free(s);                                                 \
-} while(0)
+} while (0)
 
 #define utstring_new(s)                                    \
 do {                                                       \
    s = (UT_string*)malloc(sizeof(UT_string));              \
    if (!s) oom();                                          \
    utstring_init(s);                                       \
-} while(0)
+} while (0)
 
 #define utstring_renew(s)                                  \
 do {                                                       \
@@ -97,13 +97,13 @@ do {                                                       \
    } else {                                                \
      utstring_new(s);                                      \
    }                                                       \
-} while(0)
+} while (0)
 
 #define utstring_clear(s)                                  \
 do {                                                       \
   (s)->i = 0;                                              \
   (s)->d[0] = '\0';                                        \
-} while(0)
+} while (0)
 
 #define utstring_bincpy(s,b,l)                             \
 do {                                                       \
@@ -111,7 +111,7 @@ do {                                                       \
   if (l) memcpy(&(s)->d[(s)->i], b, l);                    \
   (s)->i += (l);                                           \
   (s)->d[(s)->i]='\0';                                     \
-} while(0)
+} while (0)
 
 #define utstring_concat(dst,src)                                 \
 do {                                                             \
@@ -119,7 +119,7 @@ do {                                                             \
   if ((src)->i) memcpy(&(dst)->d[(dst)->i], (src)->d, (src)->i); \
   (dst)->i += (src)->i;                                          \
   (dst)->d[(dst)->i]='\0';                                       \
-} while(0)
+} while (0)
 
 #define utstring_len(s) ((s)->i)
 
