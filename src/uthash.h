@@ -26,6 +26,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define UTHASH_VERSION 2.0.2
 
+#ifndef DUTHASH_V2_ABI
+#define DUTHASH_V2_ABI
+#endif
+
 #include <string.h>   /* memcmp, memset, strlen */
 #include <stddef.h>   /* ptrdiff_t */
 #include <stdlib.h>   /* exit */
@@ -1172,11 +1176,16 @@ typedef struct UT_hash_bucket {
 
 typedef struct UT_hash_table {
    UT_hash_bucket *buckets;
-   struct UT_hash_handle *tail; /* tail hh in app order, for fast append     */
-   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element) */
-
+#ifdef DUTHASH_V2_ABI
+   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
+   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
+#endif
    unsigned num_buckets, log2_num_buckets;
    unsigned num_items;
+#ifndef DUTHASH_V2_ABI
+   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
+   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
+#endif
 
    /* in an ideal situation (all buckets used equally), no bucket would have
     * more than ceil(#items/#buckets) items. that's the ideal chain length. */
