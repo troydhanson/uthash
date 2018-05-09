@@ -1,0 +1,13 @@
+LL_INSERT_INORDER
+list1: n g m f l e k d j c i b o h a 
+list2: o h a i b j c k d l e m f n g 
+DL_INSERT_INORDER
+list1: n g m f l e k d j c i b o h a 
+list2: o h a i b j c k d l e m f n g 
+CDL_INSERT_INORDER
+list1:
+n g m f l e k d j c i b o h a 
+n a h o b i c j d k e l f m g 
+list2:
+o h a i b j c k d l e m f n g 
+o g n f m e l d k c j b i a h 
