@@ -277,6 +277,7 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  LL_PREPEND2(head, add, next);
  LL_PREPEND_ELEM2(head, ref, add, next);
  LL_APPEND_ELEM2(head, ref, add, next);
+ LL_INSERT_INORDER2(head, add, cmp, next);
  LL_REPLACE_ELEM(head, del, add, next);
  LL_CONCAT2(head1, head2, next);
  LL_APPEND2(head, add, next);
@@ -290,6 +291,7 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  DL_PREPEND2(head, add, prev, next);
  DL_PREPEND_ELEM2(head, ref, add, prev, next);
  DL_APPEND_ELEM2(head, ref, add, prev, next);
+ DL_INSERT_INORDER2(head, add, cmp, prev, next);
  DL_REPLACE_ELEM2(head, del, add, prev, next);
  DL_CONCAT2(head1, head2, prev, next);
  DL_APPEND2(head, add, prev, next);
@@ -303,6 +305,7 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
  CDL_PREPEND2(head, add, prev, next);
  CDL_PREPEND_ELEM2(head, ref, add, prev, next);
  CDL_APPEND_ELEM2(head, ref, add, prev, next);
+ CDL_INSERT_INORDER2(head, add, cmp, prev, next);
  CDL_REPLACE_ELEM2(head, del, add, prev, next);
  CDL_APPEND2(head, add, prev, next);
  CDL_DELETE2(head, del, prev, next);
