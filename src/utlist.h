@@ -358,8 +358,8 @@ do {                                                                            
 do {                                                                                           \
   LDECLTYPE(head) _tmp;                                                                        \
   if (head) {                                                                                  \
-    LL_LOWER_BOUND(head, _tmp, add, cmp);                                                      \
-    LL_APPEND_ELEM(head, _tmp, add);                                                           \
+    LL_LOWER_BOUND2(head, _tmp, add, cmp, next);                                               \
+    LL_APPEND_ELEM2(head, _tmp, add, next);                                                    \
   } else {                                                                                     \
     (head) = (add);                                                                            \
     (head)->next = NULL;                                                                       \
