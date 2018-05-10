@@ -838,7 +838,7 @@ do {                                                                            
     (head) = (add);                                                                            \
   } else {                                                                                     \
     char *_tmp = (char*)(head);                                                                \
-    while ((char*)(head)->next != _tmp && (cmp((head)->next, add)) < 0) {                      \
+    while ((head)->next && (cmp((head)->next, add)) < 0) {                                     \
       (head) = (head)->next;                                                                   \
     }                                                                                          \
     (add)->prev = (head);                                                                      \
