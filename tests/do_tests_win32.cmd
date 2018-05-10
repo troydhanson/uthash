@@ -1,6 +1,6 @@
 :: this compiles and runs the test suite under Visual Studio 2008
 ::@echo off
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\vcvars32.bat" > vc.out
+call "C:\Program Files\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" > vc.out
 ::call "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" > vc.out
 set "COMPILE=cl.exe /I ..\src /EHsc /nologo"
 echo compiling...
