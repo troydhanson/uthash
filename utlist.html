@@ -1216,8 +1216,8 @@ int main(int argc, char *argv[]) {
     }
 
     while (fgets(linebuf,BUFLEN,file) != NULL) {
-        if ( (name = (el*)malloc(sizeof(el))) == NULL) exit(-1);
-        strncpy(name-&gt;bname,linebuf,BUFLEN);
+        if ( (name = (el *)malloc(sizeof *name)) == NULL) exit(-1);
+        strcpy(name-&gt;bname, linebuf);
         DL_APPEND(head, name);
     }
     DL_SORT(head, namecmp);
@@ -1246,54 +1246,103 @@ int main(int argc, char *argv[]) {
 <div class="paragraph"><p>If the <code>prev</code> and <code>next</code> fields are named something else, a separate group of
 macros must be used. These work the same as the regular macros, but take the
 field names as extra parameters.</p></div>
-<div class="paragraph"><p>These "flexible field name" macros are shown below. They all end with "2". Each
-operates the same as its counterpart without the 2, but they take the name of
+<div class="paragraph"><p>These "flexible field name" macros are shown below. They all end with <code>2</code>. Each
+operates the same as its counterpart without the <code>2</code>, but they take the name of
 the <code>prev</code> and <code>next</code> fields (as applicable) as trailing arguments.</p></div>
-<div class="literalblock">
-<div class="title">Flexible field name macros</div>
-<div class="content">
-<pre><code>LL_SORT2(list, cmp, next);
-DL_SORT2(list, cmp, prev, next);
-CDL_SORT2(list, cmp, prev, next);
-LL_PREPEND2(head, add, next);
-LL_PREPEND_ELEM2(head, ref, add, next);
-LL_APPEND_ELEM2(head, ref, add, next);
-LL_REPLACE_ELEM(head, del, add, next);
-LL_CONCAT2(head1, head2, next);
-LL_APPEND2(head, add, next);
-LL_DELETE2(head, del, next);
-LL_FOREACH2(head, elt, next) {...}
-LL_FOREACH_SAFE2(head, elt, tmp, next) {...}
-LL_SEARCH_SCALAR2(head, elt, mbr, val, next);
-LL_SEARCH2(head, elt, like, cmp, next);
-LL_LOWER_BOUND2(head, elt, like, cmp, next);
-LL_COUNT2(head, elt, count, next);
-DL_PREPEND2(head, add, prev, next);
-DL_PREPEND_ELEM2(head, ref, add, prev, next);
-DL_APPEND_ELEM2(head, ref, add, prev, next);
-DL_REPLACE_ELEM2(head, del, add, prev, next);
-DL_CONCAT2(head1, head2, prev, next);
-DL_APPEND2(head, add, prev, next);
-DL_DELETE2(head, del, prev, next);
-DL_FOREACH2(head, elt, next) {...}
-DL_FOREACH_SAFE2(head, elt, tmp, next) {...}
-DL_SEARCH_SCALAR2(head, out, field, val, next);
-DL_SEARCH2(head, elt, like, cmp, next);
-DL_LOWER_BOUND2(head, elt, like, cmp, next);
-DL_COUNT2(head, elt, count, next);
-CDL_PREPEND2(head, add, prev, next);
-CDL_PREPEND_ELEM2(head, ref, add, prev, next);
-CDL_APPEND_ELEM2(head, ref, add, prev, next);
-CDL_REPLACE_ELEM2(head, del, add, prev, next);
-CDL_APPEND2(head, add, prev, next);
-CDL_DELETE2(head, del, prev, next);
-CDL_FOREACH2(head, elt, next) {...}
-CDL_FOREACH_SAFE2(head, elt, tmp1, tmp2, prev, next) {...}
-CDL_SEARCH_SCALAR2(head, out, field, val, next);
-CDL_SEARCH2(head, out, elt, cmp, next);
-CDL_LOWER_BOUND2(head, elt, like, cmp, next);
-CDL_COUNT2(head, elt, count, next);</code></pre>
-</div></div>
+<div class="tableblock">
+<table rules="cols"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+<thead>
+<tr>
+<th align="left" valign="top">Singly-linked                             </th>
+<th align="left" valign="top"> Doubly-linked                             </th>
+<th align="left" valign="top"> Circular, doubly-linked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_PREPEND2(head,add,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_PREPEND2(head,add,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_PREPEND2(head,add,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_PREPEND_ELEM2(head,ref,add,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_PREPEND_ELEM2(head,ref,add,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_PREPEND_ELEM2(head,ref,add,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_APPEND_ELEM2(head,ref,add,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_APPEND_ELEM2(head,ref,add,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_APPEND_ELEM2(head,ref,add,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_REPLACE_ELEM2(head,del,add,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_REPLACE_ELEM2(head,del,add,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_REPLACE_ELEM2(head,del,add,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_APPEND2(head,add,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_APPEND2(head,add,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_APPEND2(head,add,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_INSERT_INORDER2(head,add,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_INSERT_INORDER2(head,add,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_INSERT_INORDER2(head,add,cmp,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_CONCAT2(head1,head2,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_CONCAT2(head1,head2,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code></code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_DELETE2(head,del,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_DELETE2(head,del,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_DELETE2(head,del,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_SORT2(head,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_SORT2(head,cmp,prev,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_SORT2(head,cmp,prev,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_FOREACH2(head,elt,next) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_FOREACH2(head,elt,next) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_FOREACH2(head,elt,next) {&#8230;}</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_FOREACH_SAFE2(head,elt,tmp,next) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_FOREACH_SAFE2(head,elt,tmp,next) {&#8230;}</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_FOREACH_SAFE2(head,elt,tmp1,tmp2,prev,next) {&#8230;}</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_SEARCH_SCALAR2(head,elt,mbr,val,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_SEARCH_SCALAR2(head,elt,mbr,val,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_SEARCH_SCALAR2(head,elt,mbr,val,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_SEARCH2(head,elt,like,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_SEARCH2(head,elt,like,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_SEARCH2(head,elt,like,cmp,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_LOWER_BOUND2(head,elt,like,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_LOWER_BOUND2(head,elt,like,cmp,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_LOWER_BOUND2(head,elt,like,cmp,next);</code></p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table"><code>LL_COUNT2(head,elt,count,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>DL_COUNT2(head,elt,count,next);</code></p></td>
+<td align="left" valign="top"><p class="table"><code>CDL_COUNT2(head,elt,count,next);</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -1302,7 +1351,7 @@ CDL_COUNT2(head, elt, count, next);</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 2.0.2<br />
-Last updated 2017-03-18 22:44:34 PDT
+Last updated 2018-05-09 22:24:48 PDT
 </div>
 </div>
 </body>

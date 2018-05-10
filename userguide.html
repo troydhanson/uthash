@@ -1103,7 +1103,7 @@ Otherwise we just modify the structure that already exists.</p></div>
 <div class="content">
 <pre><code>    HASH_FIND_INT(users, &amp;user_id, s);  /* id already in the hash? */
     if (s==NULL) {
-      s = (struct my_struct*)malloc(sizeof(struct my_struct));
+      s = (struct my_struct *)malloc(sizeof *s);
       s-&gt;id = user_id;
       HASH_ADD_INT( users, id, s );  /* id: name of key field */
     }
@@ -1379,7 +1379,7 @@ void add_user(int user_id, char *name) {
 
     HASH_FIND_INT(users, &amp;user_id, s);  /* id already in the hash? */
     if (s==NULL) {
-      s = (struct my_struct*)malloc(sizeof(struct my_struct));
+      s = (struct my_struct *)malloc(sizeof *s);
       s-&gt;id = user_id;
       HASH_ADD_INT( users, id, s );  /* id: name of key field */
     }
@@ -1568,14 +1568,13 @@ struct my_struct {
 
 
 int main(int argc, char *argv[]) {
-    const char **n, *names[] = { "joe", "bob", "betty", NULL };
+    const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
-    int i=0;
 
-    for (n = names; *n != NULL; n++) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        strncpy(s-&gt;name, *n,10);
-        s-&gt;id = i++;
+    for (int i = 0; names[i]; ++i) {
+        s = (struct my_struct *)malloc(sizeof *s);
+        strcpy(s-&gt;name, names[i]);
+        s-&gt;id = i;
         HASH_ADD_STR( users, name, s );
     }
 
@@ -1615,14 +1614,13 @@ struct my_struct {
 
 
 int main(int argc, char *argv[]) {
-    const char **n, *names[] = { "joe", "bob", "betty", NULL };
+    const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
-    int i=0;
 
-    for (n = names; *n != NULL; n++) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        s-&gt;name = *n;
-        s-&gt;id = i++;
+    for (int i = 0; names[i]; ++i) {
+        s = (struct my_struct *)malloc(sizeof *s);
+        s-&gt;name = names[i];
+        s-&gt;id = i;
         HASH_ADD_KEYPTR( hh, users, s-&gt;name, strlen(s-&gt;name), s );
     }
 
@@ -1664,7 +1662,7 @@ char *someaddr = NULL;
 
 int main() {
   el_t *d;
-  el_t *e = (el_t*)malloc(sizeof(el_t));
+  el_t *e = (el_t *)malloc(sizeof *e);
   if (!e) return -1;
   e-&gt;key = (void*)someaddr;
   e-&gt;i = 1;
@@ -1720,8 +1718,8 @@ typedef struct {
 int main(int argc, char *argv[]) {
     record_t l, *p, *r, *tmp, *records = NULL;
 
-    r = (record_t*)malloc( sizeof(record_t) );
-    memset(r, 0, sizeof(record_t));
+    r = (record_t *)malloc(sizeof *r);
+    memset(r, 0, sizeof *r);
     r-&gt;key.a = 'a';
     r-&gt;key.b = 1;
     HASH_ADD(hh, records, key, sizeof(record_key_t), r);
@@ -1784,7 +1782,7 @@ int main(int argc, char *argv[]) {
     int beijing[] = {0x5317, 0x4eac};   /* UTF-32LE for 北京 */
 
     /* allocate and initialize our structure */
-    msg = (msg_t*)malloc( sizeof(msg_t) + sizeof(beijing) );
+    msg = (msg_t *)malloc( sizeof(msg_t) + sizeof(beijing) );
     memset(msg, 0, sizeof(msg_t)+sizeof(beijing)); /* zero fill */
     msg-&gt;len = sizeof(beijing);
     msg-&gt;encoding = UTF32;
@@ -1801,7 +1799,7 @@ int main(int argc, char *argv[]) {
     /* look it up to prove that it worked :-) */
     msg=NULL;
 
-    lookup_key = (lookup_key_t*)malloc(sizeof(*lookup_key) + sizeof(beijing));
+    lookup_key = (lookup_key_t *)malloc(sizeof(*lookup_key) + sizeof(beijing));
     memset(lookup_key, 0, sizeof(*lookup_key) + sizeof(beijing));
     lookup_key-&gt;encoding = UTF32;
     memcpy(lookup_key-&gt;text, beijing, sizeof(beijing));
@@ -2617,12 +2615,15 @@ convenience on embedded platforms that manage their own memory.</p></div>
 <div class="sect3">
 <h4 id="_specifying_alternate_standard_library_functions">Specifying alternate standard library functions</h4>
 <div class="paragraph"><p>Uthash also uses <code>strlen</code> (in the <code>HASH_FIND_STR</code> convenience macro, for
-example) and <code>memcmp</code> (as the method of comparing keys for equality). On
-platforms that do not provide these functions, you can substitute your own
-implementations.</p></div>
+example), <code>memcmp</code> (as the method of comparing keys for equality), and <code>memset</code>
+(used only for zeroing memory). On platforms that do not provide these functions,
+you can substitute your own implementations.</p></div>
 <div class="listingblock">
 <div class="content">
-<pre><code>#undef uthash_memcmp
+<pre><code>#undef uthash_bzero
+#define uthash_bzero(a,len) my_bzero(a,len)
+
+#undef uthash_memcmp
 #define uthash_memcmp(a,b,len) my_memcmp(a,b,len)
 
 #undef uthash_strlen
@@ -2631,17 +2632,41 @@ implementations.</p></div>
 </div>
 <div class="sect3">
 <h4 id="_out_of_memory">Out of memory</h4>
-<div class="paragraph"><p>If memory allocation fails (i.e., the malloc function returned <code>NULL</code>), the
-default behavior is to terminate the process by calling <code>exit(-1)</code>. This can
-be modified by re-defining the <code>uthash_fatal</code> macro.</p></div>
+<div class="paragraph"><p>If memory allocation fails (i.e., the <code>uthash_malloc</code> function returns <code>NULL</code>),
+the default behavior is to terminate the process by calling <code>exit(-1)</code>. This
+can be modified by re-defining the <code>uthash_fatal</code> macro.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>#undef uthash_fatal
 #define uthash_fatal(msg) my_fatal_function(msg)</code></pre>
 </div></div>
 <div class="paragraph"><p>The fatal function should terminate the process or <code>longjmp</code> back to a safe
-place. Uthash does not support "returning a failure" if memory cannot be
-allocated.</p></div>
+place. Note that an allocation failure may leave allocated memory that cannot
+be recovered. After <code>uthash_fatal</code>, the hash table object should be considered
+unusable; it might not be safe even to run <code>HASH_CLEAR</code> on the hash table
+when it is in this state.</p></div>
+<div class="paragraph"><p>To enable "returning a failure" if memory cannot be allocated, define the
+macro <code>HASH_NONFATAL_OOM</code> before including the <code>uthash.h</code> header file. In this
+case, <code>uthash_fatal</code> is not used; instead, each allocation failure results in
+a single call to <code>uthash_nonfatal_oom(elt)</code> where <code>elt</code> is the address of the
+element whose insertion triggered the failure. The default behavior of
+<code>uthash_nonfatal_oom</code> is a no-op.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef uthash_nonfatal_oom
+#define uthash_nonfatal_oom(elt) perhaps_recover((element_t *) elt)</code></pre>
+</div></div>
+<div class="paragraph"><p>Before the call to <code>uthash_nonfatal_oom</code>, the hash table is rolled back
+to the state it was in prior to the problematic insertion; no memory is
+leaked. It is safe to <code>throw</code> or <code>longjmp</code> out of the <code>uthash_nonfatal_oom</code>
+handler.</p></div>
+<div class="paragraph"><p>The <code>elt</code> argument will be of the correct pointer-to-element type, unless
+<code>uthash_nonfatal_oom</code> is invoked from <code>HASH_SELECT</code>, in which case it will
+be of <code>void*</code> type and must be cast before using. In any case, <code>elt-&gt;hh.tbl</code>
+will be <code>NULL</code>.</p></div>
+<div class="paragraph"><p>Allocation failure is possible only when adding elements to the hash table
+(including the <code>ADD</code>, <code>REPLACE</code>, and <code>SELECT</code> operations).
+<code>uthash_free</code> never fails.</p></div>
 </div>
 <div class="sect3">
 <h4 id="_internal_events">Internal events</h4>
@@ -3093,7 +3118,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 2.0.2<br />
-Last updated 2017-03-02 11:35:19 PST
+Last updated 2018-05-09 22:24:48 PDT
 </div>
 </div>
 </body>
