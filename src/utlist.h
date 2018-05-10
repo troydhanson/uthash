@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2007-2017, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2007-2018, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -838,7 +838,7 @@ do {                                                                            
     (head) = (add);                                                                            \
   } else {                                                                                     \
     char *_tmp = (char*)(head);                                                                \
-    while ((head)->next != NULL && (cmp((head)->next, add)) < 0) {                             \
+    while ((head)->next && (cmp((head)->next, add)) < 0) {                                     \
       (head) = (head)->next;                                                                   \
     }                                                                                          \
     (add)->prev = (head);                                                                      \

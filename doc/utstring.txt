@@ -226,4 +226,3 @@ second argument, rather than the start position. You can emulate the position
 parameter by adding to the string start address and subtracting from its length.
 
 // vim: set nowrap syntax=asciidoc:
-
