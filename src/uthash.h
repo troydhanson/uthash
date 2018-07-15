@@ -224,8 +224,8 @@ do {                                                                            
         HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));               \
     (head)->hh.tbl->signature = HASH_SIGNATURE;                                  \
     if (!(head)->hh.tbl->buckets) {                                              \
-      HASH_RECORD_OOM(oomed);                                                    \
       uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                        \
+      HASH_RECORD_OOM(oomed);                                                    \
     } else {                                                                     \
       uthash_bzero((head)->hh.tbl->buckets,                                      \
           HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));             \
@@ -1171,11 +1171,11 @@ typedef struct UT_hash_bucket {
 #define HASH_BLOOM_SIGNATURE 0xb12220f2u
 
 typedef struct UT_hash_table {
+   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
    UT_hash_bucket *buckets;
+   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
    unsigned num_buckets, log2_num_buckets;
    unsigned num_items;
-   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
-   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
 
    /* in an ideal situation (all buckets used equally), no bucket would have
     * more than ceil(#items/#buckets) items. that's the ideal chain length. */
