@@ -224,6 +224,7 @@ do {                                                                            
         HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));               \
     (head)->hh.tbl->signature = HASH_SIGNATURE;                                  \
     if (!(head)->hh.tbl->buckets) {                                              \
+      uthash_free((head)->hh.tbl, sizeof(UT_hash_table));                        \
       HASH_RECORD_OOM(oomed);                                                    \
     } else {                                                                     \
       uthash_bzero((head)->hh.tbl->buckets,                                      \
