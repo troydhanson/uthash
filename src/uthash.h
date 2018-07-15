@@ -1170,11 +1170,11 @@ typedef struct UT_hash_bucket {
 #define HASH_BLOOM_SIGNATURE 0xb12220f2u
 
 typedef struct UT_hash_table {
+   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
    UT_hash_bucket *buckets;
+   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
    unsigned num_buckets, log2_num_buckets;
    unsigned num_items;
-   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
-   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
 
    /* in an ideal situation (all buckets used equally), no bucket would have
     * more than ceil(#items/#buckets) items. that's the ideal chain length. */
