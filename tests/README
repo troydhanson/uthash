@@ -4,7 +4,7 @@ Run "make" in this directory to build the tests and run them.
 
 test1:  make 10-item hash, iterate and print each one
 test2:  make 10-item hash, lookup items with even keys, print
-test3:  make 10-item hash, delete items with even keys, print others 
+test3:  make 10-item hash, delete items with even keys, print others
 test4:  10 structs have dual hash handles, separate keys
 test5:  10 structs have dual hash handles, lookup evens by alt key
 test6:  test alt malloc macros (and alt memcmp macro)
@@ -29,7 +29,7 @@ test24: make 10-item hash and confirm item count (HASH_COUNT)
 test25: CDL / DL / LL tests
 test26: test the linked list sort macros in utlist.h
 test27: LL_APPEND, SORT
-test28: CDL / DL / LL tests  
+test28: CDL / DL / LL tests
 test29: DL_APPEND, SORT
 test30: CDL_PREPEND, SORT
 test31: CDL_PREPEND, SORT
@@ -60,7 +60,7 @@ test55: test utstring
 test56: test uthash, utlist and utstring together for #define conflicts etc
 test57: test uthash HASH_ADD_PTR and HASH_FIND_PTR
 test58: test HASH_ITER macro
-test59: sample of multi-level hash 
+test59: sample of multi-level hash
 test60: sample of multi-level hash that also does HASH_DEL and free
 test61: test utarray_find
 test62: test macros used in safe unaligned reads on non-Intel type platforms
