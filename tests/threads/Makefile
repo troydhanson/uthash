@@ -3,9 +3,9 @@ PROGS = test1 test2
 
 # Thread support requires compiler-specific options
 # ----------------------------------------------------------------------------
-# GNU 
+# GNU
 CFLAGS += -I$(HASHDIR) -g -pthread
-# Solaris (Studio 11) 
+# Solaris (Studio 11)
 #CFLAGS = -I$(HASHDIR) -g -mt
 # ----------------------------------------------------------------------------
 
@@ -26,6 +26,6 @@ run_tests: $(PROGS)
 
 .PHONY: clean
 
-clean:	
-	rm -f $(PROGS) test*.out 
+clean:
+	rm -f $(PROGS) test*.out
 	rm -rf test*.dSYM

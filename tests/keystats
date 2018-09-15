@@ -22,14 +22,14 @@ for my $exe (@exes) {
 print( "fcn  ideal%     #items   #buckets  dup%  fl   add_usec  find_usec  del-all usec\n");
 printf("---  ------ ---------- ---------- -----  -- ---------- ----------  ------------\n");
 for my $exe (sort statsort keys %stats) {
-    my ($ideal,$items,$bkts,$dups,$ok,$add,$find,$del) = split /,/, $stats{$exe}; 
+    my ($ideal,$items,$bkts,$dups,$ok,$add,$find,$del) = split /,/, $stats{$exe};
 
     # convert 0-1 values to percentages
     $dups = $items ? (100.0 * $dups / $items) : 0.0;
     $ideal = 100.0 * $ideal;
 
-    printf("%3s  %5.1f%% %10d %10d %4.0f%%  %2s %10d %10d  %12d\n", substr($exe,-3,3), 
-        $ideal,$items,$bkts,$dups,$ok,$add,$find,$del); 
+    printf("%3s  %5.1f%% %10d %10d %4.0f%%  %2s %10d %10d  %12d\n", substr($exe,-3,3),
+        $ideal,$items,$bkts,$dups,$ok,$add,$find,$del);
 }
 
 # sort on hash_q (desc) then by find_usec (asc)

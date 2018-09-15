@@ -18,8 +18,8 @@ CFLAGS += -I$(HASHDIR)
 #CFLAGS += -O2
 CFLAGS += -g
 #CFLAGS += -Wstrict-aliasing=2
-CFLAGS += -Wall 
-#CFLAGS += -Wextra 
+CFLAGS += -Wall
+#CFLAGS += -Wextra
 #CFLAGS += -std=c89
 CFLAGS += ${EXTRA_CFLAGS}
 
@@ -74,7 +74,7 @@ pedantic:
 	$(MAKE) all HASH_PEDANTIC=1
 
 cplusplus:
-	CC=$(CXX) $(MAKE) all 
+	CC=$(CXX) $(MAKE) all
 
 thorough:
 	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic'
@@ -97,7 +97,7 @@ hashscan : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
-sleep_test : $(HASHDIR)/uthash.h 
+sleep_test : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
@@ -121,6 +121,6 @@ astyle:
 
 .PHONY: clean astyle
 
-clean:	
+clean:
 	rm -f $(UTILS) $(PLAT_UTILS) $(PROGS) test*.out keystat.??? example hashscan sleep_test *.exe $(GITIGN)
 	rm -rf *.dSYM
