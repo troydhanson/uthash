@@ -20,6 +20,7 @@
     "src/uthash.h",
     "src/utlist.h",
     "src/utringbuffer.h",
+    "src/utstack.h",
     "src/utstring.h"
   ],
 
