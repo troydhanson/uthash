@@ -30,6 +30,7 @@
         <div><a href="utlist.html">utlist</a></div>
         <div><a href="utarray.html">utarray</a></div>
         <div><a href="utringbuffer.html">utringbuffer</a></div>
+        <div><a href="utstack.html">utstack</a></div>
         <div><a href="utstring.html">utstring</a></div>
 
         <h2>download</h2>
@@ -64,14 +65,14 @@ Example 1. Adding an item to a hash.
 
 struct my_struct {
     int id;            /* we'll use this field as the key */
-    char name[10];             
+    char name[10];
     UT_hash_handle hh; /* makes this structure hashable */
 };
 
 struct my_struct *users = NULL;
 
 void add_user(struct my_struct *s) {
-    HASH_ADD_INT( users, id, s );    
+    HASH_ADD_INT( users, id, s );
 }
 
 </pre>
@@ -85,7 +86,7 @@ Example 2. Looking up an item in a hash.
 struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &amp;user_id, s );  
+    HASH_FIND_INT( users, &amp;user_id, s );
     return s;
 }
 
@@ -99,7 +100,7 @@ Example 3. Deleting an item from a hash.
 
 <pre>
 void delete_user(struct my_struct *user) {
-    HASH_DEL( users, user);  
+    HASH_DEL( users, user);
 }
 
 </pre>
