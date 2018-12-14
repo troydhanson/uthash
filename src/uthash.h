@@ -937,7 +937,9 @@ do {                                                                            
         _he_newbkt = &(_he_new_buckets[_he_bkt]);                                \
         if (++(_he_newbkt->count) > (tbl)->ideal_chain_maxlen) {                 \
           (tbl)->nonideal_items++;                                               \
-          _he_newbkt->expand_mult = _he_newbkt->count / (tbl)->ideal_chain_maxlen; \
+          if (_he_newbkt->count > _he_newbkt->expand_mult * (tbl)->ideal_chain_maxlen) { \
+            _he_newbkt->expand_mult++;                                           \
+          }                                                                      \
         }                                                                        \
         _he_thh->hh_prev = NULL;                                                 \
         _he_thh->hh_next = _he_newbkt->hh_head;                                  \
