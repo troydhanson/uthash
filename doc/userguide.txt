@@ -991,6 +991,10 @@ didn't zero-fill the structure, this padding would contain random values.  The
 random values would lead to `HASH_FIND` failures; as two "identical" keys will
 appear to mismatch if there are any differences within their padding.
 
+Alternatively, you can customize the global <<hash_keycompare,key comparison function>>
+and <<hash_functions,key hashing function>> to ignore the padding in your key.
+See <<hash_keycompare,Specifying an alternate key comparison function>>.
+
 [[multilevel]]
 Multi-level hash tables
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -1268,6 +1272,61 @@ items to the destination hash selectively.
 The two hash handles must differ. An example of using `HASH_SELECT` is included
 in `tests/test36.c`.
 
+[[hash_keycompare]]
+Specifying an alternate key comparison function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you call `HASH_FIND(hh, head, intfield, sizeof(int), out)`, uthash will
+first call <<hash_functions,`HASH_FUNCTION`>>`(intfield, sizeof(int), hashvalue)` to
+determine the bucket `b` in which to search, and then, for each element `elt`
+of bucket `b`, uthash will evaluate
+`elt->hh.hashv == hashvalue && elt.hh.keylen == sizeof(int) && HASH_KEYCMP(intfield, elt->hh.key, sizeof(int)) == 0`.
+`HASH_KEYCMP` should return `0` to indicate that `elt` is a match and should be
+returned, and any non-zero value to indicate that the search for a matching
+element should continue.
+
+By default, uthash defines `HASH_KEYCMP` as an alias for `memcmp`. On platforms
+that do not provide `memcmp`, you can substitute your own implementation.
+
+----------------------------------------------------------------------------
+#undef HASH_KEYCMP
+#define HASH_KEYCMP(a,b,len) bcmp(a,b,len)
+----------------------------------------------------------------------------
+
+Another reason to substitute your own key comparison function is if your "key" is not
+trivially comparable. In this case you will also need to substitute your own `HASH_FUNCTION`.
+
+----------------------------------------------------------------------------
+struct Key {
+    short s;
+    /* 2 bytes of padding */
+    float f;
+};
+/* do not compare the padding bytes; do not use memcmp on floats */
+unsigned key_hash(struct Key *s) { return s + (unsigned)f; }
+bool key_equal(struct Key *a, struct Key *b) { return a.s == b.s && a.f == b.f; }
+
+#define HASH_FUNCTION(s,len,hashv) (hashv) = key_hash((struct Key *)s)
+#define HASH_KEYCMP(a,b,len) (!key_equal((struct Key *)a, (struct Key *)b))
+----------------------------------------------------------------------------
+
+Another reason to substitute your own key comparison function is to trade off
+correctness for raw speed. During its linear search of a bucket, uthash always
+compares the 32-bit `hashv` first, and calls `HASH_KEYCMP` only if the `hashv`
+compares equal. This means that `HASH_KEYCMP` is called at least once per
+successful find. Given a good hash function, we expect the `hashv` comparison to
+produce a "false positive" equality only once in four billion times. Therefore,
+we expect `HASH_KEYCMP` to produce `0` most of the time. If we expect many
+successful finds, and our application doesn't mind the occasional false positive,
+we might substitute a no-op comparison function:
+
+----------------------------------------------------------------------------
+#undef HASH_KEYCMP
+#define HASH_KEYCMP(a,b,len) 0  /* occasionally wrong, but very fast */
+----------------------------------------------------------------------------
+
+Note: The global equality-comparison function `HASH_KEYCMP` has no relationship
+at all to the lessthan-comparison function passed as a parameter to `HASH_ADD_INORDER`.
 
 [[hash_functions]]
 Built-in hash functions
@@ -1592,16 +1651,12 @@ convenience on embedded platforms that manage their own memory.
 Specifying alternate standard library functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Uthash also uses `strlen` (in the `HASH_FIND_STR` convenience macro, for
-example), `memcmp` (as the method of comparing keys for equality), and `memset`
-(used only for zeroing memory). On platforms that do not provide these functions,
-you can substitute your own implementations.
+example) and `memset` (used only for zeroing memory). On platforms that do not
+provide these functions, you can substitute your own implementations.
 
 ----------------------------------------------------------------------------
 #undef uthash_bzero
 #define uthash_bzero(a,len) my_bzero(a,len)
-
-#undef uthash_memcmp
-#define uthash_memcmp(a,b,len) my_memcmp(a,b,len)
 
 #undef uthash_strlen
 #define uthash_strlen(s) my_strlen(s)
