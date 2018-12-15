@@ -230,8 +230,8 @@ last parameter is a pointer to the structure being added.
 .Wait.. the field name is a parameter?
 *******************************************************************************
 If you find it strange that `id`, which is the 'name of a field' in the
-structure, can be passed as a parameter, welcome to the world of macros. Don't
-worry- the C preprocessor expands this to valid C code.
+structure, can be passed as a parameter... welcome to the world of macros. Don't
+worry; the C preprocessor expands this to valid C code.
 *******************************************************************************
 
 Key must not be modified while in-use
@@ -966,6 +966,7 @@ by an `int` will normally have 3 "wasted" bytes of padding after the char, in
 order to make the `int` field start on a multiple-of-4 address (4 is the length
 of the int).
 
+[[multifield_note]]
 .Calculating the length of a multi-field key:
 *******************************************************************************
 To determine the key length when using a multi-field key, you must include any
@@ -1070,7 +1071,7 @@ Items in several hash tables
 A structure can be added to more than one hash table. A few reasons you might do
 this include:
 
-- each hash table may use an alternative key;
+- each hash table may use a different key;
 - each hash table may have its own sort order;
 - or you might simply use multiple hash tables for grouping purposes.  E.g.,
   you could have users in an `admin_users` and a `users` hash table.
@@ -1080,19 +1081,19 @@ which it might be added. You can name them anything. E.g.,
 
   UT_hash_handle hh1, hh2;
 
-Items with alternative keys
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Items with multiple keys
+~~~~~~~~~~~~~~~~~~~~~~~~
 You might create a hash table keyed on an ID field, and another hash table keyed
 on username (if usernames are unique). You can add the same user structure to
 both hash tables (without duplication of the structure), allowing lookup of a
 user structure by their name or ID.  The way to achieve this is to have a
 separate `UT_hash_handle` for each hash to which the structure may be added.
 
-.A structure with two alternative keys
+.A structure with two different keys
 ----------------------------------------------------------------------
 struct my_struct {
-    int id;                    /* usual key */
-    char username[10];         /* alternative key */
+    int id;                    /* first key */
+    char username[10];         /* second key */
     UT_hash_handle hh1;        /* handle for first hash table */
     UT_hash_handle hh2;        /* handle for second hash table */
 };
@@ -1122,12 +1123,12 @@ always used with the `users_by_name` hash table).
     HASH_ADD(hh1, users_by_id, id, sizeof(int), s);
     HASH_ADD(hh2, users_by_name, username, strlen(s->username), s);
 
-    /* lookup user by ID in the "users_by_id" hash table */
+    /* find user by ID in the "users_by_id" hash table */
     i=1;
     HASH_FIND(hh1, users_by_id, &i, sizeof(int), s);
     if (s) printf("found id %d: %s\n", i, s->username);
 
-    /* lookup user by username in the "users_by_name" hash table */
+    /* find user by username in the "users_by_name" hash table */
     name = "thanson";
     HASH_FIND(hh2, users_by_name, name, strlen(name), s);
     if (s) printf("found user %s: %d\n", name, s->id);
@@ -1169,7 +1170,7 @@ ways. This is based on the ability to store a structure in several hash tables.
 
 Extending the previous example, suppose we have many users. We have added each
 user structure to the `users_by_id` hash table and the `users_by_name` hash table.
-(To reiterate, this is done without the need to have two copies of each structure).
+(To reiterate, this is done without the need to have two copies of each structure.)
 Now we can define two sort functions, then use `HASH_SRT`.
 
   int sort_by_id(struct my_struct *a, struct my_struct *b) {
@@ -1272,7 +1273,7 @@ in `tests/test36.c`.
 Built-in hash functions
 ~~~~~~~~~~~~~~~~~~~~~~~
 Internally, a hash function transforms a key into a bucket number.  You don't
-have to take any action to use the default hash function, currently Jenkin's.
+have to take any action to use the default hash function, currently Jenkins.
 
 Some programs may benefit from using another of the built-in hash functions.
 There is a simple analysis utility included with uthash to help you determine
@@ -1529,6 +1530,31 @@ inhibited' flag remains in effect as long as the hash has items in it.
 Inhibited expansion may cause `HASH_FIND` to exhibit worse than constant-time
 performance.
 
+Diagnostic hooks
+^^^^^^^^^^^^^^^^
+
+There are two "notification" hooks which get executed if uthash is
+expanding buckets, or setting the 'bucket expansion inhibited' flag.
+There is no need for the application to set these hooks or take action in
+response to these events. They are mainly for diagnostic purposes.
+Normally both of these hooks are undefined and thus compile away to nothing.
+
+The `uthash_expand_fyi` hook can be defined to execute code whenever
+uthash performs a bucket expansion.
+
+----------------------------------------------------------------------------
+#undef uthash_expand_fyi
+#define uthash_expand_fyi(tbl) printf("expanded to %u buckets\n", tbl->num_buckets)
+----------------------------------------------------------------------------
+
+The `uthash_noexpand_fyi` hook can be defined to execute code whenever
+uthash sets the 'bucket expansion inhibited' flag.
+
+----------------------------------------------------------------------------
+#undef uthash_noexpand_fyi
+#define uthash_noexpand_fyi(tbl) printf("warning: bucket expansion inhibited\n")
+----------------------------------------------------------------------------
+
 Hooks
 ~~~~~
 You don't need to use these hooks -- they are only here if you want to modify
@@ -1543,8 +1569,8 @@ example, by passing `-Duthash_malloc=my_malloc` on the command line.
 
 Specifying alternate memory management functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-By default this hash implementation uses `malloc` and `free` to manage memory.
-If your application uses its own custom allocator, this hash can use them too.
+By default, uthash uses `malloc` and `free` to manage memory.
+If your application uses its own custom allocator, uthash can use them too.
 
 ----------------------------------------------------------------------------
 #include "uthash.h"
@@ -1622,35 +1648,7 @@ will be `NULL`.
 
 Allocation failure is possible only when adding elements to the hash table
 (including the `ADD`, `REPLACE`, and `SELECT` operations).
-`uthash_free` never fails.
-
-Internal events
-^^^^^^^^^^^^^^^
-There is no need for the application to set these hooks or take action in
-response to these events. They are mainly for diagnostic purposes.
-
-These two hooks are "notification" hooks which get executed if uthash is
-expanding buckets, or setting the 'bucket expansion inhibited' flag. Normally
-both of these hooks are undefined and thus compile away to nothing.
-
-Expansion
-+++++++++
-There is a hook for the bucket expansion event.
-
-----------------------------------------------------------------------------
-#undef uthash_expand_fyi
-#define uthash_expand_fyi(tbl) printf("expanded to %d buckets\n", tbl->num_buckets)
-----------------------------------------------------------------------------
-
-Expansion-inhibition
-++++++++++++++++++++
-This hook can be defined to code to execute in the event that uthash decides to
-set the 'bucket expansion inhibited' flag.
-
-----------------------------------------------------------------------------
-#undef uthash_noexpand_fyi
-#define uthash_noexpand_fyi printf("warning: bucket expansion inhibited\n")
-----------------------------------------------------------------------------
+`uthash_free` is not allowed to fail.
 
 Debug mode
 ~~~~~~~~~~
@@ -1776,21 +1774,21 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 |===============================================================================
 |macro                               | arguments
 |HASH_ADD                            | (hh_name, head, keyfield_name, key_len, item_ptr)
-|HASH_ADD_BYHASHVALUE                | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr)
+|HASH_ADD_BYHASHVALUE                | (hh_name, head, keyfield_name, key_len, hashv, item_ptr)
 |HASH_ADD_KEYPTR                     | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_ADD_KEYPTR_BYHASHVALUE         | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_ADD_KEYPTR_BYHASHVALUE         | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
 |HASH_ADD_INORDER                    | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
-|HASH_ADD_BYHASHVALUE_INORDER        | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)
+|HASH_ADD_BYHASHVALUE_INORDER        | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, cmp)
 |HASH_ADD_KEYPTR_INORDER             | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
-|HASH_ADD_KEYPTR_BYHASHVALUE_INORDER | (hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)
+|HASH_ADD_KEYPTR_BYHASHVALUE_INORDER | (hh_name, head, key_ptr, key_len, hashv, item_ptr, cmp)
 |HASH_REPLACE                        | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_BYHASHVALUE            | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_BYHASHVALUE            | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr)
 |HASH_REPLACE_INORDER                | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr, cmp)
-|HASH_REPLACE_BYHASHVALUE_INORDER    | (hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr, cmp)
+|HASH_REPLACE_BYHASHVALUE_INORDER    | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr, cmp)
 |HASH_FIND                           | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_FIND_BYHASHVALUE               | (hh_name, head, key_ptr, key_len, key_hash, item_ptr)
+|HASH_FIND_BYHASHVALUE               | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
 |HASH_DELETE                         | (hh_name, head, item_ptr)
-|HASH_VALUE                          | (key_ptr, key_len, key_hash)
+|HASH_VALUE                          | (key_ptr, key_len, hashv)
 |HASH_SRT                            | (hh_name, head, cmp)
 |HASH_CNT                            | (hh_name, head)
 |HASH_CLEAR                          | (hh_name, head)
@@ -1825,12 +1823,12 @@ keyfield_name::
 key_len::
     the length of the key field in bytes. E.g. for an integer key, this is
     `sizeof(int)`, while for a string key it's `strlen(key)`. (For a
-    multi-field key, see the notes in this guide on calculating key length).
+    multi-field key, see <<multifield_note,this note>>.)
 key_ptr::
     for `HASH_FIND`, this is a pointer to the key to look up in the hash
     (since it's a pointer, you can't directly pass a literal value here). For
     `HASH_ADD_KEYPTR`, this is the address of the key of the item being added.
-key_hash::
+hashv::
     the hash value of the provided key. This is an input parameter for the
     `..._BYHASHVALUE` macros, and an output parameter for `HASH_VALUE`.
     Reusing a cached hash value can be a performance optimization if
@@ -1849,9 +1847,9 @@ cmp::
     items to compare) and returns an int specifying whether the first item
     should sort before, equal to, or after the second item (like `strcmp`).
 condition::
-    a function or macro which accepts a single argument-- a void pointer to a
-    structure, which needs to be cast to the appropriate structure type. The
-    function or macro should return (or evaluate to) a non-zero value if the
+    a function or macro which accepts a single argument (a void pointer to a
+    structure, which needs to be cast to the appropriate structure type). The
+    function or macro should evaluate to a non-zero value if the
     structure should be "selected" for addition to the destination hash.
 
 // vim: set tw=80 wm=2 syntax=asciidoc:
