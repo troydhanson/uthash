@@ -1075,8 +1075,8 @@ last parameter is a pointer to the structure being added.</p></div>
 <div class="content">
 <div class="title">Wait.. the field name is a parameter?</div>
 <div class="paragraph"><p>If you find it strange that <code>id</code>, which is the <em>name of a field</em> in the
-structure, can be passed as a parameter, welcome to the world of macros. Don&#8217;t
-worry- the C preprocessor expands this to valid C code.</p></div>
+structure, can be passed as a parameter&#8230; welcome to the world of macros. Don&#8217;t
+worry; the C preprocessor expands this to valid C code.</p></div>
 </div></div>
 <div class="sect3">
 <h4 id="_key_must_not_be_modified_while_in_use">Key must not be modified while in-use</h4>
@@ -1821,7 +1821,7 @@ requirement of each field. For example a structure containing a <code>char</code
 by an <code>int</code> will normally have 3 "wasted" bytes of padding after the char, in
 order to make the <code>int</code> field start on a multiple-of-4 address (4 is the length
 of the int).</p></div>
-<div class="sidebarblock">
+<div class="sidebarblock" id="multifield_note">
 <div class="content">
 <div class="title">Calculating the length of a multi-field key:</div>
 <div class="paragraph"><p>To determine the key length when using a multi-field key, you must include any
@@ -1924,7 +1924,7 @@ this include:</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
-each hash table may use an alternative key;
+each hash table may use a different key;
 </p>
 </li>
 <li>
@@ -1947,18 +1947,18 @@ which it might be added. You can name them anything. E.g.,</p></div>
 </div></div>
 </div>
 <div class="sect2">
-<h3 id="_items_with_alternative_keys">Items with alternative keys</h3>
+<h3 id="_items_with_multiple_keys">Items with multiple keys</h3>
 <div class="paragraph"><p>You might create a hash table keyed on an ID field, and another hash table keyed
 on username (if usernames are unique). You can add the same user structure to
 both hash tables (without duplication of the structure), allowing lookup of a
 user structure by their name or ID.  The way to achieve this is to have a
 separate <code>UT_hash_handle</code> for each hash to which the structure may be added.</p></div>
 <div class="listingblock">
-<div class="title">A structure with two alternative keys</div>
+<div class="title">A structure with two different keys</div>
 <div class="content">
 <pre><code>struct my_struct {
-    int id;                    /* usual key */
-    char username[10];         /* alternative key */
+    int id;                    /* first key */
+    char username[10];         /* second key */
     UT_hash_handle hh1;        /* handle for first hash table */
     UT_hash_handle hh2;        /* handle for second hash table */
 };</code></pre>
@@ -1986,12 +1986,12 @@ always used with the <code>users_by_name</code> hash table).</p></div>
     HASH_ADD(hh1, users_by_id, id, sizeof(int), s);
     HASH_ADD(hh2, users_by_name, username, strlen(s-&gt;username), s);
 
-    /* lookup user by ID in the "users_by_id" hash table */
+    /* find user by ID in the "users_by_id" hash table */
     i=1;
     HASH_FIND(hh1, users_by_id, &amp;i, sizeof(int), s);
     if (s) printf("found id %d: %s\n", i, s-&gt;username);
 
-    /* lookup user by username in the "users_by_name" hash table */
+    /* find user by username in the "users_by_name" hash table */
     name = "thanson";
     HASH_FIND(hh2, users_by_name, name, strlen(name), s);
     if (s) printf("found user %s: %d\n", name, s-&gt;id);</code></pre>
@@ -2033,7 +2033,7 @@ this fact can also be used advantageously to sort the <em>same items</em> in sev
 ways. This is based on the ability to store a structure in several hash tables.</p></div>
 <div class="paragraph"><p>Extending the previous example, suppose we have many users. We have added each
 user structure to the <code>users_by_id</code> hash table and the <code>users_by_name</code> hash table.
-(To reiterate, this is done without the need to have two copies of each structure).
+(To reiterate, this is done without the need to have two copies of each structure.)
 Now we can define two sort functions, then use <code>HASH_SRT</code>.</p></div>
 <div class="literalblock">
 <div class="content">
@@ -2170,7 +2170,7 @@ in <code>tests/test36.c</code>.</p></div>
 <div class="sect2">
 <h3 id="hash_functions">Built-in hash functions</h3>
 <div class="paragraph"><p>Internally, a hash function transforms a key into a bucket number.  You don&#8217;t
-have to take any action to use the default hash function, currently Jenkin&#8217;s.</p></div>
+have to take any action to use the default hash function, currently Jenkins.</p></div>
 <div class="paragraph"><p>Some programs may benefit from using another of the built-in hash functions.
 There is a simple analysis utility included with uthash to help you determine
 if another hash function will give you better performance.</p></div>
@@ -2580,6 +2580,28 @@ inhibited</em> flag remains in effect as long as the hash has items in it.
 Inhibited expansion may cause <code>HASH_FIND</code> to exhibit worse than constant-time
 performance.</p></div>
 </div>
+<div class="sect3">
+<h4 id="_diagnostic_hooks">Diagnostic hooks</h4>
+<div class="paragraph"><p>There are two "notification" hooks which get executed if uthash is
+expanding buckets, or setting the <em>bucket expansion inhibited</em> flag.
+There is no need for the application to set these hooks or take action in
+response to these events. They are mainly for diagnostic purposes.
+Normally both of these hooks are undefined and thus compile away to nothing.</p></div>
+<div class="paragraph"><p>The <code>uthash_expand_fyi</code> hook can be defined to execute code whenever
+uthash performs a bucket expansion.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef uthash_expand_fyi
+#define uthash_expand_fyi(tbl) printf("expanded to %u buckets\n", tbl-&gt;num_buckets)</code></pre>
+</div></div>
+<div class="paragraph"><p>The <code>uthash_noexpand_fyi</code> hook can be defined to execute code whenever
+uthash sets the <em>bucket expansion inhibited</em> flag.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef uthash_noexpand_fyi
+#define uthash_noexpand_fyi(tbl) printf("warning: bucket expansion inhibited\n")</code></pre>
+</div></div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_hooks">Hooks</h3>
@@ -2593,8 +2615,8 @@ after including <code>uthash.h</code>, or to define them before inclusion; for
 example, by passing <code>-Duthash_malloc=my_malloc</code> on the command line.</p></div>
 <div class="sect3">
 <h4 id="_specifying_alternate_memory_management_functions">Specifying alternate memory management functions</h4>
-<div class="paragraph"><p>By default this hash implementation uses <code>malloc</code> and <code>free</code> to manage memory.
-If your application uses its own custom allocator, this hash can use them too.</p></div>
+<div class="paragraph"><p>By default, uthash uses <code>malloc</code> and <code>free</code> to manage memory.
+If your application uses its own custom allocator, uthash can use them too.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>#include "uthash.h"
@@ -2666,34 +2688,7 @@ be of <code>void*</code> type and must be cast before using. In any case, <code>
 will be <code>NULL</code>.</p></div>
 <div class="paragraph"><p>Allocation failure is possible only when adding elements to the hash table
 (including the <code>ADD</code>, <code>REPLACE</code>, and <code>SELECT</code> operations).
-<code>uthash_free</code> never fails.</p></div>
-</div>
-<div class="sect3">
-<h4 id="_internal_events">Internal events</h4>
-<div class="paragraph"><p>There is no need for the application to set these hooks or take action in
-response to these events. They are mainly for diagnostic purposes.</p></div>
-<div class="paragraph"><p>These two hooks are "notification" hooks which get executed if uthash is
-expanding buckets, or setting the <em>bucket expansion inhibited</em> flag. Normally
-both of these hooks are undefined and thus compile away to nothing.</p></div>
-<div class="sect4">
-<h5 id="_expansion">Expansion</h5>
-<div class="paragraph"><p>There is a hook for the bucket expansion event.</p></div>
-<div class="listingblock">
-<div class="content">
-<pre><code>#undef uthash_expand_fyi
-#define uthash_expand_fyi(tbl) printf("expanded to %d buckets\n", tbl-&gt;num_buckets)</code></pre>
-</div></div>
-</div>
-<div class="sect4">
-<h5 id="_expansion_inhibition">Expansion-inhibition</h5>
-<div class="paragraph"><p>This hook can be defined to code to execute in the event that uthash decides to
-set the <em>bucket expansion inhibited</em> flag.</p></div>
-<div class="listingblock">
-<div class="content">
-<pre><code>#undef uthash_noexpand_fyi
-#define uthash_noexpand_fyi printf("warning: bucket expansion inhibited\n")</code></pre>
-</div></div>
-</div>
+<code>uthash_free</code> is not allowed to fail.</p></div>
 </div>
 </div>
 <div class="sect2">
@@ -2905,7 +2900,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_BYHASHVALUE</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, hashv, item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR</code></p></td>
@@ -2913,7 +2908,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BYHASHVALUE</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, hashv, item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_INORDER</code></p></td>
@@ -2921,7 +2916,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_BYHASHVALUE_INORDER</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, cmp)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, hashv, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_INORDER</code></p></td>
@@ -2929,7 +2924,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_ADD_KEYPTR_BYHASHVALUE_INORDER</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr, cmp)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, hashv, item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE</code></p></td>
@@ -2937,7 +2932,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BYHASHVALUE</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE_INORDER</code></p></td>
@@ -2945,7 +2940,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE_BYHASHVALUE_INORDER</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, key_hash, item_ptr, replaced_item_ptr, cmp)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr, cmp)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND</code></p></td>
@@ -2953,7 +2948,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_BYHASHVALUE</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, key_hash, item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(hh_name, head, key_ptr, key_len, hashv, item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_DELETE</code></p></td>
@@ -2961,7 +2956,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_VALUE</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(key_ptr, key_len, key_hash)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(key_ptr, key_len, hashv)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_SRT</code></p></td>
@@ -3042,7 +3037,7 @@ key_len
 <p>
     the length of the key field in bytes. E.g. for an integer key, this is
     <code>sizeof(int)</code>, while for a string key it&#8217;s <code>strlen(key)</code>. (For a
-    multi-field key, see the notes in this guide on calculating key length).
+    multi-field key, see <a href="#multifield_note">this note</a>.)
 </p>
 </dd>
 <dt class="hdlist1">
@@ -3056,7 +3051,7 @@ key_ptr
 </p>
 </dd>
 <dt class="hdlist1">
-key_hash
+hashv
 </dt>
 <dd>
 <p>
@@ -3102,9 +3097,9 @@ condition
 </dt>
 <dd>
 <p>
-    a function or macro which accepts a single argument-- a void pointer to a
-    structure, which needs to be cast to the appropriate structure type. The
-    function or macro should return (or evaluate to) a non-zero value if the
+    a function or macro which accepts a single argument (a void pointer to a
+    structure, which needs to be cast to the appropriate structure type). The
+    function or macro should evaluate to a non-zero value if the
     structure should be "selected" for addition to the destination hash.
 </p>
 </dd>
@@ -3118,7 +3113,7 @@ condition
 <div id="footer">
 <div id="footer-text">
 Version 2.0.2<br />
-Last updated 2018-05-09 22:24:48 PDT
+Last updated 2018-12-15 14:00:33 EST
 </div>
 </div>
 </body>
