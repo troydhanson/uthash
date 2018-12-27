@@ -788,6 +788,58 @@ asciidoc.install(2);
 </div>
 </div>
 <div class="sect1">
+<h2 id="_version_2_1_0_2018_12_20">Version 2.1.0 (2018-12-20)</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+silence some Clang static analysis warnings
+</p>
+</li>
+<li>
+<p>
+add LL_INSERT_INORDER and LL_LOWER_BOUND etc (thanks, Jeffrey Lovitz and Mattias Eriksson!)
+</p>
+</li>
+<li>
+<p>
+add uthash_bzero for platforms without &lt;string.h&gt;
+</p>
+</li>
+<li>
+<p>
+fix a missing HASH_BLOOM_ADD in HASH_SELECT (thanks, Pawel Veselov!)
+</p>
+</li>
+<li>
+<p>
+permit malloc failure to be recoverable via HASH_NONFATAL_OOM (thanks, Pawel Veselov!)
+</p>
+</li>
+<li>
+<p>
+avoid repeated calls to uthash_strlen in HASH_FIND_STR
+</p>
+</li>
+<li>
+<p>
+rename uthash_memcmp to HASH_KEYCMP, leaving the old name for compatibility
+</p>
+</li>
+<li>
+<p>
+add utstack.h
+</p>
+</li>
+<li>
+<p>
+remove libut
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_version_2_0_2_2017_03_02">Version 2.0.2 (2017-03-02)</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
@@ -831,6 +883,11 @@ by-hashvalue insertion macros HASH_ADD_BYHASHVALUE etc
 <li>
 <p>
 during key comparison, check hashvalue before doing a full memcmp
+</p>
+</li>
+<li>
+<p>
+add utringbuffer.h
 </p>
 </li>
 </ul></div>
@@ -1595,7 +1652,7 @@ Initial release
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-09 22:24:48 PDT
+Last updated 2018-12-20 20:33:53 EST
 </div>
 </div>
 </body>

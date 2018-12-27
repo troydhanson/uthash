@@ -769,8 +769,8 @@ asciidoc.install(2);
 <div id="header">
 <h1>uthash User Guide</h1>
 <span id="author">Troy D. Hanson, Arthur O'Dwyer</span><br />
-<span id="revnumber">version 2.0.2,</span>
-<span id="revdate">March 2017</span>
+<span id="revnumber">version 2.1.0,</span>
+<span id="revdate">December 2018</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -1843,6 +1843,9 @@ zero-filling it. This zeroes out any padding between the key fields. If we
 didn&#8217;t zero-fill the structure, this padding would contain random values.  The
 random values would lead to <code>HASH_FIND</code> failures; as two "identical" keys will
 appear to mismatch if there are any differences within their padding.</p></div>
+<div class="paragraph"><p>Alternatively, you can customize the global <a href="#hash_keycompare">key comparison function</a>
+and <a href="#hash_functions">key hashing function</a> to ignore the padding in your key.
+See <a href="#hash_keycompare">Specifying an alternate key comparison function</a>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="multilevel">Multi-level hash tables</h3>
@@ -2166,6 +2169,56 @@ the source hash remains unchanged under any use of <code>HASH_SELECT</code>. It 
 items to the destination hash selectively.</p></div>
 <div class="paragraph"><p>The two hash handles must differ. An example of using <code>HASH_SELECT</code> is included
 in <code>tests/test36.c</code>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="hash_keycompare">Specifying an alternate key comparison function</h3>
+<div class="paragraph"><p>When you call <code>HASH_FIND(hh, head, intfield, sizeof(int), out)</code>, uthash will
+first call <a href="#hash_functions"><code>HASH_FUNCTION</code></a><code>(intfield, sizeof(int), hashvalue)</code> to
+determine the bucket <code>b</code> in which to search, and then, for each element <code>elt</code>
+of bucket <code>b</code>, uthash will evaluate
+<code>elt-&gt;hh.hashv == hashvalue &amp;&amp; elt.hh.keylen == sizeof(int) &amp;&amp; HASH_KEYCMP(intfield, elt-&gt;hh.key, sizeof(int)) == 0</code>.
+<code>HASH_KEYCMP</code> should return <code>0</code> to indicate that <code>elt</code> is a match and should be
+returned, and any non-zero value to indicate that the search for a matching
+element should continue.</p></div>
+<div class="paragraph"><p>By default, uthash defines <code>HASH_KEYCMP</code> as an alias for <code>memcmp</code>. On platforms
+that do not provide <code>memcmp</code>, you can substitute your own implementation.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef HASH_KEYCMP
+#define HASH_KEYCMP(a,b,len) bcmp(a,b,len)</code></pre>
+</div></div>
+<div class="paragraph"><p>Another reason to substitute your own key comparison function is if your "key" is not
+trivially comparable. In this case you will also need to substitute your own <code>HASH_FUNCTION</code>.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>struct Key {
+    short s;
+    /* 2 bytes of padding */
+    float f;
+};
+/* do not compare the padding bytes; do not use memcmp on floats */
+unsigned key_hash(struct Key *s) { return s + (unsigned)f; }
+bool key_equal(struct Key *a, struct Key *b) { return a.s == b.s &amp;&amp; a.f == b.f; }
+
+#define HASH_FUNCTION(s,len,hashv) (hashv) = key_hash((struct Key *)s)
+#define HASH_KEYCMP(a,b,len) (!key_equal((struct Key *)a, (struct Key *)b))</code></pre>
+</div></div>
+<div class="paragraph"><p>Another reason to substitute your own key comparison function is to trade off
+correctness for raw speed. During its linear search of a bucket, uthash always
+compares the 32-bit <code>hashv</code> first, and calls <code>HASH_KEYCMP</code> only if the <code>hashv</code>
+compares equal. This means that <code>HASH_KEYCMP</code> is called at least once per
+successful find. Given a good hash function, we expect the <code>hashv</code> comparison to
+produce a "false positive" equality only once in four billion times. Therefore,
+we expect <code>HASH_KEYCMP</code> to produce <code>0</code> most of the time. If we expect many
+successful finds, and our application doesn&#8217;t mind the occasional false positive,
+we might substitute a no-op comparison function:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef HASH_KEYCMP
+#define HASH_KEYCMP(a,b,len) 0  /* occasionally wrong, but very fast */</code></pre>
+</div></div>
+<div class="paragraph"><p>Note: The global equality-comparison function <code>HASH_KEYCMP</code> has no relationship
+at all to the lessthan-comparison function passed as a parameter to <code>HASH_ADD_INORDER</code>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="hash_functions">Built-in hash functions</h3>
@@ -2637,16 +2690,12 @@ convenience on embedded platforms that manage their own memory.</p></div>
 <div class="sect3">
 <h4 id="_specifying_alternate_standard_library_functions">Specifying alternate standard library functions</h4>
 <div class="paragraph"><p>Uthash also uses <code>strlen</code> (in the <code>HASH_FIND_STR</code> convenience macro, for
-example), <code>memcmp</code> (as the method of comparing keys for equality), and <code>memset</code>
-(used only for zeroing memory). On platforms that do not provide these functions,
-you can substitute your own implementations.</p></div>
+example) and <code>memset</code> (used only for zeroing memory). On platforms that do not
+provide these functions, you can substitute your own implementations.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>#undef uthash_bzero
 #define uthash_bzero(a,len) my_bzero(a,len)
-
-#undef uthash_memcmp
-#define uthash_memcmp(a,b,len) my_memcmp(a,b,len)
 
 #undef uthash_strlen
 #define uthash_strlen(s) my_strlen(s)</code></pre>
@@ -3112,8 +3161,8 @@ condition
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.2<br />
-Last updated 2018-12-15 14:00:33 EST
+Version 2.1.0<br />
+Last updated 2018-12-20 20:33:53 EST
 </div>
 </div>
 </body>
