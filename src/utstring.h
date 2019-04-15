@@ -64,7 +64,7 @@ do {                                                       \
 do {                                                       \
   (s)->n = 0; (s)->i = 0; (s)->d = NULL;                   \
   utstring_reserve(s,100);                                 \
-  (s)->d[0] = '\0';                                        \
+  if ((s)->d) (s)->d[0] = '\0';                            \
 } while(0)
 
 #define utstring_done(s)                                   \
@@ -82,8 +82,8 @@ do {                                                       \
 #define utstring_new(s)                                    \
 do {                                                       \
    (s) = (UT_string*)malloc(sizeof(UT_string));            \
-   if (!(s)) oom();                                        \
-   utstring_init(s);                                       \
+   if ((s)) utstring_init(s);                              \
+   else oom();                                             \
 } while(0)
 
 #define utstring_renew(s)                                  \
