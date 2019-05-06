@@ -370,4 +370,12 @@ Notes
    For this reason, it's usually better to refer to an element by its integer
    'index' in code whose duration may include element insertion.
 
+6. To override the default out-of-memory handling behavior (which calls `exit(-1)`),
+   override the `utarray_oom` macro before including `utarray.h` or functions that use it.
+   For example,
+
+  #define utarray_oom() do { set_error_code(100); } while (0)
+  ...
+  #include "utarray.h"
+
 // vim: set nowrap syntax=asciidoc:
