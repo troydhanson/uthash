@@ -38,8 +38,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UTARRAY_UNUSED
 #endif
 
-#ifndef oom
-#define oom() exit(-1)
+#ifdef oom
+#error "The name of macro 'oom' has been changed to 'utarray_oom'. Please update your code."
+#define utarray_oom() oom()
+#endif
+
+#ifndef utarray_oom
+#define utarray_oom() exit(-1)
 #endif
 
 typedef void (ctor_f)(void *dst, const void *src);
@@ -78,7 +83,9 @@ typedef struct {
 
 #define utarray_new(a,_icd) do {                                              \
   (a) = (UT_array*)malloc(sizeof(UT_array));                                  \
-  if ((a) == NULL) oom();                                                     \
+  if ((a) == NULL) {                                                          \
+    utarray_oom();                                                            \
+  }                                                                           \
   utarray_init(a,_icd);                                                       \
 } while(0)
 
@@ -92,7 +99,9 @@ typedef struct {
     char *utarray_tmp;                                                        \
     while (((a)->i+(by)) > (a)->n) { (a)->n = ((a)->n ? (2*(a)->n) : 8); }    \
     utarray_tmp=(char*)realloc((a)->d, (a)->n*(a)->icd.sz);                   \
-    if (utarray_tmp == NULL) oom();                                           \
+    if (utarray_tmp == NULL) {                                                \
+      utarray_oom();                                                          \
+    }                                                                         \
     (a)->d=utarray_tmp;                                                       \
   }                                                                           \
 } while(0)

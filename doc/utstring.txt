@@ -225,4 +225,15 @@ Note that the internal `_utstring_find` has the length of the UT_string as its
 second argument, rather than the start position. You can emulate the position
 parameter by adding to the string start address and subtracting from its length.
 
+Notes
+~~~~~
+
+1. To override the default out-of-memory handling behavior (which calls `exit(-1)`),
+   override the `utstring_oom()` macro before including `utstring.h`.
+   For example,
+
+  #define utstring_oom() do { longjmp(error_handling_location); } while (0)
+  ...
+  #include "utstring.h"
+
 // vim: set nowrap syntax=asciidoc:

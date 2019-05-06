@@ -345,9 +345,11 @@ Notes
    while `utarray_init` and `utarray_done` can be used if the UT_array is already
    allocated and just needs to be initialized or have its internal resources
    freed.
-2. `utarray_reserve` takes the "delta" of elements to reserve (not the total
-   desired capacity of the array-- this differs from the C++ STL "reserve" notion)
-3. `utarray_sort` expects a comparison function having the usual `strcmp` -like
+
+2. `utarray_reserve` takes the "delta" of elements to reserve, not the total
+   desired capacity of the array. This differs from the C++ STL "reserve" notion.
+
+3. `utarray_sort` expects a comparison function having the usual `strcmp`-like
    convention where it accepts two elements (a and b) and returns a negative
    value if a precedes b, 0 if a and b sort equally, and positive if b precedes a.
    This is an example of a comparison function:
@@ -369,5 +371,13 @@ Notes
    memory management may need to `realloc` the element storage to a new address.
    For this reason, it's usually better to refer to an element by its integer
    'index' in code whose duration may include element insertion.
+
+6. To override the default out-of-memory handling behavior (which calls `exit(-1)`),
+   override the `utarray_oom()` macro before including `utarray.h`.
+   For example,
+
+  #define utarray_oom() do { longjmp(error_handling_location); } while (0)
+  ...
+  #include "utarray.h"
 
 // vim: set nowrap syntax=asciidoc:
