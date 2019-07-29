@@ -473,6 +473,7 @@ do {                                                                            
       (head)->hh.tbl->tail = HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev);     \
     }                                                                            \
     if (_hd_hh_del->prev != NULL) {                                              \
+      assert(&(head)->hh != _hd_hh_del);                                         \
       HH_FROM_ELMT((head)->hh.tbl, _hd_hh_del->prev)->next = _hd_hh_del->next;   \
     } else {                                                                     \
       DECLTYPE_ASSIGN(head, _hd_hh_del->next);                                   \
