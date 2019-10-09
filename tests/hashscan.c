@@ -28,8 +28,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <inttypes.h>
+#include <sys/types.h>  /* on OSX, must come before ptrace.h */
 #include <sys/ptrace.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <assert.h>
@@ -37,6 +37,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef __FreeBSD__
 #include <sys/param.h>  /* MAXPATHLEN */
 #include <vm/vm.h>      /* VM_PROT_* flags */
+#endif
+
+#if defined(PT_ATTACH) && !defined(PTRACE_ATTACH)
+#define PTRACE_ATTACH PT_ATTACH
+#define PTRACE_DETACH PT_DETACH
 #endif
 
 /* need this defined so offsetof can give us bloom offsets in UT_hash_table */
@@ -215,11 +220,11 @@ static void found(int fd, char* peer_sig, pid_t pid)
 
     /* got the table. how about the buckets */
     peer_bkts = (char*)tbl->buckets;
-    vvv("reading buckets at peer %p\n", (void*)peer_bkts);
+    vvv("reading %u buckets at peer %p\n", tbl->num_buckets, (void*)peer_bkts);
     bkts = (UT_hash_bucket*)malloc(sizeof(UT_hash_bucket)*tbl->num_buckets);
     if (bkts == NULL) {
         fprintf(stderr, "out of memory\n");
-        exit(-1);
+        goto done;
     }
 #ifdef __FreeBSD__
     if (read_mem(bkts, pid, (void *)peer_bkts, sizeof(UT_hash_bucket)*tbl->num_buckets) != 0) {
@@ -575,7 +580,7 @@ static int scan(pid_t pid)
 
     /* attach to the target process and wait for it to suspend */
     vv("attaching to peer\n");
-    if (ptrace(PTRACE_ATTACH,pid,NULL,NULL) == -1) {
+    if (ptrace(PTRACE_ATTACH, pid, NULL, 0) == -1) {
         fprintf(stderr,"failed to attach to %u: %s\n", (unsigned)pid, strerror(errno));
         exit(-1);
     }
@@ -637,7 +642,7 @@ static int scan(pid_t pid)
 
 die:
     vv("detaching and resuming peer\n");
-    if (ptrace(PTRACE_DETACH, pid, NULL, NULL) == -1) {
+    if (ptrace(PTRACE_DETACH, pid, NULL, 0) == -1) {
         fprintf(stderr,"failed to detach from %u: %s\n", (unsigned)pid, strerror(errno));
     }
     return 0;
