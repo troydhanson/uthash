@@ -5,7 +5,7 @@ echo "MinGW test script starting"
 for f in test*.exe
 do
   t=`echo $f | sed s/.exe//`
-  `$f > $t.out`
+  "./$f" > "$t.out"
   diff -qb "$t.out" "$t.ans"
   if [ $? -eq 1 ]
   then
