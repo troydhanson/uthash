@@ -144,7 +144,7 @@ typedef unsigned char uint8_t;
 /* calculate the element whose hash handle address is hhp */
 #define ELMT_FROM_HH(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
 /* calculate the hash handle from element address elp */
-#define HH_FROM_ELMT(tbl,elp) ((UT_hash_handle *)(((char*)(elp)) + ((tbl)->hho)))
+#define HH_FROM_ELMT(tbl,elp) ((UT_hash_handle*)(void*)(((char*)(elp)) + ((tbl)->hho)))
 
 #define HASH_ROLLBACK_BKT(hh, head, itemptrhh)                                   \
 do {                                                                             \
@@ -1003,7 +1003,7 @@ do {                                                                            
         _elt = ELMT_FROM_HH((src)->hh_src.tbl, _src_hh);                         \
         if (cond(_elt)) {                                                        \
           IF_HASH_NONFATAL_OOM( int _hs_oomed = 0; )                             \
-          _dst_hh = (UT_hash_handle*)(((char*)_elt) + _dst_hho);                 \
+          _dst_hh = (UT_hash_handle*)(void*)(((char*)_elt) + _dst_hho);          \
           _dst_hh->key = _src_hh->key;                                           \
           _dst_hh->keylen = _src_hh->keylen;                                     \
           _dst_hh->hashv = _src_hh->hashv;                                       \

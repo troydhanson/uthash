@@ -12,8 +12,8 @@ struct item {
 
 int sort_func(const struct item *a, const struct item *b)
 {
-    int va = *(int*)a->sort_field;
-    int vb = *(int*)b->sort_field;
+    int va = *(int*)(void*)a->sort_field;
+    int vb = *(int*)(void*)b->sort_field;
     return (va < vb) ? -1 : (va > vb);
 }
 
@@ -33,7 +33,7 @@ int main()
 
         p->sort_field_len = sizeof(int);
         p->sort_field = (unsigned char *)malloc(p->sort_field_len);
-        *(int*)p->sort_field = counter++;
+        *(int*)(void*)p->sort_field = counter++;
 
         HASH_ADD_KEYPTR_INORDER(hh, list, p->sort_field, p->sort_field_len, p, sort_func);
     }
@@ -41,7 +41,7 @@ int main()
     printf("filling in is ok\n");
 
     HASH_ITER(hh, list, p, tmp) {
-        total += *(int*)p->sort_field;
+        total += *(int*)(void*)p->sort_field;
         HASH_DEL(list, p);
         free(p->sort_field);
         free(p);
