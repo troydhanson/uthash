@@ -34,9 +34,6 @@ endif
 TEST_TARGET=run_tests
 TESTS=./do_tests
 
-# These flags are required in order to build with -DHASH_FUNCTION=HASH_MUR.
-MUR_CFLAGS = -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing
-
 # detect Cygwin
 ifneq ($(strip $(shell $(CC) -v 2>&1 |grep "cygwin")),)
   TESTS=./do_tests.cygwin
@@ -80,11 +77,9 @@ thorough:
 	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic'
 	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
 	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
-	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing -DHASH_FUNCTION=HASH_MUR'
 	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic'
 	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
 	$(MAKE) clean && CC=$(CXX) $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
-	$(MAKE) clean && CC=$(CXX) $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_USING_NO_STRICT_ALIASING -fno-strict-aliasing -DHASH_FUNCTION=HASH_MUR'
 
 example: example.c $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
@@ -94,7 +89,7 @@ $(PROGS) $(UTILS) : $(HASHDIR)/uthash.h
 	@$(MKGITIGN)
 
 hashscan : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
 sleep_test : $(HASHDIR)/uthash.h
@@ -108,7 +103,6 @@ keystat : $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_OAT $(LDFLAGS) -o keystat.OAT keystat.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SAX $(LDFLAGS) -o keystat.SAX keystat.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SFH $(LDFLAGS) -o keystat.SFH keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(MUR_CFLAGS) -DHASH_FUNCTION=HASH_MUR $(LDFLAGS) -o keystat.MUR keystat.c
 
 run_tests: $(PROGS)
 	perl $(TESTS)

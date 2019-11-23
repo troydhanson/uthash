@@ -1,90 +1,80 @@
-#include <stdio.h>
+
+#include <assert.h>
 #include <stdlib.h>
-#include <inttypes.h>
+
+#define HASH_FUNCTION(s, len, hashv) (hashv) = TrivialHash((const char *)s, len)
 #include "uthash.h"
 
-#define MUR_PLUS0_ALIGNED(p) (((unsigned long)p & 3UL) == 0UL)
-#define MUR_PLUS1_ALIGNED(p) (((unsigned long)p & 3UL) == 1UL)
-#define MUR_PLUS2_ALIGNED(p) (((unsigned long)p & 3UL) == 2UL)
-#define MUR_PLUS3_ALIGNED(p) (((unsigned long)p & 3UL) == 3UL)
-
-#define yn(rc) ((rc!=0U)?"y":"n")
-int main(int argc,char*argv[])
+unsigned int TrivialHash(const char *s, size_t len)
 {
-    unsigned rc;
-    char *c = (char *)malloc(8UL);
-    if (c == NULL) {
-        exit(-1);
+    unsigned int h = 0;
+    int i;
+    for (i=0; i < len; ++i) {
+        h += (unsigned char)s[i];
     }
-    *(c+0) = 0x00;
-    unsigned *al = (unsigned*)(c+0);
-    *(c+1) = 0x01;
-    unsigned *u1 = (unsigned*)(c+1);
-    *(c+2) = 0x02;
-    unsigned *u2 = (unsigned*)(c+2);
-    *(c+3) = 0x03;
-    unsigned *u3 = (unsigned*)(c+3);
-    *(c+4) = 0x04;
-    *(c+5) = 0x05;
-    *(c+6) = 0x06;
-    *(c+7) = 0x07;
+    return h;
+}
 
-    /* ---------------------------------------- */
-    /* test whether alignment is detected properly */
+struct test_t {
+    int a;
+    int b;
+    UT_hash_handle hh;
+};
 
-    rc = MUR_PLUS0_ALIGNED(al);
-    printf("al aligned (y): %s\n", yn(rc));
-    rc = MUR_PLUS0_ALIGNED(u1);
-    printf("u1 aligned (n): %s\n", yn(rc));
-    rc = MUR_PLUS0_ALIGNED(u2);
-    printf("u2 aligned (n): %s\n", yn(rc));
-    rc = MUR_PLUS0_ALIGNED(u3);
-    printf("u3 aligned (n): %s\n", yn(rc));
-    printf("\n");
+struct test_t *make_test(int value)
+{
+    struct test_t *test = (struct test_t *)malloc(sizeof *test);
+    assert(test != NULL);
+    test->a = value;
+    return test;
+}
 
-    rc = MUR_PLUS1_ALIGNED(al);
-    printf("al plus1 (n): %s\n", yn(rc));
-    rc = MUR_PLUS1_ALIGNED(u1);
-    printf("u1 plus1 (y): %s\n", yn(rc));
-    rc = MUR_PLUS1_ALIGNED(u2);
-    printf("u2 plus1 (n): %s\n", yn(rc));
-    rc = MUR_PLUS1_ALIGNED(u3);
-    printf("u3 plus1 (n): %s\n", yn(rc));
-    printf("\n");
+int main()
+{
+    struct test_t *tests = NULL;
+    struct test_t *test = NULL;
+    int x;
+    unsigned int h;
 
-    rc = MUR_PLUS2_ALIGNED(al);
-    printf("al plus2 (n): %s\n", yn(rc));
-    rc = MUR_PLUS2_ALIGNED(u1);
-    printf("u1 plus2 (n): %s\n", yn(rc));
-    rc = MUR_PLUS2_ALIGNED(u2);
-    printf("u2 plus2 (y): %s\n", yn(rc));
-    rc = MUR_PLUS2_ALIGNED(u3);
-    printf("u3 plus2 (n): %s\n", yn(rc));
-    printf("\n");
+    x = 0x0042;
+    HASH_VALUE(&x, sizeof x, h);
+    assert(h == 0x42);
 
-    rc = MUR_PLUS3_ALIGNED(al);
-    printf("al plus3 (n): %s\n", yn(rc));
-    rc = MUR_PLUS3_ALIGNED(u1);
-    printf("u1 plus3 (n): %s\n", yn(rc));
-    rc = MUR_PLUS3_ALIGNED(u2);
-    printf("u2 plus3 (n): %s\n", yn(rc));
-    rc = MUR_PLUS3_ALIGNED(u3);
-    printf("u3 plus3 (y): %s\n", yn(rc));
-    printf("\n");
+    x = 0x4002;
+    HASH_VALUE(&x, sizeof x, h);
+    assert(h == 0x42);
 
-    /* ---------------------------------------- */
-    /* test careful reassembly of an unaligned integer */
-#if 0 /* commented out since result is endian dependent */
-    rc = MUR_GETBLOCK(al,0);
-    printf("%x\n", rc);
-    rc = MUR_GETBLOCK(u1,0);
-    printf("%x\n", rc);
-    rc = MUR_GETBLOCK(u2,0);
-    printf("%x\n", rc);
-    rc = MUR_GETBLOCK(u3,0);
-    printf("%x\n", rc);
-#endif
+    test = make_test(0x0042);
+    HASH_ADD_INT(tests, a, test);
+    test = make_test(0x4002);
+    HASH_ADD_INT(tests, a, test);
 
-    free(c);
-    return 0;
+    x = 0x4002;
+    test = NULL;
+    HASH_FIND_BYHASHVALUE(hh, tests, &x, sizeof x, 0x42, test);
+    assert(test != NULL);
+    assert(test->a == 0x4002);
+
+    x = 0x0042;
+    test = NULL;
+    HASH_FIND_BYHASHVALUE(hh, tests, &x, sizeof x, 0x42, test);
+    assert(test != NULL);
+    assert(test->a == 0x0042);
+
+    x = 0x4002;
+    test = NULL;
+    HASH_FIND_BYHASHVALUE(hh, tests, &x, sizeof x, 0x43, test);
+    assert(test == NULL);
+
+    x = 0x0042;
+    test = NULL;
+    HASH_FIND_BYHASHVALUE(hh, tests, &x, sizeof x, 0x43, test);
+    assert(test == NULL);
+
+    x = 0x4003;
+    test = NULL;
+    HASH_FIND_BYHASHVALUE(hh, tests, &x, sizeof x, 0x42, test);
+    assert(test == NULL);
+
+    HASH_CLEAR(hh, tests);
 }

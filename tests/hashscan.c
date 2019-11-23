@@ -76,9 +76,8 @@ int getkeys=0;
 #define SAX 4
 #define FNV 5
 #define OAT 6
-#define MUR 7
-#define NUM_HASH_FUNCS 8 /* includes id 0, the non-function */
-const char *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT","MUR"};
+#define NUM_HASH_FUNCS 7 /* includes id 0, the non-function */
+const char *hash_fcns[] = {"???","JEN","BER","SFH","SAX","FNV","OAT"};
 
 /* given a peer key/len/hashv, reverse engineer its hash function */
 static int infer_hash_function(char *key, size_t keylen, uint32_t hashv)
@@ -108,10 +107,6 @@ static int infer_hash_function(char *key, size_t keylen, uint32_t hashv)
     HASH_OAT(key,keylen,ohashv);
     if (ohashv == hashv) {
         return OAT;
-    }
-    HASH_MUR(key,keylen,ohashv);
-    if (ohashv == hashv) {
-        return MUR;
     }
     return 0;
 }

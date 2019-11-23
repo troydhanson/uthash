@@ -1354,16 +1354,7 @@ below. E.g.,
 |OAT    |   One-at-a-time
 |FNV    |   Fowler/Noll/Vo
 |SFH    |   Paul Hsieh
-|MUR    |   MurmurHash v3 (see note)
 |===============================================================================
-
-[NOTE]
-.MurmurHash
-================================================================================
-A special symbol must be defined if you intend to use MurmurHash. To use it, add
-`-DHASH_USING_NO_STRICT_ALIASING` to your `CFLAGS`. And, if you are using
-the gcc compiler with optimization, add `-fno-strict-aliasing` to your `CFLAGS`.
-================================================================================
 
 Which hash function is best?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
