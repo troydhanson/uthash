@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <stdio.h>
+#include <stddef.h>   /* size_t, NULL */
 #include "utstack.h"
 
 typedef struct el {
