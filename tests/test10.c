@@ -47,5 +47,8 @@ int main()
     HASH_FIND(alth,altusers,&i,sizeof(int),tmp);
     printf("%d %s in alth\n", i, (tmp != NULL) ? "found" : "not found");
 
+    HASH_CLEAR(hh, users);
+    HASH_CLEAR(alth, altusers);
+
     return 0;
 }
