@@ -8,7 +8,7 @@
 unsigned int TrivialHash(const char *s, size_t len)
 {
     unsigned int h = 0;
-    int i;
+    size_t i;
     for (i=0; i < len; ++i) {
         h += (unsigned char)s[i];
     }
