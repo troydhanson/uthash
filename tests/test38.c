@@ -7,7 +7,7 @@ struct test_t {
     UT_hash_handle hh;
 };
 
-int main(void)
+int main()
 {
     struct test_t *tests=NULL, *test;
     int a, b;

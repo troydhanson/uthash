@@ -6,7 +6,7 @@ typedef struct el {
     struct el *Next, *Prev;
 } el;
 
-int main(int argc, char *argv[])
+int main()
 {
     int i;
     el els[10], *e;

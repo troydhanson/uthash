@@ -17,7 +17,7 @@ static int order_asc(el *a, el *b)
     return -order_desc(a, b);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     int i;
     el *head = NULL;

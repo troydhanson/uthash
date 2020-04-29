@@ -51,7 +51,7 @@ static example_user_t * init_user(int need_malloc_cnt) {
     return user;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
 
 #define init(a) do { \

@@ -98,7 +98,7 @@ out:
 	pthread_exit(NULL);
 }
 
-int main(void)
+int main()
 {
 	int rv;
 	struct foo_cache *cache = NULL;

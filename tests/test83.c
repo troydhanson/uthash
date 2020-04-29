@@ -8,7 +8,7 @@ typedef struct person_t {
     UT_hash_handle hh;
 } person_t;
 
-int main(int argc, char*argv[])
+int main()
 {
     person_t *people=NULL, *person, *new_person, *tmp;
     const char **name;

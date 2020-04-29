@@ -10,7 +10,7 @@ typedef struct el {
     struct el *next, *prev;
 } el;
 
-int main(int argc, char *argv[])
+int main()
 {
     el *name, *tmp;
     el *head = NULL;

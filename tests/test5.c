@@ -9,7 +9,7 @@ typedef struct example_user_t {
     UT_hash_handle alth;
 } example_user_t;
 
-int main(int argc,char *argv[])
+int main()
 {
     int i,j;
     example_user_t *user, *tmp, *users=NULL, *altusers=NULL;

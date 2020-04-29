@@ -29,7 +29,7 @@ static int descending_sort(void *_a, void *_b)
     return (a->id < b->id) ? 1 : -1;
 }
 
-int main(int argc,char *argv[])
+int main()
 {
     int i;
     example_user_t *user, *users=NULL, *altusers=NULL;

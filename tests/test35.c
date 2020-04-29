@@ -8,7 +8,7 @@ typedef struct elt {
     UT_hash_handle hh;
 } elt;
 
-int main(int argc,char *argv[])
+int main()
 {
     int i;
     elt *head = NULL;

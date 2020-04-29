@@ -17,7 +17,7 @@ struct my_event {
 };
 
 
-int main(int argc, char *argv[])
+int main()
 {
     struct my_event *e, ev, *events = NULL;
     unsigned keylen;

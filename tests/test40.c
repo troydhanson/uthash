@@ -10,7 +10,7 @@ struct my_struct {
 };
 
 
-int main(int argc, char *argv[])
+int main()
 {
     const char **n, *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;

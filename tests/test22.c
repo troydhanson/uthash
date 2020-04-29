@@ -18,7 +18,7 @@ typedef struct {
     int text[];
 } lookup_key_t;
 
-int main(int argc, char *argv[])
+int main()
 {
     unsigned keylen;
     msg_t *msg, *tmp, *msgs = NULL;

@@ -22,7 +22,7 @@ static int idcmp(void *_a, void *_b)
     return (a->id - b->id);
 }
 
-int main(int argc,char *argv[])
+int main()
 {
     int i;
     example_user_t *user, *users=NULL, *ausers=NULL;

@@ -77,7 +77,7 @@ void sort_by_id()
     HASH_SORT(users, id_sort);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     char in[10];
     int id=1, running=1;
