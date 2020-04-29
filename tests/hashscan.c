@@ -172,7 +172,8 @@ static void found(int fd, char* peer_sig, pid_t pid)
     UT_hash_handle hh;
     size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
     char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
-         *peer_bloombv, *peer_bkts, *peer_key, *peer_hh, *key=NULL;
+         *peer_bloombv, *peer_bkts, *peer_hh, *key=NULL;
+    const char *peer_key;
     const char *hash_fcn = NULL;
     unsigned char *bloombv=NULL;
     static int fileno=0;
@@ -255,7 +256,7 @@ static void found(int fd, char* peer_sig, pid_t pid)
                 goto done;
             }
             peer_hh = (char*)hh.hh_next;
-            peer_key = (char*)(hh.key);
+            peer_key = (const char*)(hh.key);
             /* malloc space to read the key, and read it */
             if ( (key = (char*)malloc(sizeof(hh.keylen))) == NULL) {
                 fprintf(stderr, "out of memory\n");
