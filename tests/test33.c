@@ -17,7 +17,7 @@ static int namecmp(void *_a, void *_b)
     return strcmp(a->bname,b->bname);
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
     el *name, *tmp;
     el *head = NULL;

@@ -17,7 +17,7 @@ static void pr(hs_t **hdpp)
     }
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
 
     hs_t *hs_head=NULL, *tmp, *replaced=NULL;

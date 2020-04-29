@@ -34,6 +34,7 @@ static void *alt_malloc(size_t sz)
 }
 
 static void alt_fatal(char const * s) {
+    (void)s;
     is_fatal = 1;
     longjmp(j_buf, 1);
 }
@@ -51,7 +52,7 @@ static example_user_t * init_user(int need_malloc_cnt) {
     return user;
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
 
 #define init(a) do { \

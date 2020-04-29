@@ -14,7 +14,7 @@ typedef struct name_rec {
     UT_hash_handle hh;
 } name_rec;
 
-int main(int argc,char *argv[])
+int main(void)
 {
     name_rec *name, *names=NULL;
     char linebuf[BUFLEN];

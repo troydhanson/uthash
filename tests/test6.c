@@ -78,7 +78,7 @@ static void real_free(void *p)
 #define memcmp ..fail_to_compile..
 #define strlen ..fail_to_compile..
 
-int main(int argc,char *argv[])
+int main(void)
 {
     int i;
     example_user_t *user, *tmp, *users=NULL;

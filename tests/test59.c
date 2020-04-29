@@ -11,7 +11,7 @@ typedef struct item {
     UT_hash_handle hh;
 } item_t;
 
-int main(int argc, char *argvp[])
+int main(void)
 {
     item_t *item1, *item2, *tmp1, *tmp2;
     item_t *items=NULL;

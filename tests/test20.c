@@ -9,7 +9,7 @@ struct my_struct {
     UT_hash_handle hh;
 };
 
-int main(int argc, char *argv[])
+int main(void)
 {
     struct my_struct *s, *t, *bins = NULL;
     char binary[5] = {'\3','\1','\4','\1','\6'};

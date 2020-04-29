@@ -11,7 +11,7 @@ static int eltcmp(el *a, el *b)
     return a->id - b->id;
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
     int i;
     el *head = NULL;

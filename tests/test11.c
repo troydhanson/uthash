@@ -25,7 +25,7 @@ static int namecmp(void *_a, void *_b)
     return strcmp(a->boy_name,b->boy_name);
 }
 
-int main(int argc,char *argv[])
+int main(void)
 {
     name_rec *name, *names=NULL;
     char linebuf[BUFLEN];

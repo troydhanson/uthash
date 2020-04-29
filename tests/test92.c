@@ -56,7 +56,7 @@ static void complain(int index, example_user_t *users, example_user_t *user)
     }
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
     example_user_t *users = NULL;
     example_user_t *user = (example_user_t*)malloc(sizeof(example_user_t));

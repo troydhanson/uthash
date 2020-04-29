@@ -11,7 +11,7 @@ static int order_desc(el *a, el *b)
     return (a->score > b->score) ? -1 : (a->score < b->score);
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
     int i;
     el *head = NULL;

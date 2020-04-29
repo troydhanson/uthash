@@ -13,7 +13,7 @@ typedef struct {
     UT_hash_handle hh;
 } record_t;
 
-int main(int argc, char *argv[])
+int main(void)
 {
     record_t l, *p, *r, *tmp, *records = NULL;
 
