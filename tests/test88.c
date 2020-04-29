@@ -19,7 +19,7 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
-static int alt_memcmp(void *a, void *b, size_t n)
+static int alt_memcmp(const void *a, const void *b, size_t n)
 {
     puts("alt_memcmp");
     return memcmp(a,b,n);

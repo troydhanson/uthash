@@ -42,7 +42,7 @@ static void alt_free(void *ptr, size_t sz)
 }
 
 static int alt_memcmp_count = 0;
-static int alt_memcmp(void *a, void *b, size_t n)
+static int alt_memcmp(const void *a, const void *b, size_t n)
 {
     ++alt_memcmp_count;
     return memcmp(a,b,n);
