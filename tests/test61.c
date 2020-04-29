@@ -3,8 +3,8 @@
 
 static int strsort(const void *_a, const void *_b)
 {
-    const char *a = *(const char**)_a;
-    const char *b = *(const char**)_b;
+    const char *a = *(const char* const *)_a;
+    const char *b = *(const char* const *)_b;
     return strcmp(a,b);
 }
 

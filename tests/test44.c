@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "utarray.h"
 
-static int reverse(const void *a,const void*b)
+static int reverse(const void *a, const void *b)
 {
-    int _a = *(int*)a;
-    int _b = *(int*)b;
+    int _a = *(const int*)a;
+    int _b = *(const int*)b;
     return _b - _a;
 }
 

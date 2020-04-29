@@ -3,15 +3,15 @@
 
 static int strsort(const void *_a, const void *_b)
 {
-    char *a = *(char**)_a;
-    char *b = *(char**)_b;
+    const char *a = *(const char* const *)_a;
+    const char *b = *(const char* const *)_b;
     return strcmp(a,b);
 }
 
 static int revsort(const void *_a, const void *_b)
 {
-    char *a = *(char**)_a;
-    char *b = *(char**)_b;
+    const char *a = *(const char* const *)_a;
+    const char *b = *(const char* const *)_b;
     return strcmp(b,a);
 }
 

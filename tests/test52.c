@@ -9,7 +9,8 @@ typedef struct {
 
 static void intchar_copy(void *_dst, const void *_src)
 {
-    intchar_t *dst = (intchar_t*)_dst, *src = (intchar_t*)_src;
+    intchar_t *dst = (intchar_t*)_dst;
+    const intchar_t *src = (const intchar_t*)_src;
     dst->a = src->a;
     dst->s = (src->s != NULL) ? strdup(src->s) : NULL;
 }
