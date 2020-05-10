@@ -58,7 +58,7 @@ typedef struct {
 } UT_icd;
 
 typedef struct {
-    unsigned i,n;/* i: index of next available slot, n: num slots */
+    size_t i,n;/* i: index of next available slot, n: num slots */
     UT_icd icd;  /* initializer, copy and destructor functions */
     char *d;     /* n slots of size icd->sz*/
 } UT_array;
@@ -71,7 +71,7 @@ typedef struct {
 #define utarray_done(a) do {                                                  \
   if ((a)->n) {                                                               \
     if ((a)->icd.dtor) {                                                      \
-      unsigned _ut_i;                                                         \
+      size_t _ut_i;                                                         \
       for(_ut_i=0; _ut_i < (a)->i; _ut_i++) {                                 \
         (a)->icd.dtor(utarray_eltptr(a,_ut_i));                               \
       }                                                                       \
@@ -151,7 +151,7 @@ typedef struct {
             ((a)->i - (j))*((a)->icd.sz));                                    \
   }                                                                           \
   if ((a)->icd.copy) {                                                        \
-    unsigned _ut_i;                                                           \
+    size_t _ut_i;                                                           \
     for(_ut_i=0;_ut_i<(w)->i;_ut_i++) {                                       \
       (a)->icd.copy(_utarray_eltptr(a, (j) + _ut_i), _utarray_eltptr(w, _ut_i)); \
     }                                                                         \
@@ -163,17 +163,17 @@ typedef struct {
 } while(0)
 
 #define utarray_resize(dst,num) do {                                          \
-  unsigned _ut_i;                                                             \
-  if ((dst)->i > (unsigned)(num)) {                                           \
+  size_t _ut_i;                                                             \
+  if ((dst)->i > (size_t)(num)) {                                           \
     if ((dst)->icd.dtor) {                                                    \
       for (_ut_i = (num); _ut_i < (dst)->i; ++_ut_i) {                        \
         (dst)->icd.dtor(_utarray_eltptr(dst, _ut_i));                         \
       }                                                                       \
     }                                                                         \
-  } else if ((dst)->i < (unsigned)(num)) {                                    \
+  } else if ((dst)->i < (size_t)(num)) {                                    \
     utarray_reserve(dst, (num) - (dst)->i);                                   \
     if ((dst)->icd.init) {                                                    \
-      for (_ut_i = (dst)->i; _ut_i < (unsigned)(num); ++_ut_i) {              \
+      for (_ut_i = (dst)->i; _ut_i < (size_t)(num); ++_ut_i) {              \
         (dst)->icd.init(_utarray_eltptr(dst, _ut_i));                         \
       }                                                                       \
     } else {                                                                  \
@@ -189,7 +189,7 @@ typedef struct {
 
 #define utarray_erase(a,pos,len) do {                                         \
   if ((a)->icd.dtor) {                                                        \
-    unsigned _ut_i;                                                           \
+    size_t _ut_i;                                                           \
     for (_ut_i = 0; _ut_i < (len); _ut_i++) {                                 \
       (a)->icd.dtor(utarray_eltptr(a, (pos) + _ut_i));                        \
     }                                                                         \
@@ -209,7 +209,7 @@ typedef struct {
 #define utarray_clear(a) do {                                                 \
   if ((a)->i > 0) {                                                           \
     if ((a)->icd.dtor) {                                                      \
-      unsigned _ut_i;                                                         \
+      size_t _ut_i;                                                         \
       for(_ut_i=0; _ut_i < (a)->i; _ut_i++) {                                 \
         (a)->icd.dtor(_utarray_eltptr(a, _ut_i));                             \
       }                                                                       \
