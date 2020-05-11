@@ -51,7 +51,7 @@ typedef void (ctor_f)(void *dst, const void *src);
 typedef void (dtor_f)(void *elt);
 typedef void (init_f)(void *elt);
 typedef struct {
-    size_t sz;
+    unsigned sz;
     init_f *init;
     ctor_f *copy;
     dtor_f *dtor;
