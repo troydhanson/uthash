@@ -51,14 +51,14 @@ typedef void (ctor_f)(void *dst, const void *src);
 typedef void (dtor_f)(void *elt);
 typedef void (init_f)(void *elt);
 typedef struct {
-    unsigned sz;
+    size_t sz;
     init_f *init;
     ctor_f *copy;
     dtor_f *dtor;
 } UT_icd;
 
 typedef struct {
-    size_t i,n;/* i: index of next available slot, n: num slots */
+    unsigned i,n;/* i: index of next available slot, n: num slots */
     UT_icd icd;  /* initializer, copy and destructor functions */
     char *d;     /* n slots of size icd->sz*/
 } UT_array;
