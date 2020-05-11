@@ -1,10 +1,14 @@
 language: cpp
-compiler:
-- clang
-- gcc
+matrix:
+  include:
+  - os: linux
+    compiler: gcc
+  - os: linux
+    compiler: clang
+  - os: osx
 script:
-- make -C tests
-- make -C tests pedantic
-- make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
-- make -C tests cplusplus
-- make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+- make -C tests EXTRA_CFLAGS="-W -Wall -Wextra"
+- make -C tests clean ; make -C tests pedantic
+- make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+- make -C tests clean ; make -C tests cplusplus
+- make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE

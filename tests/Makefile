@@ -71,15 +71,15 @@ pedantic:
 	$(MAKE) all HASH_PEDANTIC=1
 
 cplusplus:
-	CC=$(CXX) $(MAKE) all
+	CC="$(CXX) -x c++" $(MAKE) all
 
 thorough:
 	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic'
 	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
 	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
-	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic'
-	$(MAKE) clean && CC=$(CXX) $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
-	$(MAKE) clean && CC=$(CXX) $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all EXTRA_CFLAGS='-pedantic'
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
 
 example: example.c $(HASHDIR)/uthash.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
