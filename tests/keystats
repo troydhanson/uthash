@@ -12,9 +12,11 @@ sub usage {
 
 usage if ((@ARGV == 0) or ($ARGV[0] eq '-h'));
 
-my @exes = glob "$FindBin::Bin/keystat.???";
+my @exes = glob "'$FindBin::Bin/keystat.???'";
+
 my %stats;
 for my $exe (@exes) {
+    $exe =~ s/\ /\\ /g;
     $stats{$exe} = `$exe @ARGV`;
     delete $stats{$exe} if ($? != 0); # omit hash functions that fail to produce stats (nx)
 }
