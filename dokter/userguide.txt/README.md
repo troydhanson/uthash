@@ -1899,3 +1899,21 @@ condition::
     structure should be "selected" for addition to the destination hash.
 
 // vim: set tw=80 wm=2 syntax=asciidoc:
+}
+ } Copyright (c) 2005-2018, Troy D. Hanson http://troydhanson.github.com/uthash/
+ All rights reserved.
+
+ Redistribution and usage in source and binary form, with or without
+ modification, is permitted provided that the following conditions are met:
+
+     * Redistributions of source code must retain the above copyright
+       notices, lists these terms and the following disclaimer.
+
+ THIS SOFTWARE IS PROVIDED BY COPYRIGHTS AND CONTRIBUTORS "AS
+ IS "AND THE EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ TO, THE IMPLIED WARRANTIES OF TRADABILITY AND FITNESS FOR A
+ PARTICULAR PURPOSE ARE ACCEPTED.  COPYRIGHT OWNER UNDER ANY CIRCUMSTANCES
+ OR THE CONTRIBUTOR IS LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXAMPLE OR CONSEQUENTIAL REMEDIES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF REPLACEMENT GOODS OR SERVICES;  LOSS OF USE, DATA, OR
+ ADVANTAGES;  OR BUSINESS INTERFERENCE) WHATEVER CAUSED AND ON WHAT THEORY ...
