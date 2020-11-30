@@ -74,6 +74,8 @@ typedef unsigned char uint8_t;
 #endif
 #elif defined(__GNUC__) && !defined(__VXWORKS__)
 #include <stdint.h>
+#elif defined(__lint__)
+#include <stdint.h>
 #else
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
