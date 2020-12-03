@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015-2018, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2015-2020, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTRINGBUFFER_H
 #define UTRINGBUFFER_H
 
-#define UTRINGBUFFER_VERSION 2.1.0
+#define UTRINGBUFFER_VERSION 2.2.0
 
 #include <stdlib.h>
 #include <string.h>
