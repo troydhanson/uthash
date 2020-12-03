@@ -1,11 +1,14 @@
+#include <assert.h>
 #include <stdio.h>   /* gets */
 #include <stdlib.h>  /* atoi, malloc */
 #include <string.h>  /* strcpy */
 #include "uthash.h"
 
+#define NAME_MAXLEN 10
+
 struct my_struct {
     int id;                    /* key */
-    char name[10];
+    char name[NAME_MAXLEN];
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
@@ -21,6 +24,7 @@ void add_user(int user_id, char *name)
         s->id = user_id;
         HASH_ADD_INT( users, id, s );  /* id: name of key field */
     }
+    assert(name != NULL && strlen(name) < sizeof(s->name));
     strcpy(s->name, name);
 }
 
@@ -77,9 +81,24 @@ void sort_by_id()
     HASH_SORT(users, id_sort);
 }
 
+char *get_input(char *buf, int siz, FILE *stream)
+{
+    char * ret = fgets(buf, siz, stream);
+
+    if (ret != NULL) {
+        size_t len = strlen(buf);
+        if (len > 0 && buf[len - 1] == '\n')
+        {
+            buf[len - 1] = '\0';
+        }
+    }
+
+    return ret;
+}
+
 int main()
 {
-    char in[10];
+    char in[NAME_MAXLEN + 1];
     int id=1, running=1;
     struct my_struct *s;
     unsigned num_users;
@@ -95,27 +114,27 @@ int main()
         printf(" 8. print users\n");
         printf(" 9. count users\n");
         printf("10. quit\n");
-        gets(in);
+        get_input(in, sizeof(in), stdin);
         switch(atoi(in)) {
             case 1:
                 printf("name?\n");
-                add_user(id++, gets(in));
+                add_user(id++, get_input(in, sizeof(in), stdin));
                 break;
             case 2:
                 printf("id?\n");
-                gets(in);
+                get_input(in, sizeof(in), stdin);
                 id = atoi(in);
                 printf("name?\n");
-                add_user(id, gets(in));
+                add_user(id, get_input(in, sizeof(in), stdin));
                 break;
             case 3:
                 printf("id?\n");
-                s = find_user(atoi(gets(in)));
+                s = find_user(atoi(get_input(in, sizeof(in), stdin)));
                 printf("user: %s\n", s ? s->name : "unknown");
                 break;
             case 4:
                 printf("id?\n");
-                s = find_user(atoi(gets(in)));
+                s = find_user(atoi(get_input(in, sizeof(in), stdin)));
                 if (s) {
                     delete_user(s);
                 } else {
