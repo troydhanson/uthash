@@ -5,6 +5,15 @@ Click to return to the link:index.html[uthash home page].
 
 NOTE: This ChangeLog may be incomplete and/or incorrect. See the git commit log.
 
+Version 2.2.0 (2020-12-??)
+--------------------------
+* add HASH_NO_STDINT for platforms without C99 <stdint.h>
+* silence many -Wcast-qual warnings (thanks, Olaf Bergmann!)
+* skip hash computation when finding in an empty hash (thanks, Huansong Fu!)
+* rename oom to utarray_oom, in utarray.h (thanks, Hong Xu!)
+* rename oom to utstring_oom, in utstring.h (thanks, Hong Xu!)
+* remove MurmurHash/HASH_MUR
+
 Version 2.1.0 (2018-12-20)
 --------------------------
 * silence some Clang static analysis warnings
