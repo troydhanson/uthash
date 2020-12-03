@@ -764,7 +764,7 @@ do {                                                                            
   }                                                                              \
   while ((out) != NULL) {                                                        \
     if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) {       \
-      if (HASH_KEYCMP((out)->hh.key, keyptr, keylen_in) == 0) {              \
+      if (HASH_KEYCMP((out)->hh.key, keyptr, keylen_in) == 0) {                  \
         break;                                                                   \
       }                                                                          \
     }                                                                            \

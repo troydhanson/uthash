@@ -7,14 +7,15 @@
 /* Set up macros for alternative malloc/free functions  */
 #undef uthash_malloc
 #undef uthash_free
-#undef uthash_memcmp
 #undef uthash_strlen
 #undef uthash_bzero
 #define uthash_malloc(sz) alt_malloc(sz)
 #define uthash_free(ptr,sz) alt_free(ptr,sz)
-#define uthash_memcmp(a,b,n) alt_memcmp(a,b,n)
 #define uthash_strlen(s) ..fail_to_compile..
 #define uthash_bzero(a,n) alt_bzero(a,n)
+
+#undef HASH_KEYCMP
+#define HASH_KEYCMP(a,b,n) alt_keycmp(a,b,n)
 
 typedef struct example_user_t {
     int id;
@@ -41,10 +42,10 @@ static void alt_free(void *ptr, size_t sz)
     free(ptr);
 }
 
-static int alt_memcmp_count = 0;
-static int alt_memcmp(const void *a, const void *b, size_t n)
+static int alt_keycmp_count = 0;
+static int alt_keycmp(const void *a, const void *b, size_t n)
 {
-    ++alt_memcmp_count;
+    ++alt_keycmp_count;
     return memcmp(a,b,n);
 }
 
@@ -115,7 +116,7 @@ int main()
 #else
     assert(alt_bzero_count == 2);
 #endif
-    assert(alt_memcmp_count == 10);
+    assert(alt_keycmp_count == 10);
     assert(alt_malloc_balance == 0);
     return 0;
 }

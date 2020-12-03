@@ -8,9 +8,9 @@
 
 /* This is mostly a copy of test6.c. */
 
-#undef uthash_memcmp
+#undef HASH_KEYCMP
 #undef uthash_strlen
-#define uthash_memcmp(a,b,n) alt_memcmp(a,b,n)
+#define HASH_KEYCMP(a,b,n) alt_keycmp(a,b,n)
 #define uthash_strlen(s) alt_strlen(s)
 
 typedef struct example_user_t {
@@ -19,9 +19,9 @@ typedef struct example_user_t {
     UT_hash_handle hh;
 } example_user_t;
 
-static int alt_memcmp(const void *a, const void *b, size_t n)
+static int alt_keycmp(const void *a, const void *b, size_t n)
 {
-    puts("alt_memcmp");
+    puts("alt_keycmp");
     return memcmp(a,b,n);
 }
 
