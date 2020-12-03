@@ -93,6 +93,10 @@ test88: test alt memcmp and strlen macros
 test89: test code from the tinydtls project
 test90: regression-test HASH_ADD_KEYPTR_INORDER (IronBug)
 test91: test LL_INSERT_INORDER etc.
+test92: HASH_NONFATAL_OOM
+test93: alt_fatal
+test94: utlist with fields named other than 'next' and 'prev'
+test95: utstack
 
 Other Make targets
 ================================================================================
