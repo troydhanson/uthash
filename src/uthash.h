@@ -843,12 +843,12 @@ do {                                                                            
   struct UT_hash_handle *_he_thh, *_he_hh_nxt;                                   \
   UT_hash_bucket *_he_new_buckets, *_he_newbkt;                                  \
   _he_new_buckets = (UT_hash_bucket*)uthash_malloc(                              \
-           2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));            \
+           sizeof(struct UT_hash_bucket) * (tbl)->num_buckets * 2U);             \
   if (!_he_new_buckets) {                                                        \
     HASH_RECORD_OOM(oomed);                                                      \
   } else {                                                                       \
     uthash_bzero(_he_new_buckets,                                                \
-        2UL * (tbl)->num_buckets * sizeof(struct UT_hash_bucket));               \
+        sizeof(struct UT_hash_bucket) * (tbl)->num_buckets * 2U);                \
     (tbl)->ideal_chain_maxlen =                                                  \
        ((tbl)->num_items >> ((tbl)->log2_num_buckets+1U)) +                      \
        ((((tbl)->num_items & (((tbl)->num_buckets*2U)-1U)) != 0U) ? 1U : 0U);    \
