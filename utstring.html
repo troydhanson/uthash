@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 9.0.4" />
 <title>utstring: dynamic string macros for C</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -435,7 +436,7 @@ thead, p.table.header {
 p.table {
   margin-top: 0;
 }
-/* Because the table frame attribute is overriden by CSS in most browsers. */
+/* Because the table frame attribute is overridden by CSS in most browsers. */
 div.tableblock > table[frame="void"] {
   border-style: none;
 }
@@ -770,8 +771,8 @@ asciidoc.install(2);
 <h1>utstring: dynamic string macros for C</h1>
 <span id="author">Troy D. Hanson</span><br />
 <span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
-<span id="revnumber">version 2.1.0,</span>
-<span id="revdate">December 2018</span>
+<span id="revnumber">version 2.2.0,</span>
+<span id="revdate">December 2020</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -1062,14 +1063,33 @@ second argument, rather than the start position. You can emulate the position
 parameter by adding to the string start address and subtracting from its length.</p></div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_notes">Notes</h3>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+To override the default out-of-memory handling behavior (which calls <code>exit(-1)</code>),
+   override the <code>utstring_oom()</code> macro before including <code>utstring.h</code>.
+   For example,
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>#define utstring_oom() do { longjmp(error_handling_location); } while (0)
+...
+#include "utstring.h"</code></pre>
+</div></div>
+</li>
+</ol></div>
+</div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.0<br />
-Last updated 2018-12-20 20:33:53 EST
+Version 2.2.0<br />
+Last updated
+ 2020-12-17 11:13:22 EST
 </div>
 </div>
 </body>

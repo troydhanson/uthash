@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 9.0.4" />
 <title>uthash ChangeLog</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -435,7 +436,7 @@ thead, p.table.header {
 p.table {
   margin-top: 0;
 }
-/* Because the table frame attribute is overriden by CSS in most browsers. */
+/* Because the table frame attribute is overridden by CSS in most browsers. */
 div.tableblock > table[frame="void"] {
   border-style: none;
 }
@@ -785,6 +786,43 @@ asciidoc.install(2);
 <td class="content">This ChangeLog may be incomplete and/or incorrect. See the git commit log.</td>
 </tr></table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_2_2_0_2020_12_17">Version 2.2.0 (2020-12-17)</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+add HASH_NO_STDINT for platforms without C99 &lt;stdint.h&gt;
+</p>
+</li>
+<li>
+<p>
+silence many -Wcast-qual warnings (thanks, Olaf Bergmann!)
+</p>
+</li>
+<li>
+<p>
+skip hash computation when finding in an empty hash (thanks, Huansong Fu!)
+</p>
+</li>
+<li>
+<p>
+rename oom to utarray_oom, in utarray.h (thanks, Hong Xu!)
+</p>
+</li>
+<li>
+<p>
+rename oom to utstring_oom, in utstring.h (thanks, Hong Xu!)
+</p>
+</li>
+<li>
+<p>
+remove MurmurHash/HASH_MUR
+</p>
+</li>
+</ul></div>
 </div>
 </div>
 <div class="sect1">
@@ -1652,7 +1690,8 @@ Initial release
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-20 20:33:53 EST
+Last updated
+ 2020-12-17 11:13:22 EST
 </div>
 </div>
 </body>

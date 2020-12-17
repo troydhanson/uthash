@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 9.0.4" />
 <title>utarray: dynamic array macros for C</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -435,7 +436,7 @@ thead, p.table.header {
 p.table {
   margin-top: 0;
 }
-/* Because the table frame attribute is overriden by CSS in most browsers. */
+/* Because the table frame attribute is overridden by CSS in most browsers. */
 div.tableblock > table[frame="void"] {
   border-style: none;
 }
@@ -770,8 +771,8 @@ asciidoc.install(2);
 <h1>utarray: dynamic array macros for C</h1>
 <span id="author">Troy D. Hanson</span><br />
 <span id="email"><code>&lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</code></span><br />
-<span id="revnumber">version 2.1.0,</span>
-<span id="revdate">December 2018</span>
+<span id="revnumber">version 2.2.0,</span>
+<span id="revdate">December 2020</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -1213,13 +1214,13 @@ cellspacing="0" cellpadding="4">
 </li>
 <li>
 <p>
-<code>utarray_reserve</code> takes the "delta" of elements to reserve (not the total
-   desired capacity of the array-- this differs from the C++ STL "reserve" notion)
+<code>utarray_reserve</code> takes the "delta" of elements to reserve, not the total
+   desired capacity of the array. This differs from the C++ STL "reserve" notion.
 </p>
 </li>
 <li>
 <p>
-<code>utarray_sort</code> expects a comparison function having the usual <code>strcmp</code> -like
+<code>utarray_sort</code> expects a comparison function having the usual <code>strcmp</code>-like
    convention where it accepts two elements (a and b) and returns a negative
    value if a precedes b, 0 if a and b sort equally, and positive if b precedes a.
    This is an example of a comparison function:
@@ -1251,6 +1252,19 @@ A <em>pointer</em> to a particular element (obtained using <code>utarray_eltptr<
    <em>index</em> in code whose duration may include element insertion.
 </p>
 </li>
+<li>
+<p>
+To override the default out-of-memory handling behavior (which calls <code>exit(-1)</code>),
+   override the <code>utarray_oom()</code> macro before including <code>utarray.h</code>.
+   For example,
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>#define utarray_oom() do { longjmp(error_handling_location); } while (0)
+...
+#include "utarray.h"</code></pre>
+</div></div>
+</li>
 </ol></div>
 </div>
 </div>
@@ -1259,8 +1273,9 @@ A <em>pointer</em> to a particular element (obtained using <code>utarray_eltptr<
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.0<br />
-Last updated 2018-12-20 20:33:53 EST
+Version 2.2.0<br />
+Last updated
+ 2020-12-17 11:13:22 EST
 </div>
 </div>
 </body>

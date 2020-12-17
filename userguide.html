@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 9.0.4" />
 <title>uthash User Guide</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -435,7 +436,7 @@ thead, p.table.header {
 p.table {
   margin-top: 0;
 }
-/* Because the table frame attribute is overriden by CSS in most browsers. */
+/* Because the table frame attribute is overridden by CSS in most browsers. */
 div.tableblock > table[frame="void"] {
   border-style: none;
 }
@@ -769,8 +770,8 @@ asciidoc.install(2);
 <div id="header">
 <h1>uthash User Guide</h1>
 <span id="author">Troy D. Hanson, Arthur O'Dwyer</span><br />
-<span id="revnumber">version 2.1.0,</span>
-<span id="revdate">December 2018</span>
+<span id="revnumber">version 2.2.0,</span>
+<span id="revdate">December 2020</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -2273,25 +2274,8 @@ cellspacing="0" cellpadding="4">
 <td align="center" valign="top"><p class="table"><code>SFH</code></p></td>
 <td align="left" valign="top"><p class="table">Paul Hsieh</p></td>
 </tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code>MUR</code></p></td>
-<td align="left" valign="top"><p class="table">MurmurHash v3 (see note)</p></td>
-</tr>
 </tbody>
 </table>
-</div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="title">MurmurHash</div>
-<div class="paragraph"><p>A special symbol must be defined if you intend to use MurmurHash. To use it, add
-<code>-DHASH_USING_NO_STRICT_ALIASING</code> to your <code>CFLAGS</code>. And, if you are using
-the gcc compiler with optimization, add <code>-fno-strict-aliasing</code> to your <code>CFLAGS</code>.</p></div>
-</td>
-</tr></table>
 </div>
 <div class="sect3">
 <h4 id="_which_hash_function_is_best">Which hash function is best?</h4>
@@ -3161,8 +3145,9 @@ condition
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 2.1.0<br />
-Last updated 2018-12-20 20:33:53 EST
+Version 2.2.0<br />
+Last updated
+ 2020-12-17 11:13:22 EST
 </div>
 </div>
 </body>
