@@ -39,43 +39,39 @@ static void alt_fatal(char const * s) {
     longjmp(j_buf, 1);
 }
 
-static example_user_t * init_user(int need_malloc_cnt) {
-    users = 0;
+static void init_users(int need_malloc_cnt) {
+    users = NULL;
     example_user_t * user = (example_user_t*)malloc(sizeof(example_user_t));
     user->id = user_id;
     is_fatal = 0;
     malloc_cnt = need_malloc_cnt;
-    /* printf("adding to hash...\n"); */
     if (!setjmp(j_buf)) {
         HASH_ADD_INT(users, id, user);
+    } else {
+        free(user);
     }
-    return user;
 }
 
 int main()
 {
+    example_user_t *user;
 
-#define init(a) do { \
-} while(0)
-
-    example_user_t * user;
-
-    user = init_user(3); /* bloom filter must fail */
+    init_users(3); /* bloom filter must fail */
     if (!is_fatal) {
         printf("fatal not called after bloom failure\n");
     }
 
-    user = init_user(2); /* bucket creation must fail */
+    init_users(2); /* bucket creation must fail */
     if (!is_fatal) {
         printf("fatal not called after bucket creation failure\n");
     }
 
-    user = init_user(1); /* table creation must fail */
+    init_users(1); /* table creation must fail */
     if (!is_fatal) {
         printf("fatal not called after table creation failure\n");
     }
 
-    user = init_user(4); /* hash must create OK */
+    init_users(4); /* hash must create OK */
     if (is_fatal) {
         printf("fatal error when creating hash normally\n");
         /* bad idea to continue running */
@@ -83,19 +79,20 @@ int main()
     }
 
     /* let's add users until expansion fails */
-    users = 0;
+    users = NULL;
     malloc_cnt = 4;
     while (1) {
-        user = (example_user_t*)malloc(sizeof(example_user_t));
-        user->id = user_id;
         if (user_id++ == 1000) {
             printf("there is no way 1000 iterations didn't require realloc\n");
             break;
         }
+        user = (example_user_t*)malloc(sizeof(example_user_t));
+        user->id = user_id;
         if (!setjmp(j_buf)) {
             HASH_ADD_INT(users, id, user);
+        } else {
+            free(user);
         }
-        malloc_cnt = 0;
         if (malloc_failed) {
 
             if (!is_fatal) {
@@ -108,12 +105,12 @@ int main()
             /* we can't really do anything, the hash is not in consistent
              * state, so assume this is a success. */
             break;
-
         }
+        malloc_cnt = 0;
     }
 
+    HASH_CLEAR(hh, users);
+
     printf("End\n");
-
     return 0;
-
 }
