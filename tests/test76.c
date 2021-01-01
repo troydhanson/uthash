@@ -8,8 +8,8 @@ int main()
     char V_NeedleStr[] = "needle\0s";
     long *V_KMP_Table;
     long V_FindPos;
-    size_t V_StartPos;
-    size_t V_FindCnt;
+    size_t V_StartPos = 0;
+    size_t V_FindCnt = 0;
 
 
     utstring_new(s);
@@ -24,9 +24,6 @@ int main()
     if (V_KMP_Table != NULL) {
         _utstring_BuildTable(utstring_body(t), utstring_len(t), V_KMP_Table);
 
-        V_FindCnt = 0;
-        V_FindPos = 0;
-        V_StartPos = 0;
         do {
             V_FindPos = _utstring_find(utstring_body(s) + V_StartPos,
                                        utstring_len(s) - V_StartPos,

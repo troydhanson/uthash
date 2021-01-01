@@ -9,7 +9,7 @@ int main()
     long *V_KMP_Table;
     long V_FindPos;
     size_t V_StartPos;
-    size_t V_FindCnt;
+    size_t V_FindCnt = 0;
 
 
     utstring_new(s);
@@ -24,8 +24,6 @@ int main()
     if (V_KMP_Table != NULL) {
         _utstring_BuildTableR(utstring_body(t), utstring_len(t), V_KMP_Table);
 
-        V_FindCnt = 0;
-        V_FindPos = 0;
         V_StartPos = utstring_len(s) - 1;
         do {
             V_FindPos = _utstring_findR(utstring_body(s),
