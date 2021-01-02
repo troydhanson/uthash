@@ -16,10 +16,10 @@ void add_user(int user_id, char *name)
     struct my_struct *s;
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
-    if (s==NULL) {
+    if (s == NULL) {
         s = (struct my_struct*)malloc(sizeof(struct my_struct));
         s->id = user_id;
-        HASH_ADD_INT( users, id, s );  /* id: name of key field */
+        HASH_ADD_INT(users, id, s);  /* id: name of key field */
     }
     strcpy(s->name, name);
 }
@@ -28,13 +28,13 @@ struct my_struct *find_user(int user_id)
 {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &user_id, s );  /* s: output pointer */
+    HASH_FIND_INT(users, &user_id, s);  /* s: output pointer */
     return s;
 }
 
 void delete_user(struct my_struct *user)
 {
-    HASH_DEL( users, user);  /* user: pointer to deletee */
+    HASH_DEL(users, user);  /* user: pointer to deletee */
     free(user);
 }
 
@@ -43,7 +43,7 @@ void delete_all()
     struct my_struct *current_user, *tmp;
 
     HASH_ITER(hh, users, current_user, tmp) {
-        HASH_DEL(users,current_user);  /* delete it (users advances to next) */
+        HASH_DEL(users, current_user);  /* delete it (users advances to next) */
         free(current_user);            /* free it */
     }
 }
@@ -52,14 +52,14 @@ void print_users()
 {
     struct my_struct *s;
 
-    for(s=users; s != NULL; s=(struct my_struct*)(s->hh.next)) {
+    for (s = users; s != NULL; s = (struct my_struct*)(s->hh.next)) {
         printf("user id %d: name %s\n", s->id, s->name);
     }
 }
 
 int name_sort(struct my_struct *a, struct my_struct *b)
 {
-    return strcmp(a->name,b->name);
+    return strcmp(a->name, b->name);
 }
 
 int id_sort(struct my_struct *a, struct my_struct *b)
@@ -80,7 +80,7 @@ void sort_by_id()
 int main()
 {
     char in[10];
-    int id=1, running=1;
+    int id = 1, running = 1;
     struct my_struct *s;
     unsigned num_users;
 
@@ -135,11 +135,11 @@ int main()
                 print_users();
                 break;
             case 9:
-                num_users=HASH_COUNT(users);
+                num_users = HASH_COUNT(users);
                 printf("there are %u users\n", num_users);
                 break;
             case 10:
-                running=0;
+                running = 0;
                 break;
         }
     }
