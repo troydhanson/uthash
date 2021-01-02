@@ -72,7 +72,7 @@ struct my_struct {
 struct my_struct *users = NULL;
 
 void add_user(struct my_struct *s) {
-    HASH_ADD_INT( users, id, s );
+    HASH_ADD_INT(users, id, s);
 }
 
 </pre>
@@ -86,7 +86,7 @@ Example 2. Looking up an item in a hash.
 struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &amp;user_id, s );
+    HASH_FIND_INT(users, &amp;user_id, s);
     return s;
 }
 
@@ -100,7 +100,7 @@ Example 3. Deleting an item from a hash.
 
 <pre>
 void delete_user(struct my_struct *user) {
-    HASH_DEL( users, user);
+    HASH_DEL(users, user);
 }
 
 </pre>

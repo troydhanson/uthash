@@ -218,7 +218,7 @@ void add_user(int user_id, char *name) {
     s = malloc(sizeof(struct my_struct));
     s->id = user_id;
     strcpy(s->name, name);
-    HASH_ADD_INT( users, id, s );  /* id: name of key field */
+    HASH_ADD_INT(users, id, s);  /* id: name of key field */
 }
 ----------------------------------------------------------------------
 
@@ -256,10 +256,10 @@ Otherwise we just modify the structure that already exists.
       struct my_struct *s;
 
       HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
-      if (s==NULL) {
+      if (s == NULL) {
         s = (struct my_struct *)malloc(sizeof *s);
         s->id = user_id;
-        HASH_ADD_INT( users, id, s );  /* id: name of key field */
+        HASH_ADD_INT(users, id, s);  /* id: name of key field */
       }
       strcpy(s->name, name);
   }
@@ -284,7 +284,7 @@ right.
   /* bad */
   void add_user(struct my_struct *users, int user_id, char *name) {
     ...
-    HASH_ADD_INT( users, id, s );
+    HASH_ADD_INT(users, id, s);
   }
 
 You really need to pass 'a pointer' to the hash pointer:
@@ -292,7 +292,7 @@ You really need to pass 'a pointer' to the hash pointer:
   /* good */
   void add_user(struct my_struct **users, int user_id, char *name) { ...
     ...
-    HASH_ADD_INT( *users, id, s );
+    HASH_ADD_INT(*users, id, s);
   }
 
 Note that we dereferenced the pointer in the `HASH_ADD` also.
@@ -319,7 +319,7 @@ To look up a structure in a hash, you need its key.  Then call `HASH_FIND`.
 struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &user_id, s );  /* s: output pointer */
+    HASH_FIND_INT(users, &user_id, s);  /* s: output pointer */
     return s;
 }
 ----------------------------------------------------------------------
@@ -376,8 +376,8 @@ void delete_all() {
   struct my_struct *current_user, *tmp;
 
   HASH_ITER(hh, users, current_user, tmp) {
-    HASH_DEL(users,current_user);  /* delete; users advances to next */
-    free(current_user);            /* optional- if you want to free  */
+    HASH_DEL(users, current_user);  /* delete; users advances to next */
+    free(current_user);             /* optional- if you want to free  */
   }
 }
 ----------------------------------------------------------------------
@@ -387,7 +387,7 @@ All-at-once deletion
 If you only want to delete all the items, but not free them or do any
 per-element clean up, you can do this more efficiently in a single operation:
 
-  HASH_CLEAR(hh,users);
+  HASH_CLEAR(hh, users);
 
 Afterward, the list head (here, `users`) will be set to `NULL`.
 
@@ -417,7 +417,7 @@ following the `hh.next` pointer.
 void print_users() {
     struct my_struct *s;
 
-    for(s=users; s != NULL; s=s->hh.next) {
+    for (s = users; s != NULL; s = s->hh.next) {
         printf("user id %d: name %s\n", s->id, s->name);
     }
 }
@@ -452,14 +452,14 @@ doubly-linked list.
 *******************************************************************************
 
 If you're using uthash in a C++ program, you need an extra cast on the `for`
-iterator, e.g., `s=(struct my_struct*)s->hh.next`.
+iterator, e.g., `s = (struct my_struct*)s->hh.next`.
 
 Sorting
 ^^^^^^^
 The items in the hash are visited in "insertion order" when you follow the
 `hh.next` pointer. You can sort the items into a new order using `HASH_SORT`.
 
-    HASH_SORT( users, name_sort );
+    HASH_SORT(users, name_sort);
 
 The second argument is a pointer to a comparison function. It must accept two
 pointer arguments (the items to compare), and must return an `int` which is
@@ -480,7 +480,7 @@ Below, `name_sort` and `id_sort` are two examples of sort functions.
 .Sorting the items in the hash
 ----------------------------------------------------------------------
 int name_sort(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a->name,b->name);
+    return strcmp(a->name, b->name);
 }
 
 int id_sort(struct my_struct *a, struct my_struct *b) {
@@ -533,10 +533,10 @@ void add_user(int user_id, char *name) {
     struct my_struct *s;
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
-    if (s==NULL) {
+    if (s == NULL) {
       s = (struct my_struct *)malloc(sizeof *s);
       s->id = user_id;
-      HASH_ADD_INT( users, id, s );  /* id: name of key field */
+      HASH_ADD_INT(users, id, s);  /* id: name of key field */
     }
     strcpy(s->name, name);
 }
@@ -544,7 +544,7 @@ void add_user(int user_id, char *name) {
 struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &user_id, s );  /* s: output pointer */
+    HASH_FIND_INT(users, &user_id, s);  /* s: output pointer */
     return s;
 }
 
@@ -565,13 +565,13 @@ void delete_all() {
 void print_users() {
     struct my_struct *s;
 
-    for(s=users; s != NULL; s=(struct my_struct*)(s->hh.next)) {
+    for (s = users; s != NULL; s = (struct my_struct*)(s->hh.next)) {
         printf("user id %d: name %s\n", s->id, s->name);
     }
 }
 
 int name_sort(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a->name,b->name);
+    return strcmp(a->name, b->name);
 }
 
 int id_sort(struct my_struct *a, struct my_struct *b) {
@@ -588,7 +588,7 @@ void sort_by_id() {
 
 int main(int argc, char *argv[]) {
     char in[10];
-    int id=1, running=1;
+    int id = 1, running = 1;
     struct my_struct *s;
     unsigned num_users;
 
@@ -639,11 +639,11 @@ int main(int argc, char *argv[]) {
                 print_users();
                 break;
             case 9:
-                num_users=HASH_COUNT(users);
+                num_users = HASH_COUNT(users);
                 printf("there are %u users\n", num_users);
                 break;
             case 10:
-                running=0;
+                running = 0;
                 break;
         }
     }
@@ -720,10 +720,10 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct *)malloc(sizeof *s);
         strcpy(s->name, names[i]);
         s->id = i;
-        HASH_ADD_STR( users, name, s );
+        HASH_ADD_STR(users, name, s);
     }
 
-    HASH_FIND_STR( users, "betty", s);
+    HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s->id);
 
     /* free the hash table contents */
@@ -766,10 +766,10 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct *)malloc(sizeof *s);
         s->name = names[i];
         s->id = i;
-        HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );
+        HASH_ADD_KEYPTR(hh, users, s->name, strlen(s->name), s);
     }
 
-    HASH_FIND_STR( users, "betty", s);
+    HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s->id);
 
     /* free the hash table contents */
@@ -812,12 +812,12 @@ int main() {
   if (!e) return -1;
   e->key = (void*)someaddr;
   e->i = 1;
-  HASH_ADD_PTR(hash,key,e);
+  HASH_ADD_PTR(hash, key, e);
   HASH_FIND_PTR(hash, &someaddr, d);
   if (d) printf("found\n");
 
   /* release memory */
-  HASH_DEL(hash,e);
+  HASH_DEL(hash, e);
   free(e);
   return 0;
 }
@@ -924,7 +924,7 @@ int main(int argc, char *argv[]) {
     int beijing[] = {0x5317, 0x4eac};   /* UTF-32LE for 北京 */
 
     /* allocate and initialize our structure */
-    msg = (msg_t *)malloc( sizeof(msg_t) + sizeof(beijing) );
+    msg = (msg_t *)malloc(sizeof(msg_t) + sizeof(beijing));
     memset(msg, 0, sizeof(msg_t)+sizeof(beijing)); /* zero fill */
     msg->len = sizeof(beijing);
     msg->encoding = UTF32;
@@ -936,16 +936,16 @@ int main(int argc, char *argv[]) {
              - offsetof(msg_t, encoding);  /* offset of first key field */
 
     /* add our structure to the hash table */
-    HASH_ADD( hh, msgs, encoding, keylen, msg);
+    HASH_ADD(hh, msgs, encoding, keylen, msg);
 
     /* look it up to prove that it worked :-) */
-    msg=NULL;
+    msg = NULL;
 
     lookup_key = (lookup_key_t *)malloc(sizeof(*lookup_key) + sizeof(beijing));
     memset(lookup_key, 0, sizeof(*lookup_key) + sizeof(beijing));
     lookup_key->encoding = UTF32;
     memcpy(lookup_key->text, beijing, sizeof(beijing));
-    HASH_FIND( hh, msgs, &lookup_key->encoding, keylen, msg );
+    HASH_FIND(hh, msgs, &lookup_key->encoding, keylen, msg);
     if (msg) printf("found \n");
     free(lookup_key);
 
@@ -1028,7 +1028,7 @@ typedef struct item {
   UT_hash_handle hh;
 } item_t;
 
-item_t *items=NULL;
+item_t *items = NULL;
 
 int main(int argc, char *argvp[]) {
   item_t *item1, *item2, *tmp1, *tmp2;
@@ -1128,7 +1128,7 @@ always used with the `users_by_name` hash table).
     HASH_ADD(hh2, users_by_name, username, strlen(s->username), s);
 
     /* find user by ID in the "users_by_id" hash table */
-    i=1;
+    i = 1;
     HASH_FIND(hh1, users_by_id, &i, sizeof(int), s);
     if (s) printf("found id %d: %s\n", i, s->username);
 
@@ -1155,7 +1155,7 @@ The `HASH_ADD_INORDER*` macros work just like their `HASH_ADD*` counterparts, bu
 with an additional comparison-function argument:
 
   int name_sort(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a->name,b->name);
+    return strcmp(a->name, b->name);
   }
 
   HASH_ADD_KEYPTR_INORDER(hh, items, &item->name, strlen(item->name), item, name_sort);
@@ -1183,7 +1183,7 @@ Now we can define two sort functions, then use `HASH_SRT`.
   }
 
   int sort_by_name(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a->username,b->username);
+    return strcmp(a->username, b->username);
   }
 
   HASH_SRT(hh1, users_by_id, sort_by_id);
@@ -1240,7 +1240,7 @@ for a structure to be usable with `HASH_SELECT`, it must have two or more hash
 handles. (As described <<multihash,here>>, a structure can exist in many
 hash tables at the same time; it must have a separate hash handle for each one).
 
-  user_t *users=NULL, *admins=NULL; /* two hash tables */
+  user_t *users = NULL, *admins = NULL; /* two hash tables */
 
   typedef struct {
       int id;
@@ -1252,7 +1252,7 @@ Now suppose we have added some users, and want to select just the administrator
 users who have id's less than 1024.
 
   #define is_admin(x) (((user_t*)x)->id < 1024)
-  HASH_SELECT(ah,admins,hh,users,is_admin);
+  HASH_SELECT(ah, admins, hh, users, is_admin);
 
 The first two parameters are the 'destination' hash handle and hash table, the
 second two parameters are the 'source' hash handle and hash table, and the last
@@ -1290,7 +1290,7 @@ that do not provide `memcmp`, you can substitute your own implementation.
 
 ----------------------------------------------------------------------------
 #undef HASH_KEYCMP
-#define HASH_KEYCMP(a,b,len) bcmp(a,b,len)
+#define HASH_KEYCMP(a, b, len) bcmp(a, b, len)
 ----------------------------------------------------------------------------
 
 Another reason to substitute your own key comparison function is if your "key" is not
@@ -1306,8 +1306,8 @@ struct Key {
 unsigned key_hash(struct Key *s) { return s + (unsigned)f; }
 bool key_equal(struct Key *a, struct Key *b) { return a.s == b.s && a.f == b.f; }
 
-#define HASH_FUNCTION(s,len,hashv) (hashv) = key_hash((struct Key *)s)
-#define HASH_KEYCMP(a,b,len) (!key_equal((struct Key *)a, (struct Key *)b))
+#define HASH_FUNCTION(s, len, hashv) (hashv) = key_hash((struct Key *)s)
+#define HASH_KEYCMP(a, b, len) (!key_equal((struct Key *)a, (struct Key *)b))
 ----------------------------------------------------------------------------
 
 Another reason to substitute your own key comparison function is to trade off
@@ -1322,7 +1322,7 @@ we might substitute a no-op comparison function:
 
 ----------------------------------------------------------------------------
 #undef HASH_KEYCMP
-#define HASH_KEYCMP(a,b,len) 0  /* occasionally wrong, but very fast */
+#define HASH_KEYCMP(a, b, len) 0  /* occasionally wrong, but very fast */
 ----------------------------------------------------------------------------
 
 Note: The global equality-comparison function `HASH_KEYCMP` has no relationship
@@ -1631,7 +1631,7 @@ If your application uses its own custom allocator, uthash can use them too.
 
 /* re-define, specifying alternate functions */
 #define uthash_malloc(sz) my_malloc(sz)
-#define uthash_free(ptr,sz) my_free(ptr)
+#define uthash_free(ptr, sz) my_free(ptr)
 
 ...
 ----------------------------------------------------------------------------
@@ -1647,7 +1647,7 @@ provide these functions, you can substitute your own implementations.
 
 ----------------------------------------------------------------------------
 #undef uthash_bzero
-#define uthash_bzero(a,len) my_bzero(a,len)
+#define uthash_bzero(a, len) my_bzero(a, len)
 
 #undef uthash_strlen
 #define uthash_strlen(s) my_strlen(s)
@@ -1754,7 +1754,7 @@ concurrent readers (since uthash 1.5).
 For example using pthreads you can create an rwlock like this:
 
   pthread_rwlock_t lock;
-  if (pthread_rwlock_init(&lock,NULL) != 0) fatal("can't create rwlock");
+  if (pthread_rwlock_init(&lock, NULL) != 0) fatal("can't create rwlock");
 
 Then, readers must acquire the read lock before doing any `HASH_FIND` calls or
 before iterating over the hash elements:
@@ -1795,10 +1795,10 @@ In order to use the convenience macros,
 |===============================================================================
 |macro            | arguments
 |HASH_ADD_INT     | (head, keyfield_name, item_ptr)
-|HASH_REPLACE_INT | (head, keyfiled_name, item_ptr,replaced_item_ptr)
+|HASH_REPLACE_INT | (head, keyfiled_name, item_ptr, replaced_item_ptr)
 |HASH_FIND_INT    | (head, key_ptr, item_ptr)
 |HASH_ADD_STR     | (head, keyfield_name, item_ptr)
-|HASH_REPLACE_STR | (head,keyfield_name, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_STR | (head, keyfield_name, item_ptr, replaced_item_ptr)
 |HASH_FIND_STR    | (head, key_ptr, item_ptr)
 |HASH_ADD_PTR     | (head, keyfield_name, item_ptr)
 |HASH_REPLACE_PTR | (head, keyfield_name, item_ptr, replaced_item_ptr)
