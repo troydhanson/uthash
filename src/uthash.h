@@ -85,19 +85,12 @@ do {                                                                            
 #define uthash_strlen(s) strlen(s)
 #endif
 
-#ifdef uthash_memcmp
-/* This warning will not catch programs that define uthash_memcmp AFTER including uthash.h. */
-#warning "uthash_memcmp is deprecated; please use HASH_KEYCMP instead"
-#else
-#define uthash_memcmp(a,b,n) memcmp(a,b,n)
-#endif
-
 #ifndef HASH_FUNCTION
 #define HASH_FUNCTION(keyptr,keylen,hashv) HASH_JEN(keyptr, keylen, hashv)
 #endif
 
 #ifndef HASH_KEYCMP
-#define HASH_KEYCMP(a,b,n) uthash_memcmp(a,b,n)
+#define HASH_KEYCMP(a,b,n) memcmp(a,b,n)
 #endif
 
 #ifndef uthash_noexpand_fyi
