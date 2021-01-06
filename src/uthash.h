@@ -1041,6 +1041,25 @@ do {                                                                            
   }                                                                              \
 } while (0)
 
+#define HASH_FREE_AND_CLEAR(hh,head,el,deleter)                                  \
+do {                                                                             \
+  if ((head) != NULL) {                                                          \
+    void *_hh_fac_next = (head);                                                 \
+    while (1) {                                                                  \
+        (el) = DECLTYPE(el)(_hh_fac_next);                                       \
+        _hh_fac_next = (el)->hh.next;                                            \
+        if (_hh_fac_next == NULL) break;                                         \
+        deleter(el);                                                             \
+    }                                                                            \
+    HASH_BLOOM_FREE((el)->hh.tbl);                                               \
+    uthash_free((el)->hh.tbl->buckets,                                           \
+                (el)->hh.tbl->num_buckets*sizeof(struct UT_hash_bucket));        \
+    uthash_free((el)->hh.tbl, sizeof(UT_hash_table));                            \
+    deleter(el);                                                                 \
+    (head) = NULL;                                                               \
+  }                                                                              \
+} while (0)
+
 #define HASH_OVERHEAD(hh,head)                                                   \
  (((head) != NULL) ? (                                                           \
  (size_t)(((head)->hh.tbl->num_items   * sizeof(UT_hash_handle))   +             \
