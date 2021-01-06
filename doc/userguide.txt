@@ -403,7 +403,7 @@ num_users = HASH_COUNT(users);
 printf("there are %u users\n", num_users);
 ----------------------------------------------------------------------
 
-Incidentally, this works even the list (`users`, here) is `NULL`, in
+Incidentally, this works even if the list head (here, `users`) is `NULL`, in
 which case the count is 0.
 
 Iterating and sorting
