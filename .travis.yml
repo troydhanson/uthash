@@ -1,14 +1,38 @@
 language: cpp
+
+addons:
+  apt:
+    packages:
+      # Need for scan-build
+      - clang-tools
+  homebrew:
+    taps: mgrebenets/scan-build
+    packages:
+      - scan-build
 matrix:
   include:
   - os: linux
+    dist: bionic
     compiler: gcc
   - os: linux
+    dist: bionic
+    compiler: clang
+  - os: linux
+    dist: focal
+    compiler: gcc
+  - os: linux
+    dist: focal
     compiler: clang
   - os: osx
+    osx_image: xcode12.2
+
+# See https://stackoverflow.com/a/58349403/2335781
+before_script:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo ln -s /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/* /usr/local/include/; fi
+
 script:
-- make -C tests EXTRA_CFLAGS="-W -Wall -Wextra"
-- make -C tests clean ; make -C tests pedantic
-- make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
-- make -C tests clean ; make -C tests cplusplus
-- make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+- scan-build make -C tests EXTRA_CFLAGS="-W -Wall -Wextra"
+- make -C tests clean ; scan-build make -C tests pedantic
+- make -C tests clean ; scan-build make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+- make -C tests clean ; scan-build make -C tests cplusplus
+- make -C tests clean ; scan-build make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
