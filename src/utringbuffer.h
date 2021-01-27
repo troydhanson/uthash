@@ -68,6 +68,7 @@ typedef struct {
 #define utringbuffer_done(a) do {                                         \
   utringbuffer_clear(a);                                                  \
   free((a)->d); (a)->d = NULL;                                            \
+  (a)->i = 0;                                                             \
   (a)->n = 0;                                                             \
 } while(0)
 
