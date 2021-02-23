@@ -430,7 +430,7 @@ the hash, starting from any known item.
 Deletion-safe iteration
 ^^^^^^^^^^^^^^^^^^^^^^^
 In the example above, it would not be safe to delete and free `s` in the body
-of the 'for' loop, (because `s` is derefenced each time the loop iterates).
+of the 'for' loop, (because `s` is dereferenced each time the loop iterates).
 This is easy to rewrite correctly (by copying the `s->hh.next` pointer to a
 temporary variable 'before' freeing `s`), but it comes up often enough that a
 deletion-safe iteration macro, `HASH_ITER`, is included. It expands to a
@@ -452,7 +452,7 @@ doubly-linked list.
 *******************************************************************************
 
 If you're using uthash in a C++ program, you need an extra cast on the `for`
-iterator, e.g., `s = (struct my_struct*)s->hh.next`.
+iterator, e.g., `s = static_cast<my_struct*>(s->hh.next)`.
 
 Sorting
 ^^^^^^^
@@ -1240,7 +1240,8 @@ for a structure to be usable with `HASH_SELECT`, it must have two or more hash
 handles. (As described <<multihash,here>>, a structure can exist in many
 hash tables at the same time; it must have a separate hash handle for each one).
 
-  user_t *users = NULL, *admins = NULL; /* two hash tables */
+  user_t *users = NULL;   /* hash table of users */
+  user_t *admins = NULL;  /* hash table of admins */
 
   typedef struct {
       int id;
@@ -1256,21 +1257,22 @@ users who have id's less than 1024.
 
 The first two parameters are the 'destination' hash handle and hash table, the
 second two parameters are the 'source' hash handle and hash table, and the last
-parameter is the 'select condition'. Here we used a macro `is_admin()` but we
+parameter is the 'select condition'. Here we used a macro `is_admin(x)` but we
 could just as well have used a function.
 
-  int is_admin(void *userv) {
-    user_t *user = (user_t*)userv;
+  int is_admin(const void *userv) {
+    user_t *user = (const user_t*)userv;
     return (user->id < 1024) ? 1 : 0;
   }
 
 If the select condition always evaluates to true, this operation is
-essentially a 'merge' of the source hash into the destination hash. Of course,
-the source hash remains unchanged under any use of `HASH_SELECT`. It only adds
-items to the destination hash selectively.
+essentially a 'merge' of the source hash into the destination hash.
 
-The two hash handles must differ. An example of using `HASH_SELECT` is included
-in `tests/test36.c`.
+`HASH_SELECT` adds items to the destination without removing them from
+the source; the source hash table remains unchanged. The destination hash table
+must not be the same as the source hash table.
+
+An example of using `HASH_SELECT` is included in `tests/test36.c`.
 
 [[hash_keycompare]]
 Specifying an alternate key comparison function
@@ -1290,7 +1292,7 @@ that do not provide `memcmp`, you can substitute your own implementation.
 
 ----------------------------------------------------------------------------
 #undef HASH_KEYCMP
-#define HASH_KEYCMP(a, b, len) bcmp(a, b, len)
+#define HASH_KEYCMP(a,b,len) bcmp(a, b, len)
 ----------------------------------------------------------------------------
 
 Another reason to substitute your own key comparison function is if your "key" is not
@@ -1306,8 +1308,8 @@ struct Key {
 unsigned key_hash(struct Key *s) { return s + (unsigned)f; }
 bool key_equal(struct Key *a, struct Key *b) { return a.s == b.s && a.f == b.f; }
 
-#define HASH_FUNCTION(s, len, hashv) (hashv) = key_hash((struct Key *)s)
-#define HASH_KEYCMP(a, b, len) (!key_equal((struct Key *)a, (struct Key *)b))
+#define HASH_FUNCTION(s,len,hashv) (hashv) = key_hash((struct Key *)s)
+#define HASH_KEYCMP(a,b,len) (!key_equal((struct Key *)a, (struct Key *)b))
 ----------------------------------------------------------------------------
 
 Another reason to substitute your own key comparison function is to trade off
@@ -1322,7 +1324,7 @@ we might substitute a no-op comparison function:
 
 ----------------------------------------------------------------------------
 #undef HASH_KEYCMP
-#define HASH_KEYCMP(a, b, len) 0  /* occasionally wrong, but very fast */
+#define HASH_KEYCMP(a,b,len) 0  /* occasionally wrong, but very fast */
 ----------------------------------------------------------------------------
 
 Note: The global equality-comparison function `HASH_KEYCMP` has no relationship
@@ -1795,7 +1797,7 @@ In order to use the convenience macros,
 |===============================================================================
 |macro            | arguments
 |HASH_ADD_INT     | (head, keyfield_name, item_ptr)
-|HASH_REPLACE_INT | (head, keyfiled_name, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_INT | (head, keyfield_name, item_ptr, replaced_item_ptr)
 |HASH_FIND_INT    | (head, key_ptr, item_ptr)
 |HASH_ADD_STR     | (head, keyfield_name, item_ptr)
 |HASH_REPLACE_STR | (head, keyfield_name, item_ptr, replaced_item_ptr)

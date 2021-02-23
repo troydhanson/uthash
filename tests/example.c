@@ -44,7 +44,7 @@ void delete_all()
 
     HASH_ITER(hh, users, current_user, tmp) {
         HASH_DEL(users, current_user);  /* delete it (users advances to next) */
-        free(current_user);            /* free it */
+        free(current_user);             /* free it */
     }
 }
 
