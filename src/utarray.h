@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2008-2020, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2008-2021, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTARRAY_H
 #define UTARRAY_H
 
-#define UTARRAY_VERSION 2.2.0
+#define UTARRAY_VERSION 2.3.0
 
 #include <stddef.h>  /* size_t */
 #include <string.h>  /* memset, etc */

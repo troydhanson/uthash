@@ -5,6 +5,12 @@ Click to return to the link:index.html[uthash home page].
 
 NOTE: This ChangeLog may be incomplete and/or incorrect. See the git commit log.
 
+Version 2.3.0 (2021-02-23)
+--------------------------
+* remove HASH_FCN; the HASH_FUNCTION and HASH_KEYCMP macros now behave similarly
+* remove uthash_memcmp (deprecated in v2.1.0) in favor of HASH_KEYCMP
+* silence -Wswitch-default warnings (thanks, Olaf Bergmann!)
+
 Version 2.2.0 (2020-12-17)
 --------------------------
 * add HASH_NO_STDINT for platforms without C99 <stdint.h>

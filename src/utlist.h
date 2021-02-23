@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2007-2020, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2007-2021, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTLIST_H
 #define UTLIST_H
 
-#define UTLIST_VERSION 2.2.0
+#define UTLIST_VERSION 2.3.0
 
 #include <assert.h>
 
