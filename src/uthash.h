@@ -678,7 +678,8 @@ do {                                                                            
     case 4:  _hj_i += ( (unsigned)_hj_key[3] << 24 );  /* FALLTHROUGH */         \
     case 3:  _hj_i += ( (unsigned)_hj_key[2] << 16 );  /* FALLTHROUGH */         \
     case 2:  _hj_i += ( (unsigned)_hj_key[1] << 8 );   /* FALLTHROUGH */         \
-    case 1:  _hj_i += _hj_key[0];                                                \
+    case 1:  _hj_i += _hj_key[0];                      /* FALLTHROUGH */         \
+    default: ;                                                                   \
   }                                                                              \
   HASH_JEN_MIX(_hj_i, _hj_j, hashv);                                             \
 } while (0)
@@ -726,6 +727,8 @@ do {                                                                            
     case 1: hashv += *_sfh_key;                                                  \
             hashv ^= hashv << 10;                                                \
             hashv += hashv >> 1;                                                 \
+            break;                                                               \
+    default: ;                                                                   \
   }                                                                              \
                                                                                  \
   /* Force "avalanching" of final 127 bits */                                    \

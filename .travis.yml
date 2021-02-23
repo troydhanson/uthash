@@ -7,7 +7,7 @@ matrix:
     compiler: clang
   - os: osx
 script:
-- make -C tests EXTRA_CFLAGS="-W -Wall -Wextra"
+- make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
 - make -C tests clean ; make -C tests pedantic
 - make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
 - make -C tests clean ; make -C tests cplusplus
