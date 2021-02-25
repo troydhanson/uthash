@@ -770,8 +770,8 @@ asciidoc.install(2);
 <div id="header">
 <h1>uthash User Guide</h1>
 <span id="author">Troy D. Hanson, Arthur O'Dwyer</span><br />
-<span id="revnumber">version 2.2.0,</span>
-<span id="revdate">December 2020</span>
+<span id="revnumber">version 2.3.0,</span>
+<span id="revdate">February 2021</span>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -1066,7 +1066,7 @@ a unique value. Then call <code>HASH_ADD</code>. (Here we use the convenience ma
     s = malloc(sizeof(struct my_struct));
     s-&gt;id = user_id;
     strcpy(s-&gt;name, name);
-    HASH_ADD_INT( users, id, s );  /* id: name of key field */
+    HASH_ADD_INT(users, id, s);  /* id: name of key field */
 }</code></pre>
 </div></div>
 <div class="paragraph"><p>The first parameter to <code>HASH_ADD_INT</code> is the hash table, and the
@@ -1103,10 +1103,10 @@ Otherwise we just modify the structure that already exists.</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>    HASH_FIND_INT(users, &amp;user_id, s);  /* id already in the hash? */
-    if (s==NULL) {
+    if (s == NULL) {
       s = (struct my_struct *)malloc(sizeof *s);
       s-&gt;id = user_id;
-      HASH_ADD_INT( users, id, s );  /* id: name of key field */
+      HASH_ADD_INT(users, id, s);  /* id: name of key field */
     }
     strcpy(s-&gt;name, name);
 }</code></pre>
@@ -1130,7 +1130,7 @@ right.</p></div>
 <pre><code>/* bad */
 void add_user(struct my_struct *users, int user_id, char *name) {
   ...
-  HASH_ADD_INT( users, id, s );
+  HASH_ADD_INT(users, id, s);
 }</code></pre>
 </div></div>
 <div class="paragraph"><p>You really need to pass <em>a pointer</em> to the hash pointer:</p></div>
@@ -1139,7 +1139,7 @@ void add_user(struct my_struct *users, int user_id, char *name) {
 <pre><code>/* good */
 void add_user(struct my_struct **users, int user_id, char *name) { ...
   ...
-  HASH_ADD_INT( *users, id, s );
+  HASH_ADD_INT(*users, id, s);
 }</code></pre>
 </div></div>
 <div class="paragraph"><p>Note that we dereferenced the pointer in the <code>HASH_ADD</code> also.</p></div>
@@ -1164,7 +1164,7 @@ also return that items pointer as an output parameter.</p></div>
 <pre><code>struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &amp;user_id, s );  /* s: output pointer */
+    HASH_FIND_INT(users, &amp;user_id, s);  /* s: output pointer */
     return s;
 }</code></pre>
 </div></div>
@@ -1222,8 +1222,8 @@ to a simple <em>for</em> loop.</p></div>
   struct my_struct *current_user, *tmp;
 
   HASH_ITER(hh, users, current_user, tmp) {
-    HASH_DEL(users,current_user);  /* delete; users advances to next */
-    free(current_user);            /* optional- if you want to free  */
+    HASH_DEL(users, current_user);  /* delete; users advances to next */
+    free(current_user);             /* optional- if you want to free  */
   }
 }</code></pre>
 </div></div>
@@ -1234,7 +1234,7 @@ to a simple <em>for</em> loop.</p></div>
 per-element clean up, you can do this more efficiently in a single operation:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>HASH_CLEAR(hh,users);</code></pre>
+<pre><code>HASH_CLEAR(hh, users);</code></pre>
 </div></div>
 <div class="paragraph"><p>Afterward, the list head (here, <code>users</code>) will be set to <code>NULL</code>.</p></div>
 </div>
@@ -1249,7 +1249,7 @@ per-element clean up, you can do this more efficiently in a single operation:</p
 num_users = HASH_COUNT(users);
 printf("there are %u users\n", num_users);</code></pre>
 </div></div>
-<div class="paragraph"><p>Incidentally, this works even the list (<code>users</code>, here) is <code>NULL</code>, in
+<div class="paragraph"><p>Incidentally, this works even if the list head (here, <code>users</code>) is <code>NULL</code>, in
 which case the count is 0.</p></div>
 </div>
 <div class="sect2">
@@ -1262,7 +1262,7 @@ following the <code>hh.next</code> pointer.</p></div>
 <pre><code>void print_users() {
     struct my_struct *s;
 
-    for(s=users; s != NULL; s=s-&gt;hh.next) {
+    for (s = users; s != NULL; s = s-&gt;hh.next) {
         printf("user id %d: name %s\n", s-&gt;id, s-&gt;name);
     }
 }</code></pre>
@@ -1272,7 +1272,7 @@ the hash, starting from any known item.</p></div>
 <div class="sect3">
 <h4 id="deletesafe">Deletion-safe iteration</h4>
 <div class="paragraph"><p>In the example above, it would not be safe to delete and free <code>s</code> in the body
-of the <em>for</em> loop, (because <code>s</code> is derefenced each time the loop iterates).
+of the <em>for</em> loop, (because <code>s</code> is dereferenced each time the loop iterates).
 This is easy to rewrite correctly (by copying the <code>s-&gt;hh.next</code> pointer to a
 temporary variable <em>before</em> freeing <code>s</code>), but it comes up often enough that a
 deletion-safe iteration macro, <code>HASH_ITER</code>, is included. It expands to a
@@ -1297,7 +1297,7 @@ be reached by repeatedly following these pointers, thus the hash is also a
 doubly-linked list.</p></div>
 </div></div>
 <div class="paragraph"><p>If you&#8217;re using uthash in a C++ program, you need an extra cast on the <code>for</code>
-iterator, e.g., <code>s=(struct my_struct*)s-&gt;hh.next</code>.</p></div>
+iterator, e.g., <code>s = static_cast&lt;my_struct*&gt;(s-&gt;hh.next)</code>.</p></div>
 </div>
 <div class="sect3">
 <h4 id="_sorting">Sorting</h4>
@@ -1305,7 +1305,7 @@ iterator, e.g., <code>s=(struct my_struct*)s-&gt;hh.next</code>.</p></div>
 <code>hh.next</code> pointer. You can sort the items into a new order using <code>HASH_SORT</code>.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>HASH_SORT( users, name_sort );</code></pre>
+<pre><code>HASH_SORT(users, name_sort);</code></pre>
 </div></div>
 <div class="paragraph"><p>The second argument is a pointer to a comparison function. It must accept two
 pointer arguments (the items to compare), and must return an <code>int</code> which is
@@ -1327,7 +1327,7 @@ used by <code>strcmp</code> or <code>qsort</code> in the standard C library).</p
 <div class="title">Sorting the items in the hash</div>
 <div class="content">
 <pre><code>int name_sort(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a-&gt;name,b-&gt;name);
+    return strcmp(a-&gt;name, b-&gt;name);
 }
 
 int id_sort(struct my_struct *a, struct my_struct *b) {
@@ -1379,10 +1379,10 @@ void add_user(int user_id, char *name) {
     struct my_struct *s;
 
     HASH_FIND_INT(users, &amp;user_id, s);  /* id already in the hash? */
-    if (s==NULL) {
+    if (s == NULL) {
       s = (struct my_struct *)malloc(sizeof *s);
       s-&gt;id = user_id;
-      HASH_ADD_INT( users, id, s );  /* id: name of key field */
+      HASH_ADD_INT(users, id, s);  /* id: name of key field */
     }
     strcpy(s-&gt;name, name);
 }
@@ -1390,7 +1390,7 @@ void add_user(int user_id, char *name) {
 struct my_struct *find_user(int user_id) {
     struct my_struct *s;
 
-    HASH_FIND_INT( users, &amp;user_id, s );  /* s: output pointer */
+    HASH_FIND_INT(users, &amp;user_id, s);  /* s: output pointer */
     return s;
 }
 
@@ -1411,13 +1411,13 @@ void delete_all() {
 void print_users() {
     struct my_struct *s;
 
-    for(s=users; s != NULL; s=(struct my_struct*)(s-&gt;hh.next)) {
+    for (s = users; s != NULL; s = (struct my_struct*)(s-&gt;hh.next)) {
         printf("user id %d: name %s\n", s-&gt;id, s-&gt;name);
     }
 }
 
 int name_sort(struct my_struct *a, struct my_struct *b) {
-    return strcmp(a-&gt;name,b-&gt;name);
+    return strcmp(a-&gt;name, b-&gt;name);
 }
 
 int id_sort(struct my_struct *a, struct my_struct *b) {
@@ -1434,7 +1434,7 @@ void sort_by_id() {
 
 int main(int argc, char *argv[]) {
     char in[10];
-    int id=1, running=1;
+    int id = 1, running = 1;
     struct my_struct *s;
     unsigned num_users;
 
@@ -1485,11 +1485,11 @@ int main(int argc, char *argv[]) {
                 print_users();
                 break;
             case 9:
-                num_users=HASH_COUNT(users);
+                num_users = HASH_COUNT(users);
                 printf("there are %u users\n", num_users);
                 break;
             case 10:
-                running=0;
+                running = 0;
                 break;
         }
     }
@@ -1576,10 +1576,10 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct *)malloc(sizeof *s);
         strcpy(s-&gt;name, names[i]);
         s-&gt;id = i;
-        HASH_ADD_STR( users, name, s );
+        HASH_ADD_STR(users, name, s);
     }
 
-    HASH_FIND_STR( users, "betty", s);
+    HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s-&gt;id);
 
     /* free the hash table contents */
@@ -1622,10 +1622,10 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct *)malloc(sizeof *s);
         s-&gt;name = names[i];
         s-&gt;id = i;
-        HASH_ADD_KEYPTR( hh, users, s-&gt;name, strlen(s-&gt;name), s );
+        HASH_ADD_KEYPTR(hh, users, s-&gt;name, strlen(s-&gt;name), s);
     }
 
-    HASH_FIND_STR( users, "betty", s);
+    HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s-&gt;id);
 
     /* free the hash table contents */
@@ -1667,12 +1667,12 @@ int main() {
   if (!e) return -1;
   e-&gt;key = (void*)someaddr;
   e-&gt;i = 1;
-  HASH_ADD_PTR(hash,key,e);
+  HASH_ADD_PTR(hash, key, e);
   HASH_FIND_PTR(hash, &amp;someaddr, d);
   if (d) printf("found\n");
 
   /* release memory */
-  HASH_DEL(hash,e);
+  HASH_DEL(hash, e);
   free(e);
   return 0;
 }</code></pre>
@@ -1783,7 +1783,7 @@ int main(int argc, char *argv[]) {
     int beijing[] = {0x5317, 0x4eac};   /* UTF-32LE for 北京 */
 
     /* allocate and initialize our structure */
-    msg = (msg_t *)malloc( sizeof(msg_t) + sizeof(beijing) );
+    msg = (msg_t *)malloc(sizeof(msg_t) + sizeof(beijing));
     memset(msg, 0, sizeof(msg_t)+sizeof(beijing)); /* zero fill */
     msg-&gt;len = sizeof(beijing);
     msg-&gt;encoding = UTF32;
@@ -1795,16 +1795,16 @@ int main(int argc, char *argv[]) {
              - offsetof(msg_t, encoding);  /* offset of first key field */
 
     /* add our structure to the hash table */
-    HASH_ADD( hh, msgs, encoding, keylen, msg);
+    HASH_ADD(hh, msgs, encoding, keylen, msg);
 
     /* look it up to prove that it worked :-) */
-    msg=NULL;
+    msg = NULL;
 
     lookup_key = (lookup_key_t *)malloc(sizeof(*lookup_key) + sizeof(beijing));
     memset(lookup_key, 0, sizeof(*lookup_key) + sizeof(beijing));
     lookup_key-&gt;encoding = UTF32;
     memcpy(lookup_key-&gt;text, beijing, sizeof(beijing));
-    HASH_FIND( hh, msgs, &amp;lookup_key-&gt;encoding, keylen, msg );
+    HASH_FIND(hh, msgs, &amp;lookup_key-&gt;encoding, keylen, msg);
     if (msg) printf("found \n");
     free(lookup_key);
 
@@ -1880,7 +1880,7 @@ typedef struct item {
   UT_hash_handle hh;
 } item_t;
 
-item_t *items=NULL;
+item_t *items = NULL;
 
 int main(int argc, char *argvp[]) {
   item_t *item1, *item2, *tmp1, *tmp2;
@@ -1991,7 +1991,7 @@ always used with the <code>users_by_name</code> hash table).</p></div>
     HASH_ADD(hh2, users_by_name, username, strlen(s-&gt;username), s);
 
     /* find user by ID in the "users_by_id" hash table */
-    i=1;
+    i = 1;
     HASH_FIND(hh1, users_by_id, &amp;i, sizeof(int), s);
     if (s) printf("found id %d: %s\n", i, s-&gt;username);
 
@@ -2017,7 +2017,7 @@ with an additional comparison-function argument:</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>int name_sort(struct my_struct *a, struct my_struct *b) {
-  return strcmp(a-&gt;name,b-&gt;name);
+  return strcmp(a-&gt;name, b-&gt;name);
 }</code></pre>
 </div></div>
 <div class="literalblock">
@@ -2049,7 +2049,7 @@ Now we can define two sort functions, then use <code>HASH_SRT</code>.</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>int sort_by_name(struct my_struct *a, struct my_struct *b) {
-  return strcmp(a-&gt;username,b-&gt;username);
+  return strcmp(a-&gt;username, b-&gt;username);
 }</code></pre>
 </div></div>
 <div class="literalblock">
@@ -2136,7 +2136,8 @@ handles. (As described <a href="#multihash">here</a>, a structure can exist in m
 hash tables at the same time; it must have a separate hash handle for each one).</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>user_t *users=NULL, *admins=NULL; /* two hash tables */</code></pre>
+<pre><code>user_t *users = NULL;   /* hash table of users */
+user_t *admins = NULL;  /* hash table of admins */</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
@@ -2151,25 +2152,25 @@ users who have id&#8217;s less than 1024.</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>#define is_admin(x) (((user_t*)x)-&gt;id &lt; 1024)
-HASH_SELECT(ah,admins,hh,users,is_admin);</code></pre>
+HASH_SELECT(ah, admins, hh, users, is_admin);</code></pre>
 </div></div>
 <div class="paragraph"><p>The first two parameters are the <em>destination</em> hash handle and hash table, the
 second two parameters are the <em>source</em> hash handle and hash table, and the last
-parameter is the <em>select condition</em>. Here we used a macro <code>is_admin()</code> but we
+parameter is the <em>select condition</em>. Here we used a macro <code>is_admin(x)</code> but we
 could just as well have used a function.</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>int is_admin(void *userv) {
-  user_t *user = (user_t*)userv;
+<pre><code>int is_admin(const void *userv) {
+  user_t *user = (const user_t*)userv;
   return (user-&gt;id &lt; 1024) ? 1 : 0;
 }</code></pre>
 </div></div>
 <div class="paragraph"><p>If the select condition always evaluates to true, this operation is
-essentially a <em>merge</em> of the source hash into the destination hash. Of course,
-the source hash remains unchanged under any use of <code>HASH_SELECT</code>. It only adds
-items to the destination hash selectively.</p></div>
-<div class="paragraph"><p>The two hash handles must differ. An example of using <code>HASH_SELECT</code> is included
-in <code>tests/test36.c</code>.</p></div>
+essentially a <em>merge</em> of the source hash into the destination hash.</p></div>
+<div class="paragraph"><p><code>HASH_SELECT</code> adds items to the destination without removing them from
+the source; the source hash table remains unchanged. The destination hash table
+must not be the same as the source hash table.</p></div>
+<div class="paragraph"><p>An example of using <code>HASH_SELECT</code> is included in <code>tests/test36.c</code>.</p></div>
 </div>
 <div class="sect2">
 <h3 id="hash_keycompare">Specifying an alternate key comparison function</h3>
@@ -2186,7 +2187,7 @@ that do not provide <code>memcmp</code>, you can substitute your own implementat
 <div class="listingblock">
 <div class="content">
 <pre><code>#undef HASH_KEYCMP
-#define HASH_KEYCMP(a,b,len) bcmp(a,b,len)</code></pre>
+#define HASH_KEYCMP(a,b,len) bcmp(a, b, len)</code></pre>
 </div></div>
 <div class="paragraph"><p>Another reason to substitute your own key comparison function is if your "key" is not
 trivially comparable. In this case you will also need to substitute your own <code>HASH_FUNCTION</code>.</p></div>
@@ -2664,7 +2665,7 @@ If your application uses its own custom allocator, uthash can use them too.</p><
 
 /* re-define, specifying alternate functions */
 #define uthash_malloc(sz) my_malloc(sz)
-#define uthash_free(ptr,sz) my_free(ptr)
+#define uthash_free(ptr, sz) my_free(ptr)
 
 ...</code></pre>
 </div></div>
@@ -2679,7 +2680,7 @@ provide these functions, you can substitute your own implementations.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>#undef uthash_bzero
-#define uthash_bzero(a,len) my_bzero(a,len)
+#define uthash_bzero(a, len) my_bzero(a, len)
 
 #undef uthash_strlen
 #define uthash_strlen(s) my_strlen(s)</code></pre>
@@ -2795,7 +2796,7 @@ concurrent readers (since uthash 1.5).</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>pthread_rwlock_t lock;
-if (pthread_rwlock_init(&amp;lock,NULL) != 0) fatal("can't create rwlock");</code></pre>
+if (pthread_rwlock_init(&amp;lock, NULL) != 0) fatal("can't create rwlock");</code></pre>
 </div></div>
 <div class="paragraph"><p>Then, readers must acquire the read lock before doing any <code>HASH_FIND</code> calls or
 before iterating over the hash elements:</p></div>
@@ -2861,7 +2862,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE_INT</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(head, keyfiled_name, item_ptr,replaced_item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_INT</code></p></td>
@@ -2873,7 +2874,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_REPLACE_STR</code></p></td>
-<td align="left" valign="top"><p class="table"><code>(head,keyfield_name, item_ptr, replaced_item_ptr)</code></p></td>
+<td align="left" valign="top"><p class="table"><code>(head, keyfield_name, item_ptr, replaced_item_ptr)</code></p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"><code>HASH_FIND_STR</code></p></td>
@@ -3145,9 +3146,9 @@ condition
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Version 2.2.0<br />
+Version 2.3.0<br />
 Last updated
- 2020-12-17 11:13:22 EST
+ 2021-02-23 00:57:10 EST
 </div>
 </div>
 </body>

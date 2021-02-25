@@ -789,6 +789,28 @@ asciidoc.install(2);
 </div>
 </div>
 <div class="sect1">
+<h2 id="_version_2_3_0_2021_02_25">Version 2.3.0 (2021-02-25)</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+remove HASH_FCN; the HASH_FUNCTION and HASH_KEYCMP macros now behave similarly
+</p>
+</li>
+<li>
+<p>
+remove uthash_memcmp (deprecated in v2.1.0) in favor of HASH_KEYCMP
+</p>
+</li>
+<li>
+<p>
+silence -Wswitch-default warnings (thanks, Olaf Bergmann!)
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_version_2_2_0_2020_12_17">Version 2.2.0 (2020-12-17)</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
@@ -1691,7 +1713,7 @@ Initial release
 <div id="footer">
 <div id="footer-text">
 Last updated
- 2020-12-17 11:13:22 EST
+ 2021-02-25 10:42:05 EST
 </div>
 </div>
 </body>
