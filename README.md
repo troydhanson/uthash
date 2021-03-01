@@ -3,6 +3,6 @@
 
 Documentation for uthash is available at:
 
-https://troydhanson.github.com/uthash/
+https://troydhanson.github.io/uthash/
 
 

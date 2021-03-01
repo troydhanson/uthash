@@ -3,7 +3,7 @@
 #include "uthash.h"
 
 // this is an example of how to do a LRU cache in C using uthash
-// http://troydhanson.github.com/uthash/
+// http://troydhanson.github.io/uthash/
 // by Jehiah Czebotar 2011 - jehiah@gmail.com
 // this code is in the public domain http://unlicense.org/
 
