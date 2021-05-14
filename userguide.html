@@ -1576,7 +1576,7 @@ int main(int argc, char *argv[]) {
         s = (struct my_struct *)malloc(sizeof *s);
         strcpy(s-&gt;name, names[i]);
         s-&gt;id = i;
-        HASH_ADD_STR(users, name, s);
+        HASH_ADD_STR(users, s-&gt;name, s);
     }
 
     HASH_FIND_STR(users, "betty", s);
