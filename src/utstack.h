@@ -35,9 +35,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * struct item {
  *      int id;
  *      struct item *next;
- * }
+ * };
  *
- * struct item *stack = NULL:
+ * struct item *stack = NULL;
  *
  * int main() {
  *      int count;
