@@ -13,8 +13,8 @@ struct my_struct {
 
 struct my_struct *users = NULL;
 
-char *get_input() {
-    static char buf[NAME_SIZE];
+const char *get_input() {
+    static char buf[100];
     printf("99 char max> "); fflush(stdout);
     char *p = fgets(buf, sizeof(buf), stdin);
     if (p == NULL || (p = strchr(buf, '\n')) == NULL) {
@@ -25,7 +25,7 @@ char *get_input() {
     return buf;
 }
 
-void add_user(int user_id, char *name)
+void add_user(int user_id, const char *name)
 {
     struct my_struct *s;
 
@@ -93,7 +93,7 @@ void sort_by_id()
 
 int main()
 {
-    char *in;
+    const char *in;
     int id = 1, running = 1;
     struct my_struct *s;
     unsigned num_users;
