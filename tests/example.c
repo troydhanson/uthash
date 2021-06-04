@@ -14,39 +14,15 @@ struct my_struct {
 struct my_struct *users = NULL;
 
 char *get_input() {
-  char *entry=NULL;
-  char *newline;
-  static char entry_buffer[NAME_SIZE];
-
-  entry = fgets(entry_buffer, sizeof(entry_buffer), stdin); // Read entry
-  if (entry==NULL) {
-    printf("ENTRY NULL\n");
-    return NULL;
-  } else {
-    // Clean entry from newline
-    newline = strchr(entry, '\n');
-    if (newline!=NULL) {
-      *newline = '\0';
-    } else {
-      // Clear entry
-      printf("Entry is too long\n");
-      while (1) {
-	entry = fgets(entry_buffer, sizeof(entry_buffer), stdin); // Read entry
-	// Exit on error
-	if ((entry[0]=='\0') || (entry[0]=='\n') || (entry==NULL) || feof(stdin)) {
-	  entry = NULL;
-	  break;
-	}
-	newline = strchr(entry, '\n');
-	if (newline!=NULL) {
-	  entry=NULL;
-	  break;
-	}
-      }
+    static char buf[NAME_SIZE];
+    printf("99 char max> "); fflush(stdout);
+    char *p = fgets(buf, sizeof(buf), stdin);
+    if (p == NULL || (p = strchr(buf, '\n')) == NULL) {
+        puts("Invalid input!");
+        exit(EXIT_FAILURE);
     }
-  }
-
-  return entry;
+    *p = '\0';
+    return buf;
 }
 
 void add_user(int user_id, char *name)
@@ -121,6 +97,7 @@ int main()
     int id = 1, running = 1;
     struct my_struct *s;
     unsigned num_users;
+    atexit(delete_all);
 
     while (running) {
         printf(" 1. add user\n");
@@ -135,35 +112,29 @@ int main()
         printf("10. quit\n");
 
 	in = get_input();
-	if (in==NULL) { printf("Invalid entry\n"); continue; }
         switch(atoi(in)) {
             case 1:
                 printf("name?\n");
 		in = get_input();
-		if (in==NULL) { printf("Invalid entry\n"); continue; }
                 add_user(id++, in);
                 break;
             case 2:
                 printf("id?\n");
 		in = get_input();
-		if (in==NULL) { printf("Invalid entry\n"); continue; }
                 id = atoi(in);
                 printf("name?\n");
 		in = get_input();
-		if (in==NULL) { printf("Invalid entry\n"); continue; }
                 add_user(id, in);
                 break;
             case 3:
                 printf("id?\n");
 		in = get_input();
-		if (in==NULL) { printf("Invalid entry\n"); continue; }
                 s = find_user(atoi(in));
                 printf("user: %s\n", s ? s->name : "unknown");
                 break;
             case 4:
                 printf("id?\n");
 		in = get_input();
-		if (in==NULL) { printf("Invalid entry\n"); continue; }
                 s = find_user(atoi(in));
                 if (s) {
                     delete_user(s);
