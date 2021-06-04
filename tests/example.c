@@ -14,7 +14,7 @@ struct my_struct {
 struct my_struct *users = NULL;
 
 const char *get_input() {
-    static char buf[100];
+    static char buf[NAME_SIZE];
     printf("99 char max> "); fflush(stdout);
     char *p = fgets(buf, sizeof(buf), stdin);
     if (p == NULL || (p = strchr(buf, '\n')) == NULL) {
