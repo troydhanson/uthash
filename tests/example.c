@@ -17,7 +17,7 @@ void add_user(int user_id, const char *name)
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
     if (s == NULL) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        s = (struct my_struct*)malloc(sizeof *s);
         s->id = user_id;
         HASH_ADD_INT(users, id, s);  /* id is the key field */
     }

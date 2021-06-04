@@ -215,7 +215,7 @@ a unique value. Then call `HASH_ADD`. (Here we use the convenience macro
 void add_user(int user_id, char *name) {
     struct my_struct *s;
 
-    s = malloc(sizeof(struct my_struct));
+    s = malloc(sizeof *s);
     s->id = user_id;
     strcpy(s->name, name);
     HASH_ADD_INT(users, id, s);  /* id: name of key field */
@@ -535,7 +535,7 @@ void add_user(int user_id, const char *name)
 
     HASH_FIND_INT(users, &user_id, s);  /* id already in the hash? */
     if (s == NULL) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
+        s = (struct my_struct*)malloc(sizeof *s);
         s->id = user_id;
         HASH_ADD_INT(users, id, s);  /* id is the key field */
     }
@@ -1131,7 +1131,7 @@ always used with the `users_by_name` hash table).
     int i;
     char *name;
 
-    s = malloc(sizeof(struct my_struct));
+    s = malloc(sizeof *s);
     s->id = 1;
     strcpy(s->username, "thanson");
 
