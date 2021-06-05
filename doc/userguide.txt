@@ -605,7 +605,7 @@ int main()
     int id = 1;
     int running = 1;
     struct my_struct *s;
-    int num_users;
+    int temp;
 
     while (running) {
         printf(" 1. add user\n");
@@ -623,8 +623,8 @@ int main()
                 add_user(id++, getl("Name (20 char max)"));
                 break;
             case 2:
-                id = atoi(getl("ID"));
-                add_user(id, getl("Name (20 char max)"));
+                temp = atoi(getl("ID"));
+                add_user(temp, getl("Name (20 char max)"));
                 break;
             case 3:
                 s = find_user(atoi(getl("ID to find")));
@@ -651,8 +651,8 @@ int main()
                 print_users();
                 break;
             case 9:
-                num_users = HASH_COUNT(users);
-                printf("there are %d users\n", num_users);
+                temp = HASH_COUNT(users);
+                printf("there are %d users\n", temp);
                 break;
             case 10:
                 running = 0;
