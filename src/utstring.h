@@ -76,7 +76,11 @@ do {                                                       \
 
 #define utstring_done(s)                                   \
 do {                                                       \
-  if ((s)->d != NULL) free((s)->d);                        \
+  if ((s)->d != NULL) {                                    \
+    free((s)->d);                                          \
+    (s)->d = NULL;                                         \
+  }                                                        \
+  (s)->i = 0;                                              \
   (s)->n = 0;                                              \
 } while(0)
 
