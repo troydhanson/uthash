@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2021, Troy D. Hanson     http://troydhanson.github.io/uthash/
+Copyright (c) 2003-2022, Troy D. Hanson  https://troydhanson.github.io/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -593,7 +593,9 @@ do {                                                                            
 
 
 /* SAX/FNV/OAT/JEN hash functions are macro variants of those listed at
- * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx */
+ * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
+ * (archive link: https://archive.is/Ivcan )
+ */
 #define HASH_SAX(key,keylen,hashv)                                               \
 do {                                                                             \
   unsigned _sx_i;                                                                \
