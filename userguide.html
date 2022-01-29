@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 9.0.4" />
+<meta name="generator" content="AsciiDoc 9.1.0" />
 <title>uthash User Guide</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -782,7 +782,7 @@ asciidoc.install(2);
 <div class="sectionbody">
 <div class="paragraph"><p>To download uthash, follow this link back to the
 <a href="https://github.com/troydhanson/uthash">GitHub project page</a>.
-Back to my <a href="http://troydhanson.github.io/">other projects</a>.</p></div>
+Back to my <a href="https://troydhanson.github.io/">other projects</a>.</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -1063,7 +1063,7 @@ a unique value. Then call <code>HASH_ADD</code>. (Here we use the convenience ma
 <pre><code>void add_user(int user_id, char *name) {
     struct my_struct *s;
 
-    s = malloc(sizeof(struct my_struct));
+    s = malloc(sizeof *s);
     s-&gt;id = user_id;
     strcpy(s-&gt;name, name);
     HASH_ADD_INT(users, id, s);  /* id: name of key field */
@@ -1074,7 +1074,7 @@ second parameter is the <em>name</em> of the key field. Here, this is <code>id</
 last parameter is a pointer to the structure being added.</p></div>
 <div class="sidebarblock" id="validc">
 <div class="content">
-<div class="title">Wait.. the field name is a parameter?</div>
+<div class="title">Wait.. the parameter is a field name?</div>
 <div class="paragraph"><p>If you find it strange that <code>id</code>, which is the <em>name of a field</em> in the
 structure, can be passed as a parameter&#8230; welcome to the world of macros. Don&#8217;t
 worry; the C preprocessor expands this to valid C code.</p></div>
@@ -1326,20 +1326,20 @@ used by <code>strcmp</code> or <code>qsort</code> in the standard C library).</p
 <div class="listingblock">
 <div class="title">Sorting the items in the hash</div>
 <div class="content">
-<pre><code>int name_sort(struct my_struct *a, struct my_struct *b) {
+<pre><code>int by_name(const struct my_struct *a, const struct my_struct *b) {
     return strcmp(a-&gt;name, b-&gt;name);
 }
 
-int id_sort(struct my_struct *a, struct my_struct *b) {
+int by_id(const struct my_struct *a, const struct my_struct *b) {
     return (a-&gt;id - b-&gt;id);
 }
 
 void sort_by_name() {
-    HASH_SORT(users, name_sort);
+    HASH_SORT(users, by_name);
 }
 
 void sort_by_id() {
-    HASH_SORT(users, id_sort);
+    HASH_SORT(users, by_id);
 }</code></pre>
 </div></div>
 <div class="paragraph"><p>When the items in the hash are sorted, the first item may change position.  In
@@ -1362,53 +1362,59 @@ working example.</p></div>
 <div class="listingblock">
 <div class="title">A complete program</div>
 <div class="content">
-<pre><code>#include &lt;stdio.h&gt;   /* gets */
+<pre><code>#include &lt;stdio.h&gt;   /* printf */
 #include &lt;stdlib.h&gt;  /* atoi, malloc */
 #include &lt;string.h&gt;  /* strcpy */
 #include "uthash.h"
 
 struct my_struct {
     int id;                    /* key */
-    char name[10];
+    char name[21];
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
 struct my_struct *users = NULL;
 
-void add_user(int user_id, char *name) {
+void add_user(int user_id, const char *name)
+{
     struct my_struct *s;
 
     HASH_FIND_INT(users, &amp;user_id, s);  /* id already in the hash? */
     if (s == NULL) {
-      s = (struct my_struct *)malloc(sizeof *s);
-      s-&gt;id = user_id;
-      HASH_ADD_INT(users, id, s);  /* id: name of key field */
+        s = (struct my_struct*)malloc(sizeof *s);
+        s-&gt;id = user_id;
+        HASH_ADD_INT(users, id, s);  /* id is the key field */
     }
     strcpy(s-&gt;name, name);
 }
 
-struct my_struct *find_user(int user_id) {
+struct my_struct *find_user(int user_id)
+{
     struct my_struct *s;
 
     HASH_FIND_INT(users, &amp;user_id, s);  /* s: output pointer */
     return s;
 }
 
-void delete_user(struct my_struct *user) {
+void delete_user(struct my_struct *user)
+{
     HASH_DEL(users, user);  /* user: pointer to deletee */
     free(user);
 }
 
-void delete_all() {
-  struct my_struct *current_user, *tmp;
+void delete_all()
+{
+    struct my_struct *current_user;
+    struct my_struct *tmp;
 
-  HASH_ITER(hh, users, current_user, tmp) {
-    HASH_DEL(users, current_user);  /* delete it (users advances to next) */
-    free(current_user);             /* free it */
-  }
+    HASH_ITER(hh, users, current_user, tmp) {
+        HASH_DEL(users, current_user);  /* delete it (users advances to next) */
+        free(current_user);             /* free it */
+    }
 }
 
-void print_users() {
+void print_users()
+{
     struct my_struct *s;
 
     for (s = users; s != NULL; s = (struct my_struct*)(s-&gt;hh.next)) {
@@ -1416,31 +1422,40 @@ void print_users() {
     }
 }
 
-int name_sort(struct my_struct *a, struct my_struct *b) {
+int by_name(const struct my_struct *a, const struct my_struct *b)
+{
     return strcmp(a-&gt;name, b-&gt;name);
 }
 
-int id_sort(struct my_struct *a, struct my_struct *b) {
+int by_id(const struct my_struct *a, const struct my_struct *b)
+{
     return (a-&gt;id - b-&gt;id);
 }
 
-void sort_by_name() {
-    HASH_SORT(users, name_sort);
+const char *getl(const char *prompt)
+{
+    static char buf[21];
+    char *p;
+    printf("%s? ", prompt); fflush(stdout);
+    p = fgets(buf, sizeof(buf), stdin);
+    if (p == NULL || (p = strchr(buf, '\n')) == NULL) {
+        puts("Invalid input!");
+        exit(EXIT_FAILURE);
+    }
+    *p = '\0';
+    return buf;
 }
 
-void sort_by_id() {
-    HASH_SORT(users, id_sort);
-}
-
-int main(int argc, char *argv[]) {
-    char in[10];
-    int id = 1, running = 1;
+int main()
+{
+    int id = 1;
+    int running = 1;
     struct my_struct *s;
-    unsigned num_users;
+    int temp;
 
     while (running) {
         printf(" 1. add user\n");
-        printf(" 2. add/rename user by id\n");
+        printf(" 2. add or rename user by id\n");
         printf(" 3. find user\n");
         printf(" 4. delete user\n");
         printf(" 5. delete all users\n");
@@ -1449,44 +1464,41 @@ int main(int argc, char *argv[]) {
         printf(" 8. print users\n");
         printf(" 9. count users\n");
         printf("10. quit\n");
-        gets(in);
-        switch(atoi(in)) {
+        switch (atoi(getl("Command"))) {
             case 1:
-                printf("name?\n");
-                add_user(id++, gets(in));
+                add_user(id++, getl("Name (20 char max)"));
                 break;
             case 2:
-                printf("id?\n");
-                gets(in); id = atoi(in);
-                printf("name?\n");
-                add_user(id, gets(in));
+                temp = atoi(getl("ID"));
+                add_user(temp, getl("Name (20 char max)"));
                 break;
             case 3:
-                printf("id?\n");
-                s = find_user(atoi(gets(in)));
+                s = find_user(atoi(getl("ID to find")));
                 printf("user: %s\n", s ? s-&gt;name : "unknown");
                 break;
             case 4:
-                printf("id?\n");
-                s = find_user(atoi(gets(in)));
-                if (s) delete_user(s);
-                else printf("id unknown\n");
+                s = find_user(atoi(getl("ID to delete")));
+                if (s) {
+                    delete_user(s);
+                } else {
+                    printf("id unknown\n");
+                }
                 break;
             case 5:
                 delete_all();
                 break;
             case 6:
-                sort_by_name();
+                HASH_SORT(users, by_name);
                 break;
             case 7:
-                sort_by_id();
+                HASH_SORT(users, by_id);
                 break;
             case 8:
                 print_users();
                 break;
             case 9:
-                num_users = HASH_COUNT(users);
-                printf("there are %u users\n", num_users);
+                temp = HASH_COUNT(users);
+                printf("there are %d users\n", temp);
                 break;
             case 10:
                 running = 0;
@@ -1982,7 +1994,7 @@ always used with the <code>users_by_name</code> hash table).</p></div>
     int i;
     char *name;
 
-    s = malloc(sizeof(struct my_struct));
+    s = malloc(sizeof *s);
     s-&gt;id = 1;
     strcpy(s-&gt;username, "thanson");
 
@@ -3148,7 +3160,7 @@ condition
 <div id="footer-text">
 Version 2.3.0<br />
 Last updated
- 2021-02-23 00:57:10 EST
+ 2022-01-29 13:59:05 EST
 </div>
 </div>
 </body>
