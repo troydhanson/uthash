@@ -805,7 +805,7 @@ Here is a simple example where a structure has a pointer member, called `key`.
 
 .A pointer key
 ----------------------------------------------------------------------
-#include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include "uthash.h"
 
@@ -816,17 +816,16 @@ typedef struct {
 } el_t;
 
 el_t *hash = NULL;
-char *someaddr = NULL;
+void *someaddr = &hash;
 
 int main() {
   el_t *d;
   el_t *e = (el_t *)malloc(sizeof *e);
-  if (!e) return -1;
-  e->key = (void*)someaddr;
+  e->key = someaddr;
   e->i = 1;
   HASH_ADD_PTR(hash, key, e);
   HASH_FIND_PTR(hash, &someaddr, d);
-  if (d) printf("found\n");
+  assert(d == e);
 
   /* release memory */
   HASH_DEL(hash, e);
@@ -835,9 +834,7 @@ int main() {
 }
 ----------------------------------------------------------------------
 
-This example is included in `tests/test57.c`. Note that the end of the program
-deletes the element out of the hash, (and since no more elements remain in the
-hash), uthash releases its internal memory.
+This example is included in `tests/test57.c`.
 
 Structure keys
 ~~~~~~~~~~~~~~
@@ -893,7 +890,7 @@ int main(int argc, char *argv[]) {
 
 ----------------------------------------------------------------------
 
-This usage is nearly the same as use of a compound key explained below.
+This usage is nearly the same as the usage of a compound key explained below.
 
 Note that the general macros require the name of the `UT_hash_handle` to be
 passed as the first argument (here, this is `hh`). The general macros are
