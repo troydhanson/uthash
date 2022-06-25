@@ -45,6 +45,7 @@ int main()
     }
 
     /* now delete the list head */
+    assert(head != NULL);
     printf("deleting head %shead->prev: %s", head->bname, head->prev->bname);
     DL_DELETE(head,head);
     DL_FOREACH(head,tmp) {

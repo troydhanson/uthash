@@ -1,4 +1,5 @@
 #include "uthash.h"
+#include <assert.h>
 #include <string.h>   /* strcpy */
 #include <stdlib.h>   /* malloc */
 #include <stdio.h>    /* printf */
@@ -16,6 +17,7 @@ int main()
     char label[6] = "hello";
     for(i=0; i<10; i++) {
         elts[i].s = (char*)malloc(6UL);
+        assert(elts[i].s != NULL);
         strcpy(elts[i].s, "hello");
         elts[i].s[0] = 'a' + i;
         printf("%d: %s\n", i, elts[i].s);

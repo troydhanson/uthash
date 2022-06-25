@@ -20,7 +20,8 @@ int sort_func(const struct item *a, const struct item *b)
 int main()
 {
     size_t i;
-    struct item *p, *tmp;
+    struct item *p;
+    struct item *tmp;
     int total = 0;
 
     /** The sorted list */
@@ -30,9 +31,11 @@ int main()
     /* fill in the sorted list */
     for(i=0; i<100; i++) {
         p = (struct item *)malloc(sizeof *p);
+        assert(p != NULL);
+        p->sort_field = (unsigned char *)malloc(sizeof(int));
+        assert(p->sort_field != NULL);
 
         p->sort_field_len = sizeof(int);
-        p->sort_field = (unsigned char *)malloc(p->sort_field_len);
         *(int*)(void*)p->sort_field = counter++;
 
         HASH_ADD_KEYPTR_INORDER(hh, list, p->sort_field, p->sort_field_len, p, sort_func);

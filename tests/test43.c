@@ -1,5 +1,7 @@
-#include <stdio.h>
 #include "utarray.h"
+
+#include <assert.h>
+#include <stdio.h>
 
 typedef struct {
     int a;
@@ -20,6 +22,7 @@ int main()
     printf("push\n");
     printf("length is %u\n", utarray_len(pairs));
     ip = (intpair_t*)utarray_back(pairs);
+    assert(ip != NULL);
     printf("back is %d %d\n", ip->a, ip->b);
     utarray_pop_back(pairs);
     printf("pop\n");

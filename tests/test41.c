@@ -33,6 +33,7 @@ int main()
     if (head != NULL) {
         printf("non-null head\n");
     }
+    assert(head == NULL);
 
     /* test DL macros */
     printf("DL macros\n");
@@ -50,6 +51,7 @@ int main()
     if (head != NULL) {
         printf("non-null head\n");
     }
+    assert(head == NULL);
 
     /* test LL macros */
     printf("LL macros\n");
@@ -67,6 +69,7 @@ int main()
     if (head != NULL) {
         printf("non-null head\n");
     }
+    assert(head == NULL);
 
     return 0;
 }

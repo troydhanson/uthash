@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,6 +35,7 @@ int main()
     for (int i=0; i < 40; ++i) {
         struct clockface *elt = (struct clockface *)malloc(sizeof(*elt));
         struct clockface *found = NULL;
+        assert(elt != NULL);
         elt->time = random_data[i];
         HASH_FIND_INT(times, &elt->time, found);
         if (found) {
