@@ -1,0 +1,23 @@
+image:
+- Ubuntu
+- macos
+
+install:
+- echo "${APPVEYOR_BUILD_WORKER_IMAGE}"
+- sh: >-
+    if test "${APPVEYOR_BUILD_WORKER_IMAGE}" = "Ubuntu"; then
+        sudo apt-get update -y
+        sudo apt-get install -y gcc-10
+    fi
+
+build_script:
+- cc --version
+- if test "${APPVEYOR_BUILD_WORKER_IMAGE}" = "Ubuntu"; then gcc-10 --version; fi
+
+test_script:
+- make -C tests EXTRA_CFLAGS="-Wextra -Wswitch-default -Wno-type-limits"
+- if test "${APPVEYOR_BUILD_WORKER_IMAGE}" = "Ubuntu"; then make -C tests clean ; make -C tests CC=gcc-10 EXTRA_CFLAGS="--analyzer"; fi
+- make -C tests clean ; make -C tests pedantic
+- make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+- make -C tests clean ; make -C tests cplusplus
+- make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
