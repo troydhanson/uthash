@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+
 #include <assert.h>
 #include <stdio.h>
 #include <setjmp.h>
@@ -89,6 +91,7 @@ int main()
             break;
         }
         user = (example_user_t*)malloc(sizeof(example_user_t));
+        assert(user != NULL);
         user->id = user_id;
         if (!setjmp(j_buf)) {
             HASH_ADD_INT(users, id, user);
@@ -110,8 +113,6 @@ int main()
         }
         malloc_cnt = 0;
     }
-
-    HASH_CLEAR(hh, users);
 
     printf("End\n");
     return 0;
