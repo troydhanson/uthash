@@ -32,7 +32,6 @@ int main()
         strcpy(name->bname, linebuf);
         DL_PREPEND(head, name);
     }
-    /* DL_SORT(head, namecmp); */
     DL_FOREACH(head,tmp) {
         printf("%s", tmp->bname);
     }
