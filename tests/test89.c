@@ -3,6 +3,7 @@
 
 #include "utlist.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,6 +53,7 @@ int main()
 
     for (i = 0; i < sizeof(timestamps)/sizeof(clock_time_t); i++) {
         struct netq_t *node = (struct netq_t *)malloc(sizeof *node);
+        assert(node != NULL);
         memset(node, '\0', sizeof *node);
         node->t = timestamps[i];
 

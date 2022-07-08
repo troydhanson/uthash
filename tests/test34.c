@@ -32,7 +32,6 @@ int main()
         strcpy(name->bname, linebuf);
         CDL_PREPEND(head, name);
     }
-    /* CDL_SORT(head, namecmp); */
     CDL_FOREACH(head,tmp) {
         printf("%s", tmp->bname);
     }

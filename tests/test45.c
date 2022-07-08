@@ -1,5 +1,6 @@
-#include <stdio.h>
 #include "utarray.h"
+#include <assert.h>
+#include <stdio.h>
 
 int main()
 {
@@ -23,6 +24,7 @@ int main()
     printf("\n");
     utarray_extend_back(a);
     p = (int*)utarray_back(a);
+    assert(p != NULL);
     *p = 1000;
     p = NULL;
     while ( (p=(int*)utarray_next(a,p)) != NULL ) {

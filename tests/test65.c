@@ -1,6 +1,7 @@
-#include <string.h>
-#include <stdio.h>
 #include "uthash.h"
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
 
 // this is an example of how to do a LRU cache in C using uthash
 // https://troydhanson.github.io/uthash/
@@ -25,6 +26,8 @@ static void add_to_cache(const char *key, const char *value)
     }
     entry->key = strdup(key);
     entry->value = strdup(value);
+    assert(entry->key != NULL);
+    assert(entry->value != NULL);
     HASH_ADD_KEYPTR(hh, cache, entry->key, strlen(entry->key), entry);
 
     // prune the cache to MAX_CACHE_SIZE

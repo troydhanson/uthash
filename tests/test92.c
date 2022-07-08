@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 
 #define HASH_NONFATAL_OOM 1
@@ -66,6 +67,7 @@ int main()
     int i;
     int saved_cnt;
 
+    assert(user != NULL);
     user->id = id;
 
 #ifdef HASH_BLOOM
@@ -112,6 +114,7 @@ int main()
     malloc_cnt = 1;
     for (id = 1; 1; ++id) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
+        assert(user != NULL);
         user->id = id;
         if (id >= 1000) {
             // prevent infinite, or too long of a loop here
@@ -171,6 +174,7 @@ int main()
 
     for (i=0; i < saved_cnt; i++) {
         user = (example_user_t*)malloc(sizeof(example_user_t));
+        assert(user != NULL);
         user->id = ++id;
         malloc_cnt = 20;  // don't fail
         HASH_ADD_INT(users, id, user);
