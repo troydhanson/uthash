@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  push: # any branch
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-gcc:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
+    - run: make -C tests clean ; make -C tests pedantic
+    - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests cplusplus
+    - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+  build-clang:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      CC: clang
+      CXX: clang++
+    steps:
+    - uses: actions/checkout@v3
+    - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
+    - run: make -C tests clean ; make -C tests pedantic
+    - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests cplusplus
+    - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
