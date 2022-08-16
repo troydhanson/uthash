@@ -1,0 +1,16 @@
+name: Docs
+
+on:
+  push: # any branch
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install AsciiDoc
+        run: sudo apt-get update && sudo apt-get install asciidoc -y
+      - name: Build documentation with AsciiDoc
+        run: make -C doc
