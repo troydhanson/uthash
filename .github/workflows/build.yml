@@ -6,8 +6,11 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-gcc:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
@@ -16,22 +19,13 @@ jobs:
     - run: make -C tests clean ; make -C tests cplusplus
     - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
   build-clang:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
       CC: clang
       CXX: clang++
-    steps:
-    - uses: actions/checkout@v3
-    - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
-    - run: make -C tests clean ; make -C tests pedantic
-    - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
-    - run: make -C tests clean ; make -C tests cplusplus
-    - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
-  build-mac:
-    runs-on: macos-latest
-    needs:
-      - build
-      - build-clang
     steps:
     - uses: actions/checkout@v3
     - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
