@@ -51,7 +51,7 @@ typedef unsigned char uint8_t;
 #else                   /* VS2008 or older (or VS2010 in C mode) */
 #define NO_DECLTYPE
 #endif
-#elif defined(__BORLANDC__) || defined(__ICCARM__) || defined(__LCC__) && !defined(__e2k__) || defined(__WATCOMC__)
+#elif defined(__BORLANDC__) || defined(__ICCARM__) || defined(__LCC__) && !defined(__MCST__) || defined(__WATCOMC__)
 #define NO_DECLTYPE
 #else                   /* GNU, Sun and other compilers */
 #define DECLTYPE(x) (__typeof(x))
