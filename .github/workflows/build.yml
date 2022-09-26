@@ -1,4 +1,4 @@
-name: Build and Test
+name: build # This name shows up in badge.svg
 
 on:
   push: # any branch
@@ -33,3 +33,9 @@ jobs:
     - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
     - run: make -C tests clean ; make -C tests cplusplus
     - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+  build-asciidoc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: sudo apt-get update && sudo apt-get install asciidoc -y
+    - run: make -C doc
