@@ -234,7 +234,16 @@ typedef struct {
 static void utarray_str_cpy(void *dst, const void *src) {
   char *const *srcc = (char *const *)src;
   char **dstc = (char**)dst;
-  *dstc = (*srcc == NULL) ? NULL : strdup(*srcc);
+  if (*srcc == NULL) {
+    *dstc = NULL;
+  } else {
+    *dstc = (char*)malloc(strlen(*srcc) + 1);
+    if (*dstc == NULL) {
+      utarray_oom();
+    } else {
+      strcpy(*dstc, *srcc);
+    }
+  }
 }
 static void utarray_str_dtor(void *elt) {
   char **eltc = (char**)elt;
