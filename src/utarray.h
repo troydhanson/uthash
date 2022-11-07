@@ -38,11 +38,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UTARRAY_UNUSED
 #endif
 
-#ifdef oom
-#error "The name of macro 'oom' has been changed to 'utarray_oom'. Please update your code."
-#define utarray_oom() oom()
-#endif
-
 #ifndef utarray_oom
 #define utarray_oom() exit(-1)
 #endif
