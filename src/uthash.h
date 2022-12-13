@@ -452,7 +452,7 @@ do {                                                                            
 
 #define HASH_DELETE_HH(hh,head,delptrhh)                                         \
 do {                                                                             \
-  struct UT_hash_handle *_hd_hh_del = (delptrhh);                                \
+  const struct UT_hash_handle *_hd_hh_del = (delptrhh);                          \
   if ((_hd_hh_del->prev == NULL) && (_hd_hh_del->next == NULL)) {                \
     HASH_BLOOM_FREE((head)->hh.tbl);                                             \
     uthash_free((head)->hh.tbl->buckets,                                         \

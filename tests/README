@@ -98,6 +98,7 @@ test93: alt_fatal
 test94: utlist with fields named other than 'next' and 'prev'
 test95: utstack
 test96: HASH_FUNCTION + HASH_KEYCMP
+test97: deleting a const-qualified node from a hash
 
 Other Make targets
 ================================================================================
