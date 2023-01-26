@@ -72,7 +72,9 @@ typedef struct {
       }                                                                       \
     }                                                                         \
     free((a)->d);                                                             \
+    (a)->d = NULL;                                                            \
   }                                                                           \
+  (a)->i=0;                                                                   \
   (a)->n=0;                                                                   \
 } while(0)
 
