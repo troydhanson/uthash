@@ -138,6 +138,16 @@ do {                                                                            
 /* calculate the hash handle from element address elp */
 #define HH_FROM_ELMT(tbl,elp) ((UT_hash_handle*)(void*)(((char*)(elp)) + ((tbl)->hho)))
 
+#define HASH_VALUE(keyptr,keylen,hashv)                                          \
+do {                                                                             \
+  HASH_FUNCTION(keyptr, keylen, hashv);                                          \
+} while (0)
+
+#define HASH_TO_BKT(hashv,num_bkts,bkt)                                          \
+do {                                                                             \
+  bkt = ((hashv) & ((num_bkts) - 1U));                                           \
+} while (0)
+
 #define HASH_ROLLBACK_BKT(hh, head, itemptrhh)                                   \
 do {                                                                             \
   struct UT_hash_handle *_hd_hh_item = (itemptrhh);                              \
@@ -146,33 +156,6 @@ do {                                                                            
   (head)->hh.tbl->buckets[_hd_bkt].count++;                                      \
   _hd_hh_item->hh_next = NULL;                                                   \
   _hd_hh_item->hh_prev = NULL;                                                   \
-} while (0)
-
-#define HASH_VALUE(keyptr,keylen,hashv)                                          \
-do {                                                                             \
-  HASH_FUNCTION(keyptr, keylen, hashv);                                          \
-} while (0)
-
-#define HASH_FIND_BYHASHVALUE(hh,head,keyptr,keylen,hashval,out)                 \
-do {                                                                             \
-  (out) = NULL;                                                                  \
-  if (head) {                                                                    \
-    unsigned _hf_bkt;                                                            \
-    HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                  \
-    if (HASH_BLOOM_TEST((head)->hh.tbl, hashval) != 0) {                         \
-      HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ], keyptr, keylen, hashval, out); \
-    }                                                                            \
-  }                                                                              \
-} while (0)
-
-#define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
-do {                                                                             \
-  (out) = NULL;                                                                  \
-  if (head) {                                                                    \
-    unsigned _hf_hashv;                                                          \
-    HASH_VALUE(keyptr, keylen, _hf_hashv);                                       \
-    HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen, _hf_hashv, out);             \
-  }                                                                              \
 } while (0)
 
 #ifdef HASH_BLOOM
@@ -242,40 +225,6 @@ do {                                                                            
       )                                                                          \
     }                                                                            \
   }                                                                              \
-} while (0)
-
-#define HASH_REPLACE_BYHASHVALUE_INORDER(hh,head,fieldname,keylen_in,hashval,add,replaced,cmpfcn) \
-do {                                                                             \
-  (replaced) = NULL;                                                             \
-  HASH_FIND_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, replaced); \
-  if (replaced) {                                                                \
-    HASH_DELETE(hh, head, replaced);                                             \
-  }                                                                              \
-  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, &((add)->fieldname), keylen_in, hashval, add, cmpfcn); \
-} while (0)
-
-#define HASH_REPLACE_BYHASHVALUE(hh,head,fieldname,keylen_in,hashval,add,replaced) \
-do {                                                                             \
-  (replaced) = NULL;                                                             \
-  HASH_FIND_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, replaced); \
-  if (replaced) {                                                                \
-    HASH_DELETE(hh, head, replaced);                                             \
-  }                                                                              \
-  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, add); \
-} while (0)
-
-#define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced)                   \
-do {                                                                             \
-  unsigned _hr_hashv;                                                            \
-  HASH_VALUE(&((add)->fieldname), keylen_in, _hr_hashv);                         \
-  HASH_REPLACE_BYHASHVALUE(hh, head, fieldname, keylen_in, _hr_hashv, add, replaced); \
-} while (0)
-
-#define HASH_REPLACE_INORDER(hh,head,fieldname,keylen_in,add,replaced,cmpfcn)    \
-do {                                                                             \
-  unsigned _hr_hashv;                                                            \
-  HASH_VALUE(&((add)->fieldname), keylen_in, _hr_hashv);                         \
-  HASH_REPLACE_BYHASHVALUE_INORDER(hh, head, fieldname, keylen_in, _hr_hashv, add, replaced, cmpfcn); \
 } while (0)
 
 #define HASH_APPEND_LIST(hh, head, add)                                          \
@@ -349,6 +298,74 @@ do {                                                                            
 
 #endif
 
+#define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
+do {                                                                             \
+  (out) = NULL;                                                                  \
+  if (head) {                                                                    \
+    unsigned _hf_hashv;                                                          \
+    HASH_VALUE(keyptr, keylen, _hf_hashv);                                       \
+    HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen, _hf_hashv, out);             \
+  }                                                                              \
+} while (0)
+
+#define HASH_FIND_BYHASHVALUE(hh,head,keyptr,keylen,hashval,out)                 \
+do {                                                                             \
+  (out) = NULL;                                                                  \
+  if (head) {                                                                    \
+    unsigned _hf_bkt;                                                            \
+    HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                  \
+    if (HASH_BLOOM_TEST((head)->hh.tbl, hashval) != 0) {                         \
+      HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ], keyptr, keylen, hashval, out); \
+    }                                                                            \
+  }                                                                              \
+} while (0)
+
+#define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
+  HASH_ADD_KEYPTR(hh, head, &((add)->fieldname), keylen_in, add)
+
+#define HASH_ADD_INORDER(hh,head,fieldname,keylen_in,add,cmpfcn)                 \
+  HASH_ADD_KEYPTR_INORDER(hh, head, &((add)->fieldname), keylen_in, add, cmpfcn)
+
+#define HASH_ADD_BYHASHVALUE(hh,head,fieldname,keylen_in,hashval,add)            \
+  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, add)
+
+#define HASH_ADD_BYHASHVALUE_INORDER(hh,head,fieldname,keylen_in,hashval,add,cmpfcn) \
+  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, &((add)->fieldname), keylen_in, hashval, add, cmpfcn)
+
+#define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
+do {                                                                             \
+  unsigned _ha_hashv;                                                            \
+  HASH_VALUE(keyptr, keylen_in, _ha_hashv);                                      \
+  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, keyptr, keylen_in, _ha_hashv, add);      \
+} while (0)
+
+#define HASH_ADD_KEYPTR_INORDER(hh,head,keyptr,keylen_in,add,cmpfcn)             \
+do {                                                                             \
+  unsigned _hs_hashv;                                                            \
+  HASH_VALUE(keyptr, keylen_in, _hs_hashv);                                      \
+  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, keyptr, keylen_in, _hs_hashv, add, cmpfcn); \
+} while (0)
+
+#define HASH_ADD_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add)        \
+do {                                                                             \
+  IF_HASH_NONFATAL_OOM( int _ha_oomed = 0; )                                     \
+  (add)->hh.hashv = (hashval);                                                   \
+  (add)->hh.key = (const void*) (keyptr);                                        \
+  (add)->hh.keylen = (unsigned) (keylen_in);                                     \
+  if (!(head)) {                                                                 \
+    (add)->hh.next = NULL;                                                       \
+    (add)->hh.prev = NULL;                                                       \
+    HASH_MAKE_TABLE(hh, add, _ha_oomed);                                         \
+    IF_HASH_NONFATAL_OOM( if (!_ha_oomed) { )                                    \
+      (head) = (add);                                                            \
+    IF_HASH_NONFATAL_OOM( } )                                                    \
+  } else {                                                                       \
+    (add)->hh.tbl = (head)->hh.tbl;                                              \
+    HASH_APPEND_LIST(hh, head, add);                                             \
+  }                                                                              \
+  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add, _ha_oomed);       \
+  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE");                            \
+} while (0)
 
 #define HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh,head,keyptr,keylen_in,hashval,add,cmpfcn) \
 do {                                                                             \
@@ -383,56 +400,50 @@ do {                                                                            
   HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE_INORDER");                    \
 } while (0)
 
-#define HASH_ADD_KEYPTR_INORDER(hh,head,keyptr,keylen_in,add,cmpfcn)             \
+#define HASH_REPLACE(hh,head,fieldname,keylen_in,add,replaced) \
+  HASH_REPLACE_KEYPTR(hh, head, &(add)->fieldname, keylen_in, add, replaced)
+
+#define HASH_REPLACE_INORDER(hh,head,fieldname,keylen_in,add,replaced,cmpfcn) \
+  HASH_REPLACE_KEYPTR_INORDER(hh, head, &(add)->fieldname, keylen_in, add, replaced, cmpfcn)
+
+#define HASH_REPLACE_BYHASHVALUE(hh,head,fieldname,keylen_in,hashval,add,replaced) \
+  HASH_REPLACE_KEYPTR_BYHASHVALUE(hh, head, &(add)->fieldname, keylen_in, hashval, add, replaced)
+
+#define HASH_REPLACE_BYHASHVALUE_INORDER(hh,head,fieldname,keylen_in,hashval,add,replaced,cmpfcn) \
+  HASH_REPLACE_KEYPTR_BYHASHVALUE_INORDER(hh, head, &(add)->fieldname, keylen_in, hashval, add, replaced, cmpfcn)
+
+#define HASH_REPLACE_KEYPTR(hh,head,keyptr,keylen_in,add,replaced)               \
 do {                                                                             \
-  unsigned _hs_hashv;                                                            \
-  HASH_VALUE(keyptr, keylen_in, _hs_hashv);                                      \
-  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, keyptr, keylen_in, _hs_hashv, add, cmpfcn); \
+  unsigned _hr_hashv;                                                            \
+  HASH_VALUE(keyptr, keylen_in, _hr_hashv);                                      \
+  HASH_REPLACE_KEYPTR_BYHASHVALUE(hh, head, keyptr, keylen_in, _hr_hashv, add, replaced); \
 } while (0)
 
-#define HASH_ADD_BYHASHVALUE_INORDER(hh,head,fieldname,keylen_in,hashval,add,cmpfcn) \
-  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, &((add)->fieldname), keylen_in, hashval, add, cmpfcn)
-
-#define HASH_ADD_INORDER(hh,head,fieldname,keylen_in,add,cmpfcn)                 \
-  HASH_ADD_KEYPTR_INORDER(hh, head, &((add)->fieldname), keylen_in, add, cmpfcn)
-
-#define HASH_ADD_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add)        \
+#define HASH_REPLACE_KEYPTR_INORDER(hh,head,keyptr,keylen_in,add,replaced,cmpfcn) \
 do {                                                                             \
-  IF_HASH_NONFATAL_OOM( int _ha_oomed = 0; )                                     \
-  (add)->hh.hashv = (hashval);                                                   \
-  (add)->hh.key = (const void*) (keyptr);                                        \
-  (add)->hh.keylen = (unsigned) (keylen_in);                                     \
-  if (!(head)) {                                                                 \
-    (add)->hh.next = NULL;                                                       \
-    (add)->hh.prev = NULL;                                                       \
-    HASH_MAKE_TABLE(hh, add, _ha_oomed);                                         \
-    IF_HASH_NONFATAL_OOM( if (!_ha_oomed) { )                                    \
-      (head) = (add);                                                            \
-    IF_HASH_NONFATAL_OOM( } )                                                    \
-  } else {                                                                       \
-    (add)->hh.tbl = (head)->hh.tbl;                                              \
-    HASH_APPEND_LIST(hh, head, add);                                             \
+  unsigned _hr_hashv;                                                            \
+  HASH_VALUE(keyptr, keylen_in, _hr_hashv);                                      \
+  HASH_REPLACE_KEYPTR_BYHASHVALUE_INORDER(hh, head, keyptr, keylen_in, _hr_hashv, add, replaced, cmpfcn); \
+} while (0)
+
+#define HASH_REPLACE_KEYPTR_BYHASHVALUE(hh,head,keyptr,keylen_in,hashval,add,replaced) \
+do {                                                                             \
+  (replaced) = NULL;                                                             \
+  HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen_in, hashval, replaced);         \
+  if (replaced) {                                                                \
+    HASH_DELETE(hh, head, replaced);                                             \
   }                                                                              \
-  HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add, _ha_oomed);       \
-  HASH_FSCK(hh, head, "HASH_ADD_KEYPTR_BYHASHVALUE");                            \
+  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, keyptr, keylen_in, hashval, add);        \
 } while (0)
 
-#define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
+#define HASH_REPLACE_KEYPTR_BYHASHVALUE_INORDER(hh,head,keyptr,keylen_in,hashval,add,replaced,cmpfcn) \
 do {                                                                             \
-  unsigned _ha_hashv;                                                            \
-  HASH_VALUE(keyptr, keylen_in, _ha_hashv);                                      \
-  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, keyptr, keylen_in, _ha_hashv, add);      \
-} while (0)
-
-#define HASH_ADD_BYHASHVALUE(hh,head,fieldname,keylen_in,hashval,add)            \
-  HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, add)
-
-#define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
-  HASH_ADD_KEYPTR(hh, head, &((add)->fieldname), keylen_in, add)
-
-#define HASH_TO_BKT(hashv,num_bkts,bkt)                                          \
-do {                                                                             \
-  bkt = ((hashv) & ((num_bkts) - 1U));                                           \
+  (replaced) = NULL;                                                             \
+  HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen_in, hashval, replaced);         \
+  if (replaced) {                                                                \
+    HASH_DELETE(hh, head, replaced);                                             \
+  }                                                                              \
+  HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, head, keyptr, keylen_in, hashval, add, cmpfcn); \
 } while (0)
 
 /* delete "delptr" from the hash table.
