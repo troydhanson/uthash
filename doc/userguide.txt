@@ -1150,17 +1150,16 @@ always used with the `users_by_name` hash table).
 
 Sorted insertion of new items
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If you would like to maintain a sorted hash you have two options. The first
-option is to use the HASH_SRT() macro, which will sort any unordered list in
+To maintain a sorted hash, you have two options. Your first
+option is to use the `HASH_SRT` macro, which will sort any unordered list in
 'O(n log(n))'. This is the best strategy if you're just filling up a hash
-table with items in random order with a single final HASH_SRT() operation
-when all is done. Obviously, this won't do what you want if you need
-the list to be in an ordered state at times between insertion of
-items. You can use HASH_SRT() after every insertion operation, but that will
-yield a computational complexity of 'O(n^2 log n)'.
+table with items in random order with a single final `HASH_SRT` operation
+when all is done. If you need the table to remain sorted as you add and remove
+items, you can use `HASH_SRT` after every insertion operation, but that gives
+a computational complexity of 'O(n^2 log n)' to insert 'n' items.
 
-The second route you can take is via the in-order add and replace macros.
-The `HASH_ADD_INORDER*` macros work just like their `HASH_ADD*` counterparts, but
+Your second option is to use the in-order add and replace macros.
+The `HASH_ADD_*_INORDER` macros work just like their `HASH_ADD_*` counterparts, but
 with an additional comparison-function argument:
 
   int name_sort(struct my_struct *a, struct my_struct *b) {
@@ -1169,11 +1168,11 @@ with an additional comparison-function argument:
 
   HASH_ADD_KEYPTR_INORDER(hh, items, &item->name, strlen(item->name), item, name_sort);
 
-New items are sorted at insertion time in 'O(n)', thus resulting in a
-total computational complexity of 'O(n^2)' for the creation of the hash
-table with all items.
-For in-order add to work, the list must be in an ordered state before
-insertion of the new item.
+These macros assume that the hash is already sorted according to the
+comparison function, and insert the new item in its proper place.
+A single insertion takes 'O(n)', resulting in a total computational
+complexity of 'O(n^2)' to insert all 'n' items: slower than a single
+`HASH_SRT`, but faster than doing a `HASH_SRT` after every insertion.
 
 Several sort orders
 ~~~~~~~~~~~~~~~~~~~
