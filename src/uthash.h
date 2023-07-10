@@ -482,8 +482,11 @@ do {                                                                            
 /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
 #define HASH_FIND_STR(head,findstr,out)                                          \
 do {                                                                             \
-    unsigned _uthash_hfstr_keylen = (unsigned)uthash_strlen(findstr);            \
-    HASH_FIND(hh, head, findstr, _uthash_hfstr_keylen, out);                     \
+    (out) = NULL;                                                                \
+    if (findstr != NULL) {                                                       \
+        unsigned _uthash_hfstr_keylen = (unsigned)uthash_strlen(findstr);        \
+        HASH_FIND(hh, head, findstr, _uthash_hfstr_keylen, out);                 \
+    }                                                                            \
 } while (0)
 #define HASH_ADD_STR(head,strfield,add)                                          \
 do {                                                                             \
