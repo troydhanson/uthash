@@ -290,7 +290,7 @@ right.
 You really need to pass 'a pointer' to the hash pointer:
 
   /* good */
-  void add_user(struct my_struct **users, int user_id, char *name) { ...
+  void add_user(struct my_struct **users, int user_id, char *name) {
     ...
     HASH_ADD_INT(*users, id, s);
   }
@@ -304,9 +304,10 @@ just what it points to).
 
 Replace item
 ~~~~~~~~~~~~
-`HASH_REPLACE` macros are equivalent to HASH_ADD macros except they attempt
-to find and delete the item first. If it finds and deletes an item, it will
-also return that items pointer as an output parameter.
+`HASH_REPLACE` is equivalent to `HASH_ADD`, except that it attempts
+to find and delete an equivalent existing item first. If it deletes an
+existing item, a pointer to the deleted item will be returned in the
+output parameter.
 
 
 Find item
@@ -353,11 +354,11 @@ structure we want to remove from the hash.
 
 uthash never frees your structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Deleting a structure just removes it from the hash table-- it doesn't `free`
-it.  The choice of when to free your structure is entirely up to you; uthash
-will never free your structure. For example when using `HASH_REPLACE` macros,
-a replaced output argument is returned back, in order to make it possible for
-the user to de-allocate it.
+Deleting an item just removes it from the hash table-- it doesn't `free`
+it.  The choice of when (and how) to deallocate your item structure is
+entirely up to you; uthash will never deallocate a pointer it didn't allocate.
+For example, `HASH_REPLACE` returns a pointer to the removed item (if any)
+in its output parameter, so that the user can deallocate that item.
 
 Delete can change the pointer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -723,8 +724,7 @@ struct my_struct {
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
-
-int main(int argc, char *argv[]) {
+int main() {
     const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
 
@@ -738,10 +738,19 @@ int main(int argc, char *argv[]) {
     HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s->id);
 
-    /* free the hash table contents */
+    s = (struct my_struct *)malloc(sizeof *s);
+    strcpy(s->name, "bob");
+    s->id = 3;
+    HASH_REPLACE_STR(users, name, s, tmp);
+    if (tmp) {
+        printf("bob's id was %d, but now it's 3\n", tmp->id);
+        free(tmp);
+    }
+
+    /* free the hash table's items */
     HASH_ITER(hh, users, s, tmp) {
-      HASH_DEL(users, s);
-      free(s);
+        HASH_DEL(users, s);
+        free(s);
     }
     return 0;
 }
@@ -769,8 +778,7 @@ struct my_struct {
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
-
-int main(int argc, char *argv[]) {
+int main() {
     const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
 
@@ -784,10 +792,19 @@ int main(int argc, char *argv[]) {
     HASH_FIND_STR(users, "betty", s);
     if (s) printf("betty's id is %d\n", s->id);
 
+    s = (struct my_struct *)malloc(sizeof *s);
+    s->name = "bob";
+    s->id = 3;
+    HASH_REPLACE_KEYPTR(hh, users, s->name, strlen(s->name), s, tmp);
+    if (tmp) {
+        printf("bob's id was %d, but now it's 3\n", tmp->id);
+        free(tmp);
+    }
+
     /* free the hash table contents */
     HASH_ITER(hh, users, s, tmp) {
-      HASH_DEL(users, s);
-      free(s);
+        HASH_DEL(users, s);
+        free(s);
     }
     return 0;
 }
@@ -1828,39 +1845,43 @@ than `hh`, or if your key's data type isn't `int` or `char[]`.
 .General macros
 [width="90%",cols="10m,30m",grid="none",options="header"]
 |===============================================================================
-|macro                               | arguments
-|HASH_ADD                            | (hh_name, head, keyfield_name, key_len, item_ptr)
-|HASH_ADD_BYHASHVALUE                | (hh_name, head, keyfield_name, key_len, hashv, item_ptr)
-|HASH_ADD_KEYPTR                     | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_ADD_KEYPTR_BYHASHVALUE         | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
-|HASH_ADD_INORDER                    | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
-|HASH_ADD_BYHASHVALUE_INORDER        | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, cmp)
-|HASH_ADD_KEYPTR_INORDER             | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
-|HASH_ADD_KEYPTR_BYHASHVALUE_INORDER | (hh_name, head, key_ptr, key_len, hashv, item_ptr, cmp)
-|HASH_REPLACE                        | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_BYHASHVALUE            | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr)
-|HASH_REPLACE_INORDER                | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr, cmp)
-|HASH_REPLACE_BYHASHVALUE_INORDER    | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr, cmp)
-|HASH_FIND                           | (hh_name, head, key_ptr, key_len, item_ptr)
-|HASH_FIND_BYHASHVALUE               | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
-|HASH_DELETE                         | (hh_name, head, item_ptr)
-|HASH_VALUE                          | (key_ptr, key_len, hashv)
-|HASH_SRT                            | (hh_name, head, cmp)
-|HASH_CNT                            | (hh_name, head)
-|HASH_CLEAR                          | (hh_name, head)
-|HASH_SELECT                         | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
-|HASH_ITER                           | (hh_name, head, item_ptr, tmp_item_ptr)
-|HASH_OVERHEAD                       | (hh_name, head)
+|macro                                   | arguments
+|HASH_ADD                                | (hh_name, head, keyfield_name, key_len, item_ptr)
+|HASH_ADD_INORDER                        | (hh_name, head, keyfield_name, key_len, item_ptr, cmp)
+|HASH_ADD_BYHASHVALUE                    | (hh_name, head, keyfield_name, key_len, hashv, item_ptr)
+|HASH_ADD_BYHASHVALUE_INORDER            | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, cmp)
+|HASH_ADD_KEYPTR                         | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_ADD_KEYPTR_INORDER                 | (hh_name, head, key_ptr, key_len, item_ptr, cmp)
+|HASH_ADD_KEYPTR_BYHASHVALUE             | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
+|HASH_ADD_KEYPTR_BYHASHVALUE_INORDER     | (hh_name, head, key_ptr, key_len, hashv, item_ptr, cmp)
+|HASH_REPLACE                            | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_INORDER                    | (hh_name, head, keyfield_name, key_len, item_ptr, replaced_item_ptr, cmp)
+|HASH_REPLACE_BYHASHVALUE                | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_BYHASHVALUE_INORDER        | (hh_name, head, keyfield_name, key_len, hashv, item_ptr, replaced_item_ptr, cmp)
+|HASH_REPLACE_KEYPTR                     | (hh_name, head, key_ptr, key_len, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_KEYPTR_INORDER             | (hh_name, head, key_ptr, key_len, item_ptr, replaced_item_ptr, cmp)
+|HASH_REPLACE_KEYPTR_BYHASHVALUE         | (hh_name, head, key_ptr, key_len, hashv, item_ptr, replaced_item_ptr)
+|HASH_REPLACE_KEYPTR_BYHASHVALUE_INORDER | (hh_name, head, key_ptr, key_len, hashv, item_ptr, replaced_item_ptr, cmp)
+|HASH_FIND                               | (hh_name, head, key_ptr, key_len, item_ptr)
+|HASH_FIND_BYHASHVALUE                   | (hh_name, head, key_ptr, key_len, hashv, item_ptr)
+|HASH_DELETE                             | (hh_name, head, item_ptr)
+|HASH_VALUE                              | (key_ptr, key_len, hashv)
+|HASH_SRT                                | (hh_name, head, cmp)
+|HASH_CNT                                | (hh_name, head)
+|HASH_CLEAR                              | (hh_name, head)
+|HASH_SELECT                             | (dst_hh_name, dst_head, src_hh_name, src_head, condition)
+|HASH_ITER                               | (hh_name, head, item_ptr, tmp_item_ptr)
+|HASH_OVERHEAD                           | (hh_name, head)
 |===============================================================================
 
 [NOTE]
 `HASH_ADD_KEYPTR` is used when the structure contains a pointer to the
 key, rather than the key itself.
 
-The `HASH_VALUE` and `..._BYHASHVALUE` macros are a performance mechanism mainly for the
+The `HASH_VALUE` and `*_BYHASHVALUE` macros are a performance mechanism mainly for the
 special case of having different structures, in different hash tables, having
 identical keys. It allows the hash value to be obtained once and then passed
-in to the `..._BYHASHVALUE` macros, saving the expense of re-computing the hash value.
+in to the `*_BYHASHVALUE` macros, saving the expense of re-computing the hash value.
 
 
 Argument descriptions
@@ -1886,7 +1907,7 @@ key_ptr::
     `HASH_ADD_KEYPTR`, this is the address of the key of the item being added.
 hashv::
     the hash value of the provided key. This is an input parameter for the
-    `..._BYHASHVALUE` macros, and an output parameter for `HASH_VALUE`.
+    `*_BYHASHVALUE` macros, and an output parameter for `HASH_VALUE`.
     Reusing a cached hash value can be a performance optimization if
     you're going to do repeated lookups for the same key.
 item_ptr::

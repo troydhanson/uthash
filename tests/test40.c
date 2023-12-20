@@ -9,26 +9,27 @@ struct my_struct {
     UT_hash_handle hh;         /* makes this structure hashable */
 };
 
-
-int main()
-{
-    const char **n, *names[] = { "joe", "bob", "betty", NULL };
+int main() {
+    const char *names[] = { "joe", "bob", "betty", NULL };
     struct my_struct *s, *tmp, *users = NULL;
-    int i=0;
 
-    for (n = names; *n != NULL; n++) {
-        s = (struct my_struct*)malloc(sizeof(struct my_struct));
-        if (s == NULL) {
-            exit(-1);
-        }
-        s->name = *n;
-        s->id = i++;
-        HASH_ADD_KEYPTR( hh, users, s->name, strlen(s->name), s );
+    for (int i = 0; names[i]; ++i) {
+        s = (struct my_struct *)malloc(sizeof *s);
+        s->name = names[i];
+        s->id = i;
+        HASH_ADD_KEYPTR(hh, users, s->name, strlen(s->name), s);
     }
 
-    HASH_FIND_STR( users, "betty", s);
-    if (s != NULL) {
-        printf("betty's id is %d\n", s->id);
+    HASH_FIND_STR(users, "betty", s);
+    if (s) printf("betty's id is %d\n", s->id);
+
+    s = (struct my_struct *)malloc(sizeof *s);
+    s->name = "bob";
+    s->id = 3;
+    HASH_REPLACE_KEYPTR(hh, users, s->name, strlen(s->name), s, tmp);
+    if (tmp) {
+        printf("bob's id was %d, but now it's 3\n", tmp->id);
+        free(tmp);
     }
 
     /* free the hash table contents */

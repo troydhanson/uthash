@@ -55,13 +55,23 @@ int main()
     };
 
     int index;
-    for (index = 0; index < 11; ++index) {
-        HASH_ADD_INORDER(hh, hTable, name[0], strlen(tst[index].name), &tst[index], CMPFUNC);
-    }
 
-    // test HASH_ADD_BYHASHVALUE_INORDER
-    HASH_VALUE(tst[11].name, strlen(tst[11].name), hashvalue);
-    HASH_ADD_BYHASHVALUE_INORDER(hh, hTable, name[0], strlen(tst[11].name), hashvalue, &tst[11], CMPFUNC);
+    HASH_ADD_INORDER(hh, hTable, name, strlen(tst[0].name), &tst[0], CMPFUNC);
+    HASH_ADD_INORDER(hh, hTable, name[0], strlen(tst[1].name), &tst[1], CMPFUNC);
+    HASH_ADD_KEYPTR_INORDER(hh, hTable, tst[2].name, strlen(tst[2].name), &tst[2], CMPFUNC);
+    HASH_ADD_KEYPTR_INORDER(hh, hTable, &tst[3].name[0], strlen(tst[3].name), &tst[3], CMPFUNC);
+    HASH_VALUE(tst[4].name, strlen(tst[4].name), hashvalue);
+    HASH_ADD_BYHASHVALUE_INORDER(hh, hTable, name, strlen(tst[4].name), hashvalue, &tst[4], CMPFUNC);
+    HASH_VALUE(tst[5].name, strlen(tst[5].name), hashvalue);
+    HASH_ADD_BYHASHVALUE_INORDER(hh, hTable, name[0], strlen(tst[5].name), hashvalue, &tst[5], CMPFUNC);
+    HASH_VALUE(tst[6].name, strlen(tst[6].name), hashvalue);
+    HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, hTable, tst[6].name, strlen(tst[6].name), hashvalue, &tst[6], CMPFUNC);
+    HASH_VALUE(tst[7].name, strlen(tst[7].name), hashvalue);
+    HASH_ADD_KEYPTR_BYHASHVALUE_INORDER(hh, hTable, &tst[7].name[0], strlen(tst[7].name), hashvalue, &tst[7], CMPFUNC);
+
+    for (index = 8; index < 12; ++index) {
+        HASH_ADD_INORDER(hh, hTable, name, strlen(tst[index].name), &tst[index], CMPFUNC);
+    }
 
     printtable(hTable);
 
@@ -78,11 +88,26 @@ int main()
 
     printtable(hTable);
 
+    // rehash "8: muh4" to "18: muh4"
+    tst[3].weight = 18;
+    HASH_REPLACE_KEYPTR_INORDER(hh, hTable, &tst[3].name, strlen(tst[3].name), &tst[3], replaced, CMPFUNC);
+    assert(replaced == &tst[3]);
+
+    printtable(hTable);
+
     // rehash "6: muh7" to "16: muh7"
     tst[6].weight = 16;
     HASH_VALUE(&tst[6].name[0], strlen(tst[6].name), hashvalue);
     HASH_REPLACE_BYHASHVALUE_INORDER(hh, hTable, name[0], strlen(tst[6].name), hashvalue, &tst[6], replaced, CMPFUNC);
     assert(replaced == &tst[6]);
+
+    printtable(hTable);
+
+    // rehash "15: muh8" to "5: muh8"
+    tst[7].weight = 5;
+    HASH_VALUE(&tst[7].name[0], strlen(tst[7].name), hashvalue);
+    HASH_REPLACE_KEYPTR_BYHASHVALUE_INORDER(hh, hTable, &tst[7].name, strlen(tst[7].name), hashvalue, &tst[7], replaced, CMPFUNC);
+    assert(replaced == &tst[7]);
 
     printtable(hTable);
 
