@@ -139,7 +139,7 @@ a copy of the source string and pushes that copy into the array.
 About UT_icd
 ~~~~~~~~~~~~
 
-Arrays be made of any type of element, not just integers and strings.  The
+Arrays can be made of any type of element, not just integers and strings.  The
 elements can be basic types or structures. Unless you're dealing with integers
 and strings (which use pre-defined `ut_int_icd` and `ut_str_icd`), you'll need
 to define a `UT_icd` helper structure. This structure contains everything that
