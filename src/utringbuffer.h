@@ -33,8 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "utarray.h"  // for "UT_icd"
 
 typedef struct {
-    unsigned i;       /* index of next available slot; wraps at n */
-    unsigned n;       /* capacity */
+    size_t i;         /* index of next available slot; wraps at n */
+    size_t n;         /* capacity */
     unsigned char f;  /* full */
     UT_icd icd;       /* initializer, copy and destructor functions */
     char *d;          /* n slots of size icd->sz */
@@ -50,12 +50,12 @@ typedef struct {
 #define utringbuffer_clear(a) do {                                        \
   if ((a)->icd.dtor) {                                                    \
     if ((a)->f) {                                                         \
-      unsigned _ut_i;                                                     \
+      size_t _ut_i;                                                       \
       for (_ut_i = 0; _ut_i < (a)->n; ++_ut_i) {                          \
         (a)->icd.dtor(utringbuffer_eltptr(a, _ut_i));                     \
       }                                                                   \
     } else {                                                              \
-      unsigned _ut_i;                                                     \
+      size_t _ut_i;                                                       \
       for (_ut_i = 0; _ut_i < (a)->i; ++_ut_i) {                          \
         (a)->icd.dtor(utringbuffer_eltptr(a, _ut_i));                     \
       }                                                                   \
@@ -94,7 +94,7 @@ typedef struct {
 
 #define _utringbuffer_real_idx(a,j) ((a)->f ? ((j) + (a)->i) % (a)->n : (j))
 #define _utringbuffer_internalptr(a,j) ((void*)((a)->d + ((a)->icd.sz * (j))))
-#define utringbuffer_eltptr(a,j) ((0 <= (j) && (j) < utringbuffer_len(a)) ? _utringbuffer_internalptr(a,_utringbuffer_real_idx(a,j)) : NULL)
+#define utringbuffer_eltptr(a,j) (((j) < utringbuffer_len(a)) ? _utringbuffer_internalptr(a,_utringbuffer_real_idx(a,j)) : NULL)
 
 #define _utringbuffer_fake_idx(a,j) ((a)->f ? ((j) + (a)->n - (a)->i) % (a)->n : (j))
 #define _utringbuffer_internalidx(a,e) (((char*)(e) >= (a)->d) ? (((char*)(e) - (a)->d)/(a)->icd.sz) : -1)
