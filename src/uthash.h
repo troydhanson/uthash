@@ -30,12 +30,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h>   /* ptrdiff_t */
 #include <stdlib.h>   /* exit */
 
-#if defined(HASH_DEFINE_OWN_STDINT) && HASH_DEFINE_OWN_STDINT
-/* This codepath is provided for backward compatibility, but I plan to remove it. */
-#warning "HASH_DEFINE_OWN_STDINT is deprecated; please use HASH_NO_STDINT instead"
-typedef unsigned int uint32_t;
-typedef unsigned char uint8_t;
-#elif defined(HASH_NO_STDINT) && HASH_NO_STDINT
+#if defined(HASH_NO_STDINT) && HASH_NO_STDINT
+/* The user doesn't have <stdint.h>, and must figure out their own way
+   to provide definitions for uint8_t and uint32_t. */
 #else
 #include <stdint.h>   /* uint8_t, uint32_t */
 #endif
