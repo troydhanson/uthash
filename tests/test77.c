@@ -64,8 +64,6 @@ int main()
     o=utstring_findR( s,  2, "ABC", 3 ) ;
     printf("expect  0 %d\n",o);
 
-
-
     utstring_free(s);
 
     return 0;
