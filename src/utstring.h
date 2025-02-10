@@ -139,7 +139,7 @@ UTSTRING_UNUSED static void utstring_printf_va(UT_string *s, const char *fmt, va
 #else
       va_copy(cp, ap);
 #endif
-      n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, cp);
+      n = vsnprintf(&s->d[s->i], s->n-s->i, fmt, cp);
       va_end(cp);
 
       if ((n > -1) && ((size_t) n < (s->n-s->i))) {
@@ -155,7 +155,7 @@ UTSTRING_UNUSED static void utstring_printf_va(UT_string *s, const char *fmt, va
 #ifdef __GNUC__
 /* support printf format checking (2=the format string, 3=start of varargs) */
 static void utstring_printf(UT_string *s, const char *fmt, ...)
-  __attribute__ (( format( printf, 2, 3) ));
+  __attribute__((format(printf, 2, 3)));
 #endif
 UTSTRING_UNUSED static void utstring_printf(UT_string *s, const char *fmt, ...) {
    va_list ap;
@@ -253,7 +253,7 @@ UTSTRING_UNUSED static long _utstring_find(
     size_t P_HaystackLen,
     const char *P_Needle,
     size_t P_NeedleLen,
-    long *P_KMP_Table)
+    const long *P_KMP_Table)
 {
     long i, j;
     long V_FindPosition = -1;
@@ -286,7 +286,7 @@ UTSTRING_UNUSED static long _utstring_findR(
     size_t P_HaystackLen,
     const char *P_Needle,
     size_t P_NeedleLen,
-    long *P_KMP_Table)
+    const long *P_KMP_Table)
 {
     long i, j;
     long V_FindPosition = -1;
@@ -316,7 +316,7 @@ UTSTRING_UNUSED static long _utstring_findR(
 
 /* Search data from left to right. ( One time search mode. ) */
 UTSTRING_UNUSED static long utstring_find(
-    UT_string *s,
+    const UT_string *s,
     long P_StartPosition,   /* Start from 0. -1 means last position. */
     const char *P_Needle,
     size_t P_NeedleLen)
@@ -362,7 +362,7 @@ UTSTRING_UNUSED static long utstring_find(
 
 /* Search data from right to left. ( One time search mode. ) */
 UTSTRING_UNUSED static long utstring_findR(
-    UT_string *s,
+    const UT_string *s,
     long P_StartPosition,   /* Start from 0. -1 means last position. */
     const char *P_Needle,
     size_t P_NeedleLen)
