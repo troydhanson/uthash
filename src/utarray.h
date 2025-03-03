@@ -232,7 +232,7 @@ static void utarray_str_cpy(void *dst, const void *src) {
   if (*srcc == NULL) {
     *dstc = NULL;
   } else {
-    *dstc = (char*)malloc(strlen(*srcc) + 1);
+    *dstc = (char*)malloc(sizeof(char)*(strlen(*srcc) + 1));
     if (*dstc == NULL) {
       utarray_oom();
     } else {
