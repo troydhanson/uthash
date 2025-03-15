@@ -110,8 +110,8 @@ example:   builds the 'example' program from the user guide
 
 Testing a specific hash function
 --------------------------------
-Set EXTRA_CFLAGS with this Makefile to use a specific hash function:
-   EXTRA_CFLAGS=-DHASH_FUNCTION=HASH_BER make
+Set CFLAGS with this Makefile to use a specific hash function:
+   CFLAGS=-DHASH_FUNCTION=HASH_BER make
 
 Other files
 ================================================================================
