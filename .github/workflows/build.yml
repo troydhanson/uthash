@@ -13,11 +13,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
+    - run: make -C tests CFLAGS="-W -Wall -Wextra -Wswitch-default"
     - run: make -C tests clean ; make -C tests pedantic
-    - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests pedantic CFLAGS=-DNO_DECLTYPE
     - run: make -C tests clean ; make -C tests cplusplus
-    - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests cplusplus CFLAGS=-DNO_DECLTYPE
   build-clang:
     strategy:
       matrix:
@@ -28,11 +28,11 @@ jobs:
       CXX: clang++
     steps:
     - uses: actions/checkout@v3
-    - run: make -C tests EXTRA_CFLAGS="-W -Wall -Wextra -Wswitch-default"
+    - run: make -C tests CFLAGS="-W -Wall -Wextra -Wswitch-default"
     - run: make -C tests clean ; make -C tests pedantic
-    - run: make -C tests clean ; make -C tests pedantic EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests pedantic CFLAGS=-DNO_DECLTYPE
     - run: make -C tests clean ; make -C tests cplusplus
-    - run: make -C tests clean ; make -C tests cplusplus EXTRA_CFLAGS=-DNO_DECLTYPE
+    - run: make -C tests clean ; make -C tests cplusplus CFLAGS=-DNO_DECLTYPE
   build-asciidoc:
     runs-on: ubuntu-latest
     steps:

@@ -14,22 +14,21 @@ PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test82 test83 test84 test85 test86 test87 test88 test89 \
         test90 test91 test92 test93 test94 test95 test96 test97 \
         test98
-CFLAGS += -I$(HASHDIR)
-#CFLAGS += -DHASH_BLOOM=16
-#CFLAGS += -O2
-CFLAGS += -g
-#CFLAGS += -Wstrict-aliasing=2
-CFLAGS += -Wall
-#CFLAGS += -Wextra
-#CFLAGS += -std=c89
-CFLAGS += ${EXTRA_CFLAGS}
+TEST_CFLAGS = -I$(HASHDIR)
+TEST_CFLAGS += -g
+#TEST_CFLAGS += -DHASH_BLOOM=16
+#TEST_CFLAGS += -O2
+TEST_CFLAGS += -Wall
+#TEST_CFLAGS += -Wstrict-aliasing=2
+#TEST_CFLAGS += -Wextra
+#TEST_CFLAGS += -std=c89
 
 ifeq ($(HASH_DEBUG),1)
-CFLAGS += -DHASH_DEBUG=1
+TEST_CFLAGS += -DHASH_DEBUG=1
 endif
 
 ifeq ($(HASH_PEDANTIC),1)
-CFLAGS += -pedantic
+TEST_CFLAGS += -pedantic
 endif
 
 TEST_TARGET=run_tests
@@ -75,35 +74,35 @@ cplusplus:
 	CC="$(CXX) -x c++" $(MAKE) all
 
 thorough:
-	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic'
-	$(MAKE) clean && $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
-	$(MAKE) clean && $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
-	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all EXTRA_CFLAGS='-pedantic'
-	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16'
-	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) tests_only EXTRA_CFLAGS='-pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE'
+	$(MAKE) clean && $(MAKE) all CFLAGS="${CFLAGS} -pedantic"
+	$(MAKE) clean && $(MAKE) all CFLAGS="${CFLAGS} -pedantic -DHASH_BLOOM=16"
+	$(MAKE) clean && $(MAKE) tests_only CFLAGS="${CFLAGS} -pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE"
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all CFLAGS="${CFLAGS} -pedantic"
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) all CFLAGS="${CFLAGS} -pedantic -DHASH_BLOOM=16"
+	$(MAKE) clean && CC="$(CXX) -x c++" $(MAKE) tests_only CFLAGS="${CFLAGS} -pedantic -DHASH_BLOOM=16 -DHASH_DEBUG -DNO_DECLTYPE"
 
 example: example.c $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 
 $(PROGS) $(UTILS) : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
 hashscan : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
 sleep_test : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_BLOOM=16 $(LDFLAGS) -o $@ $(@).c
 	@$(MKGITIGN)
 
 keystat : $(HASHDIR)/uthash.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_BER $(LDFLAGS) -o keystat.BER keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_FNV $(LDFLAGS) -o keystat.FNV keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_JEN $(LDFLAGS) -o keystat.JEN keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_OAT $(LDFLAGS) -o keystat.OAT keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SAX $(LDFLAGS) -o keystat.SAX keystat.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SFH $(LDFLAGS) -o keystat.SFH keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_BER $(LDFLAGS) -o keystat.BER keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_FNV $(LDFLAGS) -o keystat.FNV keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_JEN $(LDFLAGS) -o keystat.JEN keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_OAT $(LDFLAGS) -o keystat.OAT keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SAX $(LDFLAGS) -o keystat.SAX keystat.c
+	$(CC) $(TEST_CFLAGS) $(CPPFLAGS) $(CFLAGS) -DHASH_FUNCTION=HASH_SFH $(LDFLAGS) -o keystat.SFH keystat.c
 
 run_tests: $(PROGS)
 	perl $(TESTS)
