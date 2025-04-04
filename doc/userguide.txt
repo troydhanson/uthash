@@ -382,12 +382,38 @@ void delete_all() {
 }
 ----------------------------------------------------------------------
 
-All-at-once deletion
-^^^^^^^^^^^^^^^^^^^^
-If you only want to delete all the items, but not free them or do any
-per-element clean up, you can do this more efficiently in a single operation:
+All-at-once deletion with cleanup
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you want to delete absolutely all the items,
+you can do this more efficiently in a single operation:
+
+.Delete all items from a hash, faster
+----------------------------------------------------------------------
+void delete_all_faster() {
+  HASH_FREE_AND_CLEAR(hh, users, free);
+}
+----------------------------------------------------------------------
+
+Afterward, the list head (here, `users`) will be set to `NULL`.
+
+This is equivalent to the `HASH_ITER` approach, but it skips fixing up
+all of the prev/next pointers on each iteration. Note that if the
+specified deleter (here, `free`) ever does a `longjmp` or otherwise exits
+non-locally, the hash table will be left in an inconsistent and
+unusable state.
+
+All-at-once deletion without cleanup
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you only want to delete all the items from the hash, but not do any
+per-element cleanup (such as `free`), you can do this in constant time:
 
   HASH_CLEAR(hh, users);
+
+`HASH_CLEAR` has the same effect as
+
+  HASH_FREE_AND_CLEAR(hh,users,item,(void));
+
+but is much faster because it does not iterate the hash.
 
 Afterward, the list head (here, `users`) will be set to `NULL`.
 
