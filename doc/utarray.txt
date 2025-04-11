@@ -336,6 +336,7 @@ Operations
 | utarray_next(UT_array *a,void *e) | get element of a following e (front if e is NULL)
 | utarray_prev(UT_array *a,void *e) | get element of a before e (back if e is NULL)
 | utarray_back(UT_array *a) | get last element of a
+| utarray_replace(UT_array *a, int j, void *p) | replace an element at index j
 |===============================================================================
 
 Notes

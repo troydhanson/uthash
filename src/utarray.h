@@ -217,6 +217,17 @@ typedef struct {
   qsort((a)->d, (a)->i, (a)->icd.sz, cmp);                                    \
 } while(0)
 
+#define utarray_replace(a, j, ele) do {                                           \
+  char *ptr = utarray_eltptr(a, j);                                               \
+  if (ptr) {                                                                      \
+    if ((a)->icd.dtor) {                                                          \
+      (a)->icd.dtor(ptr);                                                         \
+    }                                                                             \
+    if ((a)->icd.copy) { (a)->icd.copy( _utarray_eltptr(a, j), ele); }            \
+    else { memcpy(ptr, ele, (a)->icd.sz); }                                       \
+  }                                                                               \
+} while(0)
+
 #define utarray_find(a,v,cmp) bsearch((v),(a)->d,(a)->i,(a)->icd.sz,cmp)
 
 #define utarray_front(a) (((a)->i) ? (_utarray_eltptr(a,0)) : NULL)
