@@ -136,6 +136,12 @@ typedef struct {
   (a)->i++;                                                                   \
 } while(0)
 
+#define utarray_replace(a,p,j) do {                                           \
+  if ((a)->icd.dtor) { (a)->icd.dtor(_utarray_eltptr(a,j)); }                 \
+  if ((a)->icd.copy) { (a)->icd.copy(_utarray_eltptr(a,j), p); }              \
+  else { memcpy(_utarray_eltptr(a,j), p, (a)->icd.sz); }                      \
+} while(0)
+
 #define utarray_inserta(a,w,j) do {                                           \
   if (utarray_len(w) == 0) break;                                             \
   if ((j) > (a)->i) utarray_resize(a,j);                                      \
@@ -215,17 +221,6 @@ typedef struct {
 
 #define utarray_sort(a,cmp) do {                                              \
   qsort((a)->d, (a)->i, (a)->icd.sz, cmp);                                    \
-} while(0)
-
-#define utarray_replace(a, j, ele) do {                                           \
-  char *ptr = utarray_eltptr(a, j);                                               \
-  if (ptr) {                                                                      \
-    if ((a)->icd.dtor) {                                                          \
-      (a)->icd.dtor(ptr);                                                         \
-    }                                                                             \
-    if ((a)->icd.copy) { (a)->icd.copy( _utarray_eltptr(a, j), ele); }            \
-    else { memcpy(ptr, ele, (a)->icd.sz); }                                       \
-  }                                                                               \
 } while(0)
 
 #define utarray_find(a,v,cmp) bsearch((v),(a)->d,(a)->i,(a)->icd.sz,cmp)

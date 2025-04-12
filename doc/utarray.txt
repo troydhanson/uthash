@@ -325,6 +325,7 @@ Operations
 | utarray_eltptr(UT_array *a,int j)    | get pointer of element from index
 | utarray_eltidx(UT_array *a,void *e)  | get index of element from pointer
 | utarray_insert(UT_array *a,void *p, int j) | insert element p to index j
+| utarray_replace(UT_array *a,void *p, int j) | replace element p at index j
 | utarray_inserta(UT_array *a,UT_array *w, int j) | insert array w into array a at index j
 | utarray_resize(UT_array *dst,int num)  | extend or shrink array to num elements
 | utarray_concat(UT_array *dst,UT_array *src) | copy src to end of dst array
@@ -336,7 +337,6 @@ Operations
 | utarray_next(UT_array *a,void *e) | get element of a following e (front if e is NULL)
 | utarray_prev(UT_array *a,void *e) | get element of a before e (back if e is NULL)
 | utarray_back(UT_array *a) | get last element of a
-| utarray_replace(UT_array *a, int j, void *p) | replace an element at index j
 |===============================================================================
 
 Notes
