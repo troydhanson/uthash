@@ -13,7 +13,7 @@ PROGS = test1 test2 test3 test4 test5 test6 test7 test8 test9   \
         test74 test75 test76 test77 test78 test79 test80 test81 \
         test82 test83 test84 test85 test86 test87 test88 test89 \
         test90 test91 test92 test93 test94 test95 test96 test97 \
-        test98
+        test98 test99 test100
 CFLAGS += -I$(HASHDIR)
 #CFLAGS += -DHASH_BLOOM=16
 #CFLAGS += -O2

@@ -136,6 +136,12 @@ typedef struct {
   (a)->i++;                                                                   \
 } while(0)
 
+#define utarray_replace(a,p,j) do {                                           \
+  if ((a)->icd.dtor) { (a)->icd.dtor(_utarray_eltptr(a,j)); }                 \
+  if ((a)->icd.copy) { (a)->icd.copy(_utarray_eltptr(a,j), p); }              \
+  else { memcpy(_utarray_eltptr(a,j), p, (a)->icd.sz); }                      \
+} while(0)
+
 #define utarray_inserta(a,w,j) do {                                           \
   if (utarray_len(w) == 0) break;                                             \
   if ((j) > (a)->i) utarray_resize(a,j);                                      \
