@@ -639,12 +639,12 @@ do {                                                                            
     char* _prev = NULL;                                                                        \
     char* _next = NULL;                                                                        \
     while (head) {                                                                             \
-      _next = (char*)((head)->next);                                                           \
-      (head)->next = (void*)_prev;                                                             \
-      _prev = (char*)(head);                                                                   \
-      (head) = (void*)_next;                                                                   \
+      UTLIST_CASTASGN(_next, (head)->next);                                                    \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
+      UTLIST_CASTASGN(_prev, (head));                                                          \
+      UTLIST_CASTASGN((head), _next);                                                          \
     }                                                                                          \
-    (head) = (void*)_prev;                                                                     \
+    UTLIST_CASTASGN((head), _prev);                                                            \
   }                                                                                            \
 } while(0)
 
@@ -912,22 +912,23 @@ do {                                                                            
 #undef DL_REVERSE2
 #define DL_REVERSE2(head,prev,next) do {                                                       \
   if ((head) && (head)->next) {                                                                \
-    char* _tail = (char*)(head);                                                               \
+    char* _tail;                                                                               \
     char* _prev;                                                                               \
     char* _tmp;                                                                                \
+    UTLIST_CASTASGN(_tail, (head));                                                            \
     while (head) {                                                                             \
-      _prev = (char*)(head)->prev;                                                             \
+      UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
       (head)->prev = (head)->next;                                                             \
-      (head)->next = (void*)_prev;                                                             \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
       (head) = (head)->prev;                                                                   \
     }                                                                                          \
-    (head) = (void*)_prev;                                                                     \
+    UTLIST_CASTASGN((head), _prev);                                                            \
     (head) = (head)->prev;                                                                     \
-    _tmp = (char*)(head);                                                                      \
-    (head) = (void*)_tail;                                                                     \
+    UTLIST_CASTASGN(_tmp, (head));                                                             \
+    UTLIST_CASTASGN((head), _tail);                                                            \
     (head)->next = NULL;                                                                       \
-    (head) = (void*)_tmp;                                                                      \
-    (head)->prev = (void*)_tail;                                                               \
+    UTLIST_CASTASGN((head), _tmp);                                                             \
+    UTLIST_CASTASGN((head)->prev, _tail);                                                      \
   }                                                                                            \
 } while(0)
 
