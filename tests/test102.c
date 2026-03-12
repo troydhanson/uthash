@@ -13,18 +13,18 @@ int main(void) {
     int i;
 
     for(i = 1; i <= 1024; i <<= 1) {
-        node = malloc(sizeof(*node));
+        node = (List*)malloc(sizeof(*node));
         node->value = i;
         DL_APPEND(list, node);
     }
 
     DL_REVERSE(list);
 
-    node = malloc(sizeof(*node));
+    node = (List*)malloc(sizeof(*node));
     node->value = 0;
     DL_APPEND(list, node);
 
-    node = malloc(sizeof(*node));
+    node = (List*)malloc(sizeof(*node));
     node->value = 2048;
     DL_PREPEND(list, node);
 
