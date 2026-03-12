@@ -444,6 +444,24 @@ do {                                                                            
     }                                                                                          \
 } while (0)
 
+#define LL_REVERSE(head)                                                                       \
+    LL_REVERSE2(head,next)
+
+#define LL_REVERSE2(head,next) do {                                                            \
+  if (head) {                                                                                  \
+    LDECLTYPE(head) _curr = (head);                                                            \
+    LDECLTYPE(head) _prev = NULL;                                                              \
+    LDECLTYPE(head) _next;                                                                     \
+    while (_curr) {                                                                            \
+      _next = _curr->next;                                                                     \
+      _curr->next = _prev;                                                                     \
+      _prev = _curr;                                                                           \
+      _curr = _next;                                                                           \
+    }                                                                                          \
+    (head) = _prev;                                                                            \
+  }                                                                                            \
+} while(0)
+
 #define LL_REPLACE_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
  LDECLTYPE(head) _tmp;                                                                         \
@@ -615,6 +633,21 @@ do {                                                                            
   }                                                                                            \
 } while (0)                                                                                    \
 
+#undef LL_REVERSE2
+#define LL_REVERSE2(head,next) do {                                                            \
+  if (head) {                                                                                  \
+    char* _prev = NULL;                                                                        \
+    char* _next = NULL;                                                                        \
+    while (head) {                                                                             \
+      _next = (char*)((head)->next);                                                           \
+      (head)->next = (void*)_prev;                                                             \
+      _prev = (char*)(head);                                                                   \
+      (head) = (void*)_next;                                                                   \
+    }                                                                                          \
+    (head) = (void*)_prev;                                                                     \
+  }                                                                                            \
+} while(0)
+
 #endif /* NO_DECLTYPE */
 
 /******************************************************************************
@@ -753,6 +786,26 @@ do {                                                                            
 #define DL_SEARCH_SCALAR2 LL_SEARCH_SCALAR2
 #define DL_SEARCH2 LL_SEARCH2
 
+#define DL_REVERSE(head)                                                                       \
+    DL_REVERSE2(head,prev,next)
+
+#define DL_REVERSE2(head,prev,next) do {                                                       \
+  if ((head) && (head)->next) {                                                                \
+    LDECLTYPE(head) _tail = (head);                                                            \
+    LDECLTYPE(head) _curr = (head);                                                            \
+    LDECLTYPE(head) _prev = NULL;                                                              \
+    while (_curr) {                                                                            \
+      _prev = _curr->prev;                                                                     \
+      _curr->prev = _curr->next;                                                               \
+      _curr->next = _prev;                                                                     \
+      _curr = _curr->prev;                                                                     \
+    }                                                                                          \
+    (head) = _prev->prev;                                                                      \
+    _tail->next = NULL;                                                                        \
+    (head)->prev = _tail;                                                                      \
+  }                                                                                            \
+} while(0)
+
 #define DL_REPLACE_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
  assert((head) != NULL);                                                                       \
@@ -855,6 +908,29 @@ do {                                                                            
     }                                                                                          \
   }                                                                                            \
 } while (0)
+
+#undef DL_REVERSE2
+#define DL_REVERSE2(head,prev,next) do {                                                       \
+  if ((head) && (head)->next) {                                                                \
+    char* _tail = (char*)(head);                                                               \
+    char* _prev;                                                                               \
+    char* _tmp;                                                                                \
+    while (head) {                                                                             \
+      _prev = (char*)(head)->prev;                                                             \
+      (head)->prev = (head)->next;                                                             \
+      (head)->next = (void*)_prev;                                                             \
+      (head) = (head)->prev;                                                                   \
+    }                                                                                          \
+    (head) = (void*)_prev;                                                                     \
+    (head) = (head)->prev;                                                                     \
+    _tmp = (char*)(head);                                                                      \
+    (head) = (void*)_tail;                                                                     \
+    (head)->next = NULL;                                                                       \
+    (head) = (void*)_tmp;                                                                      \
+    (head)->prev = (void*)_tail;                                                               \
+  }                                                                                            \
+} while(0)
+
 #endif /* NO_DECLTYPE */
 
 /******************************************************************************
