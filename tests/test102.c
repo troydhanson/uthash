@@ -32,9 +32,8 @@ int main(void) {
         printf("%d\n", node->value);
     }
 
-    for(node = list; node != NULL;) {
-        tmp = node->next;
+    DL_FOREACH_SAFE(list, node, tmp) {
+        LL_DELETE(list, node);
         free(node);
-        node = tmp;
     }
 }

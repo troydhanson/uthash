@@ -1064,6 +1064,24 @@ do {                                                                            
     }                                                                                          \
 } while (0)
 
+#define CDL_REVERSE(head)                                                                      \
+    CDL_REVERSE2(head,prev,next)
+
+#define CDL_REVERSE2(head,prev,next) \
+do { \
+  if ((head) && (head)->next) { \
+    LDECLTYPE(head) _curr = (head);                                                            \
+    LDECLTYPE(head) _prev = NULL;                                                              \
+    do { \
+      _prev = _curr->prev;                                                                     \
+      _curr->prev = _curr->next;                                                               \
+      _curr->next = _prev;                                                                     \
+      _curr = _curr->prev;                                                                     \
+    } while(_curr != (head)); \
+    (head) = (head)->next; \
+  } \
+} while(0)
+
 #define CDL_REPLACE_ELEM2(head, el, add, prev, next)                                           \
 do {                                                                                           \
  assert((head) != NULL);                                                                       \
@@ -1152,6 +1170,24 @@ do {                                                                            
     UTLIST_RS(head);                                                                           \
   }                                                                                            \
 } while (0)
+
+#undef CDL_REVERSE2
+#define CDL_REVERSE2(head,prev,next)                                                           \
+do {                                                                                           \
+  if ((head) && (head)->next) {                                                                \
+    char* _curr;                                                                               \
+    char* _prev;                                                                               \
+    UTLIST_CASTASGN(_curr, (head));                                                            \
+    do {                                                                                       \
+      UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
+      (head)->prev = (head)->next;                                                             \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
+      (head) = (head)->prev;                                                                   \
+    } while(_curr != (char*)(head));                                                           \
+    (head) = (head)->next;                                                                     \
+  }                                                                                            \
+} while(0)
+
 #endif /* NO_DECLTYPE */
 
 #endif /* UTLIST_H */
