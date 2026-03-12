@@ -447,7 +447,8 @@ do {                                                                            
 #define LL_REVERSE(head)                                                                       \
     LL_REVERSE2(head,next)
 
-#define LL_REVERSE2(head,next) do {                                                            \
+#define LL_REVERSE2(head,next)                                                                 \
+do {                                                                                           \
   if (head) {                                                                                  \
     LDECLTYPE(head) _curr = (head);                                                            \
     LDECLTYPE(head) _prev = NULL;                                                              \
@@ -634,7 +635,8 @@ do {                                                                            
 } while (0)                                                                                    \
 
 #undef LL_REVERSE2
-#define LL_REVERSE2(head,next) do {                                                            \
+#define LL_REVERSE2(head,next)                                                                 \
+do {                                                                                           \
   if (head) {                                                                                  \
     char* _prev = NULL;                                                                        \
     char* _next = NULL;                                                                        \
@@ -789,7 +791,8 @@ do {                                                                            
 #define DL_REVERSE(head)                                                                       \
     DL_REVERSE2(head,prev,next)
 
-#define DL_REVERSE2(head,prev,next) do {                                                       \
+#define DL_REVERSE2(head,prev,next)                                                            \
+do {                                                                                           \
   if ((head) && (head)->next) {                                                                \
     LDECLTYPE(head) _tail = (head);                                                            \
     LDECLTYPE(head) _curr = (head);                                                            \
@@ -910,7 +913,8 @@ do {                                                                            
 } while (0)
 
 #undef DL_REVERSE2
-#define DL_REVERSE2(head,prev,next) do {                                                       \
+#define DL_REVERSE2(head,prev,next)                                                            \
+do {                                                                                           \
   if ((head) && (head)->next) {                                                                \
     char* _tail;                                                                               \
     char* _prev;                                                                               \
