@@ -282,8 +282,8 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
 |LL_INSERT_INORDER2(head,add,cmp,next);    | DL_INSERT_INORDER2(head,add,cmp,prev,next); | CDL_INSERT_INORDER2(head,add,cmp,prev,next);
 |LL_CONCAT2(head1,head2,next);             | DL_CONCAT2(head1,head2,prev,next);          |
 |LL_DELETE2(head,del,next);                | DL_DELETE2(head,del,prev,next);             | CDL_DELETE2(head,del,prev,next);
-|LL_SORT2(head,cmp,next);                  | DL_SORT2(head,cmp,prev,next);               | CDL_SORT2(head,cmp,prev,next);
 |LL_REVERSE2(head,next);                   | DL_REVERSE2(head,prev,next);                | CDL_REVERSE2(head,prev,next);
+|LL_SORT2(head,cmp,next);                  | DL_SORT2(head,cmp,prev,next);               | CDL_SORT2(head,cmp,prev,next);
 |LL_FOREACH2(head,elt,next) {...}          | DL_FOREACH2(head,elt,next) {...}            | CDL_FOREACH2(head,elt,next) {...}
 |LL_FOREACH_SAFE2(head,elt,tmp,next) {...} | DL_FOREACH_SAFE2(head,elt,tmp,next) {...}   | CDL_FOREACH_SAFE2(head,elt,tmp1,tmp2,prev,next) {...}
 |LL_SEARCH_SCALAR2(head,elt,mbr,val,next); | DL_SEARCH_SCALAR2(head,elt,mbr,val,next);   | CDL_SEARCH_SCALAR2(head,elt,mbr,val,next);
