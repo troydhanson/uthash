@@ -108,8 +108,8 @@ iterating over them.
 |LL_INSERT_INORDER(head,add,cmp); | DL_INSERT_INORDER(head,add,cmp); | CDL_INSERT_INORDER(head,add,cmp);
 |LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    |
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
-|LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
 |LL_REVERSE(head);         | DL_REVERSE(head);          | CDL_REVERSE(head);
+|LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
 |LL_FOREACH(head,elt) {...}| DL_FOREACH(head,elt) {...} | CDL_FOREACH(head,elt) {...}
 |LL_FOREACH_SAFE(head,elt,tmp) {...}| DL_FOREACH_SAFE(head,elt,tmp) {...} | CDL_FOREACH_SAFE(head,elt,tmp1,tmp2) {...}
 |LL_SEARCH_SCALAR(head,elt,mbr,val);| DL_SEARCH_SCALAR(head,elt,mbr,val); | CDL_SEARCH_SCALAR(head,elt,mbr,val);

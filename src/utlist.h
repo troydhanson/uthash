@@ -461,7 +461,7 @@ do {                                                                            
     }                                                                                          \
     (head) = _prev;                                                                            \
   }                                                                                            \
-} while(0)
+} while (0)
 
 #define LL_REPLACE_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
@@ -638,8 +638,8 @@ do {                                                                            
 #define LL_REVERSE2(head,next)                                                                 \
 do {                                                                                           \
   if (head) {                                                                                  \
-    char* _prev = NULL;                                                                        \
-    char* _next = NULL;                                                                        \
+    char *_prev = NULL;                                                                        \
+    char *_next = NULL;                                                                        \
     while (head) {                                                                             \
       UTLIST_CASTASGN(_next, (head)->next);                                                    \
       UTLIST_CASTASGN((head)->next, _prev);                                                    \
@@ -648,7 +648,7 @@ do {                                                                            
     }                                                                                          \
     UTLIST_CASTASGN((head), _prev);                                                            \
   }                                                                                            \
-} while(0)
+} while (0)
 
 #endif /* NO_DECLTYPE */
 
@@ -807,7 +807,7 @@ do {                                                                            
     _tail->next = NULL;                                                                        \
     (head)->prev = _tail;                                                                      \
   }                                                                                            \
-} while(0)
+} while (0)
 
 #define DL_REPLACE_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
@@ -916,9 +916,9 @@ do {                                                                            
 #define DL_REVERSE2(head,prev,next)                                                            \
 do {                                                                                           \
   if ((head) && (head)->next) {                                                                \
-    char* _tail;                                                                               \
-    char* _prev;                                                                               \
-    char* _tmp;                                                                                \
+    char *_tail;                                                                               \
+    char *_prev;                                                                               \
+    char *_tmp;                                                                                \
     UTLIST_CASTASGN(_tail, (head));                                                            \
     while (head) {                                                                             \
       UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
@@ -934,7 +934,7 @@ do {                                                                            
     UTLIST_CASTASGN((head), _tmp);                                                             \
     UTLIST_CASTASGN((head)->prev, _tail);                                                      \
   }                                                                                            \
-} while(0)
+} while (0)
 
 #endif /* NO_DECLTYPE */
 
@@ -1080,7 +1080,7 @@ do { \
     } while(_curr != (head)); \
     (head) = (head)->next; \
   } \
-} while(0)
+} while (0)
 
 #define CDL_REPLACE_ELEM2(head, el, add, prev, next)                                           \
 do {                                                                                           \
@@ -1175,8 +1175,8 @@ do {                                                                            
 #define CDL_REVERSE2(head,prev,next)                                                           \
 do {                                                                                           \
   if ((head) && (head)->next) {                                                                \
-    char* _curr;                                                                               \
-    char* _prev;                                                                               \
+    char *_curr;                                                                               \
+    char *_prev;                                                                               \
     UTLIST_CASTASGN(_curr, (head));                                                            \
     do {                                                                                       \
       UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
@@ -1186,7 +1186,7 @@ do {                                                                            
     } while(_curr != (char*)(head));                                                           \
     (head) = (head)->next;                                                                     \
   }                                                                                            \
-} while(0)
+} while (0)
 
 #endif /* NO_DECLTYPE */
 
