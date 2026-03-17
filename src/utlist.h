@@ -467,6 +467,22 @@ do {                                                                            
 #define LL_REPLACE_ELEM(head, el, add)                                                         \
     LL_REPLACE_ELEM2(head, el, add, next)
 
+#define LL_REVERSE2(head,next)                                                                 \
+do {                                                                                           \
+  LDECLTYPE(head) _curr = (head);                                                              \
+  LDECLTYPE(head) _prev = NULL;                                                                \
+  while (_curr) {                                                                              \
+    LDECLTYPE(head) _next = _curr->next;                                                       \
+    _curr->next = _prev;                                                                       \
+    _prev = _curr;                                                                             \
+    _curr = _next;                                                                             \
+  }                                                                                            \
+  (head) = _prev;                                                                              \
+} while (0)
+
+#define LL_REVERSE(head)                                                                       \
+    LL_REVERSE2(head,next)
+
 #define LL_PREPEND_ELEM2(head, el, add, next)                                                  \
 do {                                                                                           \
  if (el) {                                                                                     \
@@ -614,6 +630,22 @@ do {                                                                            
     LL_APPEND2(head, add, next);                                                               \
   }                                                                                            \
 } while (0)                                                                                    \
+
+#undef LL_REVERSE2
+#define LL_REVERSE2(head,next)                                                                 \
+do {                                                                                           \
+  if (head) {                                                                                  \
+    char *_prev = NULL;                                                                        \
+    char *_next = NULL;                                                                        \
+    while (head) {                                                                             \
+      UTLIST_CASTASGN(_next, (head)->next);                                                    \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
+      UTLIST_CASTASGN(_prev, (head));                                                          \
+      UTLIST_CASTASGN((head), _next);                                                          \
+    }                                                                                          \
+    UTLIST_CASTASGN((head), _prev);                                                            \
+  }                                                                                            \
+} while (0)
 
 #endif /* NO_DECLTYPE */
 
@@ -782,6 +814,27 @@ do {                                                                            
 #define DL_REPLACE_ELEM(head, el, add)                                                         \
     DL_REPLACE_ELEM2(head, el, add, prev, next)
 
+#define DL_REVERSE2(head,prev,next)                                                            \
+do {                                                                                           \
+  if ((head) && (head)->next) {                                                                \
+    LDECLTYPE(head) _tail = (head);                                                            \
+    LDECLTYPE(head) _curr = (head);                                                            \
+    LDECLTYPE(head) _prev = NULL;                                                              \
+    while (_curr) {                                                                            \
+      _prev = _curr->prev;                                                                     \
+      _curr->prev = _curr->next;                                                               \
+      _curr->next = _prev;                                                                     \
+      _curr = _curr->prev;                                                                     \
+    }                                                                                          \
+    (head) = _prev->prev;                                                                      \
+    _tail->next = NULL;                                                                        \
+    (head)->prev = _tail;                                                                      \
+  }                                                                                            \
+} while (0)
+
+#define DL_REVERSE(head)                                                                       \
+    DL_REVERSE2(head,prev,next)
+
 #define DL_PREPEND_ELEM2(head, el, add, prev, next)                                            \
 do {                                                                                           \
  if (el) {                                                                                     \
@@ -855,6 +908,31 @@ do {                                                                            
     }                                                                                          \
   }                                                                                            \
 } while (0)
+
+#undef DL_REVERSE2
+#define DL_REVERSE2(head,prev,next)                                                            \
+do {                                                                                           \
+  if ((head) && (head)->next) {                                                                \
+    char *_tail;                                                                               \
+    char *_prev;                                                                               \
+    char *_tmp;                                                                                \
+    UTLIST_CASTASGN(_tail, (head));                                                            \
+    while (head) {                                                                             \
+      UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
+      (head)->prev = (head)->next;                                                             \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
+      (head) = (head)->prev;                                                                   \
+    }                                                                                          \
+    UTLIST_CASTASGN((head), _prev);                                                            \
+    (head) = (head)->prev;                                                                     \
+    UTLIST_CASTASGN(_tmp, (head));                                                             \
+    UTLIST_CASTASGN((head), _tail);                                                            \
+    (head)->next = NULL;                                                                       \
+    UTLIST_CASTASGN((head), _tmp);                                                             \
+    UTLIST_CASTASGN((head)->prev, _tail);                                                      \
+  }                                                                                            \
+} while (0)
+
 #endif /* NO_DECLTYPE */
 
 /******************************************************************************
@@ -1006,6 +1084,24 @@ do {                                                                            
 #define CDL_REPLACE_ELEM(head, el, add)                                                        \
     CDL_REPLACE_ELEM2(head, el, add, prev, next)
 
+#define CDL_REVERSE2(head,prev,next)                                                           \
+do {                                                                                           \
+  if ((head) && (head)->next) {                                                                \
+    LDECLTYPE(head) _curr = (head);                                                            \
+    LDECLTYPE(head) _prev = NULL;                                                              \
+    do {                                                                                       \
+      _prev = _curr->prev;                                                                     \
+      _curr->prev = _curr->next;                                                               \
+      _curr->next = _prev;                                                                     \
+      _curr = _curr->prev;                                                                     \
+    } while (_curr != (head));                                                                 \
+    (head) = (head)->next;                                                                     \
+  }                                                                                            \
+} while (0)
+
+#define CDL_REVERSE(head)                                                                      \
+    CDL_REVERSE2(head,prev,next)
+
 #define CDL_PREPEND_ELEM2(head, el, add, prev, next)                                           \
 do {                                                                                           \
   if (el) {                                                                                    \
@@ -1071,6 +1167,24 @@ do {                                                                            
     UTLIST_RS(head);                                                                           \
   }                                                                                            \
 } while (0)
+
+#undef CDL_REVERSE2
+#define CDL_REVERSE2(head,prev,next)                                                           \
+do {                                                                                           \
+  if ((head) && (head)->next) {                                                                \
+    char *_curr;                                                                               \
+    char *_prev;                                                                               \
+    UTLIST_CASTASGN(_curr, (head));                                                            \
+    do {                                                                                       \
+      UTLIST_CASTASGN(_prev, (head)->prev);                                                    \
+      (head)->prev = (head)->next;                                                             \
+      UTLIST_CASTASGN((head)->next, _prev);                                                    \
+      (head) = (head)->prev;                                                                   \
+    } while (_curr != (char*)(head));                                                          \
+    (head) = (head)->next;                                                                     \
+  }                                                                                            \
+} while (0)
+
 #endif /* NO_DECLTYPE */
 
 #endif /* UTLIST_H */
