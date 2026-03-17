@@ -449,18 +449,16 @@ do {                                                                            
 
 #define LL_REVERSE2(head,next)                                                                 \
 do {                                                                                           \
-  if (head) {                                                                                  \
-    LDECLTYPE(head) _curr = (head);                                                            \
-    LDECLTYPE(head) _prev = NULL;                                                              \
-    LDECLTYPE(head) _next;                                                                     \
-    while (_curr) {                                                                            \
-      _next = _curr->next;                                                                     \
-      _curr->next = _prev;                                                                     \
-      _prev = _curr;                                                                           \
-      _curr = _next;                                                                           \
-    }                                                                                          \
-    (head) = _prev;                                                                            \
+  LDECLTYPE(head) _curr = (head);                                                              \
+  LDECLTYPE(head) _prev = NULL;                                                                \
+  LDECLTYPE(head) _next;                                                                       \
+  while (_curr) {                                                                              \
+    _next = _curr->next;                                                                       \
+    _curr->next = _prev;                                                                       \
+    _prev = _curr;                                                                             \
+    _curr = _next;                                                                             \
   }                                                                                            \
+  (head) = _prev;                                                                              \
 } while (0)
 
 #define LL_REPLACE_ELEM2(head, el, add, next)                                                  \
