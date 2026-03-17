@@ -170,7 +170,8 @@ static void found(int fd, char* peer_sig, pid_t pid)
     UT_hash_table *tbl=NULL;
     UT_hash_bucket *bkts=NULL;
     UT_hash_handle hh;
-    size_t i, bloom_len, bloom_bitlen,  bloom_on_bits=0,bloom_off_bits=0;
+    size_t i, bloom_len, bloom_bitlen;
+    size_t bloom_on_bits = 0;
     char *peer_tbl, *peer_bloom_sig, *peer_bloom_nbits, *peer_bloombv_ptr,
          *peer_bloombv, *peer_bkts, *peer_hh, *key=NULL;
     const char *peer_key;
@@ -322,8 +323,6 @@ static void found(int fd, char* peer_sig, pid_t pid)
                     if (HS_BIT_TEST(bloombv,(unsigned)i)) {
                         /* vvv("bit %u set\n",(unsigned)i); */
                         bloom_on_bits++;
-                    } else {
-                        bloom_off_bits++;
                     }
                 }
                 has_bloom_filter_fields = 1;
