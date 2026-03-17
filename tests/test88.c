@@ -42,15 +42,15 @@ int main()
         if (user == NULL) {
             exit(-1);
         }
-        sprintf(user->id, "%d", i);
+        user->id[0] = '0' + i;
+        user->id[1] = '\0';
         user->cookie = i*i;
         HASH_ADD_STR(users,id,user);
     }
 
     /* delete each ID */
     for (i=0; i<10; i++) {
-        char buffer[3];
-        sprintf(buffer, "%d", i);
+        char buffer[2] = {(char)('0' + i), '\0'};
         HASH_FIND_STR(users,buffer,tmp);
         if (tmp != NULL) {
             HASH_DEL(users,tmp);
