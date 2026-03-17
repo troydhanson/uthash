@@ -19,6 +19,8 @@ int main()
 {
     UT_array *strs,*strs2;
     char *s, **p=NULL;
+    size_t zero = 0;
+
     utarray_new(strs, &ut_str_icd);
     s=(char*)"hello";
     utarray_push_back(strs, &s);
@@ -29,7 +31,7 @@ int main()
     }
     printf("\n");
     s=(char*)"begin";
-    utarray_insert(strs,&s,0);
+    utarray_insert(strs, &s, zero);
     while ( (p=(char**)utarray_next(strs,p)) != NULL ) {
         printf("%s ",*p);
     }

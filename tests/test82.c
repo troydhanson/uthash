@@ -5,6 +5,8 @@ int main()
 {
     UT_array *a,*b;
     int i, *p;
+    size_t zero = 0;
+
     utarray_new(a, &ut_int_icd);
     utarray_new(b, &ut_int_icd);
 
@@ -23,7 +25,7 @@ int main()
     }
     printf("len: %u\n\n", utarray_len(b));
 
-    utarray_inserta(b,a,0);
+    utarray_inserta(b,a,zero);
     for(p=(int*)utarray_front(b); p!=NULL; p=(int*)utarray_next(b,p)) {
         printf("%d ",*p);
     }

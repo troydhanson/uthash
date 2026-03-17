@@ -12,6 +12,7 @@ int main()
     intpair_t it, *ip;
     UT_icd pairicd = { sizeof(intpair_t),NULL,NULL,NULL};
     size_t zero=0;
+
     utarray_new(pairs, &pairicd);
     printf("length is %u\n", utarray_len(pairs));
     it.a = 1;
@@ -91,7 +92,7 @@ int main()
     }
     it.a=5;
     it.b=6;
-    utarray_insert(pairs_cpy, &it, 0);
+    utarray_insert(pairs_cpy, &it, zero);
     printf("insert cpy[0]\n");
     printf("cpy length is %u\n", utarray_len(pairs_cpy));
     while( (ip=(intpair_t*)utarray_next(pairs_cpy,ip)) != NULL ) {
