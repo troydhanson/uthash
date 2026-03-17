@@ -1,296 +1,453 @@
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "utlist.h"
 
-typedef struct el {
-    int id;
-    struct el *next, *prev;
-} el;
+struct List {
+    int value;
+    struct List *prev;
+    struct List *next;
+};
+
+struct List dummy = {9, NULL, NULL};
+
+static void dump_els(struct List *els, int n) {
+    printf("---\n");
+    for (int i=0; i < n; ++i) {
+        printf("%d (prev %d next %d)\n", els[i].value,
+            els[i].prev ? els[i].prev->value : -1,
+            els[i].next ? els[i].next->value : -1);
+    }
+}
+
+static void test_ll_prepend() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_ll_prepend\n");
+
+    for (i = 0; i < 3; ++i) {
+        LL_PREPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_ll_append() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_ll_append\n");
+
+    for (i = 0; i < 3; ++i) {
+        LL_APPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_ll_prepend_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_ll_prepend_elem\n");
+
+    // Empty list, prepend before NULL (which means append)
+    LL_PREPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, prepend before head
+    LL_PREPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[1]); // 1 0
+    dump_els(els, 5);
+
+    // Remove an element
+    LL_DELETE(list, list);
+    assert(list == &els[0]); // 0
+
+    // Size-1 list, prepend before NULL (which means append)
+    LL_PREPEND_ELEM(list, zeroptr, &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, prepend before head
+    LL_PREPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[2]); // 2 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    LL_DELETE(list, list);
+    assert(list == &els[0]); // 0 1
+
+    // Size-2 list, prepend before tail
+    LL_PREPEND_ELEM(list, &els[1], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Size-3 list, prepend before NULL (which means append)
+    LL_PREPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[0]); // 0 2 1 3
+    dump_els(els, 5);
+}
+
+static void test_ll_append_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_ll_append_elem\n");
+
+    // Empty list, append after NULL (which means prepend)
+    LL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, append after head
+    LL_APPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    LL_DELETE(list, list);
+    assert(list == &els[1]); // 1
+
+    // Size-1 list, append after NULL (which means prepend)
+    LL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, append after head
+    LL_APPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Remove an element
+    LL_DELETE(list, list);
+    assert(list == &els[2]); // 2 1
+
+    // Size-2 list, append after tail
+    LL_APPEND_ELEM(list, &els[1], &els[0]);
+    assert(list == &els[2]); // 2 1 0
+    dump_els(els, 5);
+
+    // Size-3 list, append after NULL (which means prepend)
+    LL_APPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[3]); // 3 2 1 0
+    dump_els(els, 5);
+}
+
+static void test_dl_prepend() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_dl_prepend\n");
+
+    for (i = 0; i < 3; ++i) {
+        DL_PREPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_dl_append() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_dl_append\n");
+
+    for (i = 0; i < 3; ++i) {
+        DL_APPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_dl_prepend_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_dl_prepend_elem\n");
+
+    // Empty list, prepend before NULL (which means append)
+    DL_PREPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, prepend before head
+    DL_PREPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[1]); // 1 0
+    dump_els(els, 5);
+
+    // Remove an element
+    DL_DELETE(list, list);
+    assert(list == &els[0]); // 0
+
+    // Size-1 list, prepend before NULL (which means append)
+    DL_PREPEND_ELEM(list, zeroptr, &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, prepend before head
+    DL_PREPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[2]); // 2 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    DL_DELETE(list, list);
+    assert(list == &els[0]); // 0 1
+
+    // Size-2 list, prepend before tail
+    DL_PREPEND_ELEM(list, &els[1], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Size-3 list, prepend before NULL (which means append)
+    DL_PREPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[0]); // 0 2 1 3
+    dump_els(els, 5);
+}
+
+static void test_dl_append_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_dl_append_elem\n");
+
+    // Empty list, append after NULL (which means prepend)
+    DL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, append after head
+    DL_APPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    DL_DELETE(list, list);
+    assert(list == &els[1]); // 1
+
+    // Size-1 list, append after NULL (which means prepend)
+    DL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, append after head
+    DL_APPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Remove an element
+    DL_DELETE(list, list);
+    assert(list == &els[2]); // 2 1
+
+    // Size-2 list, append after tail
+    DL_APPEND_ELEM(list, &els[1], &els[0]);
+    assert(list == &els[2]); // 2 1 0
+    dump_els(els, 5);
+
+    // Size-3 list, append after NULL (which means prepend)
+    DL_APPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[3]); // 3 2 1 0
+    dump_els(els, 5);
+}
+
+static void test_cdl_prepend() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_cdl_prepend\n");
+
+    for (i = 0; i < 3; ++i) {
+        CDL_PREPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_cdl_append() {
+    struct List els[] = {
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+    };
+    struct List *list = NULL;
+    int i;
+
+    printf("test_cdl_append\n");
+
+    for (i = 0; i < 3; ++i) {
+        CDL_APPEND(list, &els[i]);
+        dump_els(els, 3);
+    }
+}
+
+static void test_cdl_prepend_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_cdl_prepend_elem\n");
+
+    // Empty list, prepend before NULL (which means append)
+    CDL_PREPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, prepend before head
+    CDL_PREPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[1]); // 1 0
+    dump_els(els, 5);
+
+    // Remove an element
+    CDL_DELETE(list, list);
+    assert(list == &els[0]); // 0
+
+    // Size-1 list, prepend before NULL (which means append)
+    CDL_PREPEND_ELEM(list, zeroptr, &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, prepend before head
+    CDL_PREPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[2]); // 2 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    CDL_DELETE(list, list);
+    assert(list == &els[0]); // 0 1
+
+    // Size-2 list, prepend before tail
+    CDL_PREPEND_ELEM(list, &els[1], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Size-3 list, prepend before NULL (which means append)
+    CDL_PREPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[0]); // 0 2 1 3
+    dump_els(els, 5);
+}
+
+static void test_cdl_append_elem() {
+    struct List els[] = {
+        {0, &dummy, &dummy},
+        {1, &dummy, &dummy},
+        {2, &dummy, &dummy},
+        {3, &dummy, &dummy},
+        {4, &dummy, &dummy}, // "non-existent"
+    };
+    struct List *list = NULL;
+    struct List *zeroptr = NULL;
+
+    printf("test_cdl_append_elem\n");
+
+    // Empty list, append after NULL (which means prepend)
+    CDL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0
+    dump_els(els, 5);
+
+    // Size-1 list, append after head
+    CDL_APPEND_ELEM(list, &els[0], &els[1]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Remove an element
+    CDL_DELETE(list, list);
+    assert(list == &els[1]); // 1
+
+    // Size-1 list, append after NULL (which means prepend)
+    CDL_APPEND_ELEM(list, zeroptr, &els[0]);
+    assert(list == &els[0]); // 0 1
+    dump_els(els, 5);
+
+    // Size-2 list, append after head
+    CDL_APPEND_ELEM(list, &els[0], &els[2]);
+    assert(list == &els[0]); // 0 2 1
+    dump_els(els, 5);
+
+    // Remove an element
+    CDL_DELETE(list, list);
+    assert(list == &els[2]); // 2 1
+
+    // Size-2 list, append after tail
+    CDL_APPEND_ELEM(list, &els[1], &els[0]);
+    assert(list == &els[2]); // 2 1 0
+    dump_els(els, 5);
+
+    // Size-3 list, append after NULL (which means prepend)
+    CDL_APPEND_ELEM(list, zeroptr, &els[3]);
+    assert(list == &els[3]); // 3 2 1 0
+    dump_els(els, 5);
+}
 
 int main()
 {
-    int i;
-    int count;
-    el els[10], *e;
-    el *head = NULL;
-    el *zeroptr = NULL;
-    for(i=0; i<10; i++) {
-        els[i].id=(int)'a'+i;
-    }
+    test_ll_prepend();
+    test_ll_append();
+    test_ll_prepend_elem();
+    test_ll_append_elem();
 
-    /* test CDL macros */
-    printf("CDL appends\n");
-    CDL_APPEND(head,&els[0]);
-    CDL_APPEND(head,&els[1]);
-    CDL_APPEND(head,&els[2]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    CDL_COUNT(head,e, count);
-    printf("count = %d\n", count);
+    test_dl_prepend();
+    test_dl_append();
+    test_dl_prepend_elem();
+    test_dl_append_elem();
 
-    printf("Test CDL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    CDL_PREPEND_ELEM(head, zeroptr, &els[3]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test CDL_PREPEND_ELEM %c before item %c\n", els[4].id, els[1].id);
-    CDL_PREPEND_ELEM(head, &els[1], &els[4]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test CDL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    CDL_APPEND_ELEM(head, zeroptr, &els[5]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test CDL_APPEND_ELEM %c after item %c\n", els[6].id, els[1].id);
-    CDL_APPEND_ELEM(head, &els[1], &els[6]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    CDL_COUNT(head,e, count);
-    printf("count = %d\n", count);
-
-    /* point head to head->next */
-    printf("advancing head pointer\n");
-    head = head->next;
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    /* follow circular loop a few times */
-    for(i=0,e=head; e && i<20; i++,e=e->next) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    /* follow circular loop backwards a few times */
-    for(i=0,e=head; e && i<10; i++,e=e->prev) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("deleting (b)\n");
-    CDL_DELETE(head,&els[1]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (a)\n");
-    CDL_DELETE(head,&els[0]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (c)\n");
-    CDL_DELETE(head,&els[2]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (g)\n");
-    CDL_DELETE(head,&els[6]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (e)\n");
-    CDL_DELETE(head,&els[4]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (d)\n");
-    CDL_DELETE(head,&els[3]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("deleting (f)\n");
-    CDL_DELETE(head,&els[5]);
-    CDL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    /* test DL macros */
-    printf("DL appends\n");
-
-    DL_APPEND(head,&els[0]);
-    DL_APPEND(head,&els[1]);
-    DL_APPEND(head,&els[2]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    DL_COUNT(head,e, count);
-    printf("count = %d\n", count);
-
-    printf("Test DL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    DL_PREPEND_ELEM(head, zeroptr, &els[3]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test DL_PREPEND_ELEM %c before item %c\n", els[4].id, els[1].id);
-    DL_PREPEND_ELEM(head, &els[1], &els[4]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test DL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    DL_APPEND_ELEM(head, zeroptr, &els[5]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test DL_APPEND_ELEM %c after item %c\n", els[6].id, els[1].id);
-    DL_APPEND_ELEM(head, &els[1], &els[6]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    DL_COUNT(head,e, count);
-    printf("count = %d\n", count);
-
-    printf("deleting (b)\n");
-    DL_DELETE(head,&els[1]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (a)\n");
-    DL_DELETE(head,&els[0]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (c)\n");
-    DL_DELETE(head,&els[2]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (g)\n");
-    DL_DELETE(head,&els[6]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (e)\n");
-    DL_DELETE(head,&els[4]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (d)\n");
-    DL_DELETE(head,&els[3]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("deleting (f)\n");
-    DL_DELETE(head,&els[5]);
-    DL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-
-    /* test LL macros */
-    printf("LL appends\n");
-
-    LL_APPEND(head,&els[0]);
-    LL_APPEND(head,&els[1]);
-    LL_APPEND(head,&els[2]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    LL_COUNT(head,e, count);
-    printf("count = %d\n", count);
-
-    printf("Test LL_PREPEND_ELEM %c with elt NULL\n", els[3].id);
-    LL_PREPEND_ELEM(head, zeroptr, &els[3]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test LL_PREPEND_ELEM %c before item %c\n", els[4].id, els[1].id);
-    LL_PREPEND_ELEM(head, &els[1], &els[4]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test LL_APPEND_ELEM %c with elt NULL\n", els[5].id);
-    LL_APPEND_ELEM(head, zeroptr, &els[5]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    printf("Test LL_APPEND_ELEM %c after item %c\n", els[6].id, els[1].id);
-    LL_APPEND_ELEM(head, &els[1], &els[6]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    LL_COUNT(head,e, count);
-    printf("count = %d\n", count);
-
-    printf("deleting (b)\n");
-    LL_DELETE(head,&els[1]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (a)\n");
-    LL_DELETE(head,&els[0]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (c)\n");
-    LL_DELETE(head,&els[2]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (g)\n");
-    LL_DELETE(head,&els[6]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (e)\n");
-    LL_DELETE(head,&els[4]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-    printf("deleting (d)\n");
-    LL_DELETE(head,&els[3]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("deleting (f)\n");
-    LL_DELETE(head,&els[5]);
-    LL_FOREACH(head,e) {
-        printf("%c ", e->id);
-    }
-    printf("\n");
-
-    return 0;
+    test_cdl_prepend();
+    test_cdl_append();
+    test_cdl_prepend_elem();
+    test_cdl_append_elem();
 }

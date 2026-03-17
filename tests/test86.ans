@@ -1,79 +1,300 @@
-CDL appends
-a b c 
-count = 3
-Test CDL_PREPEND_ELEM d with elt NULL
-a b c d 
-Test CDL_PREPEND_ELEM e before item b
-a e b c d 
-Test CDL_APPEND_ELEM f with elt NULL
-f a e b c d 
-Test CDL_APPEND_ELEM g after item b
-f a e b g c d 
-count = 7
-advancing head pointer
-a e b g c d f 
-a e b g c d f a e b g c d f a e b g c d 
-a f d c g b e a f d 
-deleting (b)
-a e g c d f 
-deleting (a)
-e g c d f 
-deleting (c)
-e g d f 
-deleting (g)
-e d f 
-deleting (e)
-d f 
-deleting (d)
-f deleting (f)
-
-DL appends
-a b c 
-count = 3
-Test DL_PREPEND_ELEM d with elt NULL
-a b c d 
-Test DL_PREPEND_ELEM e before item b
-a e b c d 
-Test DL_APPEND_ELEM f with elt NULL
-f a e b c d 
-Test DL_APPEND_ELEM g after item b
-f a e b g c d 
-count = 7
-deleting (b)
-f a e g c d 
-deleting (a)
-f e g c d 
-deleting (c)
-f e g d 
-deleting (g)
-f e d 
-deleting (e)
-f d 
-deleting (d)
-f deleting (f)
-
-LL appends
-a b c 
-count = 3
-Test LL_PREPEND_ELEM d with elt NULL
-a b c d 
-Test LL_PREPEND_ELEM e before item b
-a e b c d 
-Test LL_APPEND_ELEM f with elt NULL
-f a e b c d 
-Test LL_APPEND_ELEM g after item b
-f a e b g c d 
-count = 7
-deleting (b)
-f a e g c d 
-deleting (a)
-f e g c d 
-deleting (c)
-f e g d 
-deleting (g)
-f e d 
-deleting (e)
-f d 
-deleting (d)
-f deleting (f)
-
+test_ll_prepend
+---
+1 (prev 9 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 9 next -1)
+2 (prev 9 next 1)
+3 (prev 9 next 9)
+---
+1 (prev 9 next -1)
+2 (prev 9 next 1)
+3 (prev 9 next 2)
+test_ll_append
+---
+1 (prev 9 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 9 next 2)
+2 (prev 9 next -1)
+3 (prev 9 next 9)
+---
+1 (prev 9 next 2)
+2 (prev 9 next 3)
+3 (prev 9 next -1)
+test_ll_prepend_elem
+---
+0 (prev 9 next -1)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next -1)
+1 (prev 9 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 1)
+1 (prev 9 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 1)
+1 (prev 9 next -1)
+2 (prev 9 next 0)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 2)
+1 (prev 9 next -1)
+2 (prev 9 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 2)
+1 (prev 9 next 3)
+2 (prev 9 next 1)
+3 (prev 9 next -1)
+4 (prev 9 next 9)
+test_ll_append_elem
+---
+0 (prev 9 next -1)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 1)
+1 (prev 9 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 1)
+1 (prev 9 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next 2)
+1 (prev 9 next -1)
+2 (prev 9 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next -1)
+1 (prev 9 next 0)
+2 (prev 9 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 9 next -1)
+1 (prev 9 next 0)
+2 (prev 9 next 1)
+3 (prev 9 next 2)
+4 (prev 9 next 9)
+test_dl_prepend
+---
+1 (prev 1 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 2 next -1)
+2 (prev 1 next 1)
+3 (prev 9 next 9)
+---
+1 (prev 2 next -1)
+2 (prev 3 next 1)
+3 (prev 1 next 2)
+test_dl_append
+---
+1 (prev 1 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 2 next 2)
+2 (prev 1 next -1)
+3 (prev 9 next 9)
+---
+1 (prev 3 next 2)
+2 (prev 1 next 3)
+3 (prev 2 next -1)
+test_dl_prepend_elem
+---
+0 (prev 0 next -1)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next -1)
+1 (prev 0 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 2 next 1)
+1 (prev 0 next -1)
+2 (prev 1 next 0)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 2)
+1 (prev 2 next -1)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 3 next 2)
+1 (prev 2 next 3)
+2 (prev 0 next 1)
+3 (prev 1 next -1)
+4 (prev 9 next 9)
+test_dl_append_elem
+---
+0 (prev 0 next -1)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next -1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 2)
+1 (prev 2 next -1)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next -1)
+1 (prev 2 next 0)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next -1)
+1 (prev 2 next 0)
+2 (prev 3 next 1)
+3 (prev 0 next 2)
+4 (prev 9 next 9)
+test_cdl_prepend
+---
+1 (prev 1 next 1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 2 next 2)
+2 (prev 1 next 1)
+3 (prev 9 next 9)
+---
+1 (prev 2 next 3)
+2 (prev 3 next 1)
+3 (prev 1 next 2)
+test_cdl_append
+---
+1 (prev 1 next 1)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+---
+1 (prev 2 next 2)
+2 (prev 1 next 1)
+3 (prev 9 next 9)
+---
+1 (prev 3 next 2)
+2 (prev 1 next 3)
+3 (prev 2 next 1)
+test_cdl_prepend_elem
+---
+0 (prev 0 next 0)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 2 next 1)
+1 (prev 0 next 2)
+2 (prev 1 next 0)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 2)
+1 (prev 2 next 0)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 3 next 2)
+1 (prev 2 next 3)
+2 (prev 0 next 1)
+3 (prev 1 next 0)
+4 (prev 9 next 9)
+test_cdl_append_elem
+---
+0 (prev 0 next 0)
+1 (prev 9 next 9)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 1)
+1 (prev 0 next 0)
+2 (prev 9 next 9)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 2)
+1 (prev 2 next 0)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 2)
+1 (prev 2 next 0)
+2 (prev 0 next 1)
+3 (prev 9 next 9)
+4 (prev 9 next 9)
+---
+0 (prev 1 next 3)
+1 (prev 2 next 0)
+2 (prev 3 next 1)
+3 (prev 0 next 2)
+4 (prev 9 next 9)
