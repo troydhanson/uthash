@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "utarray.h"
 
-int main(void) {
+int main() {
     UT_array *nums;
     int i, *p;
 

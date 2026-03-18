@@ -20,7 +20,7 @@ void Data_deinit(void* vdata) {
     free(data->dept);
 }
 
-int main(void) {
+int main() {
     UT_array *datas;
     int i;
     Data d, *dp;
