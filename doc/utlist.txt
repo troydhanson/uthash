@@ -106,7 +106,7 @@ iterating over them.
 |LL_REPLACE_ELEM(head,del,add); | DL_REPLACE_ELEM(head,del,add); | CDL_REPLACE_ELEM(head,del,add);
 |LL_APPEND(head,add);      | DL_APPEND(head,add);       | CDL_APPEND(head,add);
 |LL_INSERT_INORDER(head,add,cmp); | DL_INSERT_INORDER(head,add,cmp); | CDL_INSERT_INORDER(head,add,cmp);
-|LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    |
+|LL_CONCAT(head1,head2);   | DL_CONCAT(head1,head2);    | CDL_CONCAT(head1,head2);
 |LL_DELETE(head,del);      | DL_DELETE(head,del);       | CDL_DELETE(head,del);
 |LL_REVERSE(head);         | DL_REVERSE(head);          | CDL_REVERSE(head);
 |LL_SORT(head,cmp);        | DL_SORT(head,cmp);         | CDL_SORT(head,cmp);
@@ -280,7 +280,7 @@ the `prev` and `next` fields (as applicable) as trailing arguments.
 |LL_REPLACE_ELEM2(head,del,add,next);      | DL_REPLACE_ELEM2(head,del,add,prev,next);   | CDL_REPLACE_ELEM2(head,del,add,prev,next);
 |LL_APPEND2(head,add,next);                | DL_APPEND2(head,add,prev,next);             | CDL_APPEND2(head,add,prev,next);
 |LL_INSERT_INORDER2(head,add,cmp,next);    | DL_INSERT_INORDER2(head,add,cmp,prev,next); | CDL_INSERT_INORDER2(head,add,cmp,prev,next);
-|LL_CONCAT2(head1,head2,next);             | DL_CONCAT2(head1,head2,prev,next);          |
+|LL_CONCAT2(head1,head2,next);             | DL_CONCAT2(head1,head2,prev,next);          | CDL_CONCAT2(head1,head2,prev,next);
 |LL_DELETE2(head,del,next);                | DL_DELETE2(head,del,prev,next);             | CDL_DELETE2(head,del,prev,next);
 |LL_REVERSE2(head,next);                   | DL_REVERSE2(head,prev,next);                | CDL_REVERSE2(head,prev,next);
 |LL_SORT2(head,cmp,next);                  | DL_SORT2(head,cmp,prev,next);               | CDL_SORT2(head,cmp,prev,next);

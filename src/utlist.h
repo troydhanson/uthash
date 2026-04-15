@@ -1004,6 +1004,25 @@ do {                                                                            
   }                                                                                            \
 } while (0)
 
+#define CDL_CONCAT(head1,head2)                                                                \
+    CDL_CONCAT2(head1,head2,prev,next)
+
+#define CDL_CONCAT2(head1,head2,prev,next)                                                     \
+do {                                                                                           \
+  LDECLTYPE(head1) _tmp;                                                                       \
+  if (head1) {                                                                                 \
+    if (head2) {                                                                               \
+      UTLIST_CASTASGN(_tmp, (head1)->prev);                                                    \
+      (head1)->prev = (head2)->prev;                                                           \
+      (head1)->prev->next = (head1);                                                           \
+      UTLIST_CASTASGN((head2)->prev, _tmp);                                                    \
+      (head2)->prev->next = (head2);                                                           \
+    }                                                                                          \
+  } else {                                                                                     \
+    (head1) = (head2);                                                                         \
+  }                                                                                            \
+} while (0)
+
 #define CDL_DELETE(head,del)                                                                   \
     CDL_DELETE2(head,del,prev,next)
 
