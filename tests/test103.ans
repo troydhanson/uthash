@@ -1,0 +1,12 @@
+After HASH_SELECT:
+src contains 0
+src contains 1
+src contains 2
+dst contains 2
+dst contains 1
+dst contains 0
+After HASH_ADD:
+dst contains 2
+dst contains 1
+dst contains 0
+dst contains 3

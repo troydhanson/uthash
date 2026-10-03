@@ -1031,6 +1031,7 @@ do {                                                                            
       }                                                                          \
     }                                                                            \
   }                                                                              \
+  if (_last_elt_hh != NULL) (dst)->hh_dst.tbl->tail = _last_elt_hh;              \
   HASH_FSCK(hh_dst, dst, "HASH_SELECT");                                         \
 } while (0)
 
